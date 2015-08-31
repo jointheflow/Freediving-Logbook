@@ -1,14 +1,27 @@
 package org.gianluca.logbook.rest.resource;
 
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
+import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
+import org.gianluca.logbook.dto.FreediverDto;
+import org.gianluca.logbook.helper.PlatformConstant;
 import org.restlet.representation.Representation;
 import org.restlet.resource.*; 
 import org.restlet.data.Status;
 import org.restlet.ext.json.*;
+
+import com.restfb.DefaultFacebookClient;
+import com.restfb.FacebookClient;
+import com.restfb.Version;
+import com.restfb.types.User;
 
 
 
@@ -38,69 +51,43 @@ public class FreediverLoginResource<K> extends ServerResource{
 				log.info("p_externalToken:"+p_externalToken);
 				
 				//check token against platform
+				User fbUser= getFacebookUser(p_externalToken);
+				//getHTML();
 				
 				//if token ok
-					//check if p_externalId exists
-					//if exists return instance
-					//else create new instance
-					//return instance created
-				//else
+				//creates instance
+				FreediverDto fdDto = new FreediverDto();
 				
-				//get customer
-				/*Customer customer = RestoDAO.getCustomerByEmail(p_email, p_password);
+				//check if p_externalId exists
 				
+				Freediver fd = LogbookDAO.getFreediverByExternalId(fbUser.getId(), Long.parseLong((p_externalPlatformId)));
 				
-				//create an auth Token
-				AuthToken token = new AuthToken();
-				//set an infinite expiration 
-				token.setExpiration(UtilHelper.getExpiration30Minute());
-				token.setUserEmail(customer.getEmail());
-				//persist token 
-				RestoDAO.addAuthToken(token);
-				
-				
-				//create dto token object
-				TokenDTO tokenDto= new TokenDTO();
-				tokenDto.expiration = token.getExpiration();
-				tokenDto.id = token.getTokenId().getId();
-				tokenDto.email = token.getUserEmail();
-				
-				//get all resti of customer and put in the DTO List
-				List<Resto> resti = RestoDAO.getResto(customer.getId().getId());
-				List<RestoDTO> restiDto = new ArrayList<RestoDTO>();
-				for (int i=0; i<resti.size(); i++) {
-					RestoDTO restoDto = new RestoDTO();
-					restoDto.amount = resti.get(i).getAmount();
-					restoDto.expirationDate = resti.get(i).getExpirationDate();
-					restoDto.id = resti.get(i).getId().getId();
-					Provider provider = resti.get(i).getProvider();
-					ProviderDTO providerDto = new ProviderDTO();
-					providerDto.email = provider.getEmail();
-					providerDto.description = provider.getName();
-					providerDto.address = provider.getAddress();
-					providerDto.id = provider.getId().getId();
-					restoDto.provider = providerDto;
-					//add resto
-					restiDto.add(restoDto);					
+				//if exists return instance
+				if (fd!=null) {
+					log.info("Freediver found!");
+					fdDto.status=PlatformConstant.FREEDIVER_STATUS_OLD;
 					
 				}
-				
-				//create customer DTO
-				CustomerDTO customerDto = new CustomerDTO();
-				
-				customerDto.email= customer.getEmail();
-				customerDto.id = customer.getId().getId();
-				customerDto.resti = restiDto;
-				customerDto.token = tokenDto;
-					
-				if (customer !=null)	{
-					representation= new JsonRepresentation(customerDto);
-					representation.setIndenting(true);
+				//else create new instance
+				else {
+					log.info("Freediver not found!");
+					fd = LogbookDAO.addFreediver(fbUser.getId(), fbUser.getName(), fbUser.getEmail(), Long.parseUnsignedLong(p_externalPlatformId));
+					fdDto.status=PlatformConstant.FREEDIVER_STATUS_NEW;
 				}
+				fdDto.externalId= fd.getExternalId();
+				fdDto.externalPlatformId = fd.getExternalPlatformId();
+				fdDto.externalToken = p_externalToken;
+				fdDto.externalUsername = fd.getExternalName();
+				fdDto.id = fd.getId().toString();
+				// find all dive session associated
+				
+				//add dive session to dto
+				
+				
+				representation= new JsonRepresentation(fdDto);
+				representation.setIndenting(true);
+				
 				return representation;
-				
-			*/
-				return null;
 		/*	}catch (WrongUserOrPasswordException e) {
 				/*setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 				ErrorResource error = new ErrorResource();
@@ -117,5 +104,14 @@ public class FreediverLoginResource<K> extends ServerResource{
 			
 		}
 
+	private User getFacebookUser(String facebookAccessToken) {
+		
+		FacebookClient facebookClient = new DefaultFacebookClient(facebookAccessToken, "84793f0243f40a9fcf53d4d857e8902d", Version.VERSION_2_4);
+		
+		return facebookClient.fetchObject("me", User.class);
+		
+	}
+
+	  
 	
 }

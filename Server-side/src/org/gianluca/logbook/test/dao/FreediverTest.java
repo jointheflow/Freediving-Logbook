@@ -49,11 +49,11 @@ public class FreediverTest {
 		Freediver fd = null;
 		try {
 			fd = LogbookDAO.getFreediverByExternalId(externalIdNotExist, 0);
-			
-		} catch (FreediverNotExistsException e) {
+			assertTrue(fd==null);
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			assertTrue(fd==null);
+			
 		}
 	}
 	
@@ -71,7 +71,7 @@ public class FreediverTest {
 			assertTrue(fd.getExternalName().equals("name external"));
 			assertTrue(fd.getExternalPlatformId()==PlatformConstant.FACEBOOK_PLATFORM);
 			
-		} catch (FreediverNotExistsException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			

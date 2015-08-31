@@ -10,6 +10,7 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
@@ -39,14 +40,16 @@ public class LogbookDAO {
 	 * */
 	
 	
-	public static Freediver getFreediverByExternalId(String externalId, long externalPlatformId) throws FreediverNotExistsException { 
+	public static Freediver getFreediverByExternalId(String externalId, long externalPlatformId) { 
 		Freediver freediver = null;
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Transaction tx = datastore.beginTransaction();
 		try {
 			Filter externalIDFilter = new FilterPredicate ("externalId", FilterOperator.EQUAL, externalId);
 			Filter externalPlatformIDFilter = new FilterPredicate("externalPlatformId", FilterOperator.EQUAL, externalPlatformId);
-			Query q = new Query("Freediver").setFilter(externalIDFilter).setFilter(externalPlatformIDFilter);		
+			Filter compFilter= CompositeFilterOperator.and(externalIDFilter, externalPlatformIDFilter);
+			
+			Query q = new Query("Freediver").setFilter(compFilter);		
 			PreparedQuery pq = datastore.prepare(q);
 			
 			if (pq.countEntities(withLimit(1)) > 0) {
@@ -62,9 +65,8 @@ public class LogbookDAO {
 				}
 								
 				
-			}else {
-					throw new FreediverNotExistsException("Freediver with externalId: "+externalId+" and external platformId: "+externalPlatformId+" does not exists!");
 			}
+			
 				
 			tx.commit();
 		} finally {
