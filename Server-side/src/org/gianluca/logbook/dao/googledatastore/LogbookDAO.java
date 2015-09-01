@@ -5,6 +5,7 @@ package org.gianluca.logbook.dao.googledatastore;
 
 import org.gianluca.logbook.dao.exception.FreediverNotExistsException;
 import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
+import org.gianluca.logbook.helper.LogbookConstant;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -36,7 +37,9 @@ public class LogbookDAO {
 	 * 				externalId: String
 	 * 				externalName: String 
 					externalEmail: String
-					externalPlatformId: long
+					externalPlatformId: int
+					deepUnit :int
+					temperatureUnit: int
 	 * */
 	
 	
@@ -60,7 +63,9 @@ public class LogbookDAO {
 					freediver.setExternalEmail((String) result.getProperty("externalEmail"));
 					freediver.setExternalName((String) result.getProperty("externalName"));
 					freediver.setExternalId((String) result.getProperty("externalId"));
-					freediver.setExternalPlatformId((long)result.getProperty("externalPlatformId"));
+					freediver.setExternalPlatformId((int)(long)result.getProperty("externalPlatformId"));
+					freediver.setDeepUnit((int)(long)result.getProperty("deepUnit"));
+					freediver.setTemperatureUnit((int)(long)result.getProperty("temperatureUnit"));
 					freediver.setId((Key) result.getKey());
 				}
 								
@@ -78,8 +83,8 @@ public class LogbookDAO {
 	     return freediver;
 		
 	}
-	
-	public static Freediver addFreediver(String externalId, String externalName, String externalEmail, long externalPlatformId) {
+	//add freediver user and default settings
+	public static Freediver addFreediver(String externalId, String externalName, String externalEmail, int externalPlatformId) {
 		Key freediverId = null;
 		Freediver freediver = null;
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -92,6 +97,9 @@ public class LogbookDAO {
 				e_freediver.setProperty("externalName", externalName);
 				e_freediver.setProperty("externalEmail", externalEmail);
 				e_freediver.setProperty("externalPlatformId", externalPlatformId);
+				//set default settings
+				e_freediver.setProperty("deepUnit", LogbookConstant.DEEP_METER);
+				e_freediver.setProperty("temperatureUnit", LogbookConstant.TEMPERATURE_CELSIUS);
 				datastore.put(e_freediver);
 				freediverId = e_freediver.getKey();
 				

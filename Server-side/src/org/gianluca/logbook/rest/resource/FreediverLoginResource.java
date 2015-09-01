@@ -1,10 +1,7 @@
 package org.gianluca.logbook.rest.resource;
 
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -12,19 +9,16 @@ import java.util.logging.Logger;
 import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
 import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
 import org.gianluca.logbook.dto.FreediverDto;
-import org.gianluca.logbook.helper.PlatformConstant;
+import org.gianluca.logbook.external.integration.ExternalUser;
+import org.gianluca.logbook.external.integration.ExternalUserFactory;
+import org.gianluca.logbook.external.integration.PlatformNotManagedException;
+import org.gianluca.logbook.helper.LogbookConstant;
 import org.restlet.representation.Representation;
 import org.restlet.resource.*; 
 import org.restlet.data.Status;
 import org.restlet.ext.json.*;
 
-import com.restfb.DefaultFacebookClient;
-import com.restfb.FacebookClient;
-import com.restfb.Version;
-import com.restfb.types.User;
-
-
-
+import com.restfb.exception.FacebookOAuthException;
 
 public class FreediverLoginResource<K> extends ServerResource{
 	private static final Logger log = Logger.getLogger(FreediverLoginResource.class.getName());
@@ -50,35 +44,37 @@ public class FreediverLoginResource<K> extends ServerResource{
 				log.info("p_externalPlatfomId:"+p_externalPlatformId);
 				log.info("p_externalToken:"+p_externalToken);
 				
-				//check token against platform
-				User fbUser= getFacebookUser(p_externalToken);
-				//getHTML();
+			
+				//check token against external platform
+				ExternalUser extUser= ExternalUserFactory.createExternalUser(p_externalToken, Integer.parseInt(p_externalPlatformId));
+				
 				
 				//if token ok
 				//creates instance
 				FreediverDto fdDto = new FreediverDto();
 				
 				//check if p_externalId exists
-				
-				Freediver fd = LogbookDAO.getFreediverByExternalId(fbUser.getId(), Long.parseLong((p_externalPlatformId)));
+				Freediver fd = LogbookDAO.getFreediverByExternalId(extUser.getId(), Integer.parseInt((p_externalPlatformId)));
 				
 				//if exists return instance
 				if (fd!=null) {
 					log.info("Freediver found!");
-					fdDto.status=PlatformConstant.FREEDIVER_STATUS_OLD;
+					fdDto.status=LogbookConstant.FREEDIVER_STATUS_OLD;
 					
 				}
 				//else create new instance
 				else {
 					log.info("Freediver not found!");
-					fd = LogbookDAO.addFreediver(fbUser.getId(), fbUser.getName(), fbUser.getEmail(), Long.parseUnsignedLong(p_externalPlatformId));
-					fdDto.status=PlatformConstant.FREEDIVER_STATUS_NEW;
+					fd = LogbookDAO.addFreediver(extUser.getId(), extUser.getName(), "null", Integer.parseInt(p_externalPlatformId));
+					fdDto.status=LogbookConstant.FREEDIVER_STATUS_NEW;
 				}
 				fdDto.externalId= fd.getExternalId();
 				fdDto.externalPlatformId = fd.getExternalPlatformId();
 				fdDto.externalToken = p_externalToken;
 				fdDto.externalUsername = fd.getExternalName();
 				fdDto.id = fd.getId().toString();
+				fdDto.deepUnit = fd.getDeepUnit();
+				fdDto.temperatureUnit = fd.getTemperatureUnit();
 				// find all dive session associated
 				
 				//add dive session to dto
@@ -88,29 +84,49 @@ public class FreediverLoginResource<K> extends ServerResource{
 				representation.setIndenting(true);
 				
 				return representation;
-		/*	}catch (WrongUserOrPasswordException e) {
-				/*setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+				
+			}catch (FacebookOAuthException e_oa) {
+				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 				ErrorResource error = new ErrorResource();
-				error.setErrorCode(ErrorResource.WRONG_USER_OR_PASSWORD);
+				error.setErrorCode(ErrorResource.WRONG_OAUTH_TOKEN);
+				error.setErrorMessage(e_oa.getMessage());
+				JsonRepresentation errorRepresentation = new JsonRepresentation(error);
+				return errorRepresentation;
+				
+			}catch (PlatformNotManagedException e_pnm) {
+				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+				ErrorResource error = new ErrorResource();
+				error.setErrorCode(ErrorResource.PLATFORM_NOT_MANAGED_ERROR);
+				error.setErrorMessage(e_pnm.getMessage());
+				JsonRepresentation errorRepresentation = new JsonRepresentation(error);
+				return errorRepresentation;
+			
+			}catch (NumberFormatException e_ne) {
+				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+				ErrorResource error = new ErrorResource();
+				error.setErrorCode(ErrorResource.NUMBER_FORMAT_ERROR);
+				error.setErrorMessage(e_ne.getMessage());
+				JsonRepresentation errorRepresentation = new JsonRepresentation(error);
+				return errorRepresentation;
+				
+			}catch (Exception e) {
+				e.printStackTrace();
+				setStatus(Status.SERVER_ERROR_INTERNAL);
+				ErrorResource error = new ErrorResource();
+				error.setErrorCode(ErrorResource.INTERNAL_SERVER_ERROR);
 				error.setErrorMessage(e.getMessage());
 				JsonRepresentation errorRepresentation = new JsonRepresentation(error);
 				return errorRepresentation;
-				*/
-			}	finally {
+				
+			}
+			
+			finally {
 				log.info("end  GET login for Freediver");
 				
 			}
 			
 			
 		}
-
-	private User getFacebookUser(String facebookAccessToken) {
-		
-		FacebookClient facebookClient = new DefaultFacebookClient(facebookAccessToken, "84793f0243f40a9fcf53d4d857e8902d", Version.VERSION_2_4);
-		
-		return facebookClient.fetchObject("me", User.class);
-		
-	}
 
 	  
 	

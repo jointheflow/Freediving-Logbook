@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.gianluca.logbook.dao.exception.FreediverNotExistsException;
 import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
 import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
-import org.gianluca.logbook.helper.PlatformConstant;
+import org.gianluca.logbook.helper.LogbookConstant;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class FreediverTest {
         //create an entity instance of Freediver
         try {
         	Freediver fd= null;
-        	fd = LogbookDAO.addFreediver("existsId", "name external", "email external", PlatformConstant.FACEBOOK_PLATFORM);
+        	fd = LogbookDAO.addFreediver("existsId", "name external", "email external", LogbookConstant.FACEBOOK_PLATFORM);
         	System.out.println(fd);
         }catch (Exception e) {
         	
@@ -64,12 +64,12 @@ public class FreediverTest {
 		String externalIdNotExist = "existsId";
 		Freediver fd = null;
 		try {
-			fd = LogbookDAO.getFreediverByExternalId(externalIdNotExist, PlatformConstant.FACEBOOK_PLATFORM);
+			fd = LogbookDAO.getFreediverByExternalId(externalIdNotExist, LogbookConstant.FACEBOOK_PLATFORM);
 			assertTrue(fd!=null);
 			assertTrue(fd.getExternalEmail().equals("email external"));
 			assertTrue(fd.getExternalId().equals("existsId"));
 			assertTrue(fd.getExternalName().equals("name external"));
-			assertTrue(fd.getExternalPlatformId()==PlatformConstant.FACEBOOK_PLATFORM);
+			assertTrue(fd.getExternalPlatformId()==LogbookConstant.FACEBOOK_PLATFORM);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

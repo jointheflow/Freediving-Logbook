@@ -7,10 +7,13 @@ public class FreediverDto {
 	
 	public String id;
 	public String externalId;
-	public long externalPlatformId;
+	public int externalPlatformId;
 	public String externalUsername;
 	public String externalToken;
 	public String status;
+	public int deepUnit;
+	public int temperatureUnit;
+	
 	
 	public List<DiveSessionDto> diveSessions;
 	public String getId() {
@@ -28,7 +31,7 @@ public class FreediverDto {
 	public long getExternalPlatformId() {
 		return externalPlatformId;
 	}
-	public void setExternalPlatformId(long externalPlatformId) {
+	public void setExternalPlatformId(int externalPlatformId) {
 		this.externalPlatformId = externalPlatformId;
 	}
 	public String getExternalUsername() {
@@ -55,6 +58,19 @@ public class FreediverDto {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
+	public int getDeepUnit() {
+		return deepUnit;
+	}
+	public void setDeepUnit(int deepUnit) {
+		this.deepUnit = deepUnit;
+	}
+	public int getTemperatureUnit() {
+		return temperatureUnit;
+	}
+	public void setTemperatureUnit(int temperatureUnit) {
+		this.temperatureUnit = temperatureUnit;
+	}
+	
+	
 
 }

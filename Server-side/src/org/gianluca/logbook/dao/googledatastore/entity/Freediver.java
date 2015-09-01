@@ -1,5 +1,7 @@
 package org.gianluca.logbook.dao.googledatastore.entity;
 
+import org.gianluca.logbook.helper.LogbookConstant;
+
 import com.google.appengine.api.datastore.Key;
 
 public class Freediver {
@@ -17,7 +19,11 @@ public class Freediver {
 	private String externalEmail;
 	
 	//identifies the external platform that manage the authetication
-	private long externalPlatformId=-1;
+	private int externalPlatformId=-1;
+	
+	private int temperatureUnit= LogbookConstant.TEMPERATURE_CELSIUS;
+	
+	private int deepUnit= LogbookConstant.DEEP_METER;
 	
 	public Key getId() {
 	
@@ -52,12 +58,28 @@ public class Freediver {
 		this.externalEmail = externalEmail;
 	}
 
-	public long getExternalPlatformId() {
+	public int getExternalPlatformId() {
 		return externalPlatformId;
 	}
 
-	public void setExternalPlatformId(long externalPlatformId) {
+	public void setExternalPlatformId(int externalPlatformId) {
 		this.externalPlatformId =externalPlatformId ;
+	}
+
+	public int getTemperatureUnit() {
+		return temperatureUnit;
+	}
+
+	public void setTemperatureUnit(int temperatureUnit) {
+		this.temperatureUnit = temperatureUnit;
+	}
+
+	public int getDeepUnit() {
+		return deepUnit;
+	}
+
+	public void setDeepUnit(int deepUnit) {
+		this.deepUnit = deepUnit;
 	}
 
 	
