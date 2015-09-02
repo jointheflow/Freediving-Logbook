@@ -18,6 +18,7 @@ import org.restlet.resource.*;
 import org.restlet.data.Status;
 import org.restlet.ext.json.*;
 
+import com.google.appengine.api.datastore.KeyFactory;
 import com.restfb.exception.FacebookOAuthException;
 
 public class FreediverLoginResource<K> extends ServerResource{
@@ -35,12 +36,12 @@ public class FreediverLoginResource<K> extends ServerResource{
 			JsonRepresentation representation = null;
 			try {
 				//get parameter
-				String p_externalId=this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_id");
+				//String p_externalId=this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_id");
 				String p_externalPlatformId= this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_platform_id");
 				String p_externalToken = this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_token");
 				
 				log.info("start GET login for Freediver");
-				log.info("p_externalId:"+p_externalId);
+				//log.info("p_externalId:"+p_externalId);
 				log.info("p_externalPlatfomId:"+p_externalPlatformId);
 				log.info("p_externalToken:"+p_externalToken);
 				
@@ -72,7 +73,7 @@ public class FreediverLoginResource<K> extends ServerResource{
 				fdDto.externalPlatformId = fd.getExternalPlatformId();
 				fdDto.externalToken = p_externalToken;
 				fdDto.externalUsername = fd.getExternalName();
-				fdDto.id = fd.getId().toString();
+				fdDto.id = KeyFactory.keyToString(fd.getId());
 				fdDto.deepUnit = fd.getDeepUnit();
 				fdDto.temperatureUnit = fd.getTemperatureUnit();
 				// find all dive session associated

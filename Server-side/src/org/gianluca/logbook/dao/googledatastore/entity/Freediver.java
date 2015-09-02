@@ -25,6 +25,9 @@ public class Freediver {
 	
 	private int deepUnit= LogbookConstant.DEEP_METER;
 	
+	private int weightUnit = LogbookConstant.WEIGHT_KILOGRAM;
+	
+	
 	public Key getId() {
 	
 		return id;
@@ -80,6 +83,14 @@ public class Freediver {
 
 	public void setDeepUnit(int deepUnit) {
 		this.deepUnit = deepUnit;
+	}
+
+	public int getWeightUnit() {
+		return weightUnit;
+	}
+
+	public void setWeightUnit(int weightUnit) {
+		this.weightUnit = weightUnit;
 	}
 
 	

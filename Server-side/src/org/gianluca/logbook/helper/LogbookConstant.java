@@ -19,5 +19,14 @@ public class LogbookConstant {
 	public static final int DEEP_METER=0;
 	public static final int DEEP_FEET=1;
 	
+	public static final int WEIGHT_KILOGRAM=0;
+	public static final int WEIGHT_POUND=1;
+	
+	public static final double METER_AS_FEET= 3.280839895;
+	public static final double CELSIUS_AS_FAREHN_TIME= 1.8;
+	public static final double CELSIUS_AS_FAREHN_ADD= 32;
+	public static final double KILOGRAM_AS_POUND = 2.2046;
+	
+	
 	
 }

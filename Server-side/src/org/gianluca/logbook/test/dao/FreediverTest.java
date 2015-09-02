@@ -2,7 +2,6 @@ package org.gianluca.logbook.test.dao;
 
 import static org.junit.Assert.*;
 
-import org.gianluca.logbook.dao.exception.FreediverNotExistsException;
 import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
 import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
 import org.gianluca.logbook.helper.LogbookConstant;
