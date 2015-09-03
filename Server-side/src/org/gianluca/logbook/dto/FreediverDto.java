@@ -2,14 +2,14 @@ package org.gianluca.logbook.dto;
 
 import java.util.List;
 
-public class FreediverDto {
+public class FreediverDto extends LogbookDto {
 	
 	
 	public String id;
 	public String externalId;
 	public int externalPlatformId;
 	public String externalUsername;
-	public String externalToken;
+	//public String externalToken;
 	public String status;
 	public int deepUnit;
 	public int temperatureUnit;
@@ -40,12 +40,7 @@ public class FreediverDto {
 	public void setExternalUsername(String externalUsername) {
 		this.externalUsername = externalUsername;
 	}
-	public String getExternalToken() {
-		return externalToken;
-	}
-	public void setExternalToken(String externalToken) {
-		this.externalToken = externalToken;
-	}
+	
 	public List<DiveSessionDto> getDiveSessions() {
 		return diveSessions;
 	}

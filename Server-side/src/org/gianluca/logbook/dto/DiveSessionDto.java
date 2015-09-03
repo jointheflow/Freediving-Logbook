@@ -2,7 +2,7 @@ package org.gianluca.logbook.dto;
 
 import java.util.Date;
 
-public class DiveSessionDto {
+public class DiveSessionDto extends LogbookDto {
 	public String id ;
 	public Date diveDate;
 	public String locationDesc;

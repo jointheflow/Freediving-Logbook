@@ -3,19 +3,23 @@ package org.gianluca.logbook.dao.googledatastore;
 
 
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
+import org.gianluca.logbook.dao.googledatastore.entity.DiveSessionsOfFreeediver;
 import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
 import org.gianluca.logbook.helper.LogbookConstant;
 
+import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.GeoPt;
 import com.google.appengine.api.datastore.Key;
-
+import com.google.appengine.api.datastore.QueryResultList;
 import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.Filter;
@@ -252,10 +256,66 @@ public class LogbookDAO {
 		
 	}
 	
-	/*Get all dive session owned by the freediver key passed as parameter*/
-	public static List<DiveSession> getDiveSessionsByFreediver() {
+	/*Get all dive session owned by the freediver key passed as parameter, starting from the given cursor if exists, with limit result to pagSize*/
+	public static DiveSessionsOfFreeediver getDiveSessionsByFreediver(Key freeDiverId, int pageSize, String startCursor) {
 		
-		return null;
+		List<DiveSession> diveSessions = null;
+		DiveSessionsOfFreeediver dsOfFree = null;
+		
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Transaction tx = datastore.beginTransaction();
+		
+		try {
+			//set pageSize limit
+			FetchOptions fetchOptions = FetchOptions.Builder.withLimit(pageSize);
+			//set startCursor, if exists
+			if (startCursor != null) {
+			      fetchOptions.startCursor(Cursor.fromWebSafeString(startCursor));
+			}
+			
+			//get all sessions descend from freeDiverId key ancestor
+			Query q = new Query("DiveSession").setAncestor(freeDiverId);		
+			PreparedQuery pq = datastore.prepare(q);
+			QueryResultList<Entity> results = pq.asQueryResultList(fetchOptions);
+			
+			if (!results.isEmpty())  {
+				diveSessions = new ArrayList<DiveSession>();
+				dsOfFree = new DiveSessionsOfFreeediver();
+			}
+			
+			for (Entity entity : results) {
+				DiveSession ds = new DiveSession();
+				ds.setDeepAsFeet((double)entity.getProperty("deepAsFeet"));
+				ds.setDeepAsMeter((double)entity.getProperty("deepAsMeter"));
+				ds.setDiveDate((Date)entity.getProperty("diveDate"));
+				ds.setEquipment((String)entity.getProperty("equipment"));
+				ds.setId(entity.getKey());
+				ds.setLocationDesc((String)entity.getProperty("locationDesc"));
+				ds.setLocationGeoPt((GeoPt)entity.getProperty("locationGeoPt"));
+				ds.setMeteoDesc((String)entity.getProperty("meteoDesc"));
+				ds.setNote((Text)entity.getProperty("note"));
+				ds.setWaterTempAsCelsius((double)entity.getProperty("waterTempAsCelsius"));
+				ds.setWaterTempAsFahrehneit((double)entity.getProperty("waterTempAsFahrehneit"));
+				ds.setWeightAsKilogram((double)entity.getProperty("weightAsKilogram"));
+				ds.setWeightAsPound((double)entity.getProperty("weightAsPound"));
+				
+				
+				diveSessions.add(ds);
+			     
+			}
+			
+			dsOfFree.setDiveSessions(diveSessions);
+			dsOfFree.setCursor(results.getCursor().toWebSafeString());
+			
+				
+			tx.commit();
+		} finally {
+		    if (tx.isActive()) {
+		        tx.rollback();
+		    }
+		}
+		
+	     return dsOfFree;
 	}
 	
 	/*Update dive session with the parameters passed*/
