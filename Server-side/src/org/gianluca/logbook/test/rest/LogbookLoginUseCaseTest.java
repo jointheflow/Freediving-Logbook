@@ -67,7 +67,7 @@ public class LogbookLoginUseCaseTest {
     private double ds3_weight =5.5;
   	    
 	private String freediverLoginRequest="http://localhost:8888/app/freediver/login?external_platform_id="+externalPlatform+"&external_token="+externalToken;
-	
+	private String diveSessionAddRequest ="http://localhost:8888/app/freediver/divesession/add";
 	@Before  
     public void setUp() {  
          
@@ -114,27 +114,31 @@ public class LogbookLoginUseCaseTest {
 			
 			
 			/*----Start adding some dives-- */
-			
-			/* END adding some dives--*/
-			
-			/*----START creation  of new provider ----*/
-			/*System.out.println("Creating a new provider");
 			Client providerClient = new Client(Protocol.HTTP);
-			Request providerRequest = new Request(Method.POST, providerSignupRequest);
+			Request providerRequest = new Request(Method.POST, diveSessionAddRequest);
 			//create a post entity for Representation
 			Form fParam_prov = new Form();
-			fParam_prov.add("email", providerEmail);
-			fParam_prov.add("password", providerPassword);
-			fParam_prov.add("name", providerName);	
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("freediver_id", freediverId);
+			fParam_prov.add("dive_date","100000");
+			fParam_prov.add("deep", Double.toString(ds1_deep));
+			fParam_prov.add("equipment", ds1_equipment); 
+			fParam_prov.add("location", ds1_location);
+			fParam_prov.add("meteo",ds1_meteo);
+			fParam_prov.add("note", ds1_note);
+			fParam_prov.add("waterTemp", Double.toString(ds1_waterTemp));
+		    fParam_prov.add("weight", Double.toString(ds1_weight));
+		    fParam_prov.add("deep_unit", Integer.toString(deepUnit));
+		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
+		    fParam_prov.add("temp_unit", Integer.toString(tempUnit));
+		    
+		    			
 			providerRequest.setEntity(fParam_prov.getWebRepresentation());
 			Response providerResponse = providerClient.handle(providerRequest);
 			JSONObject jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
 			System.out.println(jsonobj_prov.toString());
-			//gett the customerID
-			providerId = (Long)jsonobj_prov.get("id");
-			providerToken = jsonobj_prov.getJSONObject("token").getLong("id");
-			System.out.println("Provider created "+providerId);
-			/*----END creation of a new provider-----*/
+			/* END adding some dives--*/
+			
 			System.out.println("-->End test");
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
