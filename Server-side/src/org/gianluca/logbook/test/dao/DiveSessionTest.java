@@ -111,6 +111,16 @@ public class DiveSessionTest {
 		assertTrue(diveSessions2!=null);
 		assertTrue(diveSessions2.size()==1);
 		assertTrue(cursorPage2 != null);
+		
+		//test removing freediver also removes all his divesessions
+		LogbookDAO.removeFreediver(fd.getId());
+		//try to get all divesessions of removed freedivers
+		DiveSessionsOfFreeediver dsOfFreeAll = LogbookDAO.getDiveSessionsByFreediver(fd.getId(), 10,null);
+		assertTrue(dsOfFreeAll==null);
+		
+		
+		
+		
 	}
 	
 	

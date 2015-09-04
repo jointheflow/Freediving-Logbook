@@ -24,8 +24,8 @@ import org.restlet.ext.json.*;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.restfb.exception.FacebookOAuthException;
 
-public class FreediverLoginResource<K> extends ServerResource{
-	private static final Logger log = Logger.getLogger(FreediverLoginResource.class.getName());
+public class DiveSessionAddResource<K> extends ServerResource{
+	private static final Logger log = Logger.getLogger(DiveSessionAddResource.class.getName());
 	
 	
 		/*Get Freediver instance basing on externalPlatformId and externalId (may be facebook, google etc.). 
@@ -34,7 +34,7 @@ public class FreediverLoginResource<K> extends ServerResource{
 		  creates new instance* 
 		 */
 		@Get("json")
-		public Representation login(){
+		public Representation add(){
 			//create json response
 			JsonRepresentation representation = null;
 			try {

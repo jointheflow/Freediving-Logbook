@@ -10,7 +10,7 @@ public class LogbookConstant {
 	public static final String FREEDIVER_STATUS_OLD="OLD";
 	
 	//Facebook secret app identifier
-	public static final String FACEBOOK_SECRET_APP="84793f0243f40a9fcf53d4d857e8902d";
+	public static final String FACEBOOK_SECRET_APP="9112e450484d1f40ab554bec6ff96c30";
 	
 	//Settings constants
 	public static final int TEMPERATURE_CELSIUS=0;

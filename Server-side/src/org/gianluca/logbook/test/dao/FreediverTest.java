@@ -77,4 +77,28 @@ public class FreediverTest {
 			
 		}
 	}
+	
+	@Test
+	public void testRemoveFreeDiver() {
+		
+		//get that does not exixts Freediver by facebookId
+		String externalIdExist = "existsId";
+		Freediver fd = null;
+		try {
+			fd = LogbookDAO.getFreediverByExternalId(externalIdExist, LogbookConstant.FACEBOOK_PLATFORM);
+			assertTrue(fd!=null);
+			LogbookDAO.removeFreediver(fd.getId());
+			
+			fd = LogbookDAO.getFreediverByExternalId(externalIdExist, LogbookConstant.FACEBOOK_PLATFORM);
+			assertTrue(fd==null);
+			
+			
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+			
+		}
+	}
 }

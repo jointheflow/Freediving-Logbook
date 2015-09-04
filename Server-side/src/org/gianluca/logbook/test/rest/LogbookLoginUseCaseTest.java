@@ -4,6 +4,9 @@ import static org.junit.Assert.*;
 
 import java.util.Date;
 
+import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
+import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
+import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
 import org.gianluca.logbook.helper.LogbookConstant;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,10 +21,15 @@ import org.restlet.data.Method;
 import org.restlet.data.Protocol;
 import org.restlet.ext.json.JsonRepresentation;
 
-public class TestLogbookLoginUseCase {
+public class LogbookLoginUseCaseTest {
 	//set test constants
 	//get new toke from FB https://developers.facebook.com/tools/explorer
-	private String externalToken="CAANb5zgEgacBAKZCGqHQAhQYYaVoYw0J3IWFlV9MmfsEbLlKbX25BEzbNmwKZBDMUIFv9KbZBVTf7ZBuWNA5HFyz4hVbyDKGg7fGxsT3jZCudq1AR0LXkdrr3G7jAtVWY5p6rLAPzZBvlLwggLg9I1XUvpZBLaolxPtnanwime1cKmC7O0bcSlEN4smIKSlTqucrUMIu9GwoAZDZD";
+	private String externalToken="CAAB4GhgAGN0BAB0zTiGmkKHF2ZBkPix61O7CA4a8W8ZCqxiXGHFc06yuoAazZCEc5qHKnpTmPQtTmoLVaeTSar03FyTkHuKZCDpAMdvlcdzI3eTt8HSfId4F6tqxNHAr82WdK7idvmueCc7dCYsODFwZBlIKZBC0Tve1r5ZCvL89VkYZBFc1h3BlnqdnAlBbnnkO8azU3M2pL8dIn6GqZCpn9";
+	//externalId associated to "freediving logbook" user on Facebook
+	private String externalId = "125927547759071";
+	private String externalName ="freediving logbook";
+	private String email = null;
+	
 	private int externalPlatform=LogbookConstant.FACEBOOK_PLATFORM;
 	//Dive sessions data global
 	private int deepUnit = LogbookConstant.DEEP_METER;
@@ -60,7 +68,25 @@ public class TestLogbookLoginUseCase {
   	    
 	private String freediverLoginRequest="http://localhost:8888/app/freediver/login?external_platform_id="+externalPlatform+"&external_token="+externalToken;
 	
-	
+	@Before  
+    public void setUp() {  
+         
+        //create an entity instance of Freediver and 3 entity of DiveSession
+        try {
+    	
+        	Freediver fd = LogbookDAO.addFreediver(externalId, externalName, email, LogbookConstant.FACEBOOK_PLATFORM);
+         	System.out.println("freediver created:" + fd);
+         	DiveSession ds1 = LogbookDAO.addDiveSession(fd.getId(), ds1_date, ds1_deep, ds1_equipment, ds1_location, null, ds1_meteo, ds1_note, ds1_waterTemp, ds1_weight, deepUnit, tempUnit, weightUnit);
+         	System.out.println("dive session added:" + ds1);
+         	DiveSession ds2 = LogbookDAO.addDiveSession(fd.getId(), ds2_date, ds2_deep, ds2_equipment, ds2_location, null, ds2_meteo, ds2_note, ds2_waterTemp, ds2_weight, deepUnit, tempUnit, weightUnit);
+         	System.out.println("dive session added:" + ds2);
+         	DiveSession ds3 = LogbookDAO.addDiveSession(fd.getId(), ds3_date, ds3_deep, ds3_equipment, ds3_location, null, ds3_meteo, ds3_note, ds3_waterTemp, ds3_weight, deepUnit, tempUnit, weightUnit);
+         	System.out.println("dive session added:" + ds3);
+        }catch (Exception e) {
+        	
+        	
+        }
+    }  
 	
 
 	@Test
@@ -70,13 +96,12 @@ public class TestLogbookLoginUseCase {
 		try {
 			
 			
-			/*----START Creation of a  new customer-----*/ 
+			/*----START Login of a  freediver-----*/ 
 			System.out.println("Login as a freediver");
 			Client loginClient = new Client(Protocol.HTTP);
 			Request loginRequest = new Request(Method.GET, freediverLoginRequest);
 			System.out.println("Executing GET "+ freediverLoginRequest);
-			//create a post entity for Representation
-			Form fParam = new Form();
+			
 			Response loginResponse = loginClient.handle(loginRequest);
 			JSONObject jsonobj = new JsonRepresentation(loginResponse.getEntityAsText()).getJsonObject();
 			System.out.println(jsonobj.toString());
@@ -85,7 +110,12 @@ public class TestLogbookLoginUseCase {
 			String externalId = (String)jsonobj.get("externalId");
 			
 			System.out.println("Login executed by external free diver:"+ freediverId);
-			/*----END Creation of a new customer----*/
+			/*----END Login of a freediver----*/
+			
+			
+			/*----Start adding some dives-- */
+			
+			/* END adding some dives--*/
 			
 			/*----START creation  of new provider ----*/
 			/*System.out.println("Creating a new provider");

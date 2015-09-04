@@ -11,6 +11,7 @@ import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSessionsOfFreeediver;
 import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
 import org.gianluca.logbook.helper.LogbookConstant;
+import org.mortbay.log.Log;
 
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -19,6 +20,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.GeoPt;
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.QueryResultList;
 import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
@@ -154,6 +156,33 @@ public class LogbookDAO {
 	        return freediver;
 		}
 	
+	/*remove freediver and all child DiveSession entity and all child Dive entity */
+	public static void removeFreediver(Key freediverId){
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Transaction tx = datastore.beginTransaction();
+		
+		try {
+			
+			//get freediver instance and all child of DiveSession (also Dive)  regardless of kind
+			Query ancestorQuery = new Query().setAncestor(freediverId).setKeysOnly();
+			List<Entity> results = datastore.prepare(ancestorQuery).asList(FetchOptions.Builder.withDefaults());
+			for (Entity entity : results) {
+				Log.info("Delete "+ entity.getKey().toString());
+				datastore.delete(entity.getKey());
+			}
+			
+			
+			
+			 	
+			tx.commit();
+		} finally {
+			if (tx.isActive()) {
+		        tx.rollback();
+		    }
+		}
+	    	
+	}
+	
 	/*Add new dive session as a child entity for the freediver key passed as parameter*/
 	public static DiveSession addDiveSession(Key freediverId, Date diveDate, Double deep, String equipment, String locationDesc, GeoPt locationGeoPt, String meteoDesc, String note, Double waterTemp, Double weight, int deepUnit, int tempUnit, int weightUnit) {
 		
@@ -280,7 +309,6 @@ public class LogbookDAO {
 			
 			if (!results.isEmpty())  {
 				diveSessions = new ArrayList<DiveSession>();
-				dsOfFree = new DiveSessionsOfFreeediver();
 			}
 			
 			for (Entity entity : results) {
@@ -304,8 +332,13 @@ public class LogbookDAO {
 			     
 			}
 			
-			dsOfFree.setDiveSessions(diveSessions);
-			dsOfFree.setCursor(results.getCursor().toWebSafeString());
+			if (!results.isEmpty())  {
+			
+				dsOfFree = new DiveSessionsOfFreeediver();
+				dsOfFree.setDiveSessions(diveSessions);
+				dsOfFree.setCursor(results.getCursor().toWebSafeString());
+			}
+			
 			
 				
 			tx.commit();
@@ -324,8 +357,11 @@ public class LogbookDAO {
 	}
 	
 	/*Remove dive session by key*/
-	public static void removeDiveSession() {
+	public static void removeDiveSession(Key diveSessionId) {
 		
 	}
+	
+	
+	
 }
 
