@@ -34,4 +34,25 @@ public class ExternalUserFactory {
 		return extUser;
 	}
 	
+	/*Check if external token is vaild*/
+	public static void checkExternalToken(String token, int platform) throws PlatformNotManagedException {
+		
+		switch (platform) {
+			
+			case LogbookConstant.FACEBOOK_PLATFORM: {
+				//using specific API to connect Facebook
+				FacebookClient facebookClient = new DefaultFacebookClient(token, LogbookConstant.FACEBOOK_SECRET_APP, Version.VERSION_2_4);
+				@SuppressWarnings("unused")
+				User user = facebookClient.fetchObject("me", User.class);
+				
+			}
+			break;
+			
+			default:
+				throw new PlatformNotManagedException("Error checking Token:"+ token +" for platform "+ platform);
+			}
+		
+		
+		
+	}
 }

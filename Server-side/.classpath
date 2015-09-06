@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="ext/lib/Json-ext/java-json.jar"/>
 	<classpathentry kind="lib" path="ext/lib/Junit-gae-eidition/appengine-api-stubs-1.9.18.jar"/>
@@ -12,5 +11,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/restfb-1.14.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/java-json.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/App Engine (1)"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

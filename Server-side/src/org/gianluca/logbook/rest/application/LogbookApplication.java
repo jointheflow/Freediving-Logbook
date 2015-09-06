@@ -18,10 +18,11 @@ public class LogbookApplication extends Application {
         // new instance resources.
         Router router = new Router(getContext());
         
-        // Defines a route for the resource Customer  
+        // Defines a route for the URLs requests  
          
         router.attach("/freediver/login", org.gianluca.logbook.rest.resource.FreediverLoginResource.class);
-   
+        router.attach("/freediver/remove", org.gianluca.logbook.rest.resource.FreediverRemoveResource.class);
+        router.attach("/freediver/divesession/add", org.gianluca.logbook.rest.resource.DiveSessionAddResource.class);
         return router;
 
        

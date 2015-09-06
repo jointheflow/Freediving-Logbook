@@ -5,3 +5,6 @@ Url test login
 http://localhost:8888/app/freediver/login?external_platform_id=0&external_token=CAANb5zgEgacBAKZCGqHQAhQYYaVoYw0J3IWFlV9MmfsEbLlKbX25BEzbNmwKZBDMUIFv9KbZBVTf7ZBuWNA5HFyz4hVbyDKGg7fGxsT3jZCudq1AR0LXkdrr3G7jAtVWY5p6rLAPzZBvlLwggLg9I1XUvpZBLaolxPtnanwime1cKmC7O0bcSlEN4smIKSlTqucrUMIu9GwoAZDZD
 
 
+Dependencies
+1) Facebook external platform integration 
+http://restfb.com/

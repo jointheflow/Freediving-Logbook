@@ -12,6 +12,7 @@ import org.gianluca.logbook.dao.googledatastore.entity.DiveSessionsOfFreeediver;
 import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
 import org.gianluca.logbook.dto.DiveSessionDto;
 import org.gianluca.logbook.dto.FreediverDto;
+import org.gianluca.logbook.dto.LogbookDto;
 import org.gianluca.logbook.external.integration.ExternalUser;
 import org.gianluca.logbook.external.integration.ExternalUserFactory;
 import org.gianluca.logbook.external.integration.PlatformNotManagedException;
@@ -100,7 +101,7 @@ public class FreediverLoginResource<K> extends ServerResource{
 							dsDto.setLocationLongitude(ds.getLocationGeoPt().getLongitude());
 						}
 						dsDto.setMeteoDesc(ds.getMeteoDesc());
-						dsDto.setMeteoDesc(ds.getNote().getValue());
+						dsDto.setNote(ds.getNote().getValue());
 						dsDto.setWaterTempAsCelsius(ds.getWaterTempAsCelsius());
 						dsDto.setWaterTempAsFahrehneit(ds.getWaterTempAsFahrehneit());
 						dsDto.setWeightAsKilogram(ds.getWeightAsKilogram());
@@ -110,7 +111,9 @@ public class FreediverLoginResource<K> extends ServerResource{
 					}
 				}
 				
-				
+				//Set dto status and message
+				fdDto.setResult(LogbookDto.RESULT_OK);
+				fdDto.setMessage("Freediver login executed");
 				
 				representation= new JsonRepresentation(fdDto);
 				representation.setIndenting(true);

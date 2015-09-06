@@ -5,5 +5,6 @@ package org.gianluca.logbook.external.integration;
 public interface ExternalUser {
 	public String getId();
 	public String getName();
+	public abstract void checkExternalToken(String externalToken);
 	
 }

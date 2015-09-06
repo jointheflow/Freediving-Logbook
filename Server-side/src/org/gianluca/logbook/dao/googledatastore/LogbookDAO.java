@@ -6,12 +6,15 @@ package org.gianluca.logbook.dao.googledatastore;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSessionsOfFreeediver;
 import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
 import org.gianluca.logbook.helper.LogbookConstant;
-import org.mortbay.log.Log;
+
+
+import org.gianluca.logbook.rest.resource.FreediverLoginResource;
 
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -34,15 +37,8 @@ import static com.google.appengine.api.datastore.FetchOptions.Builder.*;
 
 import com.google.appengine.api.datastore.Transaction;
 
-
-
-
-
-
-
-
 public class LogbookDAO {
-	
+	private static final Logger log = Logger.getLogger(LogbookDAO.class.getName());
 	/*Freediver is saved in the datastore as the following:
 	 * Entity --> Freediver
 	 * 				key: id
@@ -167,7 +163,7 @@ public class LogbookDAO {
 			Query ancestorQuery = new Query().setAncestor(freediverId).setKeysOnly();
 			List<Entity> results = datastore.prepare(ancestorQuery).asList(FetchOptions.Builder.withDefaults());
 			for (Entity entity : results) {
-				Log.info("Delete "+ entity.getKey().toString());
+				log.info("Delete "+ entity.getKey().toString());
 				datastore.delete(entity.getKey());
 			}
 			

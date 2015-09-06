@@ -26,5 +26,11 @@ public class FacebookUser implements ExternalUser {
 		this.name = name;
 	}
 
+	@Override
+	public void checkExternalToken(String externalToken) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }
