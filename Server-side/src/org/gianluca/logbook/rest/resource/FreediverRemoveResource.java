@@ -49,7 +49,7 @@ public class FreediverRemoveResource<K> extends ServerResource{
 			ExternalUserFactory.checkExternalToken(externalToken, Integer.parseInt(externalPlatformId));
 		    
 		    //add dive session
-		    LogbookDAO.removeFreediver(KeyFactory.stringToKey(freediverId));
+		    LogbookDAO.removeFreediver(freediverId);
 		    LogbookDto resDto = new LogbookDto();
 		    
 		  //Set dto status and message

@@ -14,6 +14,8 @@ import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
 import org.gianluca.logbook.helper.LogbookConstant;
 import org.gianluca.logbook.rest.resource.FreediverLoginResource;
 
+import sun.awt.KeyboardFocusManagerPeerProvider;
+
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -93,7 +95,7 @@ public class LogbookDAO {
 					freediver.setDeepUnit((int)(long)result.getProperty("deepUnit"));
 					freediver.setTemperatureUnit((int)(long)result.getProperty("temperatureUnit"));
 					freediver.setWeightUnit((int)(long)result.getProperty("weightUnit"));
-					freediver.setId((Key) result.getKey());
+					freediver.setId(KeyFactory.keyToString(result.getKey()));
 				}
 								
 				
@@ -138,7 +140,7 @@ public class LogbookDAO {
 				freediver.setExternalId(externalId);
 				freediver.setExternalName(externalName);
 				freediver.setExternalPlatformId(externalPlatformId);
-				freediver.setId(freediverId);
+				freediver.setId(KeyFactory.keyToString(freediverId));
 				
 				tx.commit();
 			} finally {
@@ -152,14 +154,14 @@ public class LogbookDAO {
 		}
 	
 	/*remove freediver and all child DiveSession entity and all child Dive entity */
-	public static void removeFreediver(Key freediverId){
+	public static void removeFreediver(String freediverId){
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Transaction tx = datastore.beginTransaction();
 		
 		try {
 			
 			//get freediver instance and all child of DiveSession (also Dive)  regardless of kind
-			Query ancestorQuery = new Query().setAncestor(freediverId).setKeysOnly();
+			Query ancestorQuery = new Query().setAncestor(KeyFactory.stringToKey(freediverId)).setKeysOnly();
 			List<Entity> results = datastore.prepare(ancestorQuery).asList(FetchOptions.Builder.withDefaults());
 			for (Entity entity : results) {
 				log.info("Delete "+ entity.getKey().toString());
@@ -179,7 +181,7 @@ public class LogbookDAO {
 	}
 	
 	/*Add new dive session as a child entity for the freediver key passed as parameter*/
-	public static DiveSession addDiveSession(Key freediverId, Date diveDate, Double deep, String equipment, String locationDesc, GeoPt locationGeoPt, String meteoDesc, String note, Double waterTemp, Double weight, int deepUnit, int tempUnit, int weightUnit) {
+	public static DiveSession addDiveSession(String freediverId, Date diveDate, Double deep, String equipment, String locationDesc, GeoPt locationGeoPt, String meteoDesc, String note, Double waterTemp, Double weight, int deepUnit, int tempUnit, int weightUnit) {
 		
 		Key diveSessionId = null;
 		DiveSession diveSession = null;
@@ -187,7 +189,7 @@ public class LogbookDAO {
 		Transaction tx = datastore.beginTransaction();
 			try {
 				
-				Entity e_diveSession = new Entity("DiveSession", freediverId);
+				Entity e_diveSession = new Entity("DiveSession", KeyFactory.stringToKey(freediverId));
 				
 				/*Executes deep conversion*/
 				if (deep !=null)
@@ -281,7 +283,7 @@ public class LogbookDAO {
 	}
 	
 	/*Get all dive session owned by the freediver key passed as parameter, starting from the given cursor if exists, with limit result to pagSize*/
-	public static DiveSessionsOfFreeediver getDiveSessionsByFreediver(Key freeDiverId, int pageSize, String startCursor) {
+	public static DiveSessionsOfFreeediver getDiveSessionsByFreediver(String freediverId, int pageSize, String startCursor) {
 		
 		List<DiveSession> diveSessions = null;
 		DiveSessionsOfFreeediver dsOfFree = null;
@@ -298,7 +300,7 @@ public class LogbookDAO {
 			}
 			
 			//get all sessions descend from freeDiverId key ancestor
-			Query q = new Query("DiveSession").setAncestor(freeDiverId).addSort("diveDate",SortDirection.DESCENDING);		
+			Query q = new Query("DiveSession").setAncestor(KeyFactory.stringToKey(freediverId)).addSort("diveDate",SortDirection.DESCENDING);		
 			PreparedQuery pq = datastore.prepare(q);
 			QueryResultList<Entity> results = pq.asQueryResultList(fetchOptions);
 			

@@ -64,7 +64,7 @@ public class DiveSessionAddResource<K> extends ServerResource{
 			ExternalUserFactory.checkExternalToken(externalToken, Integer.parseInt(externalPlatformId));
 		    
 		    //add dive session
-		    DiveSession ds = LogbookDAO.addDiveSession(KeyFactory.stringToKey(freediverId), diveDate, deep, equipment , location, null, meteo, note, waterTemp, weight, deepUnit, tempUnit, weightUnit);
+		    DiveSession ds = LogbookDAO.addDiveSession(freediverId, diveDate, deep, equipment , location, null, meteo, note, waterTemp, weight, deepUnit, tempUnit, weightUnit);
 		    
 		    //create result dto
 		    DiveSessionDto dsDto = new DiveSessionDto();

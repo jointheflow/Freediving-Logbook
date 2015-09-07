@@ -7,7 +7,7 @@ import com.google.appengine.api.datastore.Key;
 public class Freediver {
 		
 	//Datastore ID
-	private Key id;
+	private String id;
 	
 	//facebook freediver's identifier returned back by external platform (e.g. Facebook)
 	private String externalId;
@@ -28,12 +28,12 @@ public class Freediver {
 	private int weightUnit = LogbookConstant.WEIGHT_KILOGRAM;
 	
 	
-	public Key getId() {
+	public String getId() {
 	
 		return id;
 	}
 
-	public void setId(Key id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

@@ -2,11 +2,6 @@ package org.gianluca.logbook.test.rest;
 
 import static org.junit.Assert.*;
 
-import java.util.Date;
-
-import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
-import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
-import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
 import org.gianluca.logbook.helper.LogbookConstant;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,7 +20,7 @@ import org.restlet.ext.json.JsonRepresentation;
 public class LogbookLoginUseCaseTest {
 	//set test constants
 	//get new toke from FB https://developers.facebook.com/tools/explorer
-	private String externalToken="CAAB4GhgAGN0BAC7i89p4wN091aQgJydwTXYYEAizv1ZAhtfNmg7a1vKol0iy0SqH8uVYZAGQ4NVT2DEc7HoRGjEQicu5z8zzdJrAcxgXt36O0OhZAUZBVc4ZB41wIZBzV35fk6wvlxqwK1xDdRGIPZBmYytnMhwv7dfJMMULyHtXrbt7xEZB2QueZAxuJvSBzs89A8mQvlX0kmgZDZD";
+	private String externalToken="CAAB4GhgAGN0BAAo4nXGkbG3Als92du72M5ciUcxmewbl5eNLGbZBGX85Abw3LMTa9pkqqQkdMnZB8DTyRp8jrM9DM6HrVxOLZCBZCDVpQ9cxyxORUyQK8AV7pVzDOdAZAUjXgaN1sKzM2ZBQiZAixJgSA69b2Rp8ZCwIPLvS3Dp0vM50WQqM9CSak18L0ZCUX7G66mZAJIVjyTUeiNqvfTDMVU";
 	//externalId associated to "freediving logbook" user on Facebook
 	private String externalId = "125927547759071";
 	private String externalName ="freediving logbook";
@@ -45,7 +40,7 @@ public class LogbookLoginUseCaseTest {
 	private String ds1_location = "Elba Island - margidore";
 	private String ds1_meteo=  "sunny";
 	private String ds1_note= "note 1";
-	private double ds1_waterTemp = 20.0;
+	private String ds1_waterTemp = "20.0";
     private double ds1_weight =5.0;
 	
     //Dive session2
@@ -55,7 +50,7 @@ public class LogbookLoginUseCaseTest {
   	private String ds2_location = "Giglio Island";
   	private String ds2_meteo=  "cloudy";
   	private String ds2_note= "note 2";
-  	private double ds2_waterTemp = 20.0;
+  	private String ds2_waterTemp = "20.0";
     private double ds2_weight =5.5;
   	
     //Dive session3
@@ -65,7 +60,7 @@ public class LogbookLoginUseCaseTest {
   	private String ds3_location = "Giglio Island";
   	private String ds3_meteo=  "windy";
   	private String ds3_note= "note 3";
-  	private double ds3_waterTemp = 21.0;
+  	private String ds3_waterTemp = "21.0";
     private double ds3_weight =5.5;
   	    
 	private String freediverLoginRequest="http://localhost:8888/app/freediver/login?external_platform_id="+externalPlatform+"&external_token="+externalToken;
@@ -108,7 +103,7 @@ public class LogbookLoginUseCaseTest {
 			fParam_prov.add("location", ds1_location);
 			fParam_prov.add("meteo",ds1_meteo);
 			fParam_prov.add("note", ds1_note);
-			fParam_prov.add("water_temp", Double.toString(ds1_waterTemp));
+			fParam_prov.add("water_temp", ds1_waterTemp);
 		    fParam_prov.add("weight", Double.toString(ds1_weight));
 		    fParam_prov.add("deep_unit", Integer.toString(deepUnit));
 		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
@@ -132,7 +127,7 @@ public class LogbookLoginUseCaseTest {
 			fParam_prov.add("location", ds2_location);
 			fParam_prov.add("meteo",ds2_meteo);
 			fParam_prov.add("note", ds2_note);
-			fParam_prov.add("water_temp", Double.toString(ds2_waterTemp));
+			fParam_prov.add("water_temp",ds2_waterTemp);
 		    fParam_prov.add("weight", Double.toString(ds2_weight));
 		    fParam_prov.add("deep_unit", Integer.toString(deepUnit));
 		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
@@ -157,7 +152,7 @@ public class LogbookLoginUseCaseTest {
 			fParam_prov.add("location", ds3_location);
 			fParam_prov.add("meteo",ds3_meteo);
 			fParam_prov.add("note", ds3_note);
-			fParam_prov.add("water_temp", Double.toString(ds3_waterTemp));
+			fParam_prov.add("water_temp", ds3_waterTemp);
 		    fParam_prov.add("weight", Double.toString(ds3_weight));
 		    fParam_prov.add("deep_unit", Integer.toString(deepUnit));
 		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
@@ -211,20 +206,36 @@ public class LogbookLoginUseCaseTest {
 			JSONObject jsonDs2 = jsonDiveSessions.getJSONObject(1);
 			JSONObject jsonDs3 = jsonDiveSessions.getJSONObject(2);
 			
-			//assertTrue(jsonDs1.get("id"));
 			assertTrue(((String)jsonDs1.get("note")).equals(ds3_note));
-			assertTrue(((Double)jsonDs1.get("waterTempAsFahrehneit")).doubleValue()==ds3_waterTemp);
-			/*assertTrue(jsonDs1.get("waterTempAsCelsius"));
-			assertTrue(jsonDs1.get("externalToken"));
-			assertTrue(jsonDs1.get("equipment"));
-			assertTrue(jsonDs1.get("deepAsFeet"));
-			assertTrue(jsonDs1.get("deepAsMeter"));
-			assertTrue(jsonDs1.get("meteoDesc"));
-			assertTrue(jsonDs1.get("locationDesc"))
-			assertTrue(jsonDs1.get("diveDate"));
-			assertTrue(jsonDs1.get("weightAsPound"));
-			assertTrue(jsonDs1.get("weightAsKilogram"));
-			*/
+			assertTrue(((Double)jsonDs1.getDouble("waterTempAsCelsius")).doubleValue()==new Double(ds3_waterTemp));
+			assertTrue(((String)jsonDs1.get("externalToken")).equals(externalToken));
+			assertTrue(((String)jsonDs1.get("equipment")).equals(ds3_equipment));
+			assertTrue(((Double)jsonDs1.getDouble("deepAsMeter")).doubleValue()==new Double(ds3_deep));
+			assertTrue(((String)jsonDs1.get("meteoDesc")).equals(ds3_meteo));
+			assertTrue(((String)jsonDs1.get("locationDesc")).equals(ds3_location));
+			assertTrue(((String)jsonDs1.get("diveDate")).equals("Thu Jan 01 01:05:00 CET 1970"));
+			assertTrue(((Double)jsonDs1.get("weightAsKilogram")).doubleValue()==new Double(ds3_weight));
+			
+			assertTrue(((String)jsonDs2.get("note")).equals(ds2_note));
+			assertTrue(((Double)jsonDs2.getDouble("waterTempAsCelsius")).doubleValue()==new Double(ds2_waterTemp));
+			assertTrue(((String)jsonDs2.get("externalToken")).equals(externalToken));
+			assertTrue(((String)jsonDs2.get("equipment")).equals(ds2_equipment));
+			assertTrue(((Double)jsonDs2.getDouble("deepAsMeter")).doubleValue()==new Double(ds2_deep));
+			assertTrue(((String)jsonDs2.get("meteoDesc")).equals(ds2_meteo));
+			assertTrue(((String)jsonDs2.get("locationDesc")).equals(ds2_location));
+			assertTrue(((String)jsonDs2.get("diveDate")).equals("Thu Jan 01 01:03:20 CET 1970"));
+			assertTrue(((Double)jsonDs2.get("weightAsKilogram")).doubleValue()==new Double(ds2_weight));
+			
+			
+			assertTrue(((String)jsonDs3.get("note")).equals(ds1_note));
+			assertTrue(((Double)jsonDs3.getDouble("waterTempAsCelsius")).doubleValue()==new Double(ds1_waterTemp));
+			assertTrue(((String)jsonDs3.get("externalToken")).equals(externalToken));
+			assertTrue(((String)jsonDs3.get("equipment")).equals(ds1_equipment));
+			assertTrue(((Double)jsonDs3.getDouble("deepAsMeter")).doubleValue()==new Double(ds1_deep));
+			assertTrue(((String)jsonDs3.get("meteoDesc")).equals(ds1_meteo));
+			assertTrue(((String)jsonDs3.get("locationDesc")).equals(ds1_location));
+			assertTrue(((String)jsonDs3.get("diveDate")).equals("Thu Jan 01 01:01:40 CET 1970"));
+			//assertTrue(((Double)jsonDs3.get("weightAsKilogram")).doubleValue()==new Double(ds1_weight));
 			
 			System.out.println(jsonDiveSessions.length());
 			

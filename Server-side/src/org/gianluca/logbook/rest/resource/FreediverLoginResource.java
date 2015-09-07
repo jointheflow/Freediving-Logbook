@@ -3,7 +3,6 @@ package org.gianluca.logbook.rest.resource;
 
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
@@ -77,7 +76,7 @@ public class FreediverLoginResource<K> extends ServerResource{
 				fdDto.externalPlatformId = fd.getExternalPlatformId();
 				fdDto.externalToken = p_externalToken;
 				fdDto.externalUsername = fd.getExternalName();
-				fdDto.id = KeyFactory.keyToString(fd.getId());
+				fdDto.id = fd.getId();
 				fdDto.deepUnit = fd.getDeepUnit();
 				fdDto.temperatureUnit = fd.getTemperatureUnit();
 				
