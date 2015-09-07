@@ -8,6 +8,7 @@ import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
 import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
 import org.gianluca.logbook.helper.LogbookConstant;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.After;
@@ -24,7 +25,7 @@ import org.restlet.ext.json.JsonRepresentation;
 public class LogbookLoginUseCaseTest {
 	//set test constants
 	//get new toke from FB https://developers.facebook.com/tools/explorer
-	private String externalToken="CAAB4GhgAGN0BAKCH1v3tWHVWKDomWsajlQcQ8tcscyhVDM4SLmMX4IkPNabR0KQoQXGZCEjRU6JZCoNFVRZADUZAyYyTaTGyrvCmizi75SstnAy8Eq1og9sZCZBlwXY64m0iEyFHrJax4iBf1jgSkWTZAap4LpvN7WmzRZAzUyiBGrAQ8V114ToELBuACP71T2i0EnFFlq1pugZDZD";
+	private String externalToken="CAAB4GhgAGN0BAC7i89p4wN091aQgJydwTXYYEAizv1ZAhtfNmg7a1vKol0iy0SqH8uVYZAGQ4NVT2DEc7HoRGjEQicu5z8zzdJrAcxgXt36O0OhZAUZBVc4ZB41wIZBzV35fk6wvlxqwK1xDdRGIPZBmYytnMhwv7dfJMMULyHtXrbt7xEZB2QueZAxuJvSBzs89A8mQvlX0kmgZDZD";
 	//externalId associated to "freediving logbook" user on Facebook
 	private String externalId = "125927547759071";
 	private String externalName ="freediving logbook";
@@ -43,7 +44,7 @@ public class LogbookLoginUseCaseTest {
 	private String ds1_equipment = "mask, lanyard, dive suit 5.5 mm"; 
 	private String ds1_location = "Elba Island - margidore";
 	private String ds1_meteo=  "sunny";
-	private String ds1_note= "katabasis course ssi level 3";
+	private String ds1_note= "note 1";
 	private double ds1_waterTemp = 20.0;
     private double ds1_weight =5.0;
 	
@@ -53,7 +54,7 @@ public class LogbookLoginUseCaseTest {
   	private String ds2_equipment = "mask, lanyard, dive suit 6.0 mm"; 
   	private String ds2_location = "Giglio Island";
   	private String ds2_meteo=  "cloudy";
-  	private String ds2_note= "training";
+  	private String ds2_note= "note 2";
   	private double ds2_waterTemp = 20.0;
     private double ds2_weight =5.5;
   	
@@ -63,7 +64,7 @@ public class LogbookLoginUseCaseTest {
   	private String ds3_equipment = "mask, dive suit 4.5 mm"; 
   	private String ds3_location = "Giglio Island";
   	private String ds3_meteo=  "windy";
-  	private String ds3_note= "training";
+  	private String ds3_note= "note 3";
   	private double ds3_waterTemp = 21.0;
     private double ds3_weight =5.5;
   	    
@@ -183,7 +184,9 @@ public class LogbookLoginUseCaseTest {
 		try {
 			System.out.println("-------START test()--------");	
 				
-				
+			//insert waiting 5 second for eventually consistence.
+			Thread.sleep(5000);	
+			
 			//execute Login
 			System.out.println("Login as a freediver");
 			Client loginClient = new Client(Protocol.HTTP);
@@ -201,6 +204,29 @@ public class LogbookLoginUseCaseTest {
 			assertTrue(((String)jsonobj.get("result")).equals("OK"));
 			assertTrue(((String)jsonobj.get("message")).equals("Freediver login executed"));
 			assertTrue(((String)jsonobj.get("externalToken")).equals(externalToken));
+			
+			JSONArray jsonDiveSessions = jsonobj.getJSONArray("diveSessions");
+			assertTrue(jsonDiveSessions.length()==3);
+			JSONObject jsonDs1 = jsonDiveSessions.getJSONObject(0);
+			JSONObject jsonDs2 = jsonDiveSessions.getJSONObject(1);
+			JSONObject jsonDs3 = jsonDiveSessions.getJSONObject(2);
+			
+			//assertTrue(jsonDs1.get("id"));
+			assertTrue(((String)jsonDs1.get("note")).equals(ds3_note));
+			assertTrue(((Double)jsonDs1.get("waterTempAsFahrehneit")).doubleValue()==ds3_waterTemp);
+			/*assertTrue(jsonDs1.get("waterTempAsCelsius"));
+			assertTrue(jsonDs1.get("externalToken"));
+			assertTrue(jsonDs1.get("equipment"));
+			assertTrue(jsonDs1.get("deepAsFeet"));
+			assertTrue(jsonDs1.get("deepAsMeter"));
+			assertTrue(jsonDs1.get("meteoDesc"));
+			assertTrue(jsonDs1.get("locationDesc"))
+			assertTrue(jsonDs1.get("diveDate"));
+			assertTrue(jsonDs1.get("weightAsPound"));
+			assertTrue(jsonDs1.get("weightAsKilogram"));
+			*/
+			
+			System.out.println(jsonDiveSessions.length());
 			
 		}catch (Exception e) {
 			e.printStackTrace();

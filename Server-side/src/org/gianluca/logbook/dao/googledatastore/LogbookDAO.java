@@ -12,8 +12,6 @@ import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSessionsOfFreeediver;
 import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
 import org.gianluca.logbook.helper.LogbookConstant;
-
-
 import org.gianluca.logbook.rest.resource.FreediverLoginResource;
 
 import com.google.appengine.api.datastore.Cursor;
@@ -24,6 +22,7 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.GeoPt;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.QueryResultList;
 import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
@@ -299,7 +298,7 @@ public class LogbookDAO {
 			}
 			
 			//get all sessions descend from freeDiverId key ancestor
-			Query q = new Query("DiveSession").setAncestor(freeDiverId);		
+			Query q = new Query("DiveSession").setAncestor(freeDiverId).addSort("diveDate",SortDirection.DESCENDING);		
 			PreparedQuery pq = datastore.prepare(q);
 			QueryResultList<Entity> results = pq.asQueryResultList(fetchOptions);
 			
