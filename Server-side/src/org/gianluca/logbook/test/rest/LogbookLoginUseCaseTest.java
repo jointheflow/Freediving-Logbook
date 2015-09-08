@@ -20,7 +20,7 @@ import org.restlet.ext.json.JsonRepresentation;
 public class LogbookLoginUseCaseTest {
 	//set test constants
 	//get new toke from FB https://developers.facebook.com/tools/explorer
-	private String externalToken="CAAB4GhgAGN0BAAo4nXGkbG3Als92du72M5ciUcxmewbl5eNLGbZBGX85Abw3LMTa9pkqqQkdMnZB8DTyRp8jrM9DM6HrVxOLZCBZCDVpQ9cxyxORUyQK8AV7pVzDOdAZAUjXgaN1sKzM2ZBQiZAixJgSA69b2Rp8ZCwIPLvS3Dp0vM50WQqM9CSak18L0ZCUX7G66mZAJIVjyTUeiNqvfTDMVU";
+	private String externalToken="CAAB4GhgAGN0BAJfHtTE2Co7QmMUFUCoB2ZC5c5Fg48BvTowHqwS1WS2x8Lz5gq1zZAIZBvuXfssZAizfZCIFz13wiBu4xFOJmtpbxXZCu2b5e20yqJYasIdRH1I1dHBKQ732f863wZAykG4AEcufqTmMtESZAVdhj6ENoq5olGcUxXBrK7kZBqQWlD0Wvytg6DbafrZBVFZCvynVWpeAQP8157V";
 	//externalId associated to "freediving logbook" user on Facebook
 	private String externalId = "125927547759071";
 	private String externalName ="freediving logbook";
@@ -62,6 +62,9 @@ public class LogbookLoginUseCaseTest {
   	private String ds3_note= "note 3";
   	private String ds3_waterTemp = "21.0";
     private double ds3_weight =5.5;
+    
+    private int divePageSize10=10;
+    private int divePageSize2=2;
   	    
 	private String freediverLoginRequest="http://localhost:8888/app/freediver/login?external_platform_id="+externalPlatform+"&external_token="+externalToken;
 	private String freediverRemoveRequest="http://localhost:8888/app/freediver/remove?external_platform_id="+externalPlatform+"&external_token="+externalToken;
@@ -75,14 +78,15 @@ public class LogbookLoginUseCaseTest {
 			/*----START Login of a  freediver-----*/ 
 			System.out.println("Login as a freediver");
 			Client loginClient = new Client(Protocol.HTTP);
-			Request loginRequest = new Request(Method.GET, freediverLoginRequest);
-			System.out.println("Executing GET "+ freediverLoginRequest);
+			Request loginRequest = new Request(Method.GET, freediverLoginRequest+"&dive_page_size="+divePageSize10);
+			System.out.println("Executing GET "+ freediverLoginRequest+"&dive_page_size="+divePageSize10);
 			
 			Response loginResponse = loginClient.handle(loginRequest);
 			JSONObject jsonobj = new JsonRepresentation(loginResponse.getEntityAsText()).getJsonObject();
 			System.out.println(jsonobj.toString());
 			
 			freediverId = (String)jsonobj.get("id");
+			@SuppressWarnings("unused")
 			String externalId = (String)jsonobj.get("externalId");
 			
 			System.out.println("Login executed by external free diver:"+ freediverId);
@@ -175,9 +179,9 @@ public class LogbookLoginUseCaseTest {
 	}
 
 	@Test
-	public void test() {
+	public void testLoginNoPagination() {
 		try {
-			System.out.println("-------START test()--------");	
+			System.out.println("-------START testLoginNoPagination()--------");	
 				
 			//insert waiting 5 second for eventually consistence.
 			Thread.sleep(5000);	
@@ -185,15 +189,15 @@ public class LogbookLoginUseCaseTest {
 			//execute Login
 			System.out.println("Login as a freediver");
 			Client loginClient = new Client(Protocol.HTTP);
-			Request loginRequest = new Request(Method.GET, freediverLoginRequest);
-			System.out.println("Executing GET "+ freediverLoginRequest);
+			Request loginRequest = new Request(Method.GET, freediverLoginRequest+"&dive_page_size="+divePageSize10);
+			System.out.println("Executing GET "+ freediverLoginRequest+"&dive_page_size="+divePageSize10);
 			
 			Response loginResponse = loginClient.handle(loginRequest);
 			JSONObject jsonobj = new JsonRepresentation(loginResponse.getEntityAsText()).getJsonObject();
 			System.out.println(jsonobj.toString());
 			
 				
-			//TODO check freediving data and dive session data
+			//check freediving data and dive session data
 			assertTrue(((String)jsonobj.get("id")).equals(freediverId));
 			assertTrue(((String)jsonobj.get("externalId")).equals(externalId));
 			assertTrue(((String)jsonobj.get("result")).equals("OK"));
@@ -247,6 +251,59 @@ public class LogbookLoginUseCaseTest {
 		}
 	}
 	
+	
+	/*Test with pagination of dive session set to 2*/
+	@Test
+	public void testLoginWithPagination() {
+		try {
+			System.out.println("-------START testLoginWithPagination()--------");	
+				
+			//insert waiting 5 second for eventually consistence.
+			Thread.sleep(5000);	
+			
+			//execute Login
+			System.out.println("Login as a freediver");
+			Client loginClient = new Client(Protocol.HTTP);
+			Request loginRequest = new Request(Method.GET, freediverLoginRequest+"&dive_page_size="+divePageSize2);
+			System.out.println("Executing GET "+ freediverLoginRequest+"&dive_page_size="+divePageSize2);
+			
+			Response loginResponse = loginClient.handle(loginRequest);
+			JSONObject jsonobj = new JsonRepresentation(loginResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj.toString());
+			
+				
+			//check freediving data and dive session data
+			assertTrue(((String)jsonobj.get("id")).equals(freediverId));
+			assertTrue(((String)jsonobj.get("externalId")).equals(externalId));
+			assertTrue(((String)jsonobj.get("result")).equals("OK"));
+			assertTrue(((String)jsonobj.get("message")).equals("Freediver login executed"));
+			assertTrue(((String)jsonobj.get("externalToken")).equals(externalToken));
+			
+			JSONArray jsonDiveSessions = jsonobj.getJSONArray("diveSessions");
+			assertTrue(jsonDiveSessions.length()==2);
+			JSONObject jsonDs1 = jsonDiveSessions.getJSONObject(0);
+			JSONObject jsonDs2 = jsonDiveSessions.getJSONObject(1);
+			
+			
+			assertTrue(((String)jsonDs1.get("note")).equals(ds3_note));
+			
+			
+			assertTrue(((String)jsonDs2.get("note")).equals(ds2_note));
+		
+			
+			
+			//assertTrue(((Double)jsonDs3.get("weightAsKilogram")).doubleValue()==new Double(ds1_weight));
+			
+			System.out.println(jsonDiveSessions.length());
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			
+		}finally {		
+			System.out.println("-------END test()--------");
+		}
+	}
+	
 	/*Remove freediver and all its sessions*/
 	@After
 	public void tearDown() {
@@ -263,12 +320,17 @@ public class LogbookLoginUseCaseTest {
 			providerRequest.setEntity(fParam_prov.getWebRepresentation());
 			Response providerResponse = providerClient.handle(providerRequest);
 			JSONObject jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			
 			System.out.println(jsonobj_prov.toString());
+			Thread.sleep(5000);
 		}catch (Exception e) {
 			e.printStackTrace();
 			//TODO manage all excpetions
 			
 		}finally {
+			//insert waiting 5 second for eventually consistence.
+				
+			
 			System.out.println("-------END tearDown()--------");
 		}
 	}

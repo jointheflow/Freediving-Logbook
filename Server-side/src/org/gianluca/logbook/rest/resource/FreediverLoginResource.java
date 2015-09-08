@@ -42,13 +42,16 @@ public class FreediverLoginResource<K> extends ServerResource{
 				//String p_externalId=this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_id");
 				String p_externalPlatformId= this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_platform_id");
 				String p_externalToken = this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_token");
+				String p_divePageSize = this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("dive_page_size");
 				
 				log.info("start GET login for Freediver");
 				//log.info("p_externalId:"+p_externalId);
 				log.info("p_externalPlatfomId:"+p_externalPlatformId);
 				log.info("p_externalToken:"+p_externalToken);
+				log.info("p_divePageSize"+p_divePageSize);
 				
-			
+				//TODO Check parameters
+				
 				//check token against external platform
 				ExternalUser extUser= ExternalUserFactory.createExternalUser(p_externalToken, Integer.parseInt(p_externalPlatformId));
 				
@@ -81,7 +84,7 @@ public class FreediverLoginResource<K> extends ServerResource{
 				fdDto.temperatureUnit = fd.getTemperatureUnit();
 				
 				// find all dive session associated
-				DiveSessionsOfFreeediver dsOfFree = LogbookDAO.getDiveSessionsByFreediver(fd.getId(), 10, null);
+				DiveSessionsOfFreeediver dsOfFree = LogbookDAO.getDiveSessionsByFreediver(fd.getId(), Integer.parseInt(p_divePageSize), null);
 				//add dive session to dto
 				if (dsOfFree != null) {
 					fdDto.diveSessions = new ArrayList<DiveSessionDto>();
