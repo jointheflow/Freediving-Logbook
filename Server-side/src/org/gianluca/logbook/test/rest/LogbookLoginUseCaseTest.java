@@ -20,7 +20,7 @@ import org.restlet.ext.json.JsonRepresentation;
 public class LogbookLoginUseCaseTest {
 	//set test constants
 	//get new toke from FB https://developers.facebook.com/tools/explorer
-	private String externalToken="CAAB4GhgAGN0BAJfHtTE2Co7QmMUFUCoB2ZC5c5Fg48BvTowHqwS1WS2x8Lz5gq1zZAIZBvuXfssZAizfZCIFz13wiBu4xFOJmtpbxXZCu2b5e20yqJYasIdRH1I1dHBKQ732f863wZAykG4AEcufqTmMtESZAVdhj6ENoq5olGcUxXBrK7kZBqQWlD0Wvytg6DbafrZBVFZCvynVWpeAQP8157V";
+	private String externalToken="CAAB4GhgAGN0BAGG3nWBBh34wVSM73biVcdnHSa9nBDLSDw8DMsgd0aXYRMMmAOoEtKncIi9MY70dpmeB7rSZCh7gaxn9xENycQnMe411O4y48ox4WZA2yPx9B9JLfeGmVq8AmVfTAvYaIG3saZBwcAMZCZAUZCATJbMVKgfJfwgrujlA5Lvnd2yfKwRLYKadAMz9SF9NNEZBQZDZD";
 	//externalId associated to "freediving logbook" user on Facebook
 	private String externalId = "125927547759071";
 	private String externalName ="freediving logbook";
@@ -65,7 +65,7 @@ public class LogbookLoginUseCaseTest {
     
     private int divePageSize10=10;
     private int divePageSize2=2;
-  	    
+    private String freediverLoginRequestNoParams="http://localhost:8888/app/freediver/login";    
 	private String freediverLoginRequest="http://localhost:8888/app/freediver/login?external_platform_id="+externalPlatform+"&external_token="+externalToken;
 	private String freediverRemoveRequest="http://localhost:8888/app/freediver/remove?external_platform_id="+externalPlatform+"&external_token="+externalToken;
 	private String diveSessionAddRequest ="http://localhost:8888/app/freediver/divesession/add";
@@ -303,6 +303,38 @@ public class LogbookLoginUseCaseTest {
 			System.out.println("-------END test()--------");
 		}
 	}
+	
+	
+	@Test
+	public void testMissingOrWrongParam() {
+		System.out.println("-------START testMissingOrWrongParam()--------");	
+		try {
+				
+				
+			//insert waiting 5 second for eventually consistence.
+			Thread.sleep(5000);	
+			
+			//execute Login
+			System.out.println("Login as a freediver with no params");
+			Client loginClient = new Client(Protocol.HTTP);
+			Request loginRequest = new Request(Method.GET, freediverLoginRequestNoParams);
+					
+			System.out.println("Executing GET "+ freediverLoginRequestNoParams);
+			
+			Response loginResponse = loginClient.handle(loginRequest);
+			JSONObject jsonobj = new JsonRepresentation(loginResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj.toString());
+		}catch(Exception e) {
+			e.printStackTrace();
+			
+		}
+		
+	}
+	
+	
+	
+		
+	
 	
 	/*Remove freediver and all its sessions*/
 	@After
