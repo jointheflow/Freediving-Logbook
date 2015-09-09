@@ -3,6 +3,7 @@ package org.gianluca.logbook.test.rest;
 import static org.junit.Assert.*;
 
 import org.gianluca.logbook.helper.LogbookConstant;
+import org.gianluca.logbook.rest.resource.ErrorResource;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,15 +16,18 @@ import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.Method;
 import org.restlet.data.Protocol;
+import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
 
 public class LogbookLoginUseCaseTest {
 	//set test constants
 	//get new toke from FB https://developers.facebook.com/tools/explorer
-	private String externalToken="CAAB4GhgAGN0BAGG3nWBBh34wVSM73biVcdnHSa9nBDLSDw8DMsgd0aXYRMMmAOoEtKncIi9MY70dpmeB7rSZCh7gaxn9xENycQnMe411O4y48ox4WZA2yPx9B9JLfeGmVq8AmVfTAvYaIG3saZBwcAMZCZAUZCATJbMVKgfJfwgrujlA5Lvnd2yfKwRLYKadAMz9SF9NNEZBQZDZD";
+	private String externalToken="CAAB4GhgAGN0BAJQXj30dWZC9t5W8Vh2nZCg98Dkh7P9vcd61tVF9CNDgZBH252YaAE8ZCZCsZCiKwQUQYp1PVrn15JC3P8OYH2LEsyf4YSIxCX0gZAgfYqQsWr7X96NqxRcGjGozBdYYU82RVt2nwwbgtZAcBrcZAUWlhsT0qxGUZCjIUn2nLZAAjaiTqGkwsy68pcgF3AiEL4Jpvh7ZBpgn1Uz4";
 	//externalId associated to "freediving logbook" user on Facebook
 	private String externalId = "125927547759071";
+	@SuppressWarnings("unused")
 	private String externalName ="freediving logbook";
+	@SuppressWarnings("unused")
 	private String email = null;
 	private String freediverId = null;
 	
@@ -314,7 +318,7 @@ public class LogbookLoginUseCaseTest {
 			//insert waiting 5 second for eventually consistence.
 			Thread.sleep(5000);	
 			
-			//execute Login
+			//execute Login without ALL params
 			System.out.println("Login as a freediver with no params");
 			Client loginClient = new Client(Protocol.HTTP);
 			Request loginRequest = new Request(Method.GET, freediverLoginRequestNoParams);
@@ -324,6 +328,98 @@ public class LogbookLoginUseCaseTest {
 			Response loginResponse = loginClient.handle(loginRequest);
 			JSONObject jsonobj = new JsonRepresentation(loginResponse.getEntityAsText()).getJsonObject();
 			System.out.println(jsonobj.toString());
+			assertTrue(loginResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			assertTrue(jsonobj.getInt("errorCode")==ErrorResource.WRONG_PARAMETER_ERROR);
+			
+			
+			
+			
+			
+			//execute Login without external platform 
+			System.out.println("Login as a freediver without external platform");
+			loginClient = new Client(Protocol.HTTP);
+			loginRequest = new Request(Method.GET, freediverLoginRequestNoParams+"?external_token="+externalToken+"&dive_page_size="+10);
+					
+			System.out.println("Executing GET "+ freediverLoginRequestNoParams+"?external_token="+externalToken+"&dive_page_size="+10);
+			
+			loginResponse = loginClient.handle(loginRequest);
+			jsonobj = new JsonRepresentation(loginResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj.toString());
+			assertTrue(loginResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			assertTrue(jsonobj.getInt("errorCode")==ErrorResource.WRONG_PARAMETER_ERROR);
+			assertTrue(jsonobj.getString("errorMessage").equals("Parameter external_platform_id missing"));
+			
+			
+			//execute Login with wrong external platform 
+			System.out.println("Login as a freediver without external platform");
+			loginClient = new Client(Protocol.HTTP);
+			loginRequest = new Request(Method.GET, freediverLoginRequestNoParams+"?external_token="+externalToken+"&dive_page_size="+10+"&external_platform_id="+8);
+					
+			System.out.println("Executing GET "+ freediverLoginRequestNoParams+"?external_token="+externalToken+"&dive_page_size="+10+"&external_platform_id="+8);
+			
+			loginResponse = loginClient.handle(loginRequest);
+			jsonobj = new JsonRepresentation(loginResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj.toString());
+			assertTrue(loginResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			assertTrue(jsonobj.getInt("errorCode")==ErrorResource.PLATFORM_NOT_MANAGED_ERROR);
+			assertTrue(jsonobj.getString("errorMessage").equals("Platform with code:8 is not managed!"));
+			
+			//execute Login with NOT Number external platform
+			System.out.println("Login as a freediver with external platform NOT Number");
+			loginClient = new Client(Protocol.HTTP);
+			loginRequest = new Request(Method.GET, freediverLoginRequestNoParams+"?external_token="+externalToken+"&dive_page_size="+10+"&external_platform_id=A");
+					
+			System.out.println("Executing GET "+ freediverLoginRequestNoParams+"?external_token="+externalToken+"&dive_page_size="+10+"&external_platform_id=A");
+			
+			loginResponse = loginClient.handle(loginRequest);
+			jsonobj = new JsonRepresentation(loginResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj.toString());
+			assertTrue(loginResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			assertTrue(jsonobj.getInt("errorCode")==ErrorResource.WRONG_PARAMETER_ERROR);
+			assertTrue(jsonobj.getString("errorMessage").startsWith("Parameter external_platform_id wrong"));
+			
+			//execute Login with wrong external platform 
+			System.out.println("Login as a freediver with wrong external platform ID (not managed)");
+			loginClient = new Client(Protocol.HTTP);
+			loginRequest = new Request(Method.GET, freediverLoginRequestNoParams+"?external_token="+externalToken+"&dive_page_size="+10+"&external_platform_id="+8);
+					
+			System.out.println("Executing GET "+ freediverLoginRequestNoParams+"?external_token="+externalToken+"&dive_page_size="+10+"&external_platform_id="+8);
+			
+			loginResponse = loginClient.handle(loginRequest);
+			jsonobj = new JsonRepresentation(loginResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj.toString());
+			assertTrue(loginResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			assertTrue(jsonobj.getInt("errorCode")==ErrorResource.PLATFORM_NOT_MANAGED_ERROR);
+			assertTrue(jsonobj.getString("errorMessage").equals("Platform with code:8 is not managed!"));
+			
+			//execute Login without Token
+			System.out.println("Login as a freediver without external token");
+			loginClient = new Client(Protocol.HTTP);
+			loginRequest = new Request(Method.GET, freediverLoginRequestNoParams+"?dive_page_size="+10+"&external_platform_id=0");
+					
+			System.out.println("Executing GET "+ freediverLoginRequestNoParams+"?dive_page_size="+10+"&external_platform_id=0");
+			
+			loginResponse = loginClient.handle(loginRequest);
+			jsonobj = new JsonRepresentation(loginResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj.toString());
+			assertTrue(loginResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			assertTrue(jsonobj.getInt("errorCode")==ErrorResource.WRONG_PARAMETER_ERROR);
+			assertTrue(jsonobj.getString("errorMessage").startsWith("Parameter external_token missing"));
+			
+			
+			//execute Login with expired or wrong token for the platform
+			System.out.println("Login as a freediver with expired or wrong external token for platform");
+			loginClient = new Client(Protocol.HTTP);
+			loginRequest = new Request(Method.GET, freediverLoginRequestNoParams+"?dive_page_size="+10+"&external_platform_id=0&external_token=ERRATO");
+					
+			System.out.println("Executing GET "+ freediverLoginRequestNoParams+"?dive_page_size="+10+"&external_platform_id=0&external_token=ERRATO");
+			
+			loginResponse = loginClient.handle(loginRequest);
+			jsonobj = new JsonRepresentation(loginResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj.toString());
+			assertTrue(loginResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			assertTrue(jsonobj.getInt("errorCode")==ErrorResource.WRONG_OAUTH_TOKEN);
+			
 		}catch(Exception e) {
 			e.printStackTrace();
 			
