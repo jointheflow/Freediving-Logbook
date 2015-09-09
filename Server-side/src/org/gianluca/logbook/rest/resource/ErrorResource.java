@@ -11,6 +11,7 @@ public class ErrorResource {
 	public static final int MANDATORY_FIELD_MISSING = -8;
 	public static final int PLATFORM_NOT_MANAGED_ERROR = -9;
 	public static final int INTERNAL_SERVER_ERROR = -10;
+	public static final int WRONG_PARAMETER_ERROR =-11;
 	
 	
 	private int errorCode;

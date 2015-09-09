@@ -16,6 +16,7 @@ import org.gianluca.logbook.external.integration.ExternalUser;
 import org.gianluca.logbook.external.integration.ExternalUserFactory;
 import org.gianluca.logbook.external.integration.PlatformNotManagedException;
 import org.gianluca.logbook.helper.LogbookConstant;
+import org.gianluca.logbook.rest.exception.WrongParameterException;
 import org.restlet.representation.Representation;
 import org.restlet.resource.*; 
 import org.restlet.data.Status;
@@ -50,7 +51,8 @@ public class FreediverLoginResource<K> extends ServerResource{
 				log.info("p_externalToken:"+p_externalToken);
 				log.info("p_divePageSize"+p_divePageSize);
 				
-				//TODO Check parameters
+				//Check parameters
+				checkParameter();
 				
 				//check token against external platform
 				ExternalUser extUser= ExternalUserFactory.createExternalUser(p_externalToken, Integer.parseInt(p_externalPlatformId));
@@ -146,6 +148,13 @@ public class FreediverLoginResource<K> extends ServerResource{
 				JsonRepresentation errorRepresentation = new JsonRepresentation(error);
 				return errorRepresentation;
 				
+			}catch (WrongParameterException e_wp) {
+				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+				ErrorResource error = new ErrorResource();
+				error.setErrorCode(ErrorResource.WRONG_PARAMETER_ERROR);
+				error.setErrorMessage(e_wp.getMessage());
+				JsonRepresentation errorRepresentation = new JsonRepresentation(error);
+				return errorRepresentation;				
 			}catch (Exception e) {
 				e.printStackTrace();
 				setStatus(Status.SERVER_ERROR_INTERNAL);
@@ -165,6 +174,42 @@ public class FreediverLoginResource<K> extends ServerResource{
 			
 		}
 
-	  
+	  public void checkParameter() throws WrongParameterException {   
+		//check parameter external_platform_id
+		try {
+			String p_externalPlatformId=null;
+			p_externalPlatformId = this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_platform_id");
+			if (p_externalPlatformId==null) throw new WrongParameterException("Parameter external_platform_id missing");
+			
+			if (Integer.parseInt(p_externalPlatformId) < LogbookConstant.FACEBOOK_PLATFORM &&
+					Integer.parseInt(p_externalPlatformId) > LogbookConstant.GOOGLE_PLATFORM) {
+				throw new WrongParameterException("Parameter external_platform_id wrong value");
+				
+			}
+			
+		  } catch (NumberFormatException e) {
+			  throw new WrongParameterException("Parameter external_platform_id wrong "+ e.getMessage());
+			  				  
+		  }
+		
+		//check parameter external token
+		String p_externalToken=null;
+		p_externalToken = this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_token");
+		if (p_externalToken==null) throw new WrongParameterException("Parameter external_token missing");
+		
+		//check parameter dive_page_size
+		try {
+			 String p_divePageSize=null;
+			 p_divePageSize = this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("dive_page_size");
+			 if (p_divePageSize==null) throw new WrongParameterException("Parameter page_dive_size missing");
+			 Integer.parseInt(p_divePageSize);				
+			 
+		}catch (NumberFormatException e) {
+			throw new WrongParameterException("Parameter page_dive_size wrong "+ e.getMessage());
+		}
+				  
+			  
+		  
+	 }
 	
 }
