@@ -26,6 +26,7 @@ public class LogbookConstant {
 	public static final double CELSIUS_AS_FAREHN_TIME= 1.8;
 	public static final double CELSIUS_AS_FAREHN_ADD= 32;
 	public static final double KILOGRAM_AS_POUND = 2.2046;
+	public static final String DATE_FORMAT = "dd-MM-yyyy";
 	
 	
 	

@@ -22,7 +22,7 @@ import org.restlet.ext.json.JsonRepresentation;
 public class LogbookLoginUseCaseTest {
 	//set test constants
 	//get new toke from FB https://developers.facebook.com/tools/explorer
-	private String externalToken="CAAB4GhgAGN0BAJQXj30dWZC9t5W8Vh2nZCg98Dkh7P9vcd61tVF9CNDgZBH252YaAE8ZCZCsZCiKwQUQYp1PVrn15JC3P8OYH2LEsyf4YSIxCX0gZAgfYqQsWr7X96NqxRcGjGozBdYYU82RVt2nwwbgtZAcBrcZAUWlhsT0qxGUZCjIUn2nLZAAjaiTqGkwsy68pcgF3AiEL4Jpvh7ZBpgn1Uz4";
+	private String externalToken="CAAB4GhgAGN0BAJVzcLPkUirXlYbJAYqHgF6lwayXA5L8NHn1LUrpI4AA4zigkNBOpx2W5LOR7duAkRDZA2xA1EAzGA2BZAH3LtQKiobx2vqgprRI63Mmyqr0Jw1sm6SX0L3BWNxJgs95O9gtSUigAPr2nmMHVfKHZBBqj0E1tluG2PJzvlIjeuKWnYBuJKog4PqbMzIZAnYyzIgFFPPK";
 	//externalId associated to "freediving logbook" user on Facebook
 	private String externalId = "125927547759071";
 	@SuppressWarnings("unused")
@@ -38,7 +38,7 @@ public class LogbookLoginUseCaseTest {
 	private int weightUnit = LogbookConstant.WEIGHT_KILOGRAM;
 	
 	//Dive session1
-	private String ds1_date="100000";
+	private String ds1_date="07-03-2015";
 	private double ds1_deep = 35.6;
 	private String ds1_equipment = "mask, lanyard, dive suit 5.5 mm"; 
 	private String ds1_location = "Elba Island - margidore";
@@ -48,7 +48,7 @@ public class LogbookLoginUseCaseTest {
     private double ds1_weight =5.0;
 	
     //Dive session2
-  	private String ds2_date="200000";
+  	private String ds2_date="08-08-2015";
   	private double ds2_deep = 40.0;
   	private String ds2_equipment = "mask, lanyard, dive suit 6.0 mm"; 
   	private String ds2_location = "Giglio Island";
@@ -58,7 +58,7 @@ public class LogbookLoginUseCaseTest {
     private double ds2_weight =5.5;
   	
     //Dive session3
-  	private String ds3_date="300000";
+  	private String ds3_date="09-09-2015";
   	private double ds3_deep = 35.0;
   	private String ds3_equipment = "mask, dive suit 4.5 mm"; 
   	private String ds3_location = "Giglio Island";
@@ -200,7 +200,7 @@ public class LogbookLoginUseCaseTest {
 			JSONObject jsonobj = new JsonRepresentation(loginResponse.getEntityAsText()).getJsonObject();
 			System.out.println(jsonobj.toString());
 			
-				
+			assertTrue(loginResponse.getStatus().getCode()==Status.SUCCESS_OK.getCode());	
 			//check freediving data and dive session data
 			assertTrue(((String)jsonobj.get("id")).equals(freediverId));
 			assertTrue(((String)jsonobj.get("externalId")).equals(externalId));
@@ -221,7 +221,7 @@ public class LogbookLoginUseCaseTest {
 			assertTrue(((Double)jsonDs1.getDouble("deepAsMeter")).doubleValue()==new Double(ds3_deep));
 			assertTrue(((String)jsonDs1.get("meteoDesc")).equals(ds3_meteo));
 			assertTrue(((String)jsonDs1.get("locationDesc")).equals(ds3_location));
-			assertTrue(((String)jsonDs1.get("diveDate")).equals("Thu Jan 01 01:05:00 CET 1970"));
+			assertTrue(((String)jsonDs1.get("diveDate")).equals("Wed Sep 09 00:00:00 CEST 2015"));
 			assertTrue(((Double)jsonDs1.get("weightAsKilogram")).doubleValue()==new Double(ds3_weight));
 			
 			assertTrue(((String)jsonDs2.get("note")).equals(ds2_note));
@@ -231,7 +231,7 @@ public class LogbookLoginUseCaseTest {
 			assertTrue(((Double)jsonDs2.getDouble("deepAsMeter")).doubleValue()==new Double(ds2_deep));
 			assertTrue(((String)jsonDs2.get("meteoDesc")).equals(ds2_meteo));
 			assertTrue(((String)jsonDs2.get("locationDesc")).equals(ds2_location));
-			assertTrue(((String)jsonDs2.get("diveDate")).equals("Thu Jan 01 01:03:20 CET 1970"));
+			assertTrue(((String)jsonDs2.get("diveDate")).equals("Sat Aug 08 00:00:00 CEST 2015"));
 			assertTrue(((Double)jsonDs2.get("weightAsKilogram")).doubleValue()==new Double(ds2_weight));
 			
 			
@@ -242,7 +242,7 @@ public class LogbookLoginUseCaseTest {
 			assertTrue(((Double)jsonDs3.getDouble("deepAsMeter")).doubleValue()==new Double(ds1_deep));
 			assertTrue(((String)jsonDs3.get("meteoDesc")).equals(ds1_meteo));
 			assertTrue(((String)jsonDs3.get("locationDesc")).equals(ds1_location));
-			assertTrue(((String)jsonDs3.get("diveDate")).equals("Thu Jan 01 01:01:40 CET 1970"));
+			assertTrue(((String)jsonDs3.get("diveDate")).equals("Sat Mar 07 00:00:00 CET 2015"));
 			//assertTrue(((Double)jsonDs3.get("weightAsKilogram")).doubleValue()==new Double(ds1_weight));
 			
 			System.out.println(jsonDiveSessions.length());
@@ -282,7 +282,7 @@ public class LogbookLoginUseCaseTest {
 			assertTrue(((String)jsonobj.get("result")).equals("OK"));
 			assertTrue(((String)jsonobj.get("message")).equals("Freediver login executed"));
 			assertTrue(((String)jsonobj.get("externalToken")).equals(externalToken));
-			
+			assertTrue(loginResponse.getStatus().getCode()==Status.SUCCESS_OK.getCode());
 			JSONArray jsonDiveSessions = jsonobj.getJSONArray("diveSessions");
 			assertTrue(jsonDiveSessions.length()==2);
 			JSONObject jsonDs1 = jsonDiveSessions.getJSONObject(0);

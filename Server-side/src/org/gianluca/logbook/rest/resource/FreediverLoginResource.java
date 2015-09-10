@@ -25,7 +25,7 @@ import org.restlet.ext.json.*;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.restfb.exception.FacebookOAuthException;
 
-public class FreediverLoginResource<K> extends ServerResource{
+public class FreediverLoginResource<K>  extends ServerResource implements ILogbookResource{
 	private static final Logger log = Logger.getLogger(FreediverLoginResource.class.getName());
 	
 	
@@ -39,20 +39,21 @@ public class FreediverLoginResource<K> extends ServerResource{
 			//create json response
 			JsonRepresentation representation = null;
 			try {
+				
 				//get parameter
 				//String p_externalId=this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_id");
 				String p_externalPlatformId= this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_platform_id");
 				String p_externalToken = this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_token");
 				String p_divePageSize = this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("dive_page_size");
 				
-				log.info("start GET login for Freediver");
+				log.info("start GET login() FreediverLoginResource");
 				//log.info("p_externalId:"+p_externalId);
 				log.info("p_externalPlatfomId:"+p_externalPlatformId);
 				log.info("p_externalToken:"+p_externalToken);
 				log.info("p_divePageSize"+p_divePageSize);
 				
 				//Check parameters
-				checkParameter();
+				checkParameters();
 				
 				//check token against external platform
 				ExternalUser extUser= ExternalUserFactory.createExternalUser(p_externalToken, Integer.parseInt(p_externalPlatformId));
@@ -167,42 +168,26 @@ public class FreediverLoginResource<K> extends ServerResource{
 			}
 			
 			finally {
-				log.info("end  GET login for Freediver");
+				log.info("end GET login() FreediverLoginResource");
 				
 			}
 			
 			
 		}
 
-	  public void checkParameter() throws WrongParameterException {   
-		//check parameter external_platform_id
-		try {
-			String p_externalPlatformId=null;
-			p_externalPlatformId = this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_platform_id");
-			if (p_externalPlatformId==null) throw new WrongParameterException("Parameter external_platform_id missing");
-			
-			if (Integer.parseInt(p_externalPlatformId) < LogbookConstant.FACEBOOK_PLATFORM &&
-					Integer.parseInt(p_externalPlatformId) > LogbookConstant.GOOGLE_PLATFORM) {
-				throw new WrongParameterException("Parameter external_platform_id wrong value");
-				
-			}
-			
-		  } catch (NumberFormatException e) {
-			  throw new WrongParameterException("Parameter external_platform_id wrong "+ e.getMessage());
-			  				  
-		  }
+	  public void checkParameters() throws WrongParameterException {   
 		
-		//check parameter external token
-		String p_externalToken=null;
-		p_externalToken = this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_token");
-		if (p_externalToken==null) throw new WrongParameterException("Parameter external_token missing");
+		checkExternalPlatformId(this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_platform_id"));
+		
+		checkExternalToken(this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_token"));		
+		
 		
 		//check parameter dive_page_size
 		try {
 			 String p_divePageSize=null;
 			 p_divePageSize = this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("dive_page_size");
 			 if (p_divePageSize==null) throw new WrongParameterException("Parameter page_dive_size missing");
-			 Integer.parseInt(p_divePageSize);				
+			 checkInt(p_divePageSize, "page_dive_size");				
 			 
 		}catch (NumberFormatException e) {
 			throw new WrongParameterException("Parameter page_dive_size wrong "+ e.getMessage());

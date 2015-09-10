@@ -3,6 +3,7 @@ package org.gianluca.logbook.rest.resource;
 
 
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Logger;
 
@@ -10,8 +11,10 @@ import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
 import org.gianluca.logbook.dto.DiveSessionDto;
 import org.gianluca.logbook.dto.LogbookDto;
-import org.gianluca.logbook.external.integration.ExternalUser;
 import org.gianluca.logbook.external.integration.ExternalUserFactory;
+import org.gianluca.logbook.external.integration.PlatformNotManagedException;
+import org.gianluca.logbook.helper.LogbookConstant;
+import org.gianluca.logbook.rest.exception.WrongParameterException;
 import org.restlet.representation.Representation;
 import org.restlet.resource.*; 
 import org.restlet.data.Form;
@@ -20,9 +23,9 @@ import org.restlet.data.Status;
 import org.restlet.ext.json.*;
 
 import com.google.appengine.api.datastore.KeyFactory;
-import com.restfb.exception.FacebookOAuthException;
 
-public class DiveSessionAddResource<K> extends ServerResource{
+
+public class DiveSessionAddResource<K> extends ServerResource implements ILogbookResource{
 	private static final Logger log = Logger.getLogger(DiveSessionAddResource.class.getName());
 	
 	
@@ -30,22 +33,31 @@ public class DiveSessionAddResource<K> extends ServerResource{
 	/*Add a new DiveSession for a freediver. Check if token is valid against external platform*/
 	@Post
 	public Representation addDiveSession(Representation entity) throws ResourceException {
+		
+		log.info("start POST addDiveSession() DiveSessionAddResource)");
 		//create json response
 		JsonRepresentation representation = null;
 	    Form form = new Form(entity); 
+	   
 		try {
 			 
 	        for (Parameter parameter : form) {
+	        	
 	        	log.info("parameter " + parameter.getName());
 	   		  	log.info("/" + parameter.getValue());
 	        }	
 	         
+	        //check if parameters exists and are valid
+		    checkParameters(entity);
+		    
 	        // retrieves customer parameters  
 		    // "name=value"  
 	        String externalToken = form.getFirstValue("external_token");
 	        String externalPlatformId = form.getFirstValue("external_platform_id");
 	        String freediverId = form.getFirstValue("freediver_id");
-	        Date diveDate = new Date(new Long( form.getFirstValue("dive_date")));
+	        String s_diveDate = form.getFirstValue("dive_date");
+	        SimpleDateFormat formatter = new SimpleDateFormat(LogbookConstant.DATE_FORMAT);
+		    Date diveDate = formatter.parse(s_diveDate);
 			Double deep = new Double(form.getFirstValue("deep"));
 			String equipment = form.getFirstValue("equipment"); 
 			String location = form.getFirstValue("location");
@@ -57,9 +69,7 @@ public class DiveSessionAddResource<K> extends ServerResource{
 		    int weightUnit = Integer.parseInt(form.getFirstValue("weight_unit"));
 		    int tempUnit = Integer.parseInt(form.getFirstValue("temp_unit"));
 		    
-		    //TODO check if parameters exists and are valid
-		     
-		   
+		    		   
 		    //check token against external platform
 			ExternalUserFactory.checkExternalToken(externalToken, Integer.parseInt(externalPlatformId));
 		    
@@ -80,7 +90,7 @@ public class DiveSessionAddResource<K> extends ServerResource{
 				dsDto.setLocationLongitude(ds.getLocationGeoPt().getLongitude());
 			}
 			dsDto.setMeteoDesc(ds.getMeteoDesc());
-			dsDto.setMeteoDesc(ds.getNote().getValue());
+			dsDto.setNote(ds.getNote().getValue());
 			dsDto.setWaterTempAsCelsius(ds.getWaterTempAsCelsius());
 			dsDto.setWaterTempAsFahrehneit(ds.getWaterTempAsFahrehneit());
 			dsDto.setWeightAsKilogram(ds.getWeightAsKilogram());
@@ -97,19 +107,93 @@ public class DiveSessionAddResource<K> extends ServerResource{
 			
 			return representation;
 			
+		}catch (PlatformNotManagedException e_pnm) {
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			ErrorResource error = new ErrorResource();
+			error.setErrorCode(ErrorResource.PLATFORM_NOT_MANAGED_ERROR);
+			error.setErrorMessage(e_pnm.getMessage());
+			JsonRepresentation errorRepresentation = new JsonRepresentation(error);
+			return errorRepresentation;
+		
+		}catch (NumberFormatException e_ne) {
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			ErrorResource error = new ErrorResource();
+			error.setErrorCode(ErrorResource.NUMBER_FORMAT_ERROR);
+			error.setErrorMessage(e_ne.getMessage());
+			JsonRepresentation errorRepresentation = new JsonRepresentation(error);
+			return errorRepresentation;
+			
+		}catch (WrongParameterException e_wp) {
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			ErrorResource error = new ErrorResource();
+			error.setErrorCode(ErrorResource.WRONG_PARAMETER_ERROR);
+			error.setErrorMessage(e_wp.getMessage());
+			JsonRepresentation errorRepresentation = new JsonRepresentation(error);
+			return errorRepresentation;				
 		}catch (Exception e) {
-			//TODO manage exception
 			e.printStackTrace();
-			//TODO return error representation
-			return null;
+			setStatus(Status.SERVER_ERROR_INTERNAL);
+			ErrorResource error = new ErrorResource();
+			error.setErrorCode(ErrorResource.INTERNAL_SERVER_ERROR);
+			error.setErrorMessage(e.getMessage());
+			JsonRepresentation errorRepresentation = new JsonRepresentation(error);
+			return errorRepresentation;
 			
 		}finally {
-			log.info("end  POST add for DiveSession");
+			log.info("end POST addDiveSession() DiveSessionAddResource)");
 			
 		}   
-	}  
-	 
 		
+				
+	}  
+	/*Check POST parametes*/
+	public void checkParameters(Representation entity) throws WrongParameterException {
+		Form form = new Form(entity);
+		
+		String externalToken = form.getFirstValue("external_token");
+		checkExternalToken(externalToken); 
+       
+		String externalPlatformId = form.getFirstValue("external_platform_id");
+		checkExternalPlatformId(externalPlatformId);
+		
+		String freediverId = form.getFirstValue("freediver_id");
+        checkFreediverId(freediverId);
+        
+        
+        String deep = form.getFirstValue("deep");
+        checkDouble(deep, "deep");
+        
+        String waterTemp = form.getFirstValue("water_temp");
+	    checkDouble(waterTemp, "water_temp");
+	    
+        String weight = form.getFirstValue("weight");
+		checkDouble(weight, "weight");
+        
+        String diveDate =form.getFirstValue("dive_date");
+		checkDate(diveDate, "dive_date");
+		
+		/*String equipment = form.getFirstValue("equipment"); 
+		String location = form.getFirstValue("location");
+		String meteo = form.getFirstValue("meteo");
+		String note = form.getFirstValue("note");
+		*/
+        
+	    String deepUnit = form.getFirstValue("deep_unit");
+	    if (deepUnit==null) throw new WrongParameterException("Parameter deep_unit missing");
+	    checkInt(deepUnit, "deep_unit");
+	    
+	    String weightUnit = form.getFirstValue("weight_unit");
+	    if (weightUnit==null) throw new WrongParameterException("Parameter weight_unit missing");
+	    checkInt(weightUnit, "weight_unit");
+	    
+	    String tempUnit = form.getFirstValue("temp_unit");
+	    if (tempUnit==null) throw new WrongParameterException("Parameter temp_unit missing");
+	    checkInt(tempUnit, "temp_unit");
+	        
+	    
+	    
+		
+	}
 	  
 	
 }
