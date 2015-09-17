@@ -153,7 +153,7 @@ public class LogbookDAO {
 		}
 	
 	/*remove freediver and all child DiveSession entity and all child Dive entity */
-	public static void removeFreediver(String freediverId){
+	public static void removeFreediver(String freediverId) throws FreediverIDException{
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Transaction tx = datastore.beginTransaction();
 		
@@ -171,6 +171,9 @@ public class LogbookDAO {
 			
 			 	
 			tx.commit();
+		}catch (IllegalArgumentException e) {
+			log.info(e.getMessage());
+			throw new FreediverIDException(e.getMessage());
 		} finally {
 			if (tx.isActive()) {
 		        tx.rollback();

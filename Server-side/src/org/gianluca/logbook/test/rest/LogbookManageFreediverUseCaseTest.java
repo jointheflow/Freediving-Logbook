@@ -19,10 +19,10 @@ import org.restlet.data.Protocol;
 import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
 
-public class LogbookLoginUseCaseTest {
+public class LogbookManageFreediverUseCaseTest {
 	//set test constants
 	//get new toke from FB https://developers.facebook.com/tools/explorer
-	private String externalToken="CAAB4GhgAGN0BAJVzcLPkUirXlYbJAYqHgF6lwayXA5L8NHn1LUrpI4AA4zigkNBOpx2W5LOR7duAkRDZA2xA1EAzGA2BZAH3LtQKiobx2vqgprRI63Mmyqr0Jw1sm6SX0L3BWNxJgs95O9gtSUigAPr2nmMHVfKHZBBqj0E1tluG2PJzvlIjeuKWnYBuJKog4PqbMzIZAnYyzIgFFPPK";
+	private String externalToken="CAAB4GhgAGN0BAGa4sqShNHFmddjLZCRtrt3eK7L1DDbYZBM8JkYicoSNWcnSfNfxVd3ZAyJ9Ls1RbhrCMhCUuPTCyeR66Yv77AB3qbnsMJlLhJ8O0CitvSBXEVpj6vkuTYkDtZBusfvELLPvXmquDsYs1OSmlWMGZCAgfAL6Y3BF63leUI0Ob3jup2D5VfZAVX8UqZB5KB2ydbrxL8bQVhU";
 	//externalId associated to "freediving logbook" user on Facebook
 	private String externalId = "125927547759071";
 	@SuppressWarnings("unused")
@@ -71,7 +71,7 @@ public class LogbookLoginUseCaseTest {
     private int divePageSize2=2;
     private String freediverLoginRequestNoParams="http://localhost:8888/app/freediver/login";    
 	private String freediverLoginRequest="http://localhost:8888/app/freediver/login?external_platform_id="+externalPlatform+"&external_token="+externalToken;
-	private String freediverRemoveRequest="http://localhost:8888/app/freediver/remove?external_platform_id="+externalPlatform+"&external_token="+externalToken;
+	private String freediverRemoveRequest="http://localhost:8888/app/freediver/remove";//?external_platform_id="+externalPlatform+"&external_token="+externalToken;
 	private String diveSessionAddRequest ="http://localhost:8888/app/freediver/divesession/add";
 	
 	/*Add a freediver and 3 dive sessions*/
@@ -427,7 +427,167 @@ public class LogbookLoginUseCaseTest {
 		
 	}
 	
-	
+	@Test
+	public void testRemoveFreediver() {
+		try {
+			System.out.println("------start removing freediver----------");
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, freediverRemoveRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("freediver_id", freediverId);
+			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			JSONObject jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			
+			System.out.println(jsonobj_prov.toString());
+			assertTrue(jsonobj_prov.get("result").equals("OK"));
+			assertTrue(jsonobj_prov.get("message").equals("Freediver removed"));
+			assertTrue(providerResponse.getStatus().getCode()==Status.SUCCESS_OK.getCode());
+			
+			System.out.println("------end removing freediver----------");
+			
+			
+			System.out.println("------start error removing freediver external platform missing----------");
+			providerClient = new Client(Protocol.HTTP);
+			providerRequest = new Request(Method.POST, freediverRemoveRequest);
+			//create a post entity for Representation
+			fParam_prov = new Form();
+			//fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("freediver_id", freediverId);
+			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			providerResponse = providerClient.handle(providerRequest);
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			
+			System.out.println(jsonobj_prov.toString());
+			//assertTrue(jsonobj_prov.getString("errorMessage").startsWith("Parameter temp_unit For input string:"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==ErrorResource.WRONG_PARAMETER_ERROR);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			System.out.println("------end error removing freediver external platform missing----------");
+			
+			
+			
+			
+			System.out.println("------start error removing freediver external token missing----------");
+			providerClient = new Client(Protocol.HTTP);
+			providerRequest = new Request(Method.POST, freediverRemoveRequest);
+			//create a post entity for Representation
+			fParam_prov = new Form();
+			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
+			//fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("freediver_id", freediverId);
+			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			providerResponse = providerClient.handle(providerRequest);
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			
+			System.out.println(jsonobj_prov.toString());
+			//assertTrue(jsonobj_prov.getString("errorMessage").startsWith("Parameter temp_unit For input string:"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==ErrorResource.WRONG_PARAMETER_ERROR);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			System.out.println("------end error removing freediver external token missing----------");
+			
+			
+			
+			System.out.println("------start error removing freediver freediverid missing----------");
+			providerClient = new Client(Protocol.HTTP);
+			providerRequest = new Request(Method.POST, freediverRemoveRequest);
+			//create a post entity for Representation
+			fParam_prov = new Form();
+			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
+			fParam_prov.add("external_token", externalToken);
+			//fParam_prov.add("freediver_id", freediverId);
+			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			providerResponse = providerClient.handle(providerRequest);
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			
+			System.out.println(jsonobj_prov.toString());
+			//assertTrue(jsonobj_prov.getString("errorMessage").startsWith("Parameter temp_unit For input string:"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==ErrorResource.WRONG_PARAMETER_ERROR);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			System.out.println("------end error removing freediver freediverid missing----------");
+			
+			
+			System.out.println("------start error removing freediver freediverid error----------");
+			providerClient = new Client(Protocol.HTTP);
+			providerRequest = new Request(Method.POST, freediverRemoveRequest);
+			//create a post entity for Representation
+			fParam_prov = new Form();
+			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("freediver_id", "unknown");
+			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			providerResponse = providerClient.handle(providerRequest);
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			
+			System.out.println(jsonobj_prov.toString());
+			//assertTrue(jsonobj_prov.getString("errorMessage").startsWith("Parameter temp_unit For input string:"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==ErrorResource.FREEDIVER_ID_ERROR);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			System.out.println("------end error removing freediver freediverid error----------");
+			
+			System.out.println("------start error removing freediver external token error----------");
+			providerClient = new Client(Protocol.HTTP);
+			providerRequest = new Request(Method.POST, freediverRemoveRequest);
+			//create a post entity for Representation
+			fParam_prov = new Form();
+			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
+			fParam_prov.add("external_token", "ERRORTOKEN");
+			fParam_prov.add("freediver_id", freediverId);
+			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			providerResponse = providerClient.handle(providerRequest);
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			
+			System.out.println(jsonobj_prov.toString());
+			//assertTrue(jsonobj_prov.getString("errorMessage").startsWith("Parameter temp_unit For input string:"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==ErrorResource.WRONG_OAUTH_TOKEN);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			System.out.println("------end error removing freediver external token error----------");
+			
+			
+			System.out.println("------start error removing freediver platform not managed----------");
+			providerClient = new Client(Protocol.HTTP);
+			providerRequest = new Request(Method.POST, freediverRemoveRequest);
+			//create a post entity for Representation
+			fParam_prov = new Form();
+			fParam_prov.add("external_platform_id","8");
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("freediver_id", freediverId);
+			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			providerResponse = providerClient.handle(providerRequest);
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			
+			System.out.println(jsonobj_prov.toString());
+			//assertTrue(jsonobj_prov.getString("errorMessage").startsWith("Parameter temp_unit For input string:"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==ErrorResource.PLATFORM_NOT_MANAGED_ERROR);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			System.out.println("------end error removing freediver platform not managed----------");
+		}catch (Exception e) {
+			e.printStackTrace();
+			
+		}
+	}
 	
 		
 	
