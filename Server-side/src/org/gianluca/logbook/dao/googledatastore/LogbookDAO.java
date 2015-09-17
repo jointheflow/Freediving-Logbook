@@ -8,13 +8,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.gianluca.logbook.dao.exception.FreediverIDException;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSessionsOfFreeediver;
 import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
 import org.gianluca.logbook.helper.LogbookConstant;
-import org.gianluca.logbook.rest.resource.FreediverLoginResource;
 
-import sun.awt.KeyboardFocusManagerPeerProvider;
 
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -181,7 +180,7 @@ public class LogbookDAO {
 	}
 	
 	/*Add new dive session as a child entity for the freediver key passed as parameter*/
-	public static DiveSession addDiveSession(String freediverId, Date diveDate, Double deep, String equipment, String locationDesc, GeoPt locationGeoPt, String meteoDesc, String note, Double waterTemp, Double weight, int deepUnit, int tempUnit, int weightUnit) {
+	public static DiveSession addDiveSession(String freediverId, Date diveDate, Double deep, String equipment, String locationDesc, GeoPt locationGeoPt, String meteoDesc, String note, Double waterTemp, Double weight, int deepUnit, int tempUnit, int weightUnit) throws FreediverIDException {
 		
 		Key diveSessionId = null;
 		DiveSession diveSession = null;
@@ -205,6 +204,7 @@ public class LogbookDAO {
 							e_diveSession.setProperty("deepAsMeter", (deep/LogbookConstant.METER_AS_FEET));
 						}
 							break;
+							
 					}
 				
 				/*Executes waterTemp conversion*/
@@ -271,6 +271,12 @@ public class LogbookDAO {
 				
 				
 				tx.commit();
+			
+			}catch (IllegalArgumentException e) {
+				log.info(e.getMessage());
+				throw new FreediverIDException(e.getMessage());
+				
+			
 			} finally {
 			    if (tx.isActive()) {
 			        tx.rollback();

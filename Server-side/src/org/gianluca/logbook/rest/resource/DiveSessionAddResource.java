@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Logger;
 
+import org.gianluca.logbook.dao.exception.FreediverIDException;
 import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
 import org.gianluca.logbook.dto.DiveSessionDto;
@@ -23,6 +24,7 @@ import org.restlet.data.Status;
 import org.restlet.ext.json.*;
 
 import com.google.appengine.api.datastore.KeyFactory;
+import com.restfb.exception.FacebookOAuthException;
 
 
 public class DiveSessionAddResource<K> extends ServerResource implements ILogbookResource{
@@ -107,6 +109,13 @@ public class DiveSessionAddResource<K> extends ServerResource implements ILogboo
 			
 			return representation;
 			
+		}catch (FacebookOAuthException e_oa) {
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			ErrorResource error = new ErrorResource();
+			error.setErrorCode(ErrorResource.WRONG_OAUTH_TOKEN);
+			error.setErrorMessage(e_oa.getMessage());
+			JsonRepresentation errorRepresentation = new JsonRepresentation(error);
+			return errorRepresentation;
 		}catch (PlatformNotManagedException e_pnm) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			ErrorResource error = new ErrorResource();
@@ -129,7 +138,16 @@ public class DiveSessionAddResource<K> extends ServerResource implements ILogboo
 			error.setErrorCode(ErrorResource.WRONG_PARAMETER_ERROR);
 			error.setErrorMessage(e_wp.getMessage());
 			JsonRepresentation errorRepresentation = new JsonRepresentation(error);
-			return errorRepresentation;				
+			return errorRepresentation;	
+			
+		}catch(FreediverIDException a_e) {
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			ErrorResource error = new ErrorResource();
+			error.setErrorCode(ErrorResource.FREEDIVER_ID_ERROR);
+			error.setErrorMessage(a_e.getMessage());
+			JsonRepresentation errorRepresentation = new JsonRepresentation(error);
+			return errorRepresentation;		
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 			setStatus(Status.SERVER_ERROR_INTERNAL);
@@ -170,7 +188,8 @@ public class DiveSessionAddResource<K> extends ServerResource implements ILogboo
 		checkDouble(weight, "weight");
         
         String diveDate =form.getFirstValue("dive_date");
-		checkDate(diveDate, "dive_date");
+        if (diveDate==null) throw new WrongParameterException("Parameter dive_date missing");
+        checkDate(diveDate, "dive_date");
 		
 		/*String equipment = form.getFirstValue("equipment"); 
 		String location = form.getFirstValue("location");
@@ -181,15 +200,20 @@ public class DiveSessionAddResource<K> extends ServerResource implements ILogboo
 	    String deepUnit = form.getFirstValue("deep_unit");
 	    if (deepUnit==null) throw new WrongParameterException("Parameter deep_unit missing");
 	    checkInt(deepUnit, "deep_unit");
+	    //check if deepUnit is correct value
+	    if ((new Integer(deepUnit) < LogbookConstant.DEEP_METER) || (new Integer (deepUnit) > LogbookConstant.DEEP_FEET)) throw new WrongParameterException("Parameter deep_unit wrong value");
 	    
 	    String weightUnit = form.getFirstValue("weight_unit");
 	    if (weightUnit==null) throw new WrongParameterException("Parameter weight_unit missing");
 	    checkInt(weightUnit, "weight_unit");
+	    //check if weight is correct value
+	    if ((new Integer(weightUnit) < LogbookConstant.WEIGHT_KILOGRAM) || (new Integer (weightUnit) > LogbookConstant.WEIGHT_POUND)) throw new WrongParameterException("Parameter weight_unit wrong value");
 	    
 	    String tempUnit = form.getFirstValue("temp_unit");
 	    if (tempUnit==null) throw new WrongParameterException("Parameter temp_unit missing");
 	    checkInt(tempUnit, "temp_unit");
-	        
+	    //check if weight is correct value
+	    if ((new Integer(tempUnit) < LogbookConstant.TEMPERATURE_CELSIUS) || (new Integer (tempUnit) > LogbookConstant.TEMPERATURE_FAHRHENEIT)) throw new WrongParameterException("Parameter temp_unit wrong value");   
 	    
 	    
 		

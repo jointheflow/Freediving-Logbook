@@ -12,6 +12,7 @@ public class ErrorResource {
 	public static final int PLATFORM_NOT_MANAGED_ERROR = -9;
 	public static final int INTERNAL_SERVER_ERROR = -10;
 	public static final int WRONG_PARAMETER_ERROR =-11;
+	public static final int FREEDIVER_ID_ERROR=-12;
 	
 	
 	private int errorCode;

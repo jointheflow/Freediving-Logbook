@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.Date;
 import java.util.List;
 
+import org.gianluca.logbook.dao.exception.FreediverIDException;
 import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSessionsOfFreeediver;
@@ -13,6 +14,7 @@ import org.gianluca.logbook.helper.LogbookConstant;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 
@@ -51,7 +53,12 @@ public class DiveSessionTest {
 		//1) test add dive session expressed as meter, celsius, kg unit 
 		DiveSession ds1 = null;
 		
-		ds1 = LogbookDAO.addDiveSession(fd.getId(), new Date(100000), 35.6, "mask, lanyard, dive suti 5.5 mm", "Elba Island - margidore", null, "sunny", "katabasis course ssi level 3", 20.0, 5.0, LogbookConstant.DEEP_METER, LogbookConstant.TEMPERATURE_CELSIUS, LogbookConstant.WEIGHT_KILOGRAM);
+		try {
+			ds1 = LogbookDAO.addDiveSession(fd.getId(), new Date(100000), 35.6, "mask, lanyard, dive suti 5.5 mm", "Elba Island - margidore", null, "sunny", "katabasis course ssi level 3", 20.0, 5.0, LogbookConstant.DEEP_METER, LogbookConstant.TEMPERATURE_CELSIUS, LogbookConstant.WEIGHT_KILOGRAM);
+		} catch (FreediverIDException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		assertTrue(ds1!=null);
 		assertTrue(ds1.getDeepAsMeter()==35.6);
@@ -72,7 +79,12 @@ public class DiveSessionTest {
 		//2) test add dive session expressed as feet, farehnehit, pound unit 
 		DiveSession ds2 = null;
 		
-		ds2 = LogbookDAO.addDiveSession(fd.getId(), new Date(100000), 116.79, "mask, lanyard, dive suti 5.5 mm", "Elba Island - margidore", null, "sunny", "katabasis course ssi level 3", 68.0, 11.023, LogbookConstant.DEEP_FEET, LogbookConstant.TEMPERATURE_FAHRHENEIT, LogbookConstant.WEIGHT_POUND);
+		try {
+			ds2 = LogbookDAO.addDiveSession(fd.getId(), new Date(100000), 116.79, "mask, lanyard, dive suti 5.5 mm", "Elba Island - margidore", null, "sunny", "katabasis course ssi level 3", 68.0, 11.023, LogbookConstant.DEEP_FEET, LogbookConstant.TEMPERATURE_FAHRHENEIT, LogbookConstant.WEIGHT_POUND);
+		} catch (FreediverIDException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		assertTrue(ds2!=null);
 		assertTrue(ds2.getDeepAsMeter()==35.59759200014239);
@@ -93,7 +105,12 @@ public class DiveSessionTest {
 		//3 test add another dive session
 		@SuppressWarnings("unused")
 		DiveSession ds3;
-		ds3 = LogbookDAO.addDiveSession(fd.getId(), new Date(200000), 11.79, "mask, lanyard, dive suit 5 mm", "Elba Island - marina di campo", null, "partially cloudy", "katabasis course ssi level 3", 50.0, 11.023, LogbookConstant.DEEP_FEET, LogbookConstant.TEMPERATURE_FAHRHENEIT, LogbookConstant.WEIGHT_POUND);
+		try {
+			ds3 = LogbookDAO.addDiveSession(fd.getId(), new Date(200000), 11.79, "mask, lanyard, dive suit 5 mm", "Elba Island - marina di campo", null, "partially cloudy", "katabasis course ssi level 3", 50.0, 11.023, LogbookConstant.DEEP_FEET, LogbookConstant.TEMPERATURE_FAHRHENEIT, LogbookConstant.WEIGHT_POUND);
+		} catch (FreediverIDException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		//get first TWO divesessions by freedivers page1
 		DiveSessionsOfFreeediver dsOfFreePag1 = LogbookDAO.getDiveSessionsByFreediver(fd.getId(), 2,null); 
