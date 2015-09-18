@@ -8,17 +8,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.gianluca.logbook.dao.exception.FreediverIDException;
+import org.gianluca.logbook.dao.exception.DiveSessionIdException;
+import org.gianluca.logbook.dao.exception.FreediverIdException;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSessionsOfFreeediver;
 import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
 import org.gianluca.logbook.helper.LogbookConstant;
 
 
+
+
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.GeoPt;
 import com.google.appengine.api.datastore.Key;
@@ -153,7 +157,7 @@ public class LogbookDAO {
 		}
 	
 	/*remove freediver and all child DiveSession entity and all child Dive entity */
-	public static void removeFreediver(String freediverId) throws FreediverIDException{
+	public static void removeFreediver(String freediverId) throws FreediverIdException{
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Transaction tx = datastore.beginTransaction();
 		
@@ -173,7 +177,7 @@ public class LogbookDAO {
 			tx.commit();
 		}catch (IllegalArgumentException e) {
 			log.info(e.getMessage());
-			throw new FreediverIDException(e.getMessage());
+			throw new FreediverIdException(e.getMessage());
 		} finally {
 			if (tx.isActive()) {
 		        tx.rollback();
@@ -183,7 +187,7 @@ public class LogbookDAO {
 	}
 	
 	/*Add new dive session as a child entity for the freediver key passed as parameter*/
-	public static DiveSession addDiveSession(String freediverId, Date diveDate, Double deep, String equipment, String locationDesc, GeoPt locationGeoPt, String meteoDesc, String note, Double waterTemp, Double weight, int deepUnit, int tempUnit, int weightUnit) throws FreediverIDException {
+	public static DiveSession addDiveSession(String freediverId, Date diveDate, Double deep, String equipment, String locationDesc, GeoPt locationGeoPt, String meteoDesc, String note, Double waterTemp, Double weight, int deepUnit, int tempUnit, int weightUnit) throws FreediverIdException {
 		
 		Key diveSessionId = null;
 		DiveSession diveSession = null;
@@ -260,7 +264,7 @@ public class LogbookDAO {
 				
 				diveSession.setDiveDate(diveDate);
 				diveSession.setEquipment(equipment);
-				diveSession.setId(diveSessionId);
+				diveSession.setId(KeyFactory.keyToString(diveSessionId));
 				diveSession.setLocationDesc(locationDesc);
 				diveSession.setLocationGeoPt(locationGeoPt);
 				diveSession.setMeteoDesc(meteoDesc);
@@ -277,7 +281,7 @@ public class LogbookDAO {
 			
 			}catch (IllegalArgumentException e) {
 				log.info(e.getMessage());
-				throw new FreediverIDException(e.getMessage());
+				throw new FreediverIdException(e.getMessage());
 				
 			
 			} finally {
@@ -323,7 +327,7 @@ public class LogbookDAO {
 				ds.setDeepAsMeter((double)entity.getProperty("deepAsMeter"));
 				ds.setDiveDate((Date)entity.getProperty("diveDate"));
 				ds.setEquipment((String)entity.getProperty("equipment"));
-				ds.setId(entity.getKey());
+				ds.setId(KeyFactory.keyToString(entity.getKey()));
 				ds.setLocationDesc((String)entity.getProperty("locationDesc"));
 				ds.setLocationGeoPt((GeoPt)entity.getProperty("locationGeoPt"));
 				ds.setMeteoDesc((String)entity.getProperty("meteoDesc"));
@@ -358,13 +362,146 @@ public class LogbookDAO {
 	}
 	
 	/*Update dive session with the parameters passed*/
-	public static DiveSession updateDiveSession() {
-		return null;
+	public static DiveSession updateDiveSession(String diveSessionId, Date diveDate, Double deep, String equipment, String locationDesc, GeoPt locationGeoPt, String meteoDesc, String note, Double waterTemp, Double weight, int deepUnit, int tempUnit, int weightUnit) throws  DiveSessionIdException {
+		
+		DiveSession diveSession = null;
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Transaction tx = datastore.beginTransaction();
+			try {
+				//find entity
+				Entity e_diveSession = datastore.get(KeyFactory.stringToKey(diveSessionId));
+				
+				/*Executes deep conversion*/
+				if (deep !=null)
+					switch (deepUnit) {
+						case LogbookConstant.DEEP_METER: {
+							e_diveSession.setProperty("deepAsMeter", deep);
+							e_diveSession.setProperty("deepAsFeet", (deep*LogbookConstant.METER_AS_FEET));
+						}
+							break;
+						
+						case LogbookConstant.DEEP_FEET: {
+							e_diveSession.setProperty("deepAsFeet", deep);
+							e_diveSession.setProperty("deepAsMeter", (deep/LogbookConstant.METER_AS_FEET));
+						}
+							break;
+							
+					}
+				
+				/*Executes waterTemp conversion*/
+				if (waterTemp != null)
+					switch (tempUnit) {
+						case LogbookConstant.TEMPERATURE_CELSIUS: {
+							e_diveSession.setProperty("waterTempAsCelsius", waterTemp);
+							e_diveSession.setProperty("waterTempAsFahrehneit", (waterTemp*LogbookConstant.CELSIUS_AS_FAREHN_TIME + LogbookConstant.CELSIUS_AS_FAREHN_ADD));
+						}
+							break;
+						
+						case LogbookConstant.TEMPERATURE_FAHRHENEIT: {
+							e_diveSession.setProperty("waterTempAsFahrehneit", waterTemp);
+							e_diveSession.setProperty("waterTempAsCelsius", (waterTemp - LogbookConstant.CELSIUS_AS_FAREHN_ADD)  / LogbookConstant.CELSIUS_AS_FAREHN_TIME);
+						}
+							break;
+					}
+				
+
+				/*Execute weigth conversion*/
+				if (weight != null)
+					switch (weightUnit) {
+					case LogbookConstant.WEIGHT_KILOGRAM: {
+						e_diveSession.setProperty("weightAsKilogram", weight);
+						e_diveSession.setProperty("weightAsPound", (weight*LogbookConstant.KILOGRAM_AS_POUND));
+					}
+						break;
+					
+					case LogbookConstant.WEIGHT_POUND: {
+						e_diveSession.setProperty("weightAsPound", weight);
+						e_diveSession.setProperty("weightAsKilogram", (weight / LogbookConstant.KILOGRAM_AS_POUND));
+					}
+						break;
+				}
+				
+				e_diveSession.setProperty("diveDate", diveDate);
+				e_diveSession.setProperty("equipment", equipment);
+				e_diveSession.setProperty("locationDesc", locationDesc);
+				e_diveSession.setProperty("locationGeoPt", locationGeoPt);
+				e_diveSession.setProperty("meteoDesc", meteoDesc);
+				if (note !=null)
+					e_diveSession.setProperty("note", new Text(note));
+				else
+					e_diveSession.setProperty("note", null);
+				
+				datastore.put(e_diveSession);
+								
+				//instantiate a new entity object
+				diveSession = new DiveSession();
+				diveSession.setDeepAsFeet((Double)e_diveSession.getProperty("deepAsFeet"));
+				diveSession.setDeepAsMeter((Double)e_diveSession.getProperty("deepAsMeter"));
+				diveSession.setDiveDate(diveDate);
+				diveSession.setEquipment(equipment);
+				diveSession.setId(diveSessionId);
+				diveSession.setLocationDesc(locationDesc);
+				diveSession.setLocationGeoPt(locationGeoPt);
+				diveSession.setMeteoDesc(meteoDesc);
+				diveSession.setNote(((Text)e_diveSession.getProperty("note")));
+				
+				diveSession.setWaterTempAsCelsius((Double)e_diveSession.getProperty("waterTempAsCelsius"));
+				diveSession.setWaterTempAsFahrehneit((Double)e_diveSession.getProperty("waterTempAsFahrehneit"));
+				
+				diveSession.setWeightAsKilogram((Double)e_diveSession.getProperty("weightAsKilogram"));
+				diveSession.setWeightAsPound((Double)e_diveSession.getProperty("weightAsPound"));
+				
+				
+				tx.commit();
+			
+			}catch (IllegalArgumentException e) {
+				log.info(e.getMessage());
+				throw new DiveSessionIdException(e.getMessage());
+				
+			
+			}catch (EntityNotFoundException f) {
+				
+				log.info(f.getMessage());
+				throw new DiveSessionIdException(f.getMessage());
+			}
+			finally {
+			    if (tx.isActive()) {
+			        tx.rollback();
+			    }
+			}
+			
+	        	
+	        return diveSession;
+		
 	}
 	
-	/*Remove dive session by key*/
-	public static void removeDiveSession(Key diveSessionId) {
+	/*Remove dive session by key and all dives associated*/
+	public static void removeDiveSession(String diveSessionId) throws DiveSessionIdException {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Transaction tx = datastore.beginTransaction();
 		
+		try {
+			
+			//get dive session instance and all child of Dive  regardless of kind
+			Query ancestorQuery = new Query().setAncestor(KeyFactory.stringToKey(diveSessionId)).setKeysOnly();
+			List<Entity> results = datastore.prepare(ancestorQuery).asList(FetchOptions.Builder.withDefaults());
+			for (Entity entity : results) {
+				log.info("Delete "+ entity.getKey().toString());
+				datastore.delete(entity.getKey());
+			}
+			
+			
+			
+			 	
+			tx.commit();
+		}catch (IllegalArgumentException e) {
+			log.info(e.getMessage());
+			throw new DiveSessionIdException(e.getMessage());
+		} finally {
+			if (tx.isActive()) {
+		        tx.rollback();
+		    }
+		}
 	}
 	
 	

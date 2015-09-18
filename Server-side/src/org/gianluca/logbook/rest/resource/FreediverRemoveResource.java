@@ -2,7 +2,7 @@ package org.gianluca.logbook.rest.resource;
 
 import java.util.logging.Logger;
 
-import org.gianluca.logbook.dao.exception.FreediverIDException;
+import org.gianluca.logbook.dao.exception.FreediverIdException;
 import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
 import org.gianluca.logbook.dto.LogbookDto;
 import org.gianluca.logbook.external.integration.ExternalUserFactory;
@@ -95,7 +95,7 @@ public class FreediverRemoveResource<K> extends ServerResource implements ILogbo
 			JsonRepresentation errorRepresentation = new JsonRepresentation(error);
 			return errorRepresentation;	
 			
-		}catch(FreediverIDException a_e) {
+		}catch(FreediverIdException a_e) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			ErrorResource error = new ErrorResource();
 			error.setErrorCode(ErrorResource.FREEDIVER_ID_ERROR);

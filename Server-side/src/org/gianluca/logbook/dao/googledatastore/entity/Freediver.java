@@ -2,7 +2,7 @@ package org.gianluca.logbook.dao.googledatastore.entity;
 
 import org.gianluca.logbook.helper.LogbookConstant;
 
-import com.google.appengine.api.datastore.Key;
+
 
 public class Freediver {
 		

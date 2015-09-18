@@ -22,7 +22,6 @@ import org.restlet.resource.*;
 import org.restlet.data.Status;
 import org.restlet.ext.json.*;
 
-import com.google.appengine.api.datastore.KeyFactory;
 import com.restfb.exception.FacebookOAuthException;
 
 public class FreediverLoginResource<K>  extends ServerResource implements ILogbookResource{
@@ -99,7 +98,7 @@ public class FreediverLoginResource<K>  extends ServerResource implements ILogbo
 						dsDto.setDiveDate(ds.getDiveDate());
 						dsDto.setEquipment(ds.getEquipment());
 						dsDto.setExternalToken(p_externalToken);
-						dsDto.setId(KeyFactory.keyToString(ds.getId()));
+						dsDto.setId(ds.getId());
 						dsDto.setLocationDesc(ds.getLocationDesc());
 						if (ds.getLocationGeoPt() != null) {
 							dsDto.setLocationLatitude(ds.getLocationGeoPt().getLatitude());

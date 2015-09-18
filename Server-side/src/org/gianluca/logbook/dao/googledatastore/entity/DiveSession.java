@@ -3,13 +3,12 @@ package org.gianluca.logbook.dao.googledatastore.entity;
 import java.util.Date;
 
 import com.google.appengine.api.datastore.GeoPt;
-import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Text;
 
 /*Represents a freediving session*/
 public class DiveSession {
-	
-	private Key id ;
+	//datastore id
+	private String id ;
 	private Date diveDate;
 	private String locationDesc;
 	private GeoPt locationGeoPt;
@@ -22,10 +21,11 @@ public class DiveSession {
 	private double weightAsKilogram;
 	private double weightAsPound;
 	private Text note;
-	public Key getId() {
+	
+	public String getId() {
 		return id;
 	}
-	public void setId(Key id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public Date getDiveDate() {

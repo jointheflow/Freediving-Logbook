@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Logger;
 
-import org.gianluca.logbook.dao.exception.FreediverIDException;
+import org.gianluca.logbook.dao.exception.FreediverIdException;
 import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
 import org.gianluca.logbook.dto.DiveSessionDto;
@@ -23,7 +23,7 @@ import org.restlet.data.Parameter;
 import org.restlet.data.Status;
 import org.restlet.ext.json.*;
 
-import com.google.appengine.api.datastore.KeyFactory;
+
 import com.restfb.exception.FacebookOAuthException;
 
 
@@ -85,7 +85,7 @@ public class DiveSessionAddResource<K> extends ServerResource implements ILogboo
 			dsDto.setDiveDate(ds.getDiveDate());
 			dsDto.setEquipment(ds.getEquipment());
 			dsDto.setExternalToken(externalToken);
-			dsDto.setId(KeyFactory.keyToString(ds.getId()));
+			dsDto.setId(ds.getId());
 			dsDto.setLocationDesc(ds.getLocationDesc());
 			if (ds.getLocationGeoPt() != null) {
 				dsDto.setLocationLatitude(ds.getLocationGeoPt().getLatitude());
@@ -140,7 +140,7 @@ public class DiveSessionAddResource<K> extends ServerResource implements ILogboo
 			JsonRepresentation errorRepresentation = new JsonRepresentation(error);
 			return errorRepresentation;	
 			
-		}catch(FreediverIDException a_e) {
+		}catch(FreediverIdException a_e) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			ErrorResource error = new ErrorResource();
 			error.setErrorCode(ErrorResource.FREEDIVER_ID_ERROR);
