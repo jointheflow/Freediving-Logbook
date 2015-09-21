@@ -3,7 +3,7 @@ package org.gianluca.logbook.dao.googledatastore.entity;
 import java.util.List;
 
 /*Represents a list of freediver's dive session.
- * This class i necessary because it contains also a last position ofthe cursor
+ * This class i necessary because it contains also a last position of the cursor
  * of the entity set returned by the query in case of pagination */
 public class DiveSessionsOfFreeediver {
 	private List<DiveSession> diveSessions = null;

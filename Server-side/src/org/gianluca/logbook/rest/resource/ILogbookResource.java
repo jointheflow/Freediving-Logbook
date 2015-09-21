@@ -31,6 +31,10 @@ public interface ILogbookResource {
 		if (freediverId==null) throw new WrongParameterException("Parameter freediver_id missing");
 	}
 	
+	public default void checkDivesessionId(String divesessionId) throws WrongParameterException {
+		if (divesessionId==null) throw new WrongParameterException("Parameter divesession_id missing");
+	}
+	
 	
 	public default void checkDouble(String doubleValue, String name) throws WrongParameterException {
 		try {

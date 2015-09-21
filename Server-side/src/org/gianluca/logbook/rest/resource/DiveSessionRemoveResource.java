@@ -2,7 +2,7 @@ package org.gianluca.logbook.rest.resource;
 
 import java.util.logging.Logger;
 
-import org.gianluca.logbook.dao.exception.FreediverIdException;
+import org.gianluca.logbook.dao.exception.DiveSessionIdException;
 import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
 import org.gianluca.logbook.dto.LogbookDto;
 import org.gianluca.logbook.external.integration.ExternalUserFactory;
@@ -17,15 +17,15 @@ import org.restlet.ext.json.*;
 
 import com.restfb.exception.FacebookOAuthException;
 
-public class FreediverRemoveResource<K> extends ServerResource implements ILogbookResource{
-	private static final Logger log = Logger.getLogger(FreediverRemoveResource.class.getName());
+public class DiveSessionRemoveResource<K> extends ServerResource implements ILogbookResource{
+	private static final Logger log = Logger.getLogger(DiveSessionRemoveResource.class.getName());
 	
 	
 		
-	/*Remove a freediver and all dive sessions associated. Check if token is valid against external platform*/
+	/*Remove a dive session and all dives  associated. Check if token is valid against external platform*/
 	@Post
 	public Representation removeFreediver(Representation entity) throws ResourceException {
-		log.info("start  POST remove for freediver");
+		log.info("start  POST remove for divesession");
 		//create json response
 		JsonRepresentation representation = null;
 	    Form form = new Form(entity); 
@@ -40,7 +40,7 @@ public class FreediverRemoveResource<K> extends ServerResource implements ILogbo
 		    // "name=value"  
 	        String externalToken = form.getFirstValue("external_token");
 	        String externalPlatformId = form.getFirstValue("external_platform_id");
-	        String freediverId = form.getFirstValue("freediver_id");
+	        String divesessionId = form.getFirstValue("divesession_id");
 	        
 		    //check if parameters exists and are valid
 		    checkParameters(entity);
@@ -49,12 +49,12 @@ public class FreediverRemoveResource<K> extends ServerResource implements ILogbo
 			ExternalUserFactory.checkExternalToken(externalToken, Integer.parseInt(externalPlatformId));
 		    
 		    //add dive session
-		    LogbookDAO.removeFreediver(freediverId);
+		    LogbookDAO.removeDiveSession(divesessionId);
 		    LogbookDto resDto = new LogbookDto();
 		    
 		    //Set dto status and message
 			resDto.setResult(LogbookDto.RESULT_OK);
-			resDto.setMessage("Freediver removed");
+			resDto.setMessage("Dive session removed");
 			resDto.setExternalToken(externalToken);
 		    
 		    
@@ -96,10 +96,10 @@ public class FreediverRemoveResource<K> extends ServerResource implements ILogbo
 			JsonRepresentation errorRepresentation = new JsonRepresentation(error);
 			return errorRepresentation;	
 			
-		}catch(FreediverIdException a_e) {
+		}catch(DiveSessionIdException a_e) {
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			ErrorResource error = new ErrorResource();
-			error.setErrorCode(ErrorResource.FREEDIVER_ID_ERROR);
+			error.setErrorCode(ErrorResource.DIVESESSION_ID_ERROR);
 			error.setErrorMessage(a_e.getMessage());
 			JsonRepresentation errorRepresentation = new JsonRepresentation(error);
 			return errorRepresentation;		
@@ -115,7 +115,7 @@ public class FreediverRemoveResource<K> extends ServerResource implements ILogbo
 			
 					
 		}finally {
-			log.info("end  POST remove for freediver");
+			log.info("end  POST remove for divesession");
 			
 		}   
 	}  
@@ -129,8 +129,8 @@ public class FreediverRemoveResource<K> extends ServerResource implements ILogbo
 		String externalPlatformId = form.getFirstValue("external_platform_id");
 		checkExternalPlatformId(externalPlatformId);
 		
-		String freediverId = form.getFirstValue("freediver_id");
-        checkFreediverId(freediverId);
+		String divesessionId = form.getFirstValue("divesession_id");
+        checkDivesessionId(divesessionId);
 		
 	}
 	

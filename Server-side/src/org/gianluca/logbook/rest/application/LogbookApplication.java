@@ -23,6 +23,8 @@ public class LogbookApplication extends Application {
         router.attach("/freediver/login", org.gianluca.logbook.rest.resource.FreediverLoginResource.class);
         router.attach("/freediver/remove", org.gianluca.logbook.rest.resource.FreediverRemoveResource.class);
         router.attach("/freediver/divesession/add", org.gianluca.logbook.rest.resource.DiveSessionAddResource.class);
+        router.attach("/freediver/divesession/update", org.gianluca.logbook.rest.resource.DiveSessionUpdateResource.class);
+        router.attach("/freediver/divesession/remove", org.gianluca.logbook.rest.resource.DiveSessionRemoveResource.class);
         return router;
 
        

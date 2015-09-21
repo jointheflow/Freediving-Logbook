@@ -13,6 +13,7 @@ public class ErrorResource {
 	public static final int INTERNAL_SERVER_ERROR = -10;
 	public static final int WRONG_PARAMETER_ERROR =-11;
 	public static final int FREEDIVER_ID_ERROR=-12;
+	public static final int DIVESESSION_ID_ERROR=-13;
 	
 	
 	private int errorCode;
