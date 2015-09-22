@@ -8,12 +8,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.gianluca.logbook.dao.exception.DiveIdException;
 import org.gianluca.logbook.dao.exception.DiveSessionIdException;
 import org.gianluca.logbook.dao.exception.FreediverIdException;
+import org.gianluca.logbook.dao.googledatastore.entity.Dive;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSessionsOfFreeediver;
 import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
 import org.gianluca.logbook.helper.LogbookConstant;
+
+
 
 
 
@@ -503,6 +507,247 @@ public class LogbookDAO {
 		    }
 		}
 	}
+	
+	//add a new Dive to the DiveSession which id is passed as parameter
+	public static Dive addDive(String divesessionId, int diveTime_minute,String diveType, int duration_second, String equipment, Double deep, Double neutralBuoyancy, String note, Double weight, int deepUnit, int weightUnit) throws DiveSessionIdException {
+		Key diveId = null;
+		Dive dive = null;
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Transaction tx = datastore.beginTransaction();
+			try {
+				
+				Entity e_dive = new Entity("Dive", KeyFactory.stringToKey(divesessionId));
+				
+				/*Executes deep conversion*/
+				if (deep !=null)
+					switch (deepUnit) {
+						case LogbookConstant.DEEP_METER: {
+							e_dive.setProperty("deepAsMeter", deep);
+							e_dive.setProperty("deepAsFeet", (deep*LogbookConstant.METER_AS_FEET));
+						}
+							break;
+						
+						case LogbookConstant.DEEP_FEET: {
+							e_dive.setProperty("maxDeepAsFeet", deep);
+							e_dive.setProperty("maxDeepAsMeter", (deep/LogbookConstant.METER_AS_FEET));
+						}
+							break;
+							
+					}
+				
+				/*Executes deep conversion*/
+				if (neutralBuoyancy !=null)
+					switch (deepUnit) {
+						case LogbookConstant.DEEP_METER: {
+							e_dive.setProperty("neutralBuoyancyAsMeter", deep);
+							e_dive.setProperty("neutralBuoyancyAsFeet", (deep*LogbookConstant.METER_AS_FEET));
+						}
+							break;
+						
+						case LogbookConstant.DEEP_FEET: {
+							e_dive.setProperty("neutralBuoyancyAsFeet", deep);
+							e_dive.setProperty("neutralBuoyancyAsMeter", (deep/LogbookConstant.METER_AS_FEET));
+						}
+							break;
+							
+					}
+								
+				/*Execute weigth conversion*/
+				if (weight != null)
+					switch (weightUnit) {
+					case LogbookConstant.WEIGHT_KILOGRAM: {
+						e_dive.setProperty("weightAsKilogram", weight);
+						e_dive.setProperty("weightAsPound", (weight*LogbookConstant.KILOGRAM_AS_POUND));
+					}
+						break;
+					
+					case LogbookConstant.WEIGHT_POUND: {
+						e_dive.setProperty("weightAsPound", weight);
+						e_dive.setProperty("weightAsKilogram", (weight / LogbookConstant.KILOGRAM_AS_POUND));
+					}
+						break;
+				}
+				
+				e_dive.setProperty("diveTime", diveTime_minute);
+				e_dive.setProperty("diveType", diveType);
+				e_dive.setProperty("duration", duration_second);
+				e_dive.setProperty("equipment", equipment);
+				e_dive.setProperty("note", new Text(note));
+				
+				datastore.put(e_dive);
+				diveId = e_dive.getKey();
+				
+				//instantiate a new entity object
+				dive = new Dive();
+				dive.setMaxDeepAsFeet((Double)e_dive.getProperty("maxDeepAsFeet"));
+				dive.setMaxDeepAsMeter((Double)e_dive.getProperty("maxDeepAsMeter"));
+				dive.setNeutralBuoyancyAsFeet((Double)e_dive.getProperty("neutralBuoyancyAsFeet"));
+				dive.setNeutralBuoyancyAsMeter((Double)e_dive.getProperty("neutralBuoyancyAsMeter"));
+				
+				dive.setDiveTime(diveTime_minute);
+				dive.setEquipment(equipment);
+				dive.setId(KeyFactory.keyToString(diveId));
+				dive.setNote(((Text)e_dive.getProperty("note")));
+				
+				
+				dive.setWeightAsKilogram((Double)e_dive.getProperty("weightAsKilogram"));
+				dive.setWeightAsPound((Double)e_dive.getProperty("weightAsPound"));
+				
+				
+				tx.commit();
+			
+			}catch (IllegalArgumentException e) {
+				log.info(e.getMessage());
+				throw new DiveSessionIdException(e.getMessage());
+				
+			
+			} finally {
+			    if (tx.isActive()) {
+			        tx.rollback();
+			    }
+			}
+			
+	        	
+	        return dive;
+	}
+	
+	//update the Dive referenced by id
+	public static Dive updateDive(String diveId, int diveTime_minute,String diveType, int duration_second, String equipment, Double deep, Double neutralBuoyancy, String note, Double weight, int deepUnit, int weightUnit) throws DiveIdException {
+		
+		Dive dive = null;
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Transaction tx = datastore.beginTransaction();
+			try {
+				
+				//find entity
+				Entity e_dive = datastore.get(KeyFactory.stringToKey(diveId));
+				
+				
+				/*Executes deep conversion*/
+				if (deep !=null)
+					switch (deepUnit) {
+						case LogbookConstant.DEEP_METER: {
+							e_dive.setProperty("deepAsMeter", deep);
+							e_dive.setProperty("deepAsFeet", (deep*LogbookConstant.METER_AS_FEET));
+						}
+							break;
+						
+						case LogbookConstant.DEEP_FEET: {
+							e_dive.setProperty("maxDeepAsFeet", deep);
+							e_dive.setProperty("maxDeepAsMeter", (deep/LogbookConstant.METER_AS_FEET));
+						}
+							break;
+							
+					}
+				
+				/*Executes deep conversion*/
+				if (neutralBuoyancy !=null)
+					switch (deepUnit) {
+						case LogbookConstant.DEEP_METER: {
+							e_dive.setProperty("neutralBuoyancyAsMeter", deep);
+							e_dive.setProperty("neutralBuoyancyAsFeet", (deep*LogbookConstant.METER_AS_FEET));
+						}
+							break;
+						
+						case LogbookConstant.DEEP_FEET: {
+							e_dive.setProperty("neutralBuoyancyAsFeet", deep);
+							e_dive.setProperty("neutralBuoyancyAsMeter", (deep/LogbookConstant.METER_AS_FEET));
+						}
+							break;
+							
+					}
+								
+				/*Execute weigth conversion*/
+				if (weight != null)
+					switch (weightUnit) {
+					case LogbookConstant.WEIGHT_KILOGRAM: {
+						e_dive.setProperty("weightAsKilogram", weight);
+						e_dive.setProperty("weightAsPound", (weight*LogbookConstant.KILOGRAM_AS_POUND));
+					}
+						break;
+					
+					case LogbookConstant.WEIGHT_POUND: {
+						e_dive.setProperty("weightAsPound", weight);
+						e_dive.setProperty("weightAsKilogram", (weight / LogbookConstant.KILOGRAM_AS_POUND));
+					}
+						break;
+				}
+				
+				e_dive.setProperty("diveTime", diveTime_minute);
+				e_dive.setProperty("diveType", diveType);
+				e_dive.setProperty("duration", duration_second);
+				e_dive.setProperty("equipment", equipment);
+				if (note !=null)
+					e_dive.setProperty("note", new Text(note));
+				else
+					e_dive.setProperty("note", null);
+				
+				datastore.put(e_dive);
+				
+				
+				//instantiate a new entity object
+				dive = new Dive();
+				dive.setMaxDeepAsFeet((Double)e_dive.getProperty("maxDeepAsFeet"));
+				dive.setMaxDeepAsMeter((Double)e_dive.getProperty("maxDeepAsMeter"));
+				dive.setNeutralBuoyancyAsFeet((Double)e_dive.getProperty("neutralBuoyancyAsFeet"));
+				dive.setNeutralBuoyancyAsMeter((Double)e_dive.getProperty("neutralBuoyancyAsMeter"));
+				
+				dive.setDiveTime(diveTime_minute);
+				dive.setEquipment(equipment);
+				dive.setId(diveId);
+				dive.setNote(((Text)e_dive.getProperty("note")));
+				
+				
+				dive.setWeightAsKilogram((Double)e_dive.getProperty("weightAsKilogram"));
+				dive.setWeightAsPound((Double)e_dive.getProperty("weightAsPound"));
+				
+				
+				tx.commit();
+			
+			}catch (IllegalArgumentException | EntityNotFoundException e) {
+				log.info(e.getMessage());
+				throw new DiveIdException(e.getMessage());
+				
+			
+			} finally {
+			    if (tx.isActive()) {
+			        tx.rollback();
+			    }
+			}
+			
+	        	
+	        return dive;
+	}
+	
+	//remove the Dive referenced by id
+	public static void removeDive(String diveId) throws DiveIdException {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Transaction tx = datastore.beginTransaction();
+		
+		try {
+			
+			//get dive session instance and all child of Dive  regardless of kind
+			Query ancestorQuery = new Query().setAncestor(KeyFactory.stringToKey(diveId)).setKeysOnly();
+			List<Entity> results = datastore.prepare(ancestorQuery).asList(FetchOptions.Builder.withDefaults());
+			for (Entity entity : results) {
+				log.info("Delete "+ entity.getKey().toString());
+				datastore.delete(entity.getKey());
+			}
+			
+			
+			
+			 	
+			tx.commit();
+		}catch (IllegalArgumentException e) {
+			log.info(e.getMessage());
+			throw new DiveIdException(e.getMessage());
+		} finally {
+			if (tx.isActive()) {
+		        tx.rollback();
+		    }
+		}
+	}
+	
 	
 	
 	

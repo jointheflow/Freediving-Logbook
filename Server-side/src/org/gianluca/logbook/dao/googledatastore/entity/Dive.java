@@ -1,6 +1,5 @@
 package org.gianluca.logbook.dao.googledatastore.entity;
 
-import java.util.Date;
 
 import com.google.appengine.api.datastore.Text;
 
@@ -8,8 +7,8 @@ public class Dive {
 	//dive id
 	private String id;
 	
-	//time of dive
-	private Date diveTime;
+	//time of dive in minute of a day from 0 (00:01) to 1440 (24:00)
+	private int diveTime;
 	
 	//dive type ex. free immersion, constant,...
 	private String diveType;
@@ -41,10 +40,10 @@ public class Dive {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public Date getDiveTime() {
+	public int getDiveTime() {
 		return diveTime;
 	}
-	public void setDiveTime(Date diveTime) {
+	public void setDiveTime(int diveTime) {
 		this.diveTime = diveTime;
 	}
 	public String getDiveType() {
