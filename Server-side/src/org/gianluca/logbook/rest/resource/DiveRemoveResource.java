@@ -17,15 +17,15 @@ import org.restlet.ext.json.*;
 
 import com.restfb.exception.FacebookOAuthException;
 
-public class DiveSessionRemoveResource<K> extends ServerResource implements ILogbookResource{
-	private static final Logger log = Logger.getLogger(DiveSessionRemoveResource.class.getName());
+public class DiveRemoveResource<K> extends ServerResource implements ILogbookResource{
+	private static final Logger log = Logger.getLogger(DiveRemoveResource.class.getName());
 	
 	
 		
-	/*Remove a dive session and all dives  associated. Check if token is valid against external platform*/
+	/*Remove a dive. Check if token is valid against external platform*/
 	@Post
-	public Representation removeDivesession(Representation entity) throws ResourceException {
-		log.info("start  POST remove for divesession");
+	public Representation removeDive(Representation entity) throws ResourceException {
+		log.info("start  POST remove for dive");
 		//create json response
 		JsonRepresentation representation = null;
 	    Form form = new Form(entity); 
@@ -40,7 +40,7 @@ public class DiveSessionRemoveResource<K> extends ServerResource implements ILog
 		    // "name=value"  
 	        String externalToken = form.getFirstValue("external_token");
 	        String externalPlatformId = form.getFirstValue("external_platform_id");
-	        String divesessionId = form.getFirstValue("divesession_id");
+	        String divesessionId = form.getFirstValue("dive_id");
 	        
 		    //check if parameters exists and are valid
 		    checkParameters(entity);
@@ -54,7 +54,7 @@ public class DiveSessionRemoveResource<K> extends ServerResource implements ILog
 		    
 		    //Set dto status and message
 			resDto.setResult(LogbookDto.RESULT_OK);
-			resDto.setMessage("Dive session removed");
+			resDto.setMessage("Dive removed");
 			resDto.setExternalToken(externalToken);
 		    
 		    
@@ -115,7 +115,7 @@ public class DiveSessionRemoveResource<K> extends ServerResource implements ILog
 			
 					
 		}finally {
-			log.info("end  POST remove for divesession");
+			log.info("end  POST remove for dive");
 			
 		}   
 	}  
@@ -129,8 +129,8 @@ public class DiveSessionRemoveResource<K> extends ServerResource implements ILog
 		String externalPlatformId = form.getFirstValue("external_platform_id");
 		checkExternalPlatformId(externalPlatformId);
 		
-		String divesessionId = form.getFirstValue("divesession_id");
-        checkDivesessionId(divesessionId);
+		String diveId = form.getFirstValue("dive_id");
+        checkDiveId(diveId);
 		
 	}
 	

@@ -36,6 +36,10 @@ public interface ILogbookResource {
 	}
 	
 	
+	public default void checkDiveId(String diveId) throws WrongParameterException {
+		if (diveId==null) throw new WrongParameterException("Parameter dive_id missing");
+	}
+	
 	public default void checkDouble(String doubleValue, String name) throws WrongParameterException {
 		try {
 			if (doubleValue!=null) new Double(doubleValue);
@@ -68,4 +72,12 @@ public interface ILogbookResource {
 	}
 	
 	
+	public default void checkTime(int time, String name) throws WrongParameterException{
+		if (time<0 || time >1440) throw new WrongParameterException("Parameter "+ name+"  "+"must be a value between 0 and 1440");
+	}
+	
+	public default void checkDuration(int duration, String name) throws WrongParameterException{
+		if (duration<0) throw new WrongParameterException("Parameter "+ name+"  "+"must be a value >=0 ");
+		
+	}	
 }

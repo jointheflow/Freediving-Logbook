@@ -7,19 +7,20 @@ import java.util.List;
  * of the entity set returned by the query in case of pagination */
 public class DivesOfDiveSession {
 	private List<Dive> dives = null;
-	private String cursor = null;
-	public List<Dive> getDivess() {
+	//private String cursor = null;
+	public List<Dive> getDives() {
 		return dives;
 	}
-	public void setDiveSessions(List<Dive> dives) {
+	public void setDives(List<Dive> dives) {
 		this.dives = dives;
 	}
-	public String getCursor() {
+	/*public String getCursor() {
 		return cursor;
 	}
 	public void setCursor(String cursor) {
 		this.cursor = cursor;
-	}
+	}*/
+	
 	
 	
 	

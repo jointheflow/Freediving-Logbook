@@ -14,8 +14,11 @@ import org.gianluca.logbook.dao.exception.FreediverIdException;
 import org.gianluca.logbook.dao.googledatastore.entity.Dive;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSessionsOfFreeediver;
+import org.gianluca.logbook.dao.googledatastore.entity.DivesOfDiveSession;
 import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
 import org.gianluca.logbook.helper.LogbookConstant;
+
+
 
 
 
@@ -61,21 +64,40 @@ public class LogbookDAO {
 	
 	/*DiveSession is saved in the datastore as the following:
 	 *  Entity --> DiveSession
-	 *  			id: Key
+	 *  			id: Key (child of freediver)
 	 *  			diveDate : Date
 					locationDesc: String
 					locationGeoPt: GeoPt 
 					meteoDesc: String 
-					waterTempAsCelsius: double;
-					waterTempAsFahrehneit: double;
-					deepAsMeter: double;
-					deepAsFeet: double;
-					equipment: String;
-					weightAsKilogram: double;
-					weightAsPound: double;
-					note: Text;
+					waterTempAsCelsius: double
+					waterTempAsFahrehneit: double
+					deepAsMeter: double
+					deepAsFeet: double
+					equipment: String
+					weightAsKilogram: double
+					weightAsPound: double
+					note: Text
+	 */
+	 /*Dive is saved in the datastore as the following:
+	 * Entity --> 	Dive
+	 * 				id: Key (child of DiveSession)
+	 * 				diveTime: int
+	 * 				diveType: String
+	 * 				duration: int
+	 * 				equipment: String
+	 * 				note: Text
+	 * 				maxDeepAsFeet: double
+	 * 				maxDeepAsMeter: double
+	 * 				neutralBuoyancyAsFeet: double
+	 * 				neutralBuoyancyAsMeter: double
+	 * 				weightAsKilogram: double
+					weightAsPound: double
+					depthWaterTempAsCelsius: double
+					depthWaterTempAsFahrehneit: double
+					
+					
 	 * 
-	 * */
+	 */
 	
 	/*Get a freediver instance by external id provided by external platform authentication*/
 	public static Freediver getFreediverByExternalId(String externalId, long externalPlatformId) { 
@@ -509,7 +531,7 @@ public class LogbookDAO {
 	}
 	
 	//add a new Dive to the DiveSession which id is passed as parameter
-	public static Dive addDive(String divesessionId, int diveTime_minute,String diveType, int duration_second, String equipment, Double deep, Double neutralBuoyancy, String note, Double weight, int deepUnit, int weightUnit) throws DiveSessionIdException {
+	public static Dive addDive(String divesessionId, int diveTime_minute,String diveType, int duration_second, String equipment, Double deep, Double neutralBuoyancy, String note, Double weight, Double depthWaterTemp, int deepUnit, int tempUnit, int weightUnit) throws DiveSessionIdException {
 		Key diveId = null;
 		Dive dive = null;
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -522,8 +544,8 @@ public class LogbookDAO {
 				if (deep !=null)
 					switch (deepUnit) {
 						case LogbookConstant.DEEP_METER: {
-							e_dive.setProperty("deepAsMeter", deep);
-							e_dive.setProperty("deepAsFeet", (deep*LogbookConstant.METER_AS_FEET));
+							e_dive.setProperty("maxDeepAsMeter", deep);
+							e_dive.setProperty("maxDeepAsFeet", (deep*LogbookConstant.METER_AS_FEET));
 						}
 							break;
 						
@@ -568,6 +590,23 @@ public class LogbookDAO {
 						break;
 				}
 				
+				/*Executes waterTemp conversion*/
+				if (depthWaterTemp != null)
+					switch (tempUnit) {
+						case LogbookConstant.TEMPERATURE_CELSIUS: {
+							e_dive.setProperty("depthWaterTempAsCelsius", depthWaterTemp);
+							e_dive.setProperty("depthWaterTempAsFahrehneit", (depthWaterTemp*LogbookConstant.CELSIUS_AS_FAREHN_TIME + LogbookConstant.CELSIUS_AS_FAREHN_ADD));
+						}
+							break;
+						
+						case LogbookConstant.TEMPERATURE_FAHRHENEIT: {
+							e_dive.setProperty("depthWaterTempAsFahrehneit", depthWaterTemp);
+							e_dive.setProperty("depthWaterTempAsCelsius", (depthWaterTemp - LogbookConstant.CELSIUS_AS_FAREHN_ADD)  / LogbookConstant.CELSIUS_AS_FAREHN_TIME);
+						}
+							break;
+					}
+				
+				
 				e_dive.setProperty("diveTime", diveTime_minute);
 				e_dive.setProperty("diveType", diveType);
 				e_dive.setProperty("duration", duration_second);
@@ -589,6 +628,10 @@ public class LogbookDAO {
 				dive.setId(KeyFactory.keyToString(diveId));
 				dive.setNote(((Text)e_dive.getProperty("note")));
 				
+				dive.setDepthWaterTempAsCelsisus((Double)e_dive.getProperty("depthWaterTempAsCelsius"));
+				dive.setDepthWaterTempAsfarheneit((Double)e_dive.getProperty("depthWaterTempAsFahrehneit"));
+				
+				dive.setDuration(duration_second);
 				
 				dive.setWeightAsKilogram((Double)e_dive.getProperty("weightAsKilogram"));
 				dive.setWeightAsPound((Double)e_dive.getProperty("weightAsPound"));
@@ -612,7 +655,7 @@ public class LogbookDAO {
 	}
 	
 	//update the Dive referenced by id
-	public static Dive updateDive(String diveId, int diveTime_minute,String diveType, int duration_second, String equipment, Double deep, Double neutralBuoyancy, String note, Double weight, int deepUnit, int weightUnit) throws DiveIdException {
+	public static Dive updateDive(String diveId, int diveTime_minute,String diveType, int duration_second, String equipment, Double deep, Double neutralBuoyancy, String note, Double weight, Double depthWaterTemp, int deepUnit, int tempUnit, int weightUnit) throws DiveIdException {
 		
 		Dive dive = null;
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -627,8 +670,8 @@ public class LogbookDAO {
 				if (deep !=null)
 					switch (deepUnit) {
 						case LogbookConstant.DEEP_METER: {
-							e_dive.setProperty("deepAsMeter", deep);
-							e_dive.setProperty("deepAsFeet", (deep*LogbookConstant.METER_AS_FEET));
+							e_dive.setProperty("maxDeepAsMeter", deep);
+							e_dive.setProperty("maxDeepAsFeet", (deep*LogbookConstant.METER_AS_FEET));
 						}
 							break;
 						
@@ -672,6 +715,23 @@ public class LogbookDAO {
 					}
 						break;
 				}
+				
+				
+				/*Executes waterTemp conversion*/
+				if (depthWaterTemp != null)
+					switch (tempUnit) {
+						case LogbookConstant.TEMPERATURE_CELSIUS: {
+							e_dive.setProperty("depthWaterTempAsCelsius", depthWaterTemp);
+							e_dive.setProperty("depthWaterTempAsFahrehneit", (depthWaterTemp*LogbookConstant.CELSIUS_AS_FAREHN_TIME + LogbookConstant.CELSIUS_AS_FAREHN_ADD));
+						}
+							break;
+						
+						case LogbookConstant.TEMPERATURE_FAHRHENEIT: {
+							e_dive.setProperty("depthWaterTempAsFahrehneit", depthWaterTemp);
+							e_dive.setProperty("depthWaterTempAsCelsius", (depthWaterTemp - LogbookConstant.CELSIUS_AS_FAREHN_ADD)  / LogbookConstant.CELSIUS_AS_FAREHN_TIME);
+						}
+							break;
+					}
 				
 				e_dive.setProperty("diveTime", diveTime_minute);
 				e_dive.setProperty("diveType", diveType);
@@ -696,6 +756,9 @@ public class LogbookDAO {
 				dive.setEquipment(equipment);
 				dive.setId(diveId);
 				dive.setNote(((Text)e_dive.getProperty("note")));
+				
+				dive.setDepthWaterTempAsCelsisus((Double)e_dive.getProperty("depthWaterTempAsCelsius"));
+				dive.setDepthWaterTempAsfarheneit((Double)e_dive.getProperty("depthWaterTempAsFahrehneit"));
 				
 				
 				dive.setWeightAsKilogram((Double)e_dive.getProperty("weightAsKilogram"));
@@ -746,6 +809,63 @@ public class LogbookDAO {
 		        tx.rollback();
 		    }
 		}
+	}
+
+	/*Get all dives of session by the session key passed as parameter*/
+	public static DivesOfDiveSession getDivesBySession(String diveSessionId){
+		
+		List<Dive> dives = null;
+		DivesOfDiveSession dOfSession = null;
+		
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Transaction tx = datastore.beginTransaction();
+		
+		try {
+			
+			//get all dives descend from diveSessionId key ancestor
+			Query q = new Query("Dive").setAncestor(KeyFactory.stringToKey(diveSessionId)).addSort("diveTime",SortDirection.DESCENDING);		
+			PreparedQuery pq = datastore.prepare(q);		
+			
+			if (pq.countEntities(withLimit(100))>0) dives = new ArrayList<Dive>();		
+			
+			for (Entity entity : pq.asIterable()) {
+				Dive d = new Dive();
+				d.setDiveTime((int)(long)entity.getProperty("diveTime"));
+				d.setDiveType((String)entity.getProperty("diveType"));
+				d.setDuration((int)(long)entity.getProperty("duration"));
+				d.setEquipment((String)entity.getProperty("equipment"));
+				d.setId(KeyFactory.keyToString(entity.getKey()));
+				d.setMaxDeepAsMeter((double)entity.getProperty("maxDeepAsMeter"));
+				d.setMaxDeepAsFeet((double)entity.getProperty("maxDeepAsFeet"));
+				d.setNeutralBuoyancyAsFeet((double)entity.getProperty("neutralBuoyancyAsFeet"));
+				d.setNeutralBuoyancyAsMeter((double)entity.getProperty("neutralBuoyancyAsMeter"));
+				d.setNote((Text)entity.getProperty("note"));
+				d.setWeightAsKilogram((double)entity.getProperty("weightAsKilogram"));
+				d.setWeightAsPound((double)entity.getProperty("weightAsPound"));
+				
+				
+				dives.add(d);
+			     
+			}
+			
+			
+			if (pq.countEntities(withLimit(100))>0)  {
+			
+				dOfSession = new DivesOfDiveSession();
+				dOfSession.setDives(dives);
+				
+			}
+			
+			
+				
+			tx.commit();
+		} finally {
+		    if (tx.isActive()) {
+		        tx.rollback();
+		    }
+		}
+		
+	     return dOfSession;
 	}
 	
 	

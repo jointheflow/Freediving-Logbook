@@ -34,6 +34,11 @@ public class Dive {
 	private double weightAsKilogram;
 	private double weightAsPound;
 	
+	//depth water temp
+	private double depthWaterTempAsCelsisus;
+	private double depthWaterTempAsfarheneit;
+	
+	
 	public String getId() {
 		return id;
 	}
@@ -106,5 +111,19 @@ public class Dive {
 	public void setWeightAsPound(double weightAsPound) {
 		this.weightAsPound = weightAsPound;
 	}
+	public double getDepthWaterTempAsCelsisus() {
+		return depthWaterTempAsCelsisus;
+	}
+	public void setDepthWaterTempAsCelsisus(double depthWaterTempAsCelsisus) {
+		this.depthWaterTempAsCelsisus = depthWaterTempAsCelsisus;
+	}
+	public double getDepthWaterTempAsfarheneit() {
+		return depthWaterTempAsfarheneit;
+	}
+	public void setDepthWaterTempAsfarheneit(double depthWaterTempAsfarheneit) {
+		this.depthWaterTempAsfarheneit = depthWaterTempAsfarheneit;
+	}
+	
+	
 	
 }
