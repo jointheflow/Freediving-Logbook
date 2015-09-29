@@ -106,6 +106,7 @@ public class DiveUpdateResource<K> extends ServerResource implements ILogbookRes
 					return representation;
 					
 				}catch (FacebookOAuthException e_oa) {
+					e_oa.printStackTrace();
 					setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 					ErrorResource error = new ErrorResource();
 					error.setErrorCode(ErrorResource.WRONG_OAUTH_TOKEN);
@@ -113,6 +114,7 @@ public class DiveUpdateResource<K> extends ServerResource implements ILogbookRes
 					JsonRepresentation errorRepresentation = new JsonRepresentation(error);
 					return errorRepresentation;
 				}catch (PlatformNotManagedException e_pnm) {
+					e_pnm.printStackTrace();
 					setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 					ErrorResource error = new ErrorResource();
 					error.setErrorCode(ErrorResource.PLATFORM_NOT_MANAGED_ERROR);
@@ -121,6 +123,7 @@ public class DiveUpdateResource<K> extends ServerResource implements ILogbookRes
 					return errorRepresentation;
 				
 				}catch (NumberFormatException e_ne) {
+					e_ne.printStackTrace();
 					setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 					ErrorResource error = new ErrorResource();
 					error.setErrorCode(ErrorResource.NUMBER_FORMAT_ERROR);
@@ -129,6 +132,7 @@ public class DiveUpdateResource<K> extends ServerResource implements ILogbookRes
 					return errorRepresentation;
 					
 				}catch (WrongParameterException e_wp) {
+					e_wp.printStackTrace();
 					setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 					ErrorResource error = new ErrorResource();
 					error.setErrorCode(ErrorResource.WRONG_PARAMETER_ERROR);
@@ -137,6 +141,7 @@ public class DiveUpdateResource<K> extends ServerResource implements ILogbookRes
 					return errorRepresentation;	
 					
 				}catch(DiveIdException a_e) {
+					a_e.printStackTrace();
 					setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 					ErrorResource error = new ErrorResource();
 					error.setErrorCode(ErrorResource.FREEDIVER_ID_ERROR);
@@ -182,12 +187,12 @@ public class DiveUpdateResource<K> extends ServerResource implements ILogbookRes
 		        
 		        String s_timeDive = form.getFirstValue("dive_time");
 		        checkInt(s_timeDive, "dive_time");
-		        checkTime(new Integer(s_timeDive), "dive_time");
+		        checkTime(s_timeDive, "dive_time");
 		        
 		        
 		        String s_duration = form.getFirstValue("duration");
 		        checkInt(s_duration, "duration");
-		        checkDuration(new Integer(s_duration), "duration");
+		        checkDuration(s_duration, "duration");
 		        
 		        
 		        String waterTemp = form.getFirstValue("depth_water_temp");

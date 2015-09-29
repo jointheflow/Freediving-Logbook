@@ -65,6 +65,7 @@ public class DiveRemoveResource<K> extends ServerResource implements ILogbookRes
 			return representation;
 			
 		}catch (FacebookOAuthException e_oa) {
+			e_oa.printStackTrace();
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			ErrorResource error = new ErrorResource();
 			error.setErrorCode(ErrorResource.WRONG_OAUTH_TOKEN);
@@ -73,6 +74,7 @@ public class DiveRemoveResource<K> extends ServerResource implements ILogbookRes
 			return errorRepresentation;
 			
 		}catch (PlatformNotManagedException e_pnm) {
+			e_pnm.printStackTrace();
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			ErrorResource error = new ErrorResource();
 			error.setErrorCode(ErrorResource.PLATFORM_NOT_MANAGED_ERROR);
@@ -81,6 +83,7 @@ public class DiveRemoveResource<K> extends ServerResource implements ILogbookRes
 			return errorRepresentation;
 		
 		}catch (NumberFormatException e_ne) {
+			e_ne.printStackTrace();
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			ErrorResource error = new ErrorResource();
 			error.setErrorCode(ErrorResource.NUMBER_FORMAT_ERROR);
@@ -89,6 +92,7 @@ public class DiveRemoveResource<K> extends ServerResource implements ILogbookRes
 			return errorRepresentation;
 			
 		}catch (WrongParameterException e_wp) {
+			e_wp.printStackTrace();
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			ErrorResource error = new ErrorResource();
 			error.setErrorCode(ErrorResource.WRONG_PARAMETER_ERROR);
@@ -97,6 +101,7 @@ public class DiveRemoveResource<K> extends ServerResource implements ILogbookRes
 			return errorRepresentation;	
 			
 		}catch(DiveSessionIdException a_e) {
+			a_e.printStackTrace();
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			ErrorResource error = new ErrorResource();
 			error.setErrorCode(ErrorResource.DIVESESSION_ID_ERROR);

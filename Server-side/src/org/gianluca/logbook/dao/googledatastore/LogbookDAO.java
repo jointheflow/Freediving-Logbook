@@ -18,13 +18,6 @@ import org.gianluca.logbook.dao.googledatastore.entity.DivesOfDiveSession;
 import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
 import org.gianluca.logbook.helper.LogbookConstant;
 
-
-
-
-
-
-
-
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -32,7 +25,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.GeoPt;
-import com.google.appengine.api.datastore.Key;
+
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.QueryResultList;
@@ -117,14 +110,8 @@ public class LogbookDAO {
 				//instantiate a Freediver
 				freediver = new Freediver();
 				for (Entity result : pq.asIterable()) {
-					freediver.setExternalEmail((String) result.getProperty("externalEmail"));
-					freediver.setExternalName((String) result.getProperty("externalName"));
-					freediver.setExternalId((String) result.getProperty("externalId"));
-					freediver.setExternalPlatformId((int)(long)result.getProperty("externalPlatformId"));
-					freediver.setDeepUnit((int)(long)result.getProperty("deepUnit"));
-					freediver.setTemperatureUnit((int)(long)result.getProperty("temperatureUnit"));
-					freediver.setWeightUnit((int)(long)result.getProperty("weightUnit"));
-					freediver.setId(KeyFactory.keyToString(result.getKey()));
+					freediver = LogbookEntityFactory.createFreediver(result);
+					
 				}
 								
 				
@@ -144,7 +131,7 @@ public class LogbookDAO {
 	
 	//add freediver user and default settings
 	public static Freediver addFreediver(String externalId, String externalName, String externalEmail, int externalPlatformId) {
-		Key freediverId = null;
+		
 		Freediver freediver = null;
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Transaction tx = datastore.beginTransaction();
@@ -161,16 +148,11 @@ public class LogbookDAO {
 				e_freediver.setProperty("temperatureUnit", LogbookConstant.TEMPERATURE_CELSIUS);
 				e_freediver.setProperty("weightUnit", LogbookConstant.WEIGHT_KILOGRAM);
 				datastore.put(e_freediver);
-				freediverId = e_freediver.getKey();
+				
 				
 				//instantiate a new entity object
-				freediver = new Freediver();
-				freediver.setExternalEmail(externalEmail);
-				freediver.setExternalId(externalId);
-				freediver.setExternalName(externalName);
-				freediver.setExternalPlatformId(externalPlatformId);
-				freediver.setId(KeyFactory.keyToString(freediverId));
-				
+				freediver = LogbookEntityFactory.createFreediver(e_freediver);
+								
 				tx.commit();
 			} finally {
 			    if (tx.isActive()) {
@@ -215,7 +197,6 @@ public class LogbookDAO {
 	/*Add new dive session as a child entity for the freediver key passed as parameter*/
 	public static DiveSession addDiveSession(String freediverId, Date diveDate, Double deep, String equipment, String locationDesc, GeoPt locationGeoPt, String meteoDesc, String note, Double waterTemp, Double weight, int deepUnit, int tempUnit, int weightUnit) throws FreediverIdException {
 		
-		Key diveSessionId = null;
 		DiveSession diveSession = null;
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Transaction tx = datastore.beginTransaction();
@@ -281,27 +262,10 @@ public class LogbookDAO {
 				e_diveSession.setProperty("note", new Text(note));
 				
 				datastore.put(e_diveSession);
-				diveSessionId = e_diveSession.getKey();
+				
 				
 				//instantiate a new entity object
-				diveSession = new DiveSession();
-				diveSession.setDeepAsFeet((Double)e_diveSession.getProperty("deepAsFeet"));
-				diveSession.setDeepAsMeter((Double)e_diveSession.getProperty("deepAsMeter"));
-				
-				diveSession.setDiveDate(diveDate);
-				diveSession.setEquipment(equipment);
-				diveSession.setId(KeyFactory.keyToString(diveSessionId));
-				diveSession.setLocationDesc(locationDesc);
-				diveSession.setLocationGeoPt(locationGeoPt);
-				diveSession.setMeteoDesc(meteoDesc);
-				diveSession.setNote(((Text)e_diveSession.getProperty("note")));
-				
-				diveSession.setWaterTempAsCelsius((Double)e_diveSession.getProperty("waterTempAsCelsius"));
-				diveSession.setWaterTempAsFahrehneit((Double)e_diveSession.getProperty("waterTempAsFahrehneit"));
-				
-				diveSession.setWeightAsKilogram((Double)e_diveSession.getProperty("weightAsKilogram"));
-				diveSession.setWeightAsPound((Double)e_diveSession.getProperty("weightAsPound"));
-				
+				diveSession = LogbookEntityFactory.createDiveSession(e_diveSession);
 				
 				tx.commit();
 			
@@ -348,22 +312,7 @@ public class LogbookDAO {
 			}
 			
 			for (Entity entity : results) {
-				DiveSession ds = new DiveSession();
-				ds.setDeepAsFeet((double)entity.getProperty("deepAsFeet"));
-				ds.setDeepAsMeter((double)entity.getProperty("deepAsMeter"));
-				ds.setDiveDate((Date)entity.getProperty("diveDate"));
-				ds.setEquipment((String)entity.getProperty("equipment"));
-				ds.setId(KeyFactory.keyToString(entity.getKey()));
-				ds.setLocationDesc((String)entity.getProperty("locationDesc"));
-				ds.setLocationGeoPt((GeoPt)entity.getProperty("locationGeoPt"));
-				ds.setMeteoDesc((String)entity.getProperty("meteoDesc"));
-				ds.setNote((Text)entity.getProperty("note"));
-				ds.setWaterTempAsCelsius((double)entity.getProperty("waterTempAsCelsius"));
-				ds.setWaterTempAsFahrehneit((double)entity.getProperty("waterTempAsFahrehneit"));
-				ds.setWeightAsKilogram((double)entity.getProperty("weightAsKilogram"));
-				ds.setWeightAsPound((double)entity.getProperty("weightAsPound"));
-				
-				
+				DiveSession ds = LogbookEntityFactory.createDiveSession(entity);
 				diveSessions.add(ds);
 			     
 			}
@@ -460,22 +409,7 @@ public class LogbookDAO {
 				datastore.put(e_diveSession);
 								
 				//instantiate a new entity object
-				diveSession = new DiveSession();
-				diveSession.setDeepAsFeet((Double)e_diveSession.getProperty("deepAsFeet"));
-				diveSession.setDeepAsMeter((Double)e_diveSession.getProperty("deepAsMeter"));
-				diveSession.setDiveDate(diveDate);
-				diveSession.setEquipment(equipment);
-				diveSession.setId(diveSessionId);
-				diveSession.setLocationDesc(locationDesc);
-				diveSession.setLocationGeoPt(locationGeoPt);
-				diveSession.setMeteoDesc(meteoDesc);
-				diveSession.setNote(((Text)e_diveSession.getProperty("note")));
-				
-				diveSession.setWaterTempAsCelsius((Double)e_diveSession.getProperty("waterTempAsCelsius"));
-				diveSession.setWaterTempAsFahrehneit((Double)e_diveSession.getProperty("waterTempAsFahrehneit"));
-				
-				diveSession.setWeightAsKilogram((Double)e_diveSession.getProperty("weightAsKilogram"));
-				diveSession.setWeightAsPound((Double)e_diveSession.getProperty("weightAsPound"));
+				diveSession = LogbookEntityFactory.createDiveSession(e_diveSession);
 				
 				
 				tx.commit();
@@ -531,8 +465,7 @@ public class LogbookDAO {
 	}
 	
 	//add a new Dive to the DiveSession which id is passed as parameter
-	public static Dive addDive(String divesessionId, int diveTime_minute,String diveType, int duration_second, String equipment, Double deep, Double neutralBuoyancy, String note, Double weight, Double depthWaterTemp, int deepUnit, int tempUnit, int weightUnit) throws DiveSessionIdException {
-		Key diveId = null;
+	public static Dive addDive(String divesessionId, Integer diveTime_minute,String diveType, Integer duration_second, String equipment, Double deep, Double neutralBuoyancy, String note, Double weight, Double depthWaterTemp, int deepUnit, int tempUnit, int weightUnit) throws DiveSessionIdException {
 		Dive dive = null;
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Transaction tx = datastore.beginTransaction();
@@ -612,30 +545,12 @@ public class LogbookDAO {
 				e_dive.setProperty("duration", duration_second);
 				e_dive.setProperty("equipment", equipment);
 				e_dive.setProperty("note", new Text(note));
-				
 				datastore.put(e_dive);
-				diveId = e_dive.getKey();
+				
 				
 				//instantiate a new entity object
-				dive = new Dive();
-				dive.setMaxDeepAsFeet((Double)e_dive.getProperty("maxDeepAsFeet"));
-				dive.setMaxDeepAsMeter((Double)e_dive.getProperty("maxDeepAsMeter"));
-				dive.setNeutralBuoyancyAsFeet((Double)e_dive.getProperty("neutralBuoyancyAsFeet"));
-				dive.setNeutralBuoyancyAsMeter((Double)e_dive.getProperty("neutralBuoyancyAsMeter"));
-				
-				dive.setDiveTime(diveTime_minute);
-				dive.setEquipment(equipment);
-				dive.setId(KeyFactory.keyToString(diveId));
-				dive.setNote(((Text)e_dive.getProperty("note")));
-				
-				dive.setDepthWaterTempAsCelsisus((Double)e_dive.getProperty("depthWaterTempAsCelsius"));
-				dive.setDepthWaterTempAsfarheneit((Double)e_dive.getProperty("depthWaterTempAsFahrehneit"));
-				
-				dive.setDuration(duration_second);
-				
-				dive.setWeightAsKilogram((Double)e_dive.getProperty("weightAsKilogram"));
-				dive.setWeightAsPound((Double)e_dive.getProperty("weightAsPound"));
-				
+				dive = LogbookEntityFactory.createDive(e_dive);
+					
 				
 				tx.commit();
 			
@@ -655,7 +570,7 @@ public class LogbookDAO {
 	}
 	
 	//update the Dive referenced by id
-	public static Dive updateDive(String diveId, int diveTime_minute,String diveType, int duration_second, String equipment, Double deep, Double neutralBuoyancy, String note, Double weight, Double depthWaterTemp, int deepUnit, int tempUnit, int weightUnit) throws DiveIdException {
+	public static Dive updateDive(String diveId, Integer diveTime_minute,String diveType, Integer duration_second, String equipment, Double deep, Double neutralBuoyancy, String note, Double weight, Double depthWaterTemp, int deepUnit, int tempUnit, int weightUnit) throws DiveIdException {
 		
 		Dive dive = null;
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -746,24 +661,7 @@ public class LogbookDAO {
 				
 				
 				//instantiate a new entity object
-				dive = new Dive();
-				dive.setMaxDeepAsFeet((Double)e_dive.getProperty("maxDeepAsFeet"));
-				dive.setMaxDeepAsMeter((Double)e_dive.getProperty("maxDeepAsMeter"));
-				dive.setNeutralBuoyancyAsFeet((Double)e_dive.getProperty("neutralBuoyancyAsFeet"));
-				dive.setNeutralBuoyancyAsMeter((Double)e_dive.getProperty("neutralBuoyancyAsMeter"));
-				
-				dive.setDiveTime(diveTime_minute);
-				dive.setEquipment(equipment);
-				dive.setId(diveId);
-				dive.setNote(((Text)e_dive.getProperty("note")));
-				
-				dive.setDepthWaterTempAsCelsisus((Double)e_dive.getProperty("depthWaterTempAsCelsius"));
-				dive.setDepthWaterTempAsfarheneit((Double)e_dive.getProperty("depthWaterTempAsFahrehneit"));
-				
-				
-				dive.setWeightAsKilogram((Double)e_dive.getProperty("weightAsKilogram"));
-				dive.setWeightAsPound((Double)e_dive.getProperty("weightAsPound"));
-				
+				dive = LogbookEntityFactory.createDive(e_dive);
 				
 				tx.commit();
 			
@@ -823,26 +721,13 @@ public class LogbookDAO {
 		try {
 			
 			//get all dives descend from diveSessionId key ancestor
-			Query q = new Query("Dive").setAncestor(KeyFactory.stringToKey(diveSessionId)).addSort("diveTime",SortDirection.DESCENDING);		
+			Query q = new Query("Dive").setAncestor(KeyFactory.stringToKey(diveSessionId));//addSort("diveTime",SortDirection.DESCENDING);		
 			PreparedQuery pq = datastore.prepare(q);		
 			
 			if (pq.countEntities(withLimit(100))>0) dives = new ArrayList<Dive>();		
 			
 			for (Entity entity : pq.asIterable()) {
-				Dive d = new Dive();
-				d.setDiveTime((int)(long)entity.getProperty("diveTime"));
-				d.setDiveType((String)entity.getProperty("diveType"));
-				d.setDuration((int)(long)entity.getProperty("duration"));
-				d.setEquipment((String)entity.getProperty("equipment"));
-				d.setId(KeyFactory.keyToString(entity.getKey()));
-				d.setMaxDeepAsMeter((double)entity.getProperty("maxDeepAsMeter"));
-				d.setMaxDeepAsFeet((double)entity.getProperty("maxDeepAsFeet"));
-				d.setNeutralBuoyancyAsFeet((double)entity.getProperty("neutralBuoyancyAsFeet"));
-				d.setNeutralBuoyancyAsMeter((double)entity.getProperty("neutralBuoyancyAsMeter"));
-				d.setNote((Text)entity.getProperty("note"));
-				d.setWeightAsKilogram((double)entity.getProperty("weightAsKilogram"));
-				d.setWeightAsPound((double)entity.getProperty("weightAsPound"));
-				
+				Dive d = LogbookEntityFactory.createDive(entity);
 				
 				dives.add(d);
 			     

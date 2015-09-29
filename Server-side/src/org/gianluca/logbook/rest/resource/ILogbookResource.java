@@ -72,12 +72,14 @@ public interface ILogbookResource {
 	}
 	
 	
-	public default void checkTime(int time, String name) throws WrongParameterException{
-		if (time<0 || time >1440) throw new WrongParameterException("Parameter "+ name+"  "+"must be a value between 0 and 1440");
+	public default void checkTime(String time, String name) throws WrongParameterException{
+		if (time != null)
+			if (Integer.parseInt(time)<0 || Integer.parseInt(time) >1440) throw new WrongParameterException("Parameter "+ name+"  "+"must be a value between 0 and 1440");
 	}
 	
-	public default void checkDuration(int duration, String name) throws WrongParameterException{
-		if (duration<0) throw new WrongParameterException("Parameter "+ name+"  "+"must be a value >=0 ");
+	public default void checkDuration(String duration, String name) throws WrongParameterException{
+		if (duration != null)
+			if (Integer.parseInt(duration)<0) throw new WrongParameterException("Parameter "+ name+"  "+"must be a value >=0 ");
 		
 	}	
 }

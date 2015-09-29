@@ -7,11 +7,9 @@ import java.util.List;
 
 import org.gianluca.logbook.dao.exception.DiveIdException;
 import org.gianluca.logbook.dao.exception.DiveSessionIdException;
-import org.gianluca.logbook.dao.exception.FreediverIdException;
 import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
 import org.gianluca.logbook.dao.googledatastore.entity.Dive;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
-import org.gianluca.logbook.dao.googledatastore.entity.DiveSessionsOfFreeediver;
 import org.gianluca.logbook.dao.googledatastore.entity.DivesOfDiveSession;
 import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
 import org.gianluca.logbook.helper.LogbookConstant;
@@ -116,7 +114,8 @@ public class DiveTest {
 		@SuppressWarnings("unused")
 		Dive d3;
 		try {
-			d3 = LogbookDAO.addDive(ds.getId(), 607 /*10:07*/, "constant", 120 /*2 minute*/, "mask", 116.79, 10.0, "katabasis course ssi level 3",  11.023, 20.0, LogbookConstant.DEEP_FEET, LogbookConstant.TEMPERATURE_CELSIUS, LogbookConstant.WEIGHT_POUND);
+			d3 = LogbookDAO.addDive(ds.getId(), 607 /*10:07*/, "constant",120 /*2 minute*/, "mask", 116.79, 10.0, "katabasis course ssi level 3",  11.023, 20.0, LogbookConstant.DEEP_FEET, LogbookConstant.TEMPERATURE_CELSIUS, LogbookConstant.WEIGHT_POUND);
+			//System.out.println(d3);
 		} catch (DiveSessionIdException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -135,19 +134,19 @@ public class DiveTest {
 		
 		Dive dr1= dives.get(2);//the lastone but is in ascending order
 		assertTrue(dr1!=null);
-		assertTrue(dr1.getMaxDeepAsMeter()==20.0);
-		//assertTrue(d1.getDeepAsFeet()==65.61679790000001);
+		//assertTrue(dr1.getMaxDeepAsMeter()==20.0);
+		assertTrue(dr1.getMaxDeepAsFeet()== 116.79);
 		
-		assertTrue(dr1.getNeutralBuoyancyAsMeter()==20.0);
+		assertTrue(dr1.getNeutralBuoyancyAsMeter()!=10.0);
 		assertTrue(dr1.getWeightAsKilogram()==5.0);
 		assertTrue(dr1.getWeightAsPound()==11.023);
 		
-		assertTrue(dr1.getEquipment().equals("mask, lanyard, dive suti 5.5 mm"));
-		assertTrue(dr1.getDiveTime()==605);
-		assertTrue(dr1.getDuration()==180);
+		assertTrue(dr1.getEquipment().equals("mask"));
+		assertTrue(dr1.getDiveTime()==607);
+		assertTrue(dr1.getDuration()==120);
 		
 		
-		assertTrue(dr1.getNote().getValue().equals("Tuffo di riscaldamento"));
+		assertTrue(dr1.getNote().getValue().equals("katabasis course ssi level 3"));
 		
 		
 		
@@ -164,44 +163,18 @@ public class DiveTest {
 			e.printStackTrace();
 		}
 		
-	}
-	
-	@Test
-	public void updateDiveSession() {
-		//1) test update dive session expressed as meter, celsius, kg unit 
-		DiveSession ds1 = null;
 		
+		//update d2
 		try {
-			ds1 = LogbookDAO.addDiveSession(fd.getId(), new Date(100000), 35.6, "mask, lanyard, dive suti 5.5 mm", "Elba Island - margidore", null, "sunny", "katabasis course ssi level 3", 20.0, 5.0, LogbookConstant.DEEP_METER, LogbookConstant.TEMPERATURE_CELSIUS, LogbookConstant.WEIGHT_KILOGRAM);
-		} catch (FreediverIdException e) {
+			Dive d4= LogbookDAO.updateDive(d2.getId(), 608, "constant", 120, null, 30.0, 10.0, "nessuna", 5.0, 15.0, 0, 0, 0);
+			assertTrue(d4.getId().equals(d2.getId()));
+			assertTrue(d4.getDuration()==120);
+			assertTrue(d4.getDiveTime()==608);
+			assertTrue(d4.getEquipment()==null);
+		} catch (DiveIdException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		DiveSession ds2 = null;
-		try {
-			ds2 = LogbookDAO.updateDiveSession(ds1.getId(), new Date(100000), 35.6, "mask", null, null, "sunny", null, null, null, LogbookConstant.DEEP_METER, LogbookConstant.TEMPERATURE_CELSIUS, LogbookConstant.WEIGHT_KILOGRAM);
-		} catch (DiveSessionIdException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		assertTrue(ds2!=null);
-		assertTrue(ds2.getDeepAsMeter()==35.6);
-		assertTrue(ds2.getDeepAsFeet()==116.79790026200001);
-		
-		assertTrue(ds2.getWaterTempAsCelsius()==20.0);
-		assertTrue(ds2.getWaterTempAsFahrehneit()==68.0);
-		
-		assertTrue(ds2.getWeightAsKilogram()==5.0);
-		assertTrue(ds2.getWeightAsPound()==11.023);
-		
-		assertTrue(ds2.getEquipment().equals("mask"));
-		assertTrue(ds2.getLocationDesc()==null);
-		assertTrue(ds2.getLocationGeoPt()==null);
-		assertTrue(ds2.getMeteoDesc().equals("sunny"));
-		assertTrue(ds2.getNote()==null);
 		
 	}
 	

@@ -51,19 +51,34 @@ public class DiveAddResource<K> extends ServerResource implements ILogbookResour
 	        String externalToken = form.getFirstValue("external_token");
 	        String externalPlatformId = form.getFirstValue("external_platform_id");
 	        String sessionId = form.getFirstValue("divesession_id");
-	        int diveTime = new Integer(form.getFirstValue("dive_time"));
-	        int duration = new Integer(form.getFirstValue("duration"));
+	        Integer diveTime=null;
+	        if (form.getFirstValue("dive_time") !=null)
+	        	diveTime = new Integer(form.getFirstValue("dive_time"));
 	        
-			Double maxDeep = new Double(form.getFirstValue("max_deep"));
-			Double neutralBuoyance = new Double(form.getFirstValue("neutral_buoyance"));
+	        Integer duration=null;
+	        if (form.getFirstValue("duration") != null)
+	        	duration = new Integer(form.getFirstValue("duration"));
+	        
+	        Double maxDeep=null;
+			if (form.getFirstValue("max_deep")!=null)
+	        maxDeep = new Double(form.getFirstValue("max_deep"));
+			
+			Double neutralBuoyance=null;
+			if (form.getFirstValue("neutral_buoyance")!=null)
+				neutralBuoyance = new Double(form.getFirstValue("neutral_buoyance"));
+			
 			String equipment = form.getFirstValue("equipment"); 
 			String diveType =form.getFirstValue("dive_type");
 						
 			String note = form.getFirstValue("note");
-		    Double weight = new Double(form.getFirstValue("weight"));
 		    
+			Double weight=null;
+			if (form.getFirstValue("weight")!=null)
+			weight = new Double(form.getFirstValue("weight"));
 		    
-		    Double depthWaterTemp = new Double(form.getFirstValue("depth_water_temp"));
+			Double depthWaterTemp=null;
+			if (form.getFirstValue("depth_water_temp") !=null)
+		    depthWaterTemp = new Double(form.getFirstValue("depth_water_temp"));
 		    
 		    int deepUnit = Integer.parseInt(form.getFirstValue("deep_unit"));
 		    int weightUnit = Integer.parseInt(form.getFirstValue("weight_unit"));
@@ -104,6 +119,7 @@ public class DiveAddResource<K> extends ServerResource implements ILogbookResour
 			return representation;
 			
 		}catch (FacebookOAuthException e_oa) {
+			e_oa.printStackTrace();
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			ErrorResource error = new ErrorResource();
 			error.setErrorCode(ErrorResource.WRONG_OAUTH_TOKEN);
@@ -111,6 +127,7 @@ public class DiveAddResource<K> extends ServerResource implements ILogbookResour
 			JsonRepresentation errorRepresentation = new JsonRepresentation(error);
 			return errorRepresentation;
 		}catch (PlatformNotManagedException e_pnm) {
+			e_pnm.printStackTrace();
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			ErrorResource error = new ErrorResource();
 			error.setErrorCode(ErrorResource.PLATFORM_NOT_MANAGED_ERROR);
@@ -119,6 +136,7 @@ public class DiveAddResource<K> extends ServerResource implements ILogbookResour
 			return errorRepresentation;
 		
 		}catch (NumberFormatException e_ne) {
+			e_ne.printStackTrace();
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			ErrorResource error = new ErrorResource();
 			error.setErrorCode(ErrorResource.NUMBER_FORMAT_ERROR);
@@ -127,6 +145,7 @@ public class DiveAddResource<K> extends ServerResource implements ILogbookResour
 			return errorRepresentation;
 			
 		}catch (WrongParameterException e_wp) {
+			e_wp.printStackTrace();
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			ErrorResource error = new ErrorResource();
 			error.setErrorCode(ErrorResource.WRONG_PARAMETER_ERROR);
@@ -135,6 +154,7 @@ public class DiveAddResource<K> extends ServerResource implements ILogbookResour
 			return errorRepresentation;	
 			
 		}catch(DiveSessionIdException a_e) {
+			a_e.printStackTrace();
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			ErrorResource error = new ErrorResource();
 			error.setErrorCode(ErrorResource.FREEDIVER_ID_ERROR);
@@ -171,8 +191,8 @@ public class DiveAddResource<K> extends ServerResource implements ILogbookResour
 		String externalPlatformId = form.getFirstValue("external_platform_id");
 		checkExternalPlatformId(externalPlatformId);
 		
-		String diveId = form.getFirstValue("dive_id");
-        checkDiveId(diveId);
+		String divesessionId = form.getFirstValue("divesession_id");
+        checkDivesessionId(divesessionId);
         
         
         String maxDeep = form.getFirstValue("max_deep");
@@ -180,12 +200,12 @@ public class DiveAddResource<K> extends ServerResource implements ILogbookResour
         
         String s_timeDive = form.getFirstValue("dive_time");
         checkInt(s_timeDive, "dive_time");
-        checkTime(new Integer(s_timeDive), "dive_time");
+        checkTime(s_timeDive, "dive_time");
         
         
         String s_duration = form.getFirstValue("duration");
         checkInt(s_duration, "duration");
-        checkDuration(new Integer(s_duration), "duration");
+        checkDuration(s_duration, "duration");
         
         
         String waterTemp = form.getFirstValue("depth_water_temp");

@@ -30,7 +30,7 @@ public class FreediverTest {
         	fd = LogbookDAO.addFreediver("existsId", "name external", "email external", LogbookConstant.FACEBOOK_PLATFORM);
         	System.out.println(fd);
         }catch (Exception e) {
-        	
+        	e.printStackTrace();
         	
         }
     }  

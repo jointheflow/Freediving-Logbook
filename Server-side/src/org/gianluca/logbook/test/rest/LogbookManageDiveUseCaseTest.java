@@ -18,10 +18,10 @@ import org.restlet.data.Protocol;
 import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
 
-public class LogbookManageDiveSessionUseCaseTest {
+public class LogbookManageDiveUseCaseTest {
 	//set test constants
 	//get new toke from FB https://developers.facebook.com/tools/explorer
-	private String externalToken="CAAB4GhgAGN0BAHnLSNbP4XZBzP7gZAOnGw3uyb9miovJ1MlDDXhnANZBVghe6AuFudZCGOAvik6SaupCnfm07pyzUzHO6RF6tWbJ80SjegU9YU9SduX7x75174eDLLf49qbBgLCl3t9SBKUkRY9ep3bp4uxlHxyKADFV4oJh2Biarrqwj4NzOxGWTX7ZB3XVZAQOjGyjU9YAZDZD";
+	private String externalToken="CAAB4GhgAGN0BAJcZAHMJhahamfw9vZAZCTelqn7BPJXzdFAcPefJuGCEY2zsbJM8XpCcsbEcZAufLvVkiF9pfAkzg95G0WzEZAv0l7vwClgMbhtvfSKC2f9oOR8KFxLPmtgkvvkalxbVQ9gRbG4g0ZCZBgDLAVjPb9c9culR96erM74T47QZAPkoTnBKWjys2S1RNDNclyX6DgZDZD";
 	//externalId associated to "freediving logbook" user on Facebook
 	@SuppressWarnings("unused")
 	private String externalId = "125927547759071";
@@ -47,7 +47,17 @@ public class LogbookManageDiveSessionUseCaseTest {
 	private String ds1_waterTemp = "20.0";
     private double ds1_weight =5.0;
 	
-   
+    //dive d1 data
+    private int d1_diveTime= 608;
+    private int d1_duration= 120;
+    private String d1_diveType ="constant";
+    private double d1_neutralBuoyance = 10.0;
+    private double d1_maxDeep = 20.0;
+    private String d1_equipment = "mask, lanyard";
+    private String d1_note = "tuffo di riscaldamento";
+    private double d1_depthWaterTemp = 16.5;
+    private double d1_weight = 5.5;
+    
     
     private int divePageSize1=1;
    	private String freediverLoginRequest="http://localhost:8888/app/freediver/login?external_platform_id="+externalPlatform+"&external_token="+externalToken;
@@ -55,6 +65,9 @@ public class LogbookManageDiveSessionUseCaseTest {
 	private String diveSessionAddRequest ="http://localhost:8888/app/freediver/divesession/add";
 	private String diveSessionUpdateRequest ="http://localhost:8888/app/freediver/divesession/update";
 	private String diveSessionRemoveRequest ="http://localhost:8888/app/freediver/divesession/remove";
+	private String diveAddRequest ="http://localhost:8888/app/freediver/divesession/dive/add";
+	private String diveUpdateRequest ="http://localhost:8888/app/freediver/divesession/dive/update";
+	private String diveRemoveRequest ="http://localhost:8888/app/freediver/divesession/dive/remove";
 	
 	@Before
 	/*Executing login will create a user*/
@@ -118,24 +131,38 @@ public class LogbookManageDiveSessionUseCaseTest {
 		
 			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
 			System.out.println(jsonobj_prov.toString());
-			assertTrue(((String)jsonobj_prov.get("note")).equals(ds1_note));
-			assertTrue(((Double)jsonobj_prov.getDouble("waterTempAsCelsius")).doubleValue()==new Double(ds1_waterTemp));
-			assertTrue(jsonobj_prov.getDouble("waterTempAsFahrehneit")==68.0);
-			assertTrue(((String)jsonobj_prov.get("externalToken")).equals(externalToken));
-			assertTrue(((String)jsonobj_prov.get("equipment")).equals(ds1_equipment));
-			assertTrue(((Double)jsonobj_prov.getDouble("deepAsMeter")).doubleValue()==new Double(ds1_deep));
-			assertTrue(jsonobj_prov.getDouble("deepAsFeet")==116.79790026200001);
-			assertTrue(((String)jsonobj_prov.get("meteoDesc")).equals(ds1_meteo));
-			assertTrue(((String)jsonobj_prov.get("locationDesc")).equals(ds1_location));
-			assertTrue(((String)jsonobj_prov.get("diveDate")).equals("Sat Mar 07 00:00:00 CET 2015"));
-			assertTrue(jsonobj_prov.getDouble("weightAsKilogram")== ds1_weight);
-			assertTrue(jsonobj_prov.getDouble("weightAsPound")== 11.023);
-			assertTrue(jsonobj_prov.get("message").equals("Dive session added"));
-			assertTrue(jsonobj_prov.get("result").equals("OK"));
+			String diveSessionId = jsonobj_prov.getString("id");
+			System.out.println("-----End addDiveSession()---------");
 			
-			assertTrue(providerResponse.getStatus().getCode()==Status.SUCCESS_OK.getCode());
+			System.out.println("-----Start addDive()---------");
+			providerClient = new Client(Protocol.HTTP);
+			providerRequest = new Request(Method.POST, diveAddRequest);
+			//create a post entity for Representation
 			
 			
+			fParam_prov = new Form();
+			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("divesession_id", diveSessionId);
+			fParam_prov.add("dive_time", Integer.toString(d1_diveTime));
+			fParam_prov.add("max_deep", Double.toString(d1_maxDeep));
+			fParam_prov.add("equipment", d1_equipment); 
+			fParam_prov.add("note", d1_note);
+			fParam_prov.add("depth_water_temp", Double.toString(d1_depthWaterTemp));
+		    fParam_prov.add("weight", Double.toString(ds1_weight));
+		    fParam_prov.add("deep_unit", Integer.toString(deepUnit));
+		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
+		    fParam_prov.add("temp_unit", Integer.toString(tempUnit));
+		    
+		    			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			providerResponse = providerClient.handle(providerRequest);
+					
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			
+			
+			System.out.println("-----End addDive()---------");
 			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -145,11 +172,11 @@ public class LogbookManageDiveSessionUseCaseTest {
 			e.printStackTrace();
 		}
 		
-		System.out.println("-----End addDiveSession()---------");
+		
 		
 	}
 	
-	@Test
+	
 	public void addErrorDiveSession() {
 		try {
 			Thread.sleep(5000);
