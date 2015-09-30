@@ -1,7 +1,6 @@
 package org.gianluca.logbook.rest.resource;
 
 
-
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -38,12 +37,19 @@ public class FreediverLoginResource<K>  extends ServerResource implements ILogbo
 			//create json response
 			JsonRepresentation representation = null;
 			try {
-				
+				 				
 				//get parameter
 				//String p_externalId=this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_id");
 				String p_externalPlatformId= this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_platform_id");
+				checkMandatory(p_externalPlatformId,"external_platform_id");
+				checkExternalPlatformId(p_externalPlatformId);
+							
 				String p_externalToken = this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_token");
+				checkMandatory(p_externalToken, "external_token");
+				
 				String p_divePageSize = this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("dive_page_size");
+				checkMandatory(p_divePageSize, "dive_page_size");
+				checkInt(p_divePageSize, "dive_page_size");
 				
 				log.info("start GET login() FreediverLoginResource");
 				//log.info("p_externalId:"+p_externalId);
@@ -51,8 +57,7 @@ public class FreediverLoginResource<K>  extends ServerResource implements ILogbo
 				log.info("p_externalToken:"+p_externalToken);
 				log.info("p_divePageSize"+p_divePageSize);
 				
-				//Check parameters
-				checkParameters();
+				
 				
 				//check token against external platform
 				ExternalUser extUser= ExternalUserFactory.createExternalUser(p_externalToken, Integer.parseInt(p_externalPlatformId));
@@ -177,27 +182,5 @@ public class FreediverLoginResource<K>  extends ServerResource implements ILogbo
 			
 			
 		}
-
-	  public void checkParameters() throws WrongParameterException {   
-		
-		checkExternalPlatformId(this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_platform_id"));
-		
-		checkExternalToken(this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_token"));		
-		
-		
-		//check parameter dive_page_size
-		try {
-			 String p_divePageSize=null;
-			 p_divePageSize = this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("dive_page_size");
-			 if (p_divePageSize==null) throw new WrongParameterException("Parameter page_dive_size missing");
-			 checkInt(p_divePageSize, "page_dive_size");				
-			 
-		}catch (NumberFormatException e) {
-			throw new WrongParameterException("Parameter page_dive_size wrong "+ e.getMessage());
-		}
-				  
-			  
-		  
-	 }
 	
 }

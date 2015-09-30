@@ -110,7 +110,7 @@ public class LogbookDAO {
 				//instantiate a Freediver
 				freediver = new Freediver();
 				for (Entity result : pq.asIterable()) {
-					freediver = LogbookEntityFactory.createFreediver(result);
+					freediver = LogbookEntityFactory.createFreediverFromEntity(result);
 					
 				}
 								
@@ -137,23 +137,15 @@ public class LogbookDAO {
 		Transaction tx = datastore.beginTransaction();
 			try {
 						        
-				Entity e_freediver = new Entity("Freediver");
-			
-				e_freediver.setProperty("externalId", externalId);
-				e_freediver.setProperty("externalName", externalName);
-				e_freediver.setProperty("externalEmail", externalEmail);
-				e_freediver.setProperty("externalPlatformId", externalPlatformId);
-				//set default settings
-				e_freediver.setProperty("deepUnit", LogbookConstant.DEEP_METER);
-				e_freediver.setProperty("temperatureUnit", LogbookConstant.TEMPERATURE_CELSIUS);
-				e_freediver.setProperty("weightUnit", LogbookConstant.WEIGHT_KILOGRAM);
+				//using factory to create freediver entity
+				Entity e_freediver = new Entity("Freediver"); 
+				LogbookEntityFactory.populateEntityFreediver(e_freediver, externalId, externalName, externalEmail, externalPlatformId);
 				datastore.put(e_freediver);
-				
+										
+				tx.commit();
 				
 				//instantiate a new entity object
-				freediver = LogbookEntityFactory.createFreediver(e_freediver);
-								
-				tx.commit();
+				freediver = LogbookEntityFactory.createFreediverFromEntity(e_freediver);
 			} finally {
 			    if (tx.isActive()) {
 			        tx.rollback();
@@ -203,71 +195,15 @@ public class LogbookDAO {
 			try {
 				
 				Entity e_diveSession = new Entity("DiveSession", KeyFactory.stringToKey(freediverId));
-				
-				/*Executes deep conversion*/
-				if (deep !=null)
-					switch (deepUnit) {
-						case LogbookConstant.DEEP_METER: {
-							e_diveSession.setProperty("deepAsMeter", deep);
-							e_diveSession.setProperty("deepAsFeet", (deep*LogbookConstant.METER_AS_FEET));
-						}
-							break;
-						
-						case LogbookConstant.DEEP_FEET: {
-							e_diveSession.setProperty("deepAsFeet", deep);
-							e_diveSession.setProperty("deepAsMeter", (deep/LogbookConstant.METER_AS_FEET));
-						}
-							break;
-							
-					}
-				
-				/*Executes waterTemp conversion*/
-				if (waterTemp != null)
-					switch (tempUnit) {
-						case LogbookConstant.TEMPERATURE_CELSIUS: {
-							e_diveSession.setProperty("waterTempAsCelsius", waterTemp);
-							e_diveSession.setProperty("waterTempAsFahrehneit", (waterTemp*LogbookConstant.CELSIUS_AS_FAREHN_TIME + LogbookConstant.CELSIUS_AS_FAREHN_ADD));
-						}
-							break;
-						
-						case LogbookConstant.TEMPERATURE_FAHRHENEIT: {
-							e_diveSession.setProperty("waterTempAsFahrehneit", waterTemp);
-							e_diveSession.setProperty("waterTempAsCelsius", (waterTemp - LogbookConstant.CELSIUS_AS_FAREHN_ADD)  / LogbookConstant.CELSIUS_AS_FAREHN_TIME);
-						}
-							break;
-					}
-				
-
-				/*Execute weigth conversion*/
-				if (weight != null)
-					switch (weightUnit) {
-					case LogbookConstant.WEIGHT_KILOGRAM: {
-						e_diveSession.setProperty("weightAsKilogram", weight);
-						e_diveSession.setProperty("weightAsPound", (weight*LogbookConstant.KILOGRAM_AS_POUND));
-					}
-						break;
-					
-					case LogbookConstant.WEIGHT_POUND: {
-						e_diveSession.setProperty("weightAsPound", weight);
-						e_diveSession.setProperty("weightAsKilogram", (weight / LogbookConstant.KILOGRAM_AS_POUND));
-					}
-						break;
-				}
-				
-				e_diveSession.setProperty("diveDate", diveDate);
-				e_diveSession.setProperty("equipment", equipment);
-				e_diveSession.setProperty("locationDesc", locationDesc);
-				e_diveSession.setProperty("locationGeoPt", locationGeoPt);
-				e_diveSession.setProperty("meteoDesc", meteoDesc);
-				e_diveSession.setProperty("note", new Text(note));
+				//populate entity
+				LogbookEntityFactory.populateEntityDiveSession(e_diveSession, diveDate, deep, equipment, locationDesc, locationGeoPt, meteoDesc, note, waterTemp, weight, deepUnit, tempUnit, weightUnit);				
 				
 				datastore.put(e_diveSession);
-				
+								
+				tx.commit();
 				
 				//instantiate a new entity object
-				diveSession = LogbookEntityFactory.createDiveSession(e_diveSession);
-				
-				tx.commit();
+				diveSession = LogbookEntityFactory.createDiveSessionFromEntity(e_diveSession);
 			
 			}catch (IllegalArgumentException e) {
 				log.info(e.getMessage());
@@ -312,7 +248,7 @@ public class LogbookDAO {
 			}
 			
 			for (Entity entity : results) {
-				DiveSession ds = LogbookEntityFactory.createDiveSession(entity);
+				DiveSession ds = LogbookEntityFactory.createDiveSessionFromEntity(entity);
 				diveSessions.add(ds);
 			     
 			}
@@ -346,73 +282,15 @@ public class LogbookDAO {
 				//find entity
 				Entity e_diveSession = datastore.get(KeyFactory.stringToKey(diveSessionId));
 				
-				/*Executes deep conversion*/
-				if (deep !=null)
-					switch (deepUnit) {
-						case LogbookConstant.DEEP_METER: {
-							e_diveSession.setProperty("deepAsMeter", deep);
-							e_diveSession.setProperty("deepAsFeet", (deep*LogbookConstant.METER_AS_FEET));
-						}
-							break;
+				//populate entity
+				LogbookEntityFactory.populateEntityDiveSession(e_diveSession, diveDate, deep, equipment, locationDesc, locationGeoPt, meteoDesc, note, waterTemp, weight, deepUnit, tempUnit, weightUnit);
 						
-						case LogbookConstant.DEEP_FEET: {
-							e_diveSession.setProperty("deepAsFeet", deep);
-							e_diveSession.setProperty("deepAsMeter", (deep/LogbookConstant.METER_AS_FEET));
-						}
-							break;
-							
-					}
-				
-				/*Executes waterTemp conversion*/
-				if (waterTemp != null)
-					switch (tempUnit) {
-						case LogbookConstant.TEMPERATURE_CELSIUS: {
-							e_diveSession.setProperty("waterTempAsCelsius", waterTemp);
-							e_diveSession.setProperty("waterTempAsFahrehneit", (waterTemp*LogbookConstant.CELSIUS_AS_FAREHN_TIME + LogbookConstant.CELSIUS_AS_FAREHN_ADD));
-						}
-							break;
-						
-						case LogbookConstant.TEMPERATURE_FAHRHENEIT: {
-							e_diveSession.setProperty("waterTempAsFahrehneit", waterTemp);
-							e_diveSession.setProperty("waterTempAsCelsius", (waterTemp - LogbookConstant.CELSIUS_AS_FAREHN_ADD)  / LogbookConstant.CELSIUS_AS_FAREHN_TIME);
-						}
-							break;
-					}
-				
-
-				/*Execute weigth conversion*/
-				if (weight != null)
-					switch (weightUnit) {
-					case LogbookConstant.WEIGHT_KILOGRAM: {
-						e_diveSession.setProperty("weightAsKilogram", weight);
-						e_diveSession.setProperty("weightAsPound", (weight*LogbookConstant.KILOGRAM_AS_POUND));
-					}
-						break;
-					
-					case LogbookConstant.WEIGHT_POUND: {
-						e_diveSession.setProperty("weightAsPound", weight);
-						e_diveSession.setProperty("weightAsKilogram", (weight / LogbookConstant.KILOGRAM_AS_POUND));
-					}
-						break;
-				}
-				
-				e_diveSession.setProperty("diveDate", diveDate);
-				e_diveSession.setProperty("equipment", equipment);
-				e_diveSession.setProperty("locationDesc", locationDesc);
-				e_diveSession.setProperty("locationGeoPt", locationGeoPt);
-				e_diveSession.setProperty("meteoDesc", meteoDesc);
-				if (note !=null)
-					e_diveSession.setProperty("note", new Text(note));
-				else
-					e_diveSession.setProperty("note", null);
-				
 				datastore.put(e_diveSession);
 								
-				//instantiate a new entity object
-				diveSession = LogbookEntityFactory.createDiveSession(e_diveSession);
-				
-				
 				tx.commit();
+				
+				//instantiate a new entity object
+				diveSession = LogbookEntityFactory.createDiveSessionFromEntity(e_diveSession);
 			
 			}catch (IllegalArgumentException e) {
 				log.info(e.getMessage());
@@ -473,86 +351,14 @@ public class LogbookDAO {
 				
 				Entity e_dive = new Entity("Dive", KeyFactory.stringToKey(divesessionId));
 				
-				/*Executes deep conversion*/
-				if (deep !=null)
-					switch (deepUnit) {
-						case LogbookConstant.DEEP_METER: {
-							e_dive.setProperty("maxDeepAsMeter", deep);
-							e_dive.setProperty("maxDeepAsFeet", (deep*LogbookConstant.METER_AS_FEET));
-						}
-							break;
-						
-						case LogbookConstant.DEEP_FEET: {
-							e_dive.setProperty("maxDeepAsFeet", deep);
-							e_dive.setProperty("maxDeepAsMeter", (deep/LogbookConstant.METER_AS_FEET));
-						}
-							break;
-							
-					}
+				LogbookEntityFactory.populateEntityDive(e_dive, diveTime_minute, diveType, duration_second, equipment, deep, neutralBuoyancy, note, weight, depthWaterTemp, deepUnit, tempUnit, weightUnit);
 				
-				/*Executes deep conversion*/
-				if (neutralBuoyancy !=null)
-					switch (deepUnit) {
-						case LogbookConstant.DEEP_METER: {
-							e_dive.setProperty("neutralBuoyancyAsMeter", deep);
-							e_dive.setProperty("neutralBuoyancyAsFeet", (deep*LogbookConstant.METER_AS_FEET));
-						}
-							break;
-						
-						case LogbookConstant.DEEP_FEET: {
-							e_dive.setProperty("neutralBuoyancyAsFeet", deep);
-							e_dive.setProperty("neutralBuoyancyAsMeter", (deep/LogbookConstant.METER_AS_FEET));
-						}
-							break;
-							
-					}
-								
-				/*Execute weigth conversion*/
-				if (weight != null)
-					switch (weightUnit) {
-					case LogbookConstant.WEIGHT_KILOGRAM: {
-						e_dive.setProperty("weightAsKilogram", weight);
-						e_dive.setProperty("weightAsPound", (weight*LogbookConstant.KILOGRAM_AS_POUND));
-					}
-						break;
-					
-					case LogbookConstant.WEIGHT_POUND: {
-						e_dive.setProperty("weightAsPound", weight);
-						e_dive.setProperty("weightAsKilogram", (weight / LogbookConstant.KILOGRAM_AS_POUND));
-					}
-						break;
-				}
-				
-				/*Executes waterTemp conversion*/
-				if (depthWaterTemp != null)
-					switch (tempUnit) {
-						case LogbookConstant.TEMPERATURE_CELSIUS: {
-							e_dive.setProperty("depthWaterTempAsCelsius", depthWaterTemp);
-							e_dive.setProperty("depthWaterTempAsFahrehneit", (depthWaterTemp*LogbookConstant.CELSIUS_AS_FAREHN_TIME + LogbookConstant.CELSIUS_AS_FAREHN_ADD));
-						}
-							break;
-						
-						case LogbookConstant.TEMPERATURE_FAHRHENEIT: {
-							e_dive.setProperty("depthWaterTempAsFahrehneit", depthWaterTemp);
-							e_dive.setProperty("depthWaterTempAsCelsius", (depthWaterTemp - LogbookConstant.CELSIUS_AS_FAREHN_ADD)  / LogbookConstant.CELSIUS_AS_FAREHN_TIME);
-						}
-							break;
-					}
-				
-				
-				e_dive.setProperty("diveTime", diveTime_minute);
-				e_dive.setProperty("diveType", diveType);
-				e_dive.setProperty("duration", duration_second);
-				e_dive.setProperty("equipment", equipment);
-				e_dive.setProperty("note", new Text(note));
 				datastore.put(e_dive);
 				
+				tx.commit();
 				
 				//instantiate a new entity object
-				dive = LogbookEntityFactory.createDive(e_dive);
-					
-				
-				tx.commit();
+				dive = LogbookEntityFactory.createDiveFromEntity(e_dive);
 			
 			}catch (IllegalArgumentException e) {
 				log.info(e.getMessage());
@@ -579,92 +385,16 @@ public class LogbookDAO {
 				
 				//find entity
 				Entity e_dive = datastore.get(KeyFactory.stringToKey(diveId));
-				
-				
-				/*Executes deep conversion*/
-				if (deep !=null)
-					switch (deepUnit) {
-						case LogbookConstant.DEEP_METER: {
-							e_dive.setProperty("maxDeepAsMeter", deep);
-							e_dive.setProperty("maxDeepAsFeet", (deep*LogbookConstant.METER_AS_FEET));
-						}
-							break;
-						
-						case LogbookConstant.DEEP_FEET: {
-							e_dive.setProperty("maxDeepAsFeet", deep);
-							e_dive.setProperty("maxDeepAsMeter", (deep/LogbookConstant.METER_AS_FEET));
-						}
-							break;
-							
-					}
-				
-				/*Executes deep conversion*/
-				if (neutralBuoyancy !=null)
-					switch (deepUnit) {
-						case LogbookConstant.DEEP_METER: {
-							e_dive.setProperty("neutralBuoyancyAsMeter", deep);
-							e_dive.setProperty("neutralBuoyancyAsFeet", (deep*LogbookConstant.METER_AS_FEET));
-						}
-							break;
-						
-						case LogbookConstant.DEEP_FEET: {
-							e_dive.setProperty("neutralBuoyancyAsFeet", deep);
-							e_dive.setProperty("neutralBuoyancyAsMeter", (deep/LogbookConstant.METER_AS_FEET));
-						}
-							break;
-							
-					}
-								
-				/*Execute weigth conversion*/
-				if (weight != null)
-					switch (weightUnit) {
-					case LogbookConstant.WEIGHT_KILOGRAM: {
-						e_dive.setProperty("weightAsKilogram", weight);
-						e_dive.setProperty("weightAsPound", (weight*LogbookConstant.KILOGRAM_AS_POUND));
-					}
-						break;
-					
-					case LogbookConstant.WEIGHT_POUND: {
-						e_dive.setProperty("weightAsPound", weight);
-						e_dive.setProperty("weightAsKilogram", (weight / LogbookConstant.KILOGRAM_AS_POUND));
-					}
-						break;
-				}
-				
-				
-				/*Executes waterTemp conversion*/
-				if (depthWaterTemp != null)
-					switch (tempUnit) {
-						case LogbookConstant.TEMPERATURE_CELSIUS: {
-							e_dive.setProperty("depthWaterTempAsCelsius", depthWaterTemp);
-							e_dive.setProperty("depthWaterTempAsFahrehneit", (depthWaterTemp*LogbookConstant.CELSIUS_AS_FAREHN_TIME + LogbookConstant.CELSIUS_AS_FAREHN_ADD));
-						}
-							break;
-						
-						case LogbookConstant.TEMPERATURE_FAHRHENEIT: {
-							e_dive.setProperty("depthWaterTempAsFahrehneit", depthWaterTemp);
-							e_dive.setProperty("depthWaterTempAsCelsius", (depthWaterTemp - LogbookConstant.CELSIUS_AS_FAREHN_ADD)  / LogbookConstant.CELSIUS_AS_FAREHN_TIME);
-						}
-							break;
-					}
-				
-				e_dive.setProperty("diveTime", diveTime_minute);
-				e_dive.setProperty("diveType", diveType);
-				e_dive.setProperty("duration", duration_second);
-				e_dive.setProperty("equipment", equipment);
-				if (note !=null)
-					e_dive.setProperty("note", new Text(note));
-				else
-					e_dive.setProperty("note", null);
+				LogbookEntityFactory.populateEntityDive(e_dive, diveTime_minute, diveType, duration_second, equipment, deep, neutralBuoyancy, note, weight, depthWaterTemp, deepUnit, tempUnit, weightUnit);
 				
 				datastore.put(e_dive);
 				
 				
-				//instantiate a new entity object
-				dive = LogbookEntityFactory.createDive(e_dive);
-				
 				tx.commit();
 			
+				//instantiate a new entity object
+				dive = LogbookEntityFactory.createDiveFromEntity(e_dive);
+				
 			}catch (IllegalArgumentException | EntityNotFoundException e) {
 				log.info(e.getMessage());
 				throw new DiveIdException(e.getMessage());
@@ -727,7 +457,7 @@ public class LogbookDAO {
 			if (pq.countEntities(withLimit(100))>0) dives = new ArrayList<Dive>();		
 			
 			for (Entity entity : pq.asIterable()) {
-				Dive d = LogbookEntityFactory.createDive(entity);
+				Dive d = LogbookEntityFactory.createDiveFromEntity(entity);
 				
 				dives.add(d);
 			     

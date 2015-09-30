@@ -9,10 +9,13 @@ import org.gianluca.logbook.rest.exception.WrongParameterException;
 /*Defining common methods for checking parameters in the resource call */
 public interface ILogbookResource {
 	
+	public default void checkMandatory(String value, String name) throws WrongParameterException {
+		if (value==null) throw new WrongParameterException("Parameter"+name+" missing");
+	}
+	
 	public default void checkExternalPlatformId(String externalPlatformId) throws WrongParameterException {
 		try {
-			if (externalPlatformId==null) throw new WrongParameterException("Parameter external_platform_id missing");
-			
+				
 			if (Integer.parseInt(externalPlatformId) < LogbookConstant.FACEBOOK_PLATFORM &&
 					Integer.parseInt(externalPlatformId) > LogbookConstant.GOOGLE_PLATFORM) {
 				throw new WrongParameterException("Parameter external_platform_id wrong value");
@@ -23,15 +26,7 @@ public interface ILogbookResource {
 	}
 	
 	
-	public default void checkExternalToken(String externalToken) throws WrongParameterException {
-		if (externalToken==null) throw new WrongParameterException("Parameter external_token missing");
-	}
-	
-	public default void checkFreediverId(String freediverId) throws WrongParameterException {
-		if (freediverId==null) throw new WrongParameterException("Parameter freediver_id missing");
-	}
-	
-	public default void checkDivesessionId(String divesessionId) throws WrongParameterException {
+		public default void checkDivesessionId(String divesessionId) throws WrongParameterException {
 		if (divesessionId==null) throw new WrongParameterException("Parameter divesession_id missing");
 	}
 	
@@ -65,7 +60,6 @@ public interface ILogbookResource {
 	public default void checkInt(String intValue, String name) throws WrongParameterException {
 		try {
 			if (intValue!=null) new Integer(intValue);
-		
 		 }catch (NumberFormatException e) {
 			  throw new WrongParameterException("Parameter "+ name +" "+ e.getMessage());
 		 }
@@ -73,13 +67,32 @@ public interface ILogbookResource {
 	
 	
 	public default void checkTime(String time, String name) throws WrongParameterException{
-		if (time != null)
-			if (Integer.parseInt(time)<0 || Integer.parseInt(time) >1440) throw new WrongParameterException("Parameter "+ name+"  "+"must be a value between 0 and 1440");
+		checkInt(time, name);
+		if (Integer.parseInt(time)<0 || Integer.parseInt(time) >1440) throw new WrongParameterException("Parameter "+ name+"  "+"must be a value between 0 and 1440");
+		
 	}
 	
 	public default void checkDuration(String duration, String name) throws WrongParameterException{
 		if (duration != null)
 			if (Integer.parseInt(duration)<0) throw new WrongParameterException("Parameter "+ name+"  "+"must be a value >=0 ");
 		
-	}	
+	}
+	
+	public default void checkDeepUnit(String deepUnit, String name) throws WrongParameterException {
+		checkInt(deepUnit,name);
+		if ((new Integer(deepUnit) < LogbookConstant.DEEP_METER) || (new Integer (deepUnit) > LogbookConstant.DEEP_FEET)) throw new WrongParameterException("Parameter  "+ name+"  wrong value");
+	}
+	
+	public default void checkWeightUnit(String weightUnit, String name) throws WrongParameterException {
+		checkInt(weightUnit, name);
+		if ((new Integer(weightUnit) < LogbookConstant.WEIGHT_KILOGRAM) || (new Integer (weightUnit) > LogbookConstant.WEIGHT_POUND)) throw new WrongParameterException("Parameter "+ name+" wrong value");
+		
+	}
+	
+	public default void checkTempUnit(String tempUnit, String name) throws WrongParameterException {
+		checkInt(tempUnit, name);
+		if ((new Integer(tempUnit) < LogbookConstant.TEMPERATURE_CELSIUS) || (new Integer (tempUnit) > LogbookConstant.TEMPERATURE_FAHRHENEIT)) throw new WrongParameterException("Parameter "+name+" wrong value");
+		
+	}
+	
 }

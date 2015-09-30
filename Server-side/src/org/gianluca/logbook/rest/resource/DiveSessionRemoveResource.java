@@ -39,12 +39,16 @@ public class DiveSessionRemoveResource<K> extends ServerResource implements ILog
 	        // retrieves customer parameters  
 		    // "name=value"  
 	        String externalToken = form.getFirstValue("external_token");
-	        String externalPlatformId = form.getFirstValue("external_platform_id");
-	        String divesessionId = form.getFirstValue("divesession_id");
+			checkMandatory(externalToken, "external_token");
+			
+	      	String externalPlatformId = form.getFirstValue("external_platform_id");
+			checkMandatory(externalPlatformId,"external_platform_id");
+			checkExternalPlatformId(externalPlatformId);
+			
+			String divesessionId = form.getFirstValue("divesession_id");
+	        checkMandatory(divesessionId, "divesession_id");
 	        
-		    //check if parameters exists and are valid
-		    checkParameters(entity);
-		   
+		   		   
 		    //check token against external platform
 			ExternalUserFactory.checkExternalToken(externalToken, Integer.parseInt(externalPlatformId));
 		    
@@ -123,20 +127,6 @@ public class DiveSessionRemoveResource<K> extends ServerResource implements ILog
 			log.info("end  POST remove for divesession");
 			
 		}   
-	}  
-	
-	public void checkParameters(Representation entity) throws WrongParameterException {
-		Form form = new Form(entity);
-		
-		String externalToken = form.getFirstValue("external_token");
-		checkExternalToken(externalToken); 
-       
-		String externalPlatformId = form.getFirstValue("external_platform_id");
-		checkExternalPlatformId(externalPlatformId);
-		
-		String divesessionId = form.getFirstValue("divesession_id");
-        checkDivesessionId(divesessionId);
-		
 	}
 	
 }

@@ -15,6 +15,14 @@ public class DiveDto extends LogbookDto {
 	public Double weightAsKilogram;
 	public Double weightAsPound;
 	public String note;
+	public String diveType;
+	
+	public String getDiveType() {
+		return diveType;
+	}
+	public void setDiveType(String diveType) {
+		this.diveType = diveType;
+	}
 	public String getId() {
 		return id;
 	}

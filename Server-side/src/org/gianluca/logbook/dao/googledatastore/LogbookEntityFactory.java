@@ -5,6 +5,7 @@ import java.util.Date;
 import org.gianluca.logbook.dao.googledatastore.entity.Dive;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
 import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
+import org.gianluca.logbook.helper.LogbookConstant;
 
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.GeoPt;
@@ -15,7 +16,7 @@ import com.google.appengine.api.datastore.Text;
 public class LogbookEntityFactory {
 	
 	/**Creates Dive entity basing on the corresponding datastore entity*/
-	public static Dive createDive(Entity entity) {
+	public static Dive createDiveFromEntity(Entity entity) {
 		Dive dive=null;
 		//instantiate a new entity object
 		if (entity !=null) {
@@ -53,7 +54,7 @@ public class LogbookEntityFactory {
 	}
 
 	/*Creates DiveSession entity basing on the corresponding datastore entity*/
-	public static DiveSession createDiveSession(Entity entity) {
+	public static DiveSession createDiveSessionFromEntity(Entity entity) {
 		DiveSession diveSession=null;
 		if (entity !=null) {
 			diveSession = new DiveSession();
@@ -87,7 +88,7 @@ public class LogbookEntityFactory {
 	}
 	
 	/*Creates a Freediver basing on the corresponding datastore entity */
-	public static Freediver createFreediver(Entity entity) {
+	public static Freediver createFreediverFromEntity(Entity entity) {
 		Freediver freediver = null;
 		if (entity != null) {
 			//instantiate a new entity object
@@ -121,4 +122,162 @@ public class LogbookEntityFactory {
 					
 		
 	}
+	/*populates a datastore entity Freediver basing on passed parameters*/
+	public static void populateEntityFreediver(Entity e_freediver, String externalId, String externalName, String externalEmail, int externalPlatformId) {
+		if (e_freediver !=null) {		
+			e_freediver.setProperty("externalId", externalId);
+			e_freediver.setProperty("externalName", externalName);
+			e_freediver.setProperty("externalEmail", externalEmail);
+			e_freediver.setProperty("externalPlatformId", externalPlatformId);
+			//set default settings
+			e_freediver.setProperty("deepUnit", LogbookConstant.DEEP_METER);
+			e_freediver.setProperty("temperatureUnit", LogbookConstant.TEMPERATURE_CELSIUS);
+			e_freediver.setProperty("weightUnit", LogbookConstant.WEIGHT_KILOGRAM);
+		}
+		
+	}
+	
+	/*Populates a datastore entity DiveSession basing on passed parameters*/
+	public static void populateEntityDiveSession(Entity e_diveSession, Date diveDate, Double deep, String equipment, String locationDesc, GeoPt locationGeoPt, String meteoDesc, String note, Double waterTemp, Double weight, int deepUnit, int tempUnit, int weightUnit) {
+		
+		if (e_diveSession !=null) {	
+				/*Executes deep conversion*/
+				if (deep !=null)
+					switch (deepUnit) {
+						case LogbookConstant.DEEP_METER: {
+							e_diveSession.setProperty("deepAsMeter", deep);
+							e_diveSession.setProperty("deepAsFeet", (deep*LogbookConstant.METER_AS_FEET));
+						}
+							break;
+						
+						case LogbookConstant.DEEP_FEET: {
+							e_diveSession.setProperty("deepAsFeet", deep);
+							e_diveSession.setProperty("deepAsMeter", (deep/LogbookConstant.METER_AS_FEET));
+						}
+							break;
+							
+					}
+				
+				/*Executes waterTemp conversion*/
+				if (waterTemp != null)
+					switch (tempUnit) {
+						case LogbookConstant.TEMPERATURE_CELSIUS: {
+							e_diveSession.setProperty("waterTempAsCelsius", waterTemp);
+							e_diveSession.setProperty("waterTempAsFahrehneit", (waterTemp*LogbookConstant.CELSIUS_AS_FAREHN_TIME + LogbookConstant.CELSIUS_AS_FAREHN_ADD));
+						}
+							break;
+						
+						case LogbookConstant.TEMPERATURE_FAHRHENEIT: {
+							e_diveSession.setProperty("waterTempAsFahrehneit", waterTemp);
+							e_diveSession.setProperty("waterTempAsCelsius", (waterTemp - LogbookConstant.CELSIUS_AS_FAREHN_ADD)  / LogbookConstant.CELSIUS_AS_FAREHN_TIME);
+						}
+							break;
+					}
+				
+		
+				/*Execute weigth conversion*/
+				if (weight != null)
+					switch (weightUnit) {
+					case LogbookConstant.WEIGHT_KILOGRAM: {
+						e_diveSession.setProperty("weightAsKilogram", weight);
+						e_diveSession.setProperty("weightAsPound", (weight*LogbookConstant.KILOGRAM_AS_POUND));
+					}
+						break;
+					
+					case LogbookConstant.WEIGHT_POUND: {
+						e_diveSession.setProperty("weightAsPound", weight);
+						e_diveSession.setProperty("weightAsKilogram", (weight / LogbookConstant.KILOGRAM_AS_POUND));
+					}
+						break;
+				}
+				
+				e_diveSession.setProperty("diveDate", diveDate);
+				e_diveSession.setProperty("equipment", equipment);
+				e_diveSession.setProperty("locationDesc", locationDesc);
+				e_diveSession.setProperty("locationGeoPt", locationGeoPt);
+				e_diveSession.setProperty("meteoDesc", meteoDesc);
+				if (note !=null)
+					e_diveSession.setProperty("note", new Text(note));
+		}
+		
+	}
+	/*populates Dive entity basing on passed parameters*/
+	public static void populateEntityDive(Entity e_dive, Integer diveTime_minute,String diveType, Integer duration_second, String equipment, Double deep, Double neutralBuoyancy, String note, Double weight, Double depthWaterTemp, int deepUnit, int tempUnit, int weightUnit) {
+		if (e_dive !=null) {
+			/*Executes deep conversion*/
+			if (deep !=null)
+				switch (deepUnit) {
+					case LogbookConstant.DEEP_METER: {
+						e_dive.setProperty("maxDeepAsMeter", deep);
+						e_dive.setProperty("maxDeepAsFeet", (deep*LogbookConstant.METER_AS_FEET));
+					}
+						break;
+					
+					case LogbookConstant.DEEP_FEET: {
+						e_dive.setProperty("maxDeepAsFeet", deep);
+						e_dive.setProperty("maxDeepAsMeter", (deep/LogbookConstant.METER_AS_FEET));
+					}
+						break;
+						
+				}
+			
+			/*Executes deep conversion*/
+			if (neutralBuoyancy !=null)
+				switch (deepUnit) {
+					case LogbookConstant.DEEP_METER: {
+						e_dive.setProperty("neutralBuoyancyAsMeter", deep);
+						e_dive.setProperty("neutralBuoyancyAsFeet", (deep*LogbookConstant.METER_AS_FEET));
+					}
+						break;
+					
+					case LogbookConstant.DEEP_FEET: {
+						e_dive.setProperty("neutralBuoyancyAsFeet", deep);
+						e_dive.setProperty("neutralBuoyancyAsMeter", (deep/LogbookConstant.METER_AS_FEET));
+					}
+						break;
+						
+				}
+							
+			/*Execute weigth conversion*/
+			if (weight != null)
+				switch (weightUnit) {
+				case LogbookConstant.WEIGHT_KILOGRAM: {
+					e_dive.setProperty("weightAsKilogram", weight);
+					e_dive.setProperty("weightAsPound", (weight*LogbookConstant.KILOGRAM_AS_POUND));
+				}
+					break;
+				
+				case LogbookConstant.WEIGHT_POUND: {
+					e_dive.setProperty("weightAsPound", weight);
+					e_dive.setProperty("weightAsKilogram", (weight / LogbookConstant.KILOGRAM_AS_POUND));
+				}
+					break;
+			}
+			
+			/*Executes waterTemp conversion*/
+			if (depthWaterTemp != null)
+				switch (tempUnit) {
+					case LogbookConstant.TEMPERATURE_CELSIUS: {
+						e_dive.setProperty("depthWaterTempAsCelsius", depthWaterTemp);
+						e_dive.setProperty("depthWaterTempAsFahrehneit", (depthWaterTemp*LogbookConstant.CELSIUS_AS_FAREHN_TIME + LogbookConstant.CELSIUS_AS_FAREHN_ADD));
+					}
+						break;
+					
+					case LogbookConstant.TEMPERATURE_FAHRHENEIT: {
+						e_dive.setProperty("depthWaterTempAsFahrehneit", depthWaterTemp);
+						e_dive.setProperty("depthWaterTempAsCelsius", (depthWaterTemp - LogbookConstant.CELSIUS_AS_FAREHN_ADD)  / LogbookConstant.CELSIUS_AS_FAREHN_TIME);
+					}
+						break;
+				}
+			
+			
+			e_dive.setProperty("diveTime", diveTime_minute);
+			e_dive.setProperty("diveType", diveType);
+			e_dive.setProperty("duration", duration_second);
+			e_dive.setProperty("equipment", equipment);
+			if (note !=null)
+				e_dive.setProperty("note", new Text(note));
+		}
+	}
+	
 }

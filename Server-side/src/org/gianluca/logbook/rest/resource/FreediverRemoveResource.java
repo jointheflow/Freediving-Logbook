@@ -38,12 +38,22 @@ public class FreediverRemoveResource<K> extends ServerResource implements ILogbo
 	         
 	        // retrieves customer parameters  
 		    // "name=value"  
-	        String externalToken = form.getFirstValue("external_token");
-	        String externalPlatformId = form.getFirstValue("external_platform_id");
-	        String freediverId = form.getFirstValue("freediver_id");
+	       
 	        
-		    //check if parameters exists and are valid
-		    checkParameters(entity);
+	        String freediverId = form.getFirstValue("freediver_id");
+	        checkMandatory(freediverId, "freediver_id");
+	        
+	        String externalPlatformId= this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_platform_id");
+			checkMandatory(externalPlatformId,"external_platform_id");
+			checkExternalPlatformId(externalPlatformId);
+						
+			String externalToken = this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_token");
+			checkMandatory(externalToken, "external_token");
+			
+			String p_divePageSize = this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("dive_page_size");
+			checkMandatory(p_divePageSize, "dive_page_size");
+			checkInt(p_divePageSize, "dive_page_size");
+	        	        		    
 		   
 		    //check token against external platform
 			ExternalUserFactory.checkExternalToken(externalToken, Integer.parseInt(externalPlatformId));
@@ -123,20 +133,6 @@ public class FreediverRemoveResource<K> extends ServerResource implements ILogbo
 			log.info("end  POST remove for freediver");
 			
 		}   
-	}  
-	
-	public void checkParameters(Representation entity) throws WrongParameterException {
-		Form form = new Form(entity);
-		
-		String externalToken = form.getFirstValue("external_token");
-		checkExternalToken(externalToken); 
-       
-		String externalPlatformId = form.getFirstValue("external_platform_id");
-		checkExternalPlatformId(externalPlatformId);
-		
-		String freediverId = form.getFirstValue("freediver_id");
-        checkFreediverId(freediverId);
-		
 	}
 	
 }

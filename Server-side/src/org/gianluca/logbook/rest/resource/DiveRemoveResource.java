@@ -2,7 +2,7 @@ package org.gianluca.logbook.rest.resource;
 
 import java.util.logging.Logger;
 
-import org.gianluca.logbook.dao.exception.DiveSessionIdException;
+import org.gianluca.logbook.dao.exception.DiveIdException;
 import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
 import org.gianluca.logbook.dto.LogbookDto;
 import org.gianluca.logbook.external.integration.ExternalUserFactory;
@@ -36,20 +36,22 @@ public class DiveRemoveResource<K> extends ServerResource implements ILogbookRes
 	   		  	log.info("/" + parameter.getValue());
 	        }	
 	         
-	        // retrieves customer parameters  
-		    // "name=value"  
-	        String externalToken = form.getFirstValue("external_token");
-	        String externalPlatformId = form.getFirstValue("external_platform_id");
-	        String divesessionId = form.getFirstValue("dive_id");
+	        String diveId = form.getFirstValue("dive_id");
+		    checkMandatory(diveId, "dive_id");
+		    
+		    String externalToken = form.getFirstValue("external_token");
+			checkMandatory(externalToken, "external_token");
+			       
+			String externalPlatformId = form.getFirstValue("external_platform_id");
+			checkMandatory(externalPlatformId, "external_platform_id");
+			checkExternalPlatformId(externalPlatformId);
 	        
-		    //check if parameters exists and are valid
-		    checkParameters(entity);
-		   
+		    	   
 		    //check token against external platform
 			ExternalUserFactory.checkExternalToken(externalToken, Integer.parseInt(externalPlatformId));
 		    
 		    //add dive session
-		    LogbookDAO.removeDiveSession(divesessionId);
+		    LogbookDAO.removeDive(diveId);
 		    LogbookDto resDto = new LogbookDto();
 		    
 		    //Set dto status and message
@@ -100,7 +102,7 @@ public class DiveRemoveResource<K> extends ServerResource implements ILogbookRes
 			JsonRepresentation errorRepresentation = new JsonRepresentation(error);
 			return errorRepresentation;	
 			
-		}catch(DiveSessionIdException a_e) {
+		}catch(DiveIdException a_e) {
 			a_e.printStackTrace();
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			ErrorResource error = new ErrorResource();
@@ -123,20 +125,6 @@ public class DiveRemoveResource<K> extends ServerResource implements ILogbookRes
 			log.info("end  POST remove for dive");
 			
 		}   
-	}  
-	
-	public void checkParameters(Representation entity) throws WrongParameterException {
-		Form form = new Form(entity);
-		
-		String externalToken = form.getFirstValue("external_token");
-		checkExternalToken(externalToken); 
-       
-		String externalPlatformId = form.getFirstValue("external_platform_id");
-		checkExternalPlatformId(externalPlatformId);
-		
-		String diveId = form.getFirstValue("dive_id");
-        checkDiveId(diveId);
-		
 	}
 	
 }

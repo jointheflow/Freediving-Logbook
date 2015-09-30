@@ -10,7 +10,6 @@ import org.gianluca.logbook.dto.DiveDto;
 import org.gianluca.logbook.dto.LogbookDto;
 import org.gianluca.logbook.external.integration.ExternalUserFactory;
 import org.gianluca.logbook.external.integration.PlatformNotManagedException;
-import org.gianluca.logbook.helper.LogbookConstant;
 import org.gianluca.logbook.rest.exception.WrongParameterException;
 import org.restlet.representation.Representation;
 import org.restlet.resource.*; 
@@ -44,39 +43,75 @@ public class DiveUpdateResource<K> extends ServerResource implements ILogbookRes
 			   		  	log.info("/" + parameter.getValue());
 			        }	
 			         
-			        //check if parameters exists and are valid
-				    checkParameters(entity);
+			        //check and set all parameters
+					
+				    String diveId = form.getFirstValue("dive_id");
+				    checkMandatory(diveId, "dive_id");
 				    
-			        // retrieves customer parameters  
-				    // "name=value"  
-			        String externalToken = form.getFirstValue("external_token");
-			        String externalPlatformId = form.getFirstValue("external_platform_id");
-			        String diveId = form.getFirstValue("dive_id");
-			        int diveTime = new Integer(form.getFirstValue("dive_time"));
-			        int duration = new Integer(form.getFirstValue("duration"));
+				    String externalToken = form.getFirstValue("external_token");
+					checkMandatory(externalToken, "external_token");
+					       
+					String externalPlatformId = form.getFirstValue("external_platform_id");
+					checkMandatory(externalPlatformId, "external_platform_id");
+					checkExternalPlatformId(externalPlatformId);
+										
+			        String s_timeDive = form.getFirstValue("dive_time");
+			        checkMandatory(s_timeDive, "dive_time");
+			        checkTime(s_timeDive, "dive_time");
+			        Integer diveTime = new Integer(s_timeDive);
 			        
-					Double maxDeep = new Double(form.getFirstValue("max_deep"));
-					Double neutralBuoyance = new Double(form.getFirstValue("neutral_buoyance"));
+			        String s_maxDeep = form.getFirstValue("max_deep");
+			        checkDouble(s_maxDeep, "max_deep");
+			        Double maxDeep = new Double(s_maxDeep);
+			        
+			        String s_duration = form.getFirstValue("duration");
+			        checkInt(s_duration, "duration");
+			        checkDuration(s_duration, "duration");
+			        Integer duration = new Integer(s_duration);
+			        
+			        String waterTemp = form.getFirstValue("depth_water_temp");
+				    checkDouble(waterTemp, "depth_water_temp");
+				            
+			        String s_weight = form.getFirstValue("weight");
+					checkDouble(s_weight, "weight");
+					Double weight = new Double(s_weight);
+					
 					String equipment = form.getFirstValue("equipment"); 
-					String diveType =form.getFirstValue("dive_type");
-								
 					String note = form.getFirstValue("note");
-				    Double weight = new Double(form.getFirstValue("weight"));
+					
+			        String s_deepUnit = form.getFirstValue("deep_unit");
+				    checkMandatory(s_deepUnit, "deep_unit");
+				    checkDeepUnit(s_deepUnit, "deep_unit");
+				    int deepUnit = Integer.parseInt(s_deepUnit);
 				    
+				    String s_weightUnit = form.getFirstValue("weight_unit");
+				    checkMandatory(s_weightUnit,"weight_unit");
+				    checkWeightUnit(s_weightUnit, "weight_unit");
+				    int weightUnit = Integer.parseInt(s_weightUnit);
 				    
-				    Double depthWaterTemp = new Double(form.getFirstValue("depth_water_temp"));
+				    String s_tempUnit = form.getFirstValue("temp_unit");
+				    checkMandatory(s_tempUnit, "temp_unit");
+				    checkTempUnit(s_tempUnit, "temp_unit");
+				    int tempUnit = Integer.parseInt(s_tempUnit);
 				    
-				    int deepUnit = Integer.parseInt(form.getFirstValue("deep_unit"));
-				    int weightUnit = Integer.parseInt(form.getFirstValue("weight_unit"));
-				    int tempUnit = Integer.parseInt(form.getFirstValue("temp_unit"));
+				    String s_neutralBuoyance = form.getFirstValue("neutral_buoyance");
+				    checkDouble(s_neutralBuoyance, "neutral_buoyance");
+				    Double neutralBuoyance = new Double(s_neutralBuoyance);
+				    
+			        String diveType =form.getFirstValue("dive_type");
+					
+			        String s_depthWaterTemp=form.getFirstValue("depth_water_temp");
+			        checkDouble(s_depthWaterTemp, "depth_water_temp");
+			        Double depthWaterTemp = new Double(s_depthWaterTemp);
+					
 				    
 				    		   
 				    //check token against external platform
 					ExternalUserFactory.checkExternalToken(externalToken, Integer.parseInt(externalPlatformId));
 				    
-				    //add dive session
+				    //update dive session
 				    Dive d = LogbookDAO.updateDive(diveId, diveTime, diveType, duration, equipment, maxDeep,neutralBuoyance, note, weight, depthWaterTemp, deepUnit, tempUnit, weightUnit);
-				    		 
+				  				  
 				    //create result dto
 				    DiveDto dDto = new DiveDto();
 					dDto.setMaxDeepAsFeet(d.getMaxDeepAsFeet());
@@ -85,19 +120,21 @@ public class DiveUpdateResource<K> extends ServerResource implements ILogbookRes
 					dDto.setEquipment(d.getEquipment());
 					dDto.setExternalToken(externalToken);
 					dDto.setId(d.getId());
-					
 					dDto.setNote(d.getNote().getValue());
-					
-					dDto.setWeightAsKilogram(d.getWeightAsKilogram());
-					dDto.setWeightAsPound(d.getWeightAsPound());
 					dDto.setDepthWaterTempAsCelsius(d.getDepthWaterTempAsCelsisus());
 					dDto.setDepthWaterTempAsFahrehneit(d.getDepthWaterTempAsfarheneit());
+					dDto.setWeightAsKilogram(d.getWeightAsKilogram());
+					dDto.setWeightAsPound(d.getWeightAsPound());
+					dDto.setDuration(d.getDuration());
+					dDto.setNeutralBuoyanceAsFeet(d.getNeutralBuoyancyAsFeet());
+					dDto.setNeutralBuoyanceAsMeter(d.getNeutralBuoyancyAsMeter());
+					dDto.setDiveType(d.getDiveType());
 					
 				    //return dive dto
 				    
 					//Set dto status and message
 					dDto.setResult(LogbookDto.RESULT_OK);
-					dDto.setMessage("Dive added");
+					dDto.setMessage("Dive updated");
 					
 					
 					representation= new JsonRepresentation(dDto);
@@ -165,68 +202,7 @@ public class DiveUpdateResource<K> extends ServerResource implements ILogbookRes
 				
 						
 			}  
-			/*Check POST parametes*/
-			public void checkParameters(Representation entity) throws WrongParameterException {
-				
 			
-				
-				Form form = new Form(entity);
-				
-				String externalToken = form.getFirstValue("external_token");
-				checkExternalToken(externalToken); 
-		       
-				String externalPlatformId = form.getFirstValue("external_platform_id");
-				checkExternalPlatformId(externalPlatformId);
-				
-				String diveId = form.getFirstValue("dive_id");
-		        checkDiveId(diveId);
-		        
-		        
-		        String maxDeep = form.getFirstValue("max_deep");
-		        checkDouble(maxDeep, "max_deep");
-		        
-		        String s_timeDive = form.getFirstValue("dive_time");
-		        checkInt(s_timeDive, "dive_time");
-		        checkTime(s_timeDive, "dive_time");
-		        
-		        
-		        String s_duration = form.getFirstValue("duration");
-		        checkInt(s_duration, "duration");
-		        checkDuration(s_duration, "duration");
-		        
-		        
-		        String waterTemp = form.getFirstValue("depth_water_temp");
-			    checkDouble(waterTemp, "depth_water_temp");
-			    
-		        
-		        String weight = form.getFirstValue("weight");
-				checkDouble(weight, "weight");
-		        
-		        String diveTime =form.getFirstValue("dive_time");
-		        if (diveTime==null) throw new WrongParameterException("Parameter dive_time missing");
-		    
-		        
-			    String deepUnit = form.getFirstValue("deep_unit");
-			    if (deepUnit==null) throw new WrongParameterException("Parameter deep_unit missing");
-			    checkInt(deepUnit, "deep_unit");
-			    //check if deepUnit is correct value
-			    if ((new Integer(deepUnit) < LogbookConstant.DEEP_METER) || (new Integer (deepUnit) > LogbookConstant.DEEP_FEET)) throw new WrongParameterException("Parameter deep_unit wrong value");
-			    
-			    String weightUnit = form.getFirstValue("weight_unit");
-			    if (weightUnit==null) throw new WrongParameterException("Parameter weight_unit missing");
-			    checkInt(weightUnit, "weight_unit");
-			    //check if weight is correct value
-			    if ((new Integer(weightUnit) < LogbookConstant.WEIGHT_KILOGRAM) || (new Integer (weightUnit) > LogbookConstant.WEIGHT_POUND)) throw new WrongParameterException("Parameter weight_unit wrong value");
-			    
-			    String tempUnit = form.getFirstValue("temp_unit");
-			    if (tempUnit==null) throw new WrongParameterException("Parameter temp_unit missing");
-			    checkInt(tempUnit, "temp_unit");
-			    //check if weight is correct value
-			    if ((new Integer(tempUnit) < LogbookConstant.TEMPERATURE_CELSIUS) || (new Integer (tempUnit) > LogbookConstant.TEMPERATURE_FAHRHENEIT)) throw new WrongParameterException("Parameter temp_unit wrong value");   
-			    
-			    
-				
-			}
 			  
 			
 		}
