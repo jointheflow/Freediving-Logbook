@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import org.gianluca.logbook.dao.exception.FreediverIdException;
 import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
+import org.gianluca.logbook.dto.FreediverInputDto;
 import org.gianluca.logbook.dto.LogbookDto;
 import org.gianluca.logbook.external.integration.ExternalUserFactory;
 import org.gianluca.logbook.external.integration.PlatformNotManagedException;
@@ -17,7 +18,7 @@ import org.restlet.ext.json.*;
 
 import com.restfb.exception.FacebookOAuthException;
 
-public class FreediverRemoveResource<K> extends ServerResource implements ILogbookResource{
+public class FreediverRemoveResource<K> extends ServerResource {
 	private static final Logger log = Logger.getLogger(FreediverRemoveResource.class.getName());
 	
 	
@@ -39,33 +40,23 @@ public class FreediverRemoveResource<K> extends ServerResource implements ILogbo
 	        // retrieves customer parameters  
 		    // "name=value"  
 	       
+	        FreediverInputDto freediverInputDto = new FreediverInputDto();
+	        LogbookDtoFactory.populateFreediverDtoFromGETRequest(freediverInputDto, form, LogbookDtoFactory.REQUEST_REMOVE);
 	        
-	        String freediverId = form.getFirstValue("freediver_id");
-	        checkMandatory(freediverId, "freediver_id");
-	        
-	        String externalPlatformId= this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_platform_id");
-			checkMandatory(externalPlatformId,"external_platform_id");
-			checkExternalPlatformId(externalPlatformId);
-						
-			String externalToken = this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("external_token");
-			checkMandatory(externalToken, "external_token");
-			
-			String p_divePageSize = this.getRequest().getResourceRef().getQueryAsForm().getFirstValue("dive_page_size");
-			checkMandatory(p_divePageSize, "dive_page_size");
-			checkInt(p_divePageSize, "dive_page_size");
+	       
 	        	        		    
 		   
 		    //check token against external platform
-			ExternalUserFactory.checkExternalToken(externalToken, Integer.parseInt(externalPlatformId));
+			ExternalUserFactory.checkExternalToken(freediverInputDto.externalToken, freediverInputDto.externalPlatformId);
 		    
 		    //add dive session
-		    LogbookDAO.removeFreediver(freediverId);
+		    LogbookDAO.removeFreediver(freediverInputDto.id);
 		    LogbookDto resDto = new LogbookDto();
 		    
 		    //Set dto status and message
 			resDto.setResult(LogbookDto.RESULT_OK);
 			resDto.setMessage("Freediver removed");
-			resDto.setExternalToken(externalToken);
+			resDto.setExternalToken(freediverInputDto.externalToken);
 		    
 		    
 			

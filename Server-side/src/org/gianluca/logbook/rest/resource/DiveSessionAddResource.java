@@ -1,17 +1,15 @@
 package org.gianluca.logbook.rest.resource;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 import java.util.logging.Logger;
 
 import org.gianluca.logbook.dao.exception.FreediverIdException;
 import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
 import org.gianluca.logbook.dto.DiveSessionDto;
+import org.gianluca.logbook.dto.DiveSessionInputDto;
 import org.gianluca.logbook.dto.LogbookDto;
-import org.gianluca.logbook.external.integration.ExternalUserFactory;
 import org.gianluca.logbook.external.integration.PlatformNotManagedException;
-import org.gianluca.logbook.helper.LogbookConstant;
 import org.gianluca.logbook.rest.exception.WrongParameterException;
 import org.restlet.representation.Representation;
 import org.restlet.resource.*; 
@@ -23,7 +21,7 @@ import org.restlet.ext.json.*;
 import com.restfb.exception.FacebookOAuthException;
 
 
-public class DiveSessionAddResource<K> extends ServerResource implements ILogbookResource{
+public class DiveSessionAddResource<K> extends ServerResource {
 	private static final Logger log = Logger.getLogger(DiveSessionAddResource.class.getName());
 	
 	
@@ -44,86 +42,32 @@ public class DiveSessionAddResource<K> extends ServerResource implements ILogboo
 	        	log.info("parameter " + parameter.getName());
 	   		  	log.info("/" + parameter.getValue());
 	        }	
-	        
-	        //retrieves and check all parameters
-	        String s_diveDate = form.getFirstValue("dive_date");
-	        checkMandatory(s_diveDate, "dive_date");
-	        checkDate(s_diveDate, "dive_date");
-	        SimpleDateFormat formatter = new SimpleDateFormat(LogbookConstant.DATE_FORMAT);
-		    Date diveDate = formatter.parse(s_diveDate);
+	        DiveSessionInputDto diveSessionInputDto = new DiveSessionInputDto(); 
+	        LogbookDtoFactory.populateDiveSessionDtoFromPOSTRequest(diveSessionInputDto, form, LogbookDtoFactory.REQUEST_ADD);
 		    
-		    String externalToken = form.getFirstValue("external_token");
-			checkMandatory(externalToken, "external_token");
-			 
-	      	String externalPlatformId = form.getFirstValue("external_platform_id");
-			checkMandatory(externalPlatformId,"external_platform_id");
-			checkExternalPlatformId(externalPlatformId);
-			
-			String freediverId = form.getFirstValue("freediver_id");
-	        checkMandatory(freediverId, "freediver_id");
-	        	        
-	        String s_deep = form.getFirstValue("deep");
-	        checkDouble(s_deep, "deep");
-	        Double deep = new Double(s_deep);
-	        
-	        String s_waterTemp = form.getFirstValue("water_temp");
-		    checkDouble(s_waterTemp, "water_temp");
-		    Double waterTemp = new Double(s_waterTemp);
+	        //add dive session
+		    DiveSession ds = LogbookDAO.addDiveSession(diveSessionInputDto.freediverId,
+		    											diveSessionInputDto.diveDate,
+		    											diveSessionInputDto.deep,
+		    											diveSessionInputDto.equipment,
+		    											diveSessionInputDto.locationDesc,
+		    											null,
+		    											diveSessionInputDto.meteoDesc,
+		    											diveSessionInputDto.note,
+		    											diveSessionInputDto.waterTemp,
+		    											diveSessionInputDto.weight,
+		    											diveSessionInputDto.deepUnit,
+		    											diveSessionInputDto.tempUnit,
+		    											diveSessionInputDto.weightUnit);
 		    
-	        String s_weight = form.getFirstValue("weight");
-			checkDouble(s_weight, "weight");
-			Double weight = new Double(s_weight);
-	        
-			       
-			String s_deepUnit = form.getFirstValue("deep_unit");
-		    checkMandatory(s_deepUnit, "deep_unit");
-		    checkDeepUnit(s_deepUnit, "deep_unit");
-		    int deepUnit = Integer.parseInt(s_deepUnit);
-		    
-		    String s_weightUnit = form.getFirstValue("weight_unit");
-		    checkMandatory(s_weightUnit,"weight_unit");
-		    checkWeightUnit(s_weightUnit, "weight_unit");
-		    int weightUnit = Integer.parseInt(s_weightUnit);
-		    
-		    String s_tempUnit = form.getFirstValue("temp_unit");
-		    checkMandatory(s_tempUnit, "temp_unit");
-		    checkTempUnit(s_tempUnit, "temp_unit");
-		    int tempUnit = Integer.parseInt(s_tempUnit);   
-		       
-		    String equipment = form.getFirstValue("equipment"); 
-			String location = form.getFirstValue("location");
-			String meteo = form.getFirstValue("meteo");
-			String note = form.getFirstValue("note");
-			
-		   //check token against external platform
-			ExternalUserFactory.checkExternalToken(externalToken, Integer.parseInt(externalPlatformId));
-		    
-		    //add dive session
-		    DiveSession ds = LogbookDAO.addDiveSession(freediverId, diveDate, deep, equipment , location, null, meteo, note, waterTemp, weight, deepUnit, tempUnit, weightUnit);
-		    
-		    //create result dto
-		    DiveSessionDto dsDto = new DiveSessionDto();
-			dsDto.setDeepAsFeet(ds.getDeepAsFeet());
-			dsDto.setDeepAsMeter(ds.getDeepAsMeter());
-			dsDto.setDiveDate(ds.getDiveDate());
-			dsDto.setEquipment(ds.getEquipment());
-			dsDto.setExternalToken(externalToken);
-			dsDto.setId(ds.getId());
-			dsDto.setLocationDesc(ds.getLocationDesc());
-			if (ds.getLocationGeoPt() != null) {
-				dsDto.setLocationLatitude(ds.getLocationGeoPt().getLatitude());
-				dsDto.setLocationLongitude(ds.getLocationGeoPt().getLongitude());
-			}
-			dsDto.setMeteoDesc(ds.getMeteoDesc());
-			dsDto.setNote(ds.getNote().getValue());
-			dsDto.setWaterTempAsCelsius(ds.getWaterTempAsCelsius());
-			dsDto.setWaterTempAsFahrehneit(ds.getWaterTempAsFahrehneit());
-			dsDto.setWeightAsKilogram(ds.getWeightAsKilogram());
-			dsDto.setWeightAsPound(ds.getWeightAsPound());
+		   
 		    //return dive dto
+		    DiveSessionDto dsDto = new DiveSessionDto();
 		    
+		    LogbookDtoFactory.populateDiveSessionDtoFromEntity(dsDto, ds);
 			//Set dto status and message
-			dsDto.setResult(LogbookDto.RESULT_OK);
+		    dsDto.setExternalToken(diveSessionInputDto.externalToken);
+		    dsDto.setResult(LogbookDto.RESULT_OK);
 			dsDto.setMessage("Dive session added");
 			
 			

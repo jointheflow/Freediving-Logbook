@@ -7,8 +7,8 @@ import org.gianluca.logbook.dao.exception.DiveIdException;
 import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
 import org.gianluca.logbook.dao.googledatastore.entity.Dive;
 import org.gianluca.logbook.dto.DiveDto;
+import org.gianluca.logbook.dto.DiveInputDto;
 import org.gianluca.logbook.dto.LogbookDto;
-import org.gianluca.logbook.external.integration.ExternalUserFactory;
 import org.gianluca.logbook.external.integration.PlatformNotManagedException;
 import org.gianluca.logbook.rest.exception.WrongParameterException;
 import org.restlet.representation.Representation;
@@ -21,7 +21,7 @@ import org.restlet.ext.json.*;
 import com.restfb.exception.FacebookOAuthException;
 
 
-public class DiveUpdateResource<K> extends ServerResource implements ILogbookResource{
+public class DiveUpdateResource<K> extends ServerResource {
 	private static final Logger log = Logger.getLogger(DiveUpdateResource.class.getName());
 	
 	
@@ -44,95 +44,32 @@ public class DiveUpdateResource<K> extends ServerResource implements ILogbookRes
 			        }	
 			         
 			        //check and set all parameters
+					DiveInputDto diveInputDto = new DiveInputDto();
+			        LogbookDtoFactory.populateDiveDtoFromPOSTRequest(form, diveInputDto, LogbookDtoFactory.REQUEST_UPDTAE);
 					
-				    String diveId = form.getFirstValue("dive_id");
-				    checkMandatory(diveId, "dive_id");
-				    
-				    String externalToken = form.getFirstValue("external_token");
-					checkMandatory(externalToken, "external_token");
-					       
-					String externalPlatformId = form.getFirstValue("external_platform_id");
-					checkMandatory(externalPlatformId, "external_platform_id");
-					checkExternalPlatformId(externalPlatformId);
-										
-			        String s_timeDive = form.getFirstValue("dive_time");
-			        checkMandatory(s_timeDive, "dive_time");
-			        checkTime(s_timeDive, "dive_time");
-			        Integer diveTime = new Integer(s_timeDive);
-			        
-			        String s_maxDeep = form.getFirstValue("max_deep");
-			        checkDouble(s_maxDeep, "max_deep");
-			        Double maxDeep = new Double(s_maxDeep);
-			        
-			        String s_duration = form.getFirstValue("duration");
-			        checkInt(s_duration, "duration");
-			        checkDuration(s_duration, "duration");
-			        Integer duration = new Integer(s_duration);
-			        
-			        String waterTemp = form.getFirstValue("depth_water_temp");
-				    checkDouble(waterTemp, "depth_water_temp");
-				            
-			        String s_weight = form.getFirstValue("weight");
-					checkDouble(s_weight, "weight");
-					Double weight = new Double(s_weight);
-					
-					String equipment = form.getFirstValue("equipment"); 
-					String note = form.getFirstValue("note");
-					
-			        String s_deepUnit = form.getFirstValue("deep_unit");
-				    checkMandatory(s_deepUnit, "deep_unit");
-				    checkDeepUnit(s_deepUnit, "deep_unit");
-				    int deepUnit = Integer.parseInt(s_deepUnit);
-				    
-				    String s_weightUnit = form.getFirstValue("weight_unit");
-				    checkMandatory(s_weightUnit,"weight_unit");
-				    checkWeightUnit(s_weightUnit, "weight_unit");
-				    int weightUnit = Integer.parseInt(s_weightUnit);
-				    
-				    String s_tempUnit = form.getFirstValue("temp_unit");
-				    checkMandatory(s_tempUnit, "temp_unit");
-				    checkTempUnit(s_tempUnit, "temp_unit");
-				    int tempUnit = Integer.parseInt(s_tempUnit);
-				    
-				    String s_neutralBuoyance = form.getFirstValue("neutral_buoyance");
-				    checkDouble(s_neutralBuoyance, "neutral_buoyance");
-				    Double neutralBuoyance = new Double(s_neutralBuoyance);
-				    
-			        String diveType =form.getFirstValue("dive_type");
-					
-			        String s_depthWaterTemp=form.getFirstValue("depth_water_temp");
-			        checkDouble(s_depthWaterTemp, "depth_water_temp");
-			        Double depthWaterTemp = new Double(s_depthWaterTemp);
-					
-				    
-				    		   
-				    //check token against external platform
-					ExternalUserFactory.checkExternalToken(externalToken, Integer.parseInt(externalPlatformId));
-				    
 				    //update dive session
-				    Dive d = LogbookDAO.updateDive(diveId, diveTime, diveType, duration, equipment, maxDeep,neutralBuoyance, note, weight, depthWaterTemp, deepUnit, tempUnit, weightUnit);
+				    Dive d = LogbookDAO.updateDive(diveInputDto.id,
+				    								diveInputDto.diveTime, 
+				    								diveInputDto.diveType,
+				    								diveInputDto.duration,
+				    								diveInputDto.equipment,
+				    								diveInputDto.maxDeep,
+				    								diveInputDto.neutralBuoyance,
+				    								diveInputDto.note,
+				    								diveInputDto.weight,
+				    								diveInputDto.depthWaterTemp,
+				    								diveInputDto.deepUnit,
+				    								diveInputDto.tempUnit,
+				    								diveInputDto.weightUnit);
 				  				  
 				    //create result dto
 				    DiveDto dDto = new DiveDto();
-					dDto.setMaxDeepAsFeet(d.getMaxDeepAsFeet());
-					dDto.setMaxDeepAsMeter(d.getMaxDeepAsMeter());
-					dDto.setDiveTime(d.getDiveTime());
-					dDto.setEquipment(d.getEquipment());
-					dDto.setExternalToken(externalToken);
-					dDto.setId(d.getId());
-					dDto.setNote(d.getNote().getValue());
-					dDto.setDepthWaterTempAsCelsius(d.getDepthWaterTempAsCelsisus());
-					dDto.setDepthWaterTempAsFahrehneit(d.getDepthWaterTempAsfarheneit());
-					dDto.setWeightAsKilogram(d.getWeightAsKilogram());
-					dDto.setWeightAsPound(d.getWeightAsPound());
-					dDto.setDuration(d.getDuration());
-					dDto.setNeutralBuoyanceAsFeet(d.getNeutralBuoyancyAsFeet());
-					dDto.setNeutralBuoyanceAsMeter(d.getNeutralBuoyancyAsMeter());
-					dDto.setDiveType(d.getDiveType());
+					   
+					//populate ouptut with resul entity
+					LogbookDtoFactory.populateDiveDtoFromEntity(dDto, d);
 					
-				    //return dive dto
-				    
 					//Set dto status and message
+					dDto.setExternalToken(diveInputDto.externalToken);
 					dDto.setResult(LogbookDto.RESULT_OK);
 					dDto.setMessage("Dive updated");
 					

@@ -4,8 +4,8 @@ import java.util.logging.Logger;
 
 import org.gianluca.logbook.dao.exception.DiveIdException;
 import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
+import org.gianluca.logbook.dto.DiveInputDto;
 import org.gianluca.logbook.dto.LogbookDto;
-import org.gianluca.logbook.external.integration.ExternalUserFactory;
 import org.gianluca.logbook.external.integration.PlatformNotManagedException;
 import org.gianluca.logbook.rest.exception.WrongParameterException;
 import org.restlet.representation.Representation;
@@ -17,7 +17,7 @@ import org.restlet.ext.json.*;
 
 import com.restfb.exception.FacebookOAuthException;
 
-public class DiveRemoveResource<K> extends ServerResource implements ILogbookResource{
+public class DiveRemoveResource<K> extends ServerResource {
 	private static final Logger log = Logger.getLogger(DiveRemoveResource.class.getName());
 	
 	
@@ -35,32 +35,22 @@ public class DiveRemoveResource<K> extends ServerResource implements ILogbookRes
 	        	log.info("parameter " + parameter.getName());
 	   		  	log.info("/" + parameter.getValue());
 	        }	
-	         
-	        String diveId = form.getFirstValue("dive_id");
-		    checkMandatory(diveId, "dive_id");
-		    
-		    String externalToken = form.getFirstValue("external_token");
-			checkMandatory(externalToken, "external_token");
-			       
-			String externalPlatformId = form.getFirstValue("external_platform_id");
-			checkMandatory(externalPlatformId, "external_platform_id");
-			checkExternalPlatformId(externalPlatformId);
 	        
-		    	   
-		    //check token against external platform
-			ExternalUserFactory.checkExternalToken(externalToken, Integer.parseInt(externalPlatformId));
-		    
+	        //check and set all parameters
+			DiveInputDto diveInputDto = new DiveInputDto();
+	        LogbookDtoFactory.populateDiveDtoFromPOSTRequest(form, diveInputDto, LogbookDtoFactory.REQUEST_REMOVE);
+	        
+	        
 		    //add dive session
-		    LogbookDAO.removeDive(diveId);
+		    LogbookDAO.removeDive(diveInputDto.id);
+		    
 		    LogbookDto resDto = new LogbookDto();
 		    
 		    //Set dto status and message
-			resDto.setResult(LogbookDto.RESULT_OK);
+		    resDto.setExternalToken(diveInputDto.externalToken);
+		    resDto.setResult(LogbookDto.RESULT_OK);
 			resDto.setMessage("Dive removed");
-			resDto.setExternalToken(externalToken);
-		    
-		    
-			
+		    			
 			representation= new JsonRepresentation(resDto);
 			representation.setIndenting(true);
 			

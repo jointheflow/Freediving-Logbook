@@ -7,12 +7,10 @@ public class FreediverDto extends LogbookDto {
 	
 	public String id;
 	public String externalId;
-	public int externalPlatformId;
 	public String externalUsername;
 	//public String externalToken;
 	public String status;
-	public int deepUnit;
-	public int temperatureUnit;
+	
 	
 	
 	public List<DiveSessionDto> diveSessions;
@@ -28,12 +26,8 @@ public class FreediverDto extends LogbookDto {
 	public void setExternalId(String externalId) {
 		this.externalId = externalId;
 	}
-	public long getExternalPlatformId() {
-		return externalPlatformId;
-	}
-	public void setExternalPlatformId(int externalPlatformId) {
-		this.externalPlatformId = externalPlatformId;
-	}
+	
+	
 	public String getExternalUsername() {
 		return externalUsername;
 	}
@@ -59,12 +53,7 @@ public class FreediverDto extends LogbookDto {
 	public void setDeepUnit(int deepUnit) {
 		this.deepUnit = deepUnit;
 	}
-	public int getTemperatureUnit() {
-		return temperatureUnit;
-	}
-	public void setTemperatureUnit(int temperatureUnit) {
-		this.temperatureUnit = temperatureUnit;
-	}
+	
 	
 	
 

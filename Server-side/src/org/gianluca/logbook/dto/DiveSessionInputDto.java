@@ -2,22 +2,45 @@ package org.gianluca.logbook.dto;
 
 import java.util.Date;
 
-public class DiveSessionDto extends LogbookDto {
+public class DiveSessionInputDto extends LogbookDto {
 	public String id ;
+	public String freediverId;
 	public Date diveDate;
 	public String locationDesc;
 	public Float locationLatitude;
 	public Float locationLongitude;
 	public String meteoDesc;
-	public Double waterTempAsCelsius;
-	public Double waterTempAsFahrehneit;
-	public Double deepAsMeter;
-	public Double deepAsFeet;
+	public Double waterTemp;
+	public Double deep;
 	public String equipment;
-	public Double weightAsKilogram;
-	public Double weightAsPound;
+	public Double weight;
 	public String note;
 	
+	
+	public String getFreediverId() {
+		return freediverId;
+	}
+	public void setFreediverId(String freediverId) {
+		this.freediverId = freediverId;
+	}
+	public Double getWaterTemp() {
+		return waterTemp;
+	}
+	public void setWaterTemp(Double waterTemp) {
+		this.waterTemp = waterTemp;
+	}
+	public Double getDeep() {
+		return deep;
+	}
+	public void setDeep(Double deep) {
+		this.deep = deep;
+	}
+	public Double getWeight() {
+		return weight;
+	}
+	public void setWeight(Double weight) {
+		this.weight = weight;
+	}
 	public String getId() {
 		return id;
 	}
@@ -54,48 +77,15 @@ public class DiveSessionDto extends LogbookDto {
 	public void setMeteoDesc(String meteoDesc) {
 		this.meteoDesc = meteoDesc;
 	}
-	public Double getWaterTempAsCelsius() {
-		return waterTempAsCelsius;
-	}
-	public void setWaterTempAsCelsius(Double waterTempAsCelsius) {
-		this.waterTempAsCelsius = waterTempAsCelsius;
-	}
-	public Double getWaterTempAsFahrehneit() {
-		return waterTempAsFahrehneit;
-	}
-	public void setWaterTempAsFahrehneit(Double waterTempAsFahrehneit) {
-		this.waterTempAsFahrehneit = waterTempAsFahrehneit;
-	}
-	public Double getDeepAsMeter() {
-		return deepAsMeter;
-	}
-	public void setDeepAsMeter(Double deepAsMeter) {
-		this.deepAsMeter = deepAsMeter;
-	}
-	public Double getDeepAsFeet() {
-		return deepAsFeet;
-	}
-	public void setDeepAsFeet(Double deepAsFeet) {
-		this.deepAsFeet = deepAsFeet;
-	}
+
+	
 	public String getEquipment() {
 		return equipment;
 	}
 	public void setEquipment(String equipment) {
 		this.equipment = equipment;
 	}
-	public Double getWeightAsKilogram() {
-		return weightAsKilogram;
-	}
-	public void setWeightAsKilogram(Double weightAsKilogram) {
-		this.weightAsKilogram = weightAsKilogram;
-	}
-	public Double getWeightAsPound() {
-		return weightAsPound;
-	}
-	public void setWeightAsPound(Double weightAsPound) {
-		this.weightAsPound = weightAsPound;
-	}
+	
 	public String getNote() {
 		return note;
 	}
