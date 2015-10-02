@@ -40,13 +40,9 @@ public class FreediverRemoveResource<K> extends ServerResource {
 	        // retrieves customer parameters  
 		    // "name=value"  
 	       
-	        FreediverInputDto freediverInputDto = new FreediverInputDto();
-	        LogbookDtoFactory.populateFreediverDtoFromGETRequest(freediverInputDto, form, LogbookDtoFactory.REQUEST_REMOVE);
-	        
-	       
-	        	        		    
-		   
-		    //check token against external platform
+	        FreediverInputDto freediverInputDto = LogbookDtoFactory.createFreediverInputDtoFromGETRequest(form, LogbookDtoFactory.REQUEST_REMOVE);
+	     
+	        //check token against external platform
 			ExternalUserFactory.checkExternalToken(freediverInputDto.externalToken, freediverInputDto.externalPlatformId);
 		    
 		    //add dive session

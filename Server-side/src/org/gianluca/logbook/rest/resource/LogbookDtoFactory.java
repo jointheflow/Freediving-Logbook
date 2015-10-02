@@ -2,14 +2,18 @@ package org.gianluca.logbook.rest.resource;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.gianluca.logbook.dao.googledatastore.entity.Dive;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
+import org.gianluca.logbook.dao.googledatastore.entity.DiveSessionsOfFreeediver;
+import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
 import org.gianluca.logbook.dto.DiveDto;
 import org.gianluca.logbook.dto.DiveInputDto;
 import org.gianluca.logbook.dto.DiveSessionDto;
 import org.gianluca.logbook.dto.DiveSessionInputDto;
+import org.gianluca.logbook.dto.FreediverDto;
 import org.gianluca.logbook.dto.FreediverInputDto;
 import org.gianluca.logbook.external.integration.ExternalUserFactory;
 import org.gianluca.logbook.external.integration.PlatformNotManagedException;
@@ -109,11 +113,8 @@ public class LogbookDtoFactory {
 		
 	}
 	
-	public static void populateDiveDtoFromGETRequest() {
-		
-		
-	}
-	public static DiveInputDto createDiveDtoFromPOSTRequest(Form form,  int requestType) throws WrongParameterException, NumberFormatException, PlatformNotManagedException {
+	
+	public static DiveInputDto createDiveInputDtoFromPOSTRequest(Form form,  int requestType) throws WrongParameterException, NumberFormatException, PlatformNotManagedException {
 		DiveInputDto diveInput = new DiveInputDto();
 		//check and set all parameters
 		//basing on the request set ancestor key or id key
@@ -211,7 +212,8 @@ public class LogbookDtoFactory {
 		
 	}
 	
-	public static void populateDiveDtoFromEntity(DiveDto dDto, Dive d) {
+	public static DiveDto createDiveDtoFromEntity(Dive d) {
+		DiveDto dDto = new DiveDto();
 		dDto.setMaxDeepAsFeet(d.getMaxDeepAsFeet());
 		dDto.setMaxDeepAsMeter(d.getMaxDeepAsMeter());
 		dDto.setDiveTime(d.getDiveTime());
@@ -226,10 +228,13 @@ public class LogbookDtoFactory {
 		dDto.setNeutralBuoyanceAsFeet(d.getNeutralBuoyancyAsFeet());
 		dDto.setNeutralBuoyanceAsMeter(d.getNeutralBuoyancyAsMeter());
 		dDto.setDiveType(d.getDiveType());
+		return dDto;
 	}
 	
-	public static void populateDiveSessionDtoFromPOSTRequest(DiveSessionInputDto diveSessionInputDto, Form form, int requestType) throws WrongParameterException, NumberFormatException, PlatformNotManagedException, ParseException {
-		 //retrieves and check all parameters
+	public static DiveSessionInputDto createDiveSessionInputDtoFromPOSTRequest(Form form, int requestType) throws WrongParameterException, NumberFormatException, PlatformNotManagedException, ParseException {
+		DiveSessionInputDto diveSessionInputDto = new DiveSessionInputDto();
+		
+		//retrieves and check all parameters
         if (requestType == REQUEST_ADD) {
         	String freediverId = form.getFirstValue("freediver_id");
             checkMandatory(freediverId, "freediver_id");
@@ -307,13 +312,16 @@ public class LogbookDtoFactory {
 		
 	   //check token against external platform
 		ExternalUserFactory.checkExternalToken(externalToken, Integer.parseInt(externalPlatformId));
+		
+		return diveSessionInputDto;
 	    
 		
 	}
 	
-	public static void populateDiveSessionDtoFromEntity(DiveSessionDto dsDto, DiveSession ds) {
+	public static DiveSessionDto createDiveSessionDtoFromEntity(DiveSession ds) {
 		 //create result dto
-	   
+		DiveSessionDto dsDto = new DiveSessionDto();
+		
 		dsDto.setDeepAsFeet(ds.getDeepAsFeet());
 		dsDto.setDeepAsMeter(ds.getDeepAsMeter());
 		dsDto.setDiveDate(ds.getDiveDate());
@@ -330,10 +338,12 @@ public class LogbookDtoFactory {
 		dsDto.setWaterTempAsFahrehneit(ds.getWaterTempAsFahrehneit());
 		dsDto.setWeightAsKilogram(ds.getWeightAsKilogram());
 		dsDto.setWeightAsPound(ds.getWeightAsPound());
+		return dsDto;
 		
 	}
 	
-	public static void populateFreediverDtoFromGETRequest(FreediverInputDto freeInputDto, Form form, int requestType) throws WrongParameterException {
+	public static FreediverInputDto createFreediverInputDtoFromGETRequest(Form form, int requestType) throws WrongParameterException {
+		FreediverInputDto freeInputDto = new FreediverInputDto();
 		
 		if (requestType == REQUEST_REMOVE || requestType == REQUEST_UPDATE) {
 			  String freediverId = form.getFirstValue("freediver_id");
@@ -356,6 +366,51 @@ public class LogbookDtoFactory {
 		checkInt(p_divePageSize, "dive_page_size");
 		freeInputDto.setPageSize(new Integer(p_divePageSize));
 		
+		return freeInputDto;
 		
 	} 
+	
+	public static FreediverDto createFreediverDtoFromEntity(Freediver fd, DiveSessionsOfFreeediver dsOfFree, String fdStatus, String externalToken) {
+		
+		FreediverDto fdDto = new FreediverDto();
+	
+		fdDto.status=fdStatus;
+		fdDto.externalId= fd.getExternalId();
+		fdDto.externalPlatformId = fd.getExternalPlatformId();
+		fdDto.externalUsername = fd.getExternalName();
+		fdDto.id = fd.getId();
+		fdDto.deepUnit = fd.getDeepUnit();
+		fdDto.tempUnit = fd.getTemperatureUnit();
+		fdDto.externalToken= externalToken;				
+		//add dive session to dto
+		if (dsOfFree != null) {
+			fdDto.diveSessions = new ArrayList<DiveSessionDto>();
+			
+			for (DiveSession ds : dsOfFree.getDiveSessions()) {
+				DiveSessionDto dsDto = new DiveSessionDto();
+				dsDto.setDeepAsFeet(ds.getDeepAsFeet());
+				dsDto.setDeepAsMeter(ds.getDeepAsMeter());
+				dsDto.setDiveDate(ds.getDiveDate());
+				dsDto.setEquipment(ds.getEquipment());
+				dsDto.setExternalToken(externalToken);
+				dsDto.setId(ds.getId());
+				dsDto.setLocationDesc(ds.getLocationDesc());
+				if (ds.getLocationGeoPt() != null) {
+					dsDto.setLocationLatitude(ds.getLocationGeoPt().getLatitude());
+					dsDto.setLocationLongitude(ds.getLocationGeoPt().getLongitude());
+				}
+				dsDto.setMeteoDesc(ds.getMeteoDesc());
+				dsDto.setNote(ds.getNote().getValue());
+				dsDto.setWaterTempAsCelsius(ds.getWaterTempAsCelsius());
+				dsDto.setWaterTempAsFahrehneit(ds.getWaterTempAsFahrehneit());
+				dsDto.setWeightAsKilogram(ds.getWeightAsKilogram());
+				dsDto.setWeightAsPound(ds.getWeightAsPound());
+			
+				fdDto.diveSessions.add(dsDto);
+			}
+		}
+		
+		return fdDto;
+		
+	}
 }

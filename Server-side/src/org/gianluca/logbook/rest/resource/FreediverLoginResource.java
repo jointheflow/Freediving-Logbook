@@ -1,14 +1,14 @@
 package org.gianluca.logbook.rest.resource;
 
 
-import java.util.ArrayList;
+
 import java.util.logging.Logger;
 
 import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
-import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
+
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSessionsOfFreeediver;
 import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
-import org.gianluca.logbook.dto.DiveSessionDto;
+
 import org.gianluca.logbook.dto.FreediverDto;
 import org.gianluca.logbook.dto.FreediverInputDto;
 import org.gianluca.logbook.dto.LogbookDto;
@@ -47,76 +47,38 @@ public class FreediverLoginResource<K>  extends ServerResource {
 			        }	
 			         
 				
-				FreediverInputDto freediverInputDto = new FreediverInputDto();
-				LogbookDtoFactory.populateFreediverDtoFromGETRequest(freediverInputDto, this.getRequest().getResourceRef().getQueryAsForm(), LogbookDtoFactory.REQUEST_ADD);
+				FreediverInputDto freediverInputDto = LogbookDtoFactory.createFreediverInputDtoFromGETRequest(this.getRequest().getResourceRef().getQueryAsForm(), LogbookDtoFactory.REQUEST_ADD);
+				
 					
 								
 				//check token against external platform
 				ExternalUser extUser= ExternalUserFactory.createExternalUser(freediverInputDto.externalToken, freediverInputDto.externalPlatformId);
 				
-				
-				//if token ok
-				//creates instance
-				FreediverDto fdDto = new FreediverDto();
-				
 				//check if p_externalId exists
 				Freediver fd = LogbookDAO.getFreediverByExternalId(extUser.getId(), freediverInputDto.externalPlatformId);
-				
-				//if exists return instance
+				String fdStatus=null;
+				//if exists return instance and set status to old
 				if (fd!=null) {
 					log.info("Freediver found!");
-					fdDto.status=LogbookConstant.FREEDIVER_STATUS_OLD;
-					
+					fdStatus = LogbookConstant.FREEDIVER_STATUS_OLD;
 				}
-				//else create new instance
+				//else create new instance and set status to new
 				else {
 					log.info("Freediver not found!");
 					fd = LogbookDAO.addFreediver(extUser.getId(), extUser.getName(), "null", freediverInputDto.externalPlatformId);
-					fdDto.status=LogbookConstant.FREEDIVER_STATUS_NEW;
+					fdStatus = LogbookConstant.FREEDIVER_STATUS_NEW;
+					
 				}
-				
-				fdDto.externalId= fd.getExternalId();
-				fdDto.externalPlatformId = fd.getExternalPlatformId();
-				fdDto.externalToken = freediverInputDto.externalToken;
-				fdDto.externalUsername = fd.getExternalName();
-				fdDto.id = fd.getId();
-				fdDto.deepUnit = fd.getDeepUnit();
-				fdDto.tempUnit = fd.getTemperatureUnit();
-				
-				
 				// find all dive session associated
 				DiveSessionsOfFreeediver dsOfFree = LogbookDAO.getDiveSessionsByFreediver(fd.getId(), freediverInputDto.pageSize, null);
-				//add dive session to dto
-				if (dsOfFree != null) {
-					fdDto.diveSessions = new ArrayList<DiveSessionDto>();
-					
-					for (DiveSession ds : dsOfFree.getDiveSessions()) {
-						DiveSessionDto dsDto = new DiveSessionDto();
-						dsDto.setDeepAsFeet(ds.getDeepAsFeet());
-						dsDto.setDeepAsMeter(ds.getDeepAsMeter());
-						dsDto.setDiveDate(ds.getDiveDate());
-						dsDto.setEquipment(ds.getEquipment());
-						dsDto.setExternalToken(freediverInputDto.externalToken);
-						dsDto.setId(ds.getId());
-						dsDto.setLocationDesc(ds.getLocationDesc());
-						if (ds.getLocationGeoPt() != null) {
-							dsDto.setLocationLatitude(ds.getLocationGeoPt().getLatitude());
-							dsDto.setLocationLongitude(ds.getLocationGeoPt().getLongitude());
-						}
-						dsDto.setMeteoDesc(ds.getMeteoDesc());
-						dsDto.setNote(ds.getNote().getValue());
-						dsDto.setWaterTempAsCelsius(ds.getWaterTempAsCelsius());
-						dsDto.setWaterTempAsFahrehneit(ds.getWaterTempAsFahrehneit());
-						dsDto.setWeightAsKilogram(ds.getWeightAsKilogram());
-						dsDto.setWeightAsPound(ds.getWeightAsPound());
-					
-						fdDto.diveSessions.add(dsDto);
-					}
-				}
-				
+							
+				//creates instance
+				FreediverDto fdDto = LogbookDtoFactory.createFreediverDtoFromEntity(fd, dsOfFree, fdStatus, freediverInputDto.externalToken);
+								
 				//Set dto status and message
 				fdDto.setResult(LogbookDto.RESULT_OK);
 				fdDto.setMessage("Freediver login executed");
+				fdDto.externalToken = freediverInputDto.externalToken;
 				
 				representation= new JsonRepresentation(fdDto);
 				representation.setIndenting(true);

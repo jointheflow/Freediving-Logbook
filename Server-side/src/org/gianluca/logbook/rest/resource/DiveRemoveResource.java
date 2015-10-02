@@ -37,7 +37,7 @@ public class DiveRemoveResource<K> extends ServerResource {
 	        }	
 	        
 	        //create dive input dto from request
-	        DiveInputDto diveInputDto = LogbookDtoFactory.createDiveDtoFromPOSTRequest(form, LogbookDtoFactory.REQUEST_REMOVE);
+	        DiveInputDto diveInputDto = LogbookDtoFactory.createDiveInputDtoFromPOSTRequest(form, LogbookDtoFactory.REQUEST_REMOVE);
 	        
 	        
 		    //add dive session

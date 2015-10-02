@@ -44,7 +44,7 @@ public class DiveAddResource<K> extends ServerResource {
 	        
 	        
 	        //create input dto from request and check parameter
-	         DiveInputDto diveInputDto = LogbookDtoFactory.createDiveDtoFromPOSTRequest(form, LogbookDtoFactory.REQUEST_ADD);
+	         DiveInputDto diveInputDto = LogbookDtoFactory.createDiveInputDtoFromPOSTRequest(form, LogbookDtoFactory.REQUEST_ADD);
 	        
 	        //invoke DAO operation
 		    Dive d = LogbookDAO.addDive(diveInputDto.diveSessionId,
@@ -62,10 +62,8 @@ public class DiveAddResource<K> extends ServerResource {
 		    							diveInputDto.weightUnit);
 		    		 
 		    //create result dto
-		    DiveDto dDto = new DiveDto();
-			//populate ouptut with resul entity
-			LogbookDtoFactory.populateDiveDtoFromEntity(dDto, d);
-			
+		    DiveDto dDto = LogbookDtoFactory.createDiveDtoFromEntity(d);
+					
 		    //Set dto status and message
 			dDto.setExternalToken(diveInputDto.externalToken);
 			dDto.setResult(LogbookDto.RESULT_OK);

@@ -42,8 +42,8 @@ public class DiveSessionAddResource<K> extends ServerResource {
 	        	log.info("parameter " + parameter.getName());
 	   		  	log.info("/" + parameter.getValue());
 	        }	
-	        DiveSessionInputDto diveSessionInputDto = new DiveSessionInputDto(); 
-	        LogbookDtoFactory.populateDiveSessionDtoFromPOSTRequest(diveSessionInputDto, form, LogbookDtoFactory.REQUEST_ADD);
+	        DiveSessionInputDto diveSessionInputDto = LogbookDtoFactory.createDiveSessionInputDtoFromPOSTRequest(form, LogbookDtoFactory.REQUEST_ADD); 
+	        
 		    
 	        //add dive session
 		    DiveSession ds = LogbookDAO.addDiveSession(diveSessionInputDto.freediverId,
@@ -62,9 +62,9 @@ public class DiveSessionAddResource<K> extends ServerResource {
 		    
 		   
 		    //return dive dto
-		    DiveSessionDto dsDto = new DiveSessionDto();
+		    DiveSessionDto dsDto =  LogbookDtoFactory.createDiveSessionDtoFromEntity(ds);
 		    
-		    LogbookDtoFactory.populateDiveSessionDtoFromEntity(dsDto, ds);
+		   
 			//Set dto status and message
 		    dsDto.setExternalToken(diveSessionInputDto.externalToken);
 		    dsDto.setResult(LogbookDto.RESULT_OK);
