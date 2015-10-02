@@ -361,11 +361,12 @@ public class LogbookDtoFactory {
 		checkMandatory(p_externalToken, "external_token");
 		freeInputDto.setExternalToken(p_externalToken);
 		
-		String p_divePageSize = form.getFirstValue("dive_page_size");
-		checkMandatory(p_divePageSize, "dive_page_size");
-		checkInt(p_divePageSize, "dive_page_size");
-		freeInputDto.setPageSize(new Integer(p_divePageSize));
-		
+		if (requestType== REQUEST_ADD) {
+			String p_divePageSize = form.getFirstValue("dive_page_size");
+			checkMandatory(p_divePageSize, "dive_page_size");
+			checkInt(p_divePageSize, "dive_page_size");
+			freeInputDto.setPageSize(new Integer(p_divePageSize));
+		}	
 		return freeInputDto;
 		
 	} 
