@@ -16,7 +16,7 @@ import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSessionsOfFreeediver;
 import org.gianluca.logbook.dao.googledatastore.entity.DivesOfDiveSession;
 import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
-import org.gianluca.logbook.helper.LogbookConstant;
+
 
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -29,7 +29,7 @@ import com.google.appengine.api.datastore.GeoPt;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.QueryResultList;
-import com.google.appengine.api.datastore.Text;
+
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;

@@ -42,10 +42,9 @@ public class DiveAddResource<K> extends ServerResource {
 	   		  	log.info("/" + parameter.getValue());
 	        }	
 	        
-	        //create dive input dto object
-	        DiveInputDto diveInputDto = new DiveInputDto();
-	        //populate input dto from request and check parameter
-	        LogbookDtoFactory.populateDiveDtoFromPOSTRequest(form, diveInputDto, LogbookDtoFactory.REQUEST_ADD);
+	        
+	        //create input dto from request and check parameter
+	         DiveInputDto diveInputDto = LogbookDtoFactory.createDiveDtoFromPOSTRequest(form, LogbookDtoFactory.REQUEST_ADD);
 	        
 	        //invoke DAO operation
 		    Dive d = LogbookDAO.addDive(diveInputDto.diveSessionId,

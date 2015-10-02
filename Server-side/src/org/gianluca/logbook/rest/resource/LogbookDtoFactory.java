@@ -20,7 +20,7 @@ import org.restlet.data.Form;
 /*Factory used to create Dto from http params and fto from json result*/
 public class LogbookDtoFactory {
 	public static int REQUEST_ADD = 0;
-	public static int REQUEST_UPDTAE =1;
+	public static int REQUEST_UPDATE =1;
 	public static int REQUEST_REMOVE = 2;
 	
 	public static void checkMandatory(String value, String name) throws WrongParameterException {
@@ -113,7 +113,8 @@ public class LogbookDtoFactory {
 		
 		
 	}
-	public static void populateDiveDtoFromPOSTRequest(Form form, DiveInputDto diveInput, int requestType) throws WrongParameterException, NumberFormatException, PlatformNotManagedException {
+	public static DiveInputDto createDiveDtoFromPOSTRequest(Form form,  int requestType) throws WrongParameterException, NumberFormatException, PlatformNotManagedException {
+		DiveInputDto diveInput = new DiveInputDto();
 		//check and set all parameters
 		//basing on the request set ancestor key or id key
 		if (requestType == REQUEST_ADD) {
@@ -122,7 +123,7 @@ public class LogbookDtoFactory {
 		    diveInput.setDiveSessionId(sessionId);
 		}
 		
-		if (requestType == REQUEST_REMOVE || requestType == REQUEST_UPDTAE) {
+		if (requestType == REQUEST_REMOVE || requestType == REQUEST_UPDATE) {
 			
 			String diveId = form.getFirstValue("dive_id");
 		    checkMandatory(diveId, "dive_id");
@@ -206,6 +207,7 @@ public class LogbookDtoFactory {
 	    //check token against external platform
 		ExternalUserFactory.checkExternalToken(externalToken, new Integer(s_externalPlatformId));
 	    
+		return diveInput;
 		
 	}
 	
@@ -234,7 +236,7 @@ public class LogbookDtoFactory {
             diveSessionInputDto.setFreediverId(freediverId);	
         }
         
-        if (requestType == REQUEST_UPDTAE || requestType == REQUEST_REMOVE) {
+        if (requestType == REQUEST_UPDATE || requestType == REQUEST_REMOVE) {
         	String divesessionId = form.getFirstValue("divesession_id");
             checkMandatory(divesessionId, "divesession_id");
             diveSessionInputDto.setId(divesessionId);	
@@ -333,7 +335,7 @@ public class LogbookDtoFactory {
 	
 	public static void populateFreediverDtoFromGETRequest(FreediverInputDto freeInputDto, Form form, int requestType) throws WrongParameterException {
 		
-		if (requestType == REQUEST_REMOVE || requestType == REQUEST_UPDTAE) {
+		if (requestType == REQUEST_REMOVE || requestType == REQUEST_UPDATE) {
 			  String freediverId = form.getFirstValue("freediver_id");
 		      checkMandatory(freediverId, "freediver_id");
 		      freeInputDto.setId(freediverId);

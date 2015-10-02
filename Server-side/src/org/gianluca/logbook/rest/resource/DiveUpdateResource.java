@@ -43,9 +43,8 @@ public class DiveUpdateResource<K> extends ServerResource {
 			   		  	log.info("/" + parameter.getValue());
 			        }	
 			         
-			        //check and set all parameters
-					DiveInputDto diveInputDto = new DiveInputDto();
-			        LogbookDtoFactory.populateDiveDtoFromPOSTRequest(form, diveInputDto, LogbookDtoFactory.REQUEST_UPDTAE);
+			        //create diveInputDto from post request
+			        DiveInputDto diveInputDto = LogbookDtoFactory.createDiveDtoFromPOSTRequest(form, LogbookDtoFactory.REQUEST_UPDATE);
 					
 				    //update dive session
 				    Dive d = LogbookDAO.updateDive(diveInputDto.id,

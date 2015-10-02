@@ -43,7 +43,7 @@ public class DiveSessionUpdateResource<K> extends ServerResource {
 	        }	
 	         
 	        DiveSessionInputDto dsInputDto = new DiveSessionInputDto();
-	        LogbookDtoFactory.populateDiveSessionDtoFromPOSTRequest(dsInputDto, form, LogbookDtoFactory.REQUEST_UPDTAE);
+	        LogbookDtoFactory.populateDiveSessionDtoFromPOSTRequest(dsInputDto, form, LogbookDtoFactory.REQUEST_UPDATE);
 	        
 	        
 		    //update dive session
