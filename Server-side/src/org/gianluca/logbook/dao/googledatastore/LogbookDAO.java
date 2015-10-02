@@ -16,7 +16,7 @@ import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSessionsOfFreeediver;
 import org.gianluca.logbook.dao.googledatastore.entity.DivesOfDiveSession;
 import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
-
+import org.gianluca.logbook.helper.LogbookConstant;
 
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -25,15 +25,10 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.GeoPt;
-
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.QueryResultList;
 
-import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
-import com.google.appengine.api.datastore.Query.Filter;
-import com.google.appengine.api.datastore.Query.FilterOperator;
-import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.PreparedQuery;
 
@@ -42,6 +37,9 @@ import static com.google.appengine.api.datastore.FetchOptions.Builder.*;
 import com.google.appengine.api.datastore.Transaction;
 
 public class LogbookDAO {
+	private final static String PREF_FACEBOOK = "FACEBOOK";
+	private final static String PREF_UNKNOWN ="UNKNOWN";
+	
 	private static final Logger log = Logger.getLogger(LogbookDAO.class.getName());
 	/*Freediver is saved in the datastore as the following:
 	 * Entity --> Freediver
@@ -93,17 +91,18 @@ public class LogbookDAO {
 	 */
 	
 	/*Get a freediver instance by external id provided by external platform authentication*/
-	public static Freediver getFreediverByExternalId(String externalId, long externalPlatformId) { 
+	public static Freediver getFreediverByExternalId(String externalId, int externalPlatformId)  { 
 		Freediver freediver = null;
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Transaction tx = datastore.beginTransaction();
 		try {
-			Filter externalIDFilter = new FilterPredicate ("externalId", FilterOperator.EQUAL, externalId);
+			/*Filter externalIDFilter = new FilterPredicate ("externalId", FilterOperator.EQUAL, externalId);
 			Filter externalPlatformIDFilter = new FilterPredicate("externalPlatformId", FilterOperator.EQUAL, externalPlatformId);
 			Filter compFilter= CompositeFilterOperator.and(externalIDFilter, externalPlatformIDFilter);
 			
 			Query q = new Query("Freediver").setFilter(compFilter);		
 			PreparedQuery pq = datastore.prepare(q);
+			
 			
 			if (pq.countEntities(withLimit(1)) > 0) {
 				
@@ -116,9 +115,15 @@ public class LogbookDAO {
 								
 				
 			}
+			*/
 			
-				
+			Entity e_freediver= datastore.get(KeyFactory.createKey("Freediver", createFreediverKey(externalId, externalPlatformId)));
+			freediver = LogbookEntityFactory.createFreediverFromEntity(e_freediver);	
+			
 			tx.commit();
+		} catch (EntityNotFoundException e) {
+			log.info(e.getMessage());
+			return freediver;
 		} finally {
 		    if (tx.isActive()) {
 		        tx.rollback();
@@ -129,6 +134,30 @@ public class LogbookDAO {
 		
 	}
 	
+	/*Get a freediver instance by id */
+	public static Freediver getFreediverBylId(String id) throws FreediverIdException { 
+		Freediver freediver = null;
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Transaction tx = datastore.beginTransaction();
+		try {
+			Entity e_freediver= datastore.get(KeyFactory.stringToKey(id));
+			freediver = LogbookEntityFactory.createFreediverFromEntity(e_freediver);				
+					
+			tx.commit();
+		} catch (EntityNotFoundException e) {
+			log.info(e.getMessage());
+			throw new FreediverIdException(e.getMessage());
+		} finally {
+		    if (tx.isActive()) {
+		        tx.rollback();
+		    }
+		}
+		
+	     return freediver;
+		
+	}
+	
+	
 	//add freediver user and default settings
 	public static Freediver addFreediver(String externalId, String externalName, String externalEmail, int externalPlatformId) {
 		
@@ -138,7 +167,8 @@ public class LogbookDAO {
 			try {
 						        
 				//using factory to create freediver entity
-				Entity e_freediver = new Entity("Freediver"); 
+				Entity e_freediver = new Entity("Freediver", createFreediverKey(externalId, externalPlatformId)); 
+				
 				LogbookEntityFactory.populateEntityFreediver(e_freediver, externalId, externalName, externalEmail, externalPlatformId);
 				datastore.put(e_freediver);
 										
@@ -483,8 +513,17 @@ public class LogbookDAO {
 	     return dOfSession;
 	}
 	
-	
-	
+	public static String createFreediverKey(String externalId, int externalPlatformId){
+		switch (externalPlatformId) {
+		
+			case LogbookConstant.FACEBOOK_PLATFORM: {
+				return PREF_FACEBOOK+"-"+externalId;	
+				
+			}
+			default:
+				return PREF_UNKNOWN+"-"+externalId;
+		}
+	}
 	
 }
 

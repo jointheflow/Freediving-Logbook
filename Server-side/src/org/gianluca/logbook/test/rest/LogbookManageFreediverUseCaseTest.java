@@ -22,7 +22,7 @@ import org.restlet.ext.json.JsonRepresentation;
 public class LogbookManageFreediverUseCaseTest {
 	//set test constants
 	//get new toke from FB https://developers.facebook.com/tools/explorer
-	private String externalToken="CAAB4GhgAGN0BAPZCZBKGm3ubvmZBYuEJavYL8bnh02lJSmGcAYAEPHewK4hq1ZBROf5PfO6SIsrK5sSrZBughtsZCOYZC3ZAgRriYhkN0IK9igTgUDt3Aqx42o1LedtTZCfLnZAvI0WgbF50JrH0DNxBmiqKP7ZCwrydZAHwHi5kz72titXrJCzHgzrZBbOze6CCVbH3NQVCMwHnqAQZDZD";
+	private String externalToken="CAAB4GhgAGN0BANVahkkMDAgwbRYnnSlxuS0eIwZAGvApUPgez2QkwsxDoIfgSeug5zv6crH4ZBbzjhk6sUYtUSB7nH4NZBbLfhR0KmOvHXfFoJbz6D8tXsX4oe1Bd64JCAVCPkWZC4souu3QZBzWmqvwX5ZCKZBoYY0YI58C0IWQl6I7rjwrAy5DhV2ZCP73ZCjESb2q7f93hMQZDZD";
 	//externalId associated to "freediving logbook" user on Facebook
 	private String externalId = "125927547759071";
 	@SuppressWarnings("unused")
@@ -188,7 +188,7 @@ public class LogbookManageFreediverUseCaseTest {
 			System.out.println("-------START testLoginNoPagination()--------");	
 				
 			//insert waiting 5 second for eventually consistence.
-			Thread.sleep(5000);	
+			//Thread.sleep(5000);	
 			
 			//execute Login
 			System.out.println("Login as a freediver");
@@ -263,7 +263,7 @@ public class LogbookManageFreediverUseCaseTest {
 			System.out.println("-------START testLoginWithPagination()--------");	
 				
 			//insert waiting 5 second for eventually consistence.
-			Thread.sleep(5000);	
+			//Thread.sleep(5000);	
 			
 			//execute Login
 			System.out.println("Login as a freediver");
@@ -316,7 +316,7 @@ public class LogbookManageFreediverUseCaseTest {
 				
 				
 			//insert waiting 5 second for eventually consistence.
-			Thread.sleep(5000);	
+			//Thread.sleep(5000);	
 			
 			//execute Login without ALL params
 			System.out.println("Login as a freediver with no params");

@@ -28,7 +28,7 @@ public class LogbookDtoFactory {
 	public static int REQUEST_REMOVE = 2;
 	
 	public static void checkMandatory(String value, String name) throws WrongParameterException {
-		if (value==null) throw new WrongParameterException("Parameter"+name+" missing");
+		if (value==null) throw new WrongParameterException("Parameter "+name+" missing");
 	}
 	
 	public static void checkExternalPlatformId(String externalPlatformId) throws WrongParameterException {
