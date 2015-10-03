@@ -117,7 +117,7 @@ public class LogbookDAO {
 			}
 			*/
 			
-			Entity e_freediver= datastore.get(KeyFactory.createKey("Freediver", createFreediverKey(externalId, externalPlatformId)));
+			Entity e_freediver= datastore.get(KeyFactory.createKey("Freediver", buildFreediverKey(externalId, externalPlatformId)));
 			freediver = LogbookEntityFactory.createFreediverFromEntity(e_freediver);	
 			
 			tx.commit();
@@ -166,9 +166,9 @@ public class LogbookDAO {
 		Transaction tx = datastore.beginTransaction();
 			try {
 						        
-				//using factory to create freediver entity
-				Entity e_freediver = new Entity("Freediver", createFreediverKey(externalId, externalPlatformId)); 
-				
+				//create a freediver entity, building key with external id and external platform id
+				Entity e_freediver = new Entity("Freediver", buildFreediverKey(externalId, externalPlatformId)); 
+				//using factory to populate freediver entity field
 				LogbookEntityFactory.populateEntityFreediver(e_freediver, externalId, externalName, externalEmail, externalPlatformId);
 				datastore.put(e_freediver);
 										
@@ -224,6 +224,9 @@ public class LogbookDAO {
 		Transaction tx = datastore.beginTransaction();
 			try {
 				
+				//ONLY CHECK IF freediverId exists!!!
+				datastore.get(KeyFactory.stringToKey(freediverId));
+				
 				Entity e_diveSession = new Entity("DiveSession", KeyFactory.stringToKey(freediverId));
 				//populate entity
 				LogbookEntityFactory.populateEntityDiveSession(e_diveSession, diveDate, deep, equipment, locationDesc, locationGeoPt, meteoDesc, note, waterTemp, weight, deepUnit, tempUnit, weightUnit);				
@@ -240,6 +243,11 @@ public class LogbookDAO {
 				throw new FreediverIdException(e.getMessage());
 				
 			
+			} catch (EntityNotFoundException e) {
+				log.info(e.getMessage());
+				throw new FreediverIdException(e.getMessage());
+				
+				
 			} finally {
 			    if (tx.isActive()) {
 			        tx.rollback();
@@ -513,7 +521,8 @@ public class LogbookDAO {
 	     return dOfSession;
 	}
 	
-	public static String createFreediverKey(String externalId, int externalPlatformId){
+	/*build a freediver key basing on external id and external platform id*/
+	public static String buildFreediverKey(String externalId, int externalPlatformId){
 		switch (externalPlatformId) {
 		
 			case LogbookConstant.FACEBOOK_PLATFORM: {

@@ -235,7 +235,21 @@ public class LogbookDtoFactory {
 		DiveSessionInputDto diveSessionInputDto = new DiveSessionInputDto();
 		
 		//retrieves and check all parameters
-        if (requestType == REQUEST_ADD) {
+		//-----MANDATORY PARAMETER----//
+		String externalToken = form.getFirstValue("external_token");
+		checkMandatory(externalToken, "external_token");
+		diveSessionInputDto.setExternalToken(externalToken);		
+		
+      	String externalPlatformId = form.getFirstValue("external_platform_id");
+		checkMandatory(externalPlatformId,"external_platform_id");
+		checkExternalPlatformId(externalPlatformId);
+		diveSessionInputDto.setExternalPlatformId(new Integer(externalPlatformId));
+		
+		//check token against external platform
+		ExternalUserFactory.checkExternalToken(externalToken, Integer.parseInt(externalPlatformId));		
+		
+		
+		if (requestType == REQUEST_ADD) {
         	String freediverId = form.getFirstValue("freediver_id");
             checkMandatory(freediverId, "freediver_id");
             diveSessionInputDto.setFreediverId(freediverId);	
@@ -244,75 +258,72 @@ public class LogbookDtoFactory {
         if (requestType == REQUEST_UPDATE || requestType == REQUEST_REMOVE) {
         	String divesessionId = form.getFirstValue("divesession_id");
             checkMandatory(divesessionId, "divesession_id");
-            diveSessionInputDto.setId(divesessionId);	
+            diveSessionInputDto.setId(divesessionId);       	
         	
         }
-		String s_diveDate = form.getFirstValue("dive_date");
-        checkMandatory(s_diveDate, "dive_date");
-        checkDate(s_diveDate, "dive_date");
-        SimpleDateFormat formatter = new SimpleDateFormat(LogbookConstant.DATE_FORMAT);
-	    Date diveDate = formatter.parse(s_diveDate);
-	    diveSessionInputDto.setDiveDate(diveDate);
-	    
-	    String externalToken = form.getFirstValue("external_token");
-		checkMandatory(externalToken, "external_token");
-		diveSessionInputDto.setExternalToken(externalToken);
-				
-      	String externalPlatformId = form.getFirstValue("external_platform_id");
-		checkMandatory(externalPlatformId,"external_platform_id");
-		checkExternalPlatformId(externalPlatformId);
-		diveSessionInputDto.setExternalPlatformId(new Integer(externalPlatformId));
-		
-		
-        	        
-        String s_deep = form.getFirstValue("deep");
-        checkDouble(s_deep, "deep");
-        Double deep = new Double(s_deep);
-        diveSessionInputDto.setDeep(deep);
+        //OPTIONAL PARAMETER//
+        if (requestType == REQUEST_UPDATE || requestType == REQUEST_ADD) {
         
-        String s_waterTemp = form.getFirstValue("water_temp");
-	    checkDouble(s_waterTemp, "water_temp");
-	    Double waterTemp = new Double(s_waterTemp);
-	    diveSessionInputDto.setWaterTemp(waterTemp);
-	    
-        String s_weight = form.getFirstValue("weight");
-		checkDouble(s_weight, "weight");
-		Double weight = new Double(s_weight);
-		diveSessionInputDto.setWeight(weight);
-				      
-		String s_deepUnit = form.getFirstValue("deep_unit");
-	    checkMandatory(s_deepUnit, "deep_unit");
-	    checkDeepUnit(s_deepUnit, "deep_unit");
-	    int deepUnit = Integer.parseInt(s_deepUnit);
-	    diveSessionInputDto.setDeepUnit(deepUnit);
-	    
-	    String s_weightUnit = form.getFirstValue("weight_unit");
-	    checkMandatory(s_weightUnit,"weight_unit");
-	    checkWeightUnit(s_weightUnit, "weight_unit");
-	    int weightUnit = Integer.parseInt(s_weightUnit);
-	    diveSessionInputDto.setWeightUnit(weightUnit);
-	    
-	    String s_tempUnit = form.getFirstValue("temp_unit");
-	    checkMandatory(s_tempUnit, "temp_unit");
-	    checkTempUnit(s_tempUnit, "temp_unit");
-	    int tempUnit = Integer.parseInt(s_tempUnit);   
-	    diveSessionInputDto.setTempUnit(tempUnit);
-	    
-	    String equipment = form.getFirstValue("equipment"); 
-	    diveSessionInputDto.setEquipment(equipment);
-	    
-	    String location = form.getFirstValue("location");
-	    diveSessionInputDto.setLocationDesc(location);
-	    
-	    String meteo = form.getFirstValue("meteo");
-	    diveSessionInputDto.setMeteoDesc(meteo);
-	    
-		String note = form.getFirstValue("note");
-		diveSessionInputDto.setNote(note);
-		
-	   //check token against external platform
-		ExternalUserFactory.checkExternalToken(externalToken, Integer.parseInt(externalPlatformId));
-		
+            String s_diveDate = form.getFirstValue("dive_date");
+            checkMandatory(s_diveDate, "dive_date");
+            checkDate(s_diveDate, "dive_date");
+            SimpleDateFormat formatter = new SimpleDateFormat(LogbookConstant.DATE_FORMAT);
+    	    Date diveDate = formatter.parse(s_diveDate);
+    	    diveSessionInputDto.setDiveDate(diveDate);
+    	    
+    	    String s_deepUnit = form.getFirstValue("deep_unit");
+    	    checkMandatory(s_deepUnit, "deep_unit");
+    	    checkDeepUnit(s_deepUnit, "deep_unit");
+    	    int deepUnit = Integer.parseInt(s_deepUnit);
+    	    diveSessionInputDto.setDeepUnit(deepUnit);
+    	    
+    	    String s_weightUnit = form.getFirstValue("weight_unit");
+    	    checkMandatory(s_weightUnit,"weight_unit");
+    	    checkWeightUnit(s_weightUnit, "weight_unit");
+    	    int weightUnit = Integer.parseInt(s_weightUnit);
+    	    diveSessionInputDto.setWeightUnit(weightUnit);
+    	    
+    	    String s_tempUnit = form.getFirstValue("temp_unit");
+    	    checkMandatory(s_tempUnit, "temp_unit");
+    	    checkTempUnit(s_tempUnit, "temp_unit");
+    	    int tempUnit = Integer.parseInt(s_tempUnit);   
+    	    diveSessionInputDto.setTempUnit(tempUnit);
+	    	    
+	        String s_deep = form.getFirstValue("deep");
+	        if (s_deep !=null) { 
+	        	checkDouble(s_deep, "deep");
+	        	Double deep = new Double(s_deep);
+	        	diveSessionInputDto.setDeep(deep);
+	        }
+	        
+	        String s_waterTemp = form.getFirstValue("water_temp");
+		    if (s_waterTemp !=null) { 
+		    	checkDouble(s_waterTemp, "water_temp");
+		    	Double waterTemp = new Double(s_waterTemp);
+		    	diveSessionInputDto.setWaterTemp(waterTemp);
+		    }
+		    
+	        String s_weight = form.getFirstValue("weight");
+	        if (s_weight !=null) {
+	        	checkDouble(s_weight, "weight");
+				Double weight = new Double(s_weight);
+				diveSessionInputDto.setWeight(weight);
+	        }			      
+			
+	        
+		    String equipment = form.getFirstValue("equipment"); 
+		    diveSessionInputDto.setEquipment(equipment);
+		    
+		    String location = form.getFirstValue("location");
+		    diveSessionInputDto.setLocationDesc(location);
+		    
+		    String meteo = form.getFirstValue("meteo");
+		    diveSessionInputDto.setMeteoDesc(meteo);
+		    
+			String note = form.getFirstValue("note");
+			diveSessionInputDto.setNote(note);
+        }	
+        
 		return diveSessionInputDto;
 	    
 		

@@ -1,8 +1,8 @@
-<!-- Indices written at Fri, 2 Oct 2015 21:50:01 CEST -->
+<!-- Indices written at Sat, 3 Oct 2015 15:33:10 CEST -->
 
 <datastore-indexes>
 
-    <!-- Used 13 times in query history -->
+    <!-- Used 12 times in query history -->
     <datastore-index kind="DiveSession" ancestor="true" source="auto">
         <property name="diveDate" direction="desc"/>
     </datastore-index>
