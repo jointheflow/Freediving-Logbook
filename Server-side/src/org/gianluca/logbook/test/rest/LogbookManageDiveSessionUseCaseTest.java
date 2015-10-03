@@ -4,7 +4,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.gianluca.logbook.helper.LogbookConstant;
-import org.gianluca.logbook.rest.resource.ErrorResource;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.After;
@@ -22,7 +21,7 @@ import org.restlet.ext.json.JsonRepresentation;
 public class LogbookManageDiveSessionUseCaseTest {
 	//set test constants
 	//get new toke from FB https://developers.facebook.com/tools/explorer
-	private String externalToken="CAAB4GhgAGN0BAEFVBRyESTSAlIRaZAZBfAjRFS4jED9FaZAZCgP0Xdd00eRA7ZBcQ4hJO1PIOJgAnmKUMSCDIZAvCpxnAaAJhX0HrYgw2Vk6e3zRl1EYp1OvFZAtubnWznKs6Yp2IvAG22Vl4ZBZCxrmtPrFXtx1c1NB9ZAUNJpNymwN4HjMyddXCmUNcfKr6v39GwELPBdEez0QZDZD";
+	private String externalToken="CAAB4GhgAGN0BAE5CeinSmVJRSnPso0Lj5kvtNBzYeeI4ZAWYuLsjo0wkVtqHnZAzpzJLP0iC0W5uPxbH8uywkNmaPZAp82CLZAnRmPnJTcZC8MghKB3kTRMYaWtE6rcgOwb2Wcf6UNydU2AUo5ZCQHbRsrOQXbApQeJLNNSKesE279ibJTCF2ttThZAp7jQ1Lqz1FZBnFLe2ngZDZD";
 	//externalId associated to "freediving logbook" user on Facebook
 	@SuppressWarnings("unused")
 	private String externalId = "125927547759071";
@@ -31,6 +30,7 @@ public class LogbookManageDiveSessionUseCaseTest {
 	@SuppressWarnings("unused")
 	private String email = null;
 	private String freediverId = null;
+	private String sessionId=null;
 	
 	private int externalPlatform=LogbookConstant.FACEBOOK_PLATFORM;
 	//Dive sessions data global
@@ -48,7 +48,17 @@ public class LogbookManageDiveSessionUseCaseTest {
 	private String ds1_waterTemp = "20.0";
     private double ds1_weight =5.0;
 	
-   
+  //Dive session2
+  	private String ds2_date="08-03-2015";
+  	private double ds2_deep = 35.6;
+  	private String ds2_equipment = "mask only"; 
+  	private String ds2_location = "Giglio Island";
+  	private String ds2_meteo=  "cloudy";
+  	private String ds2_note= "note 2";
+  	private String ds2_waterTemp = "20.0";
+    private double ds2_weight =5.0;
+  	
+    
     
     private int divePageSize1=1;
    	private String freediverLoginRequest="http://localhost:8888/app/freediver/login?external_platform_id="+externalPlatform+"&external_token="+externalToken;
@@ -75,6 +85,35 @@ public class LogbookManageDiveSessionUseCaseTest {
 			System.out.println(jsonobj.toString());
 			freediverId = (String)jsonobj.get("id");
 			
+			
+			Request providerRequest = new Request(Method.POST, diveSessionAddRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("freediver_id", freediverId);
+			fParam_prov.add("dive_date", ds1_date);
+			fParam_prov.add("deep", Double.toString(ds1_deep));
+			fParam_prov.add("equipment", ds1_equipment); 
+			fParam_prov.add("location", ds1_location);
+			fParam_prov.add("meteo",ds1_meteo);
+			fParam_prov.add("note", ds1_note);
+			fParam_prov.add("water_temp", ds1_waterTemp);
+		    fParam_prov.add("weight", Double.toString(ds1_weight));
+		    fParam_prov.add("deep_unit", Integer.toString(deepUnit));
+		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
+		    fParam_prov.add("temp_unit", Integer.toString(tempUnit));
+		   
+		    System.out.println("Executing POST "+ diveSessionAddRequest);
+		    Client addClient = 	new Client(Protocol.HTTP);		
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = addClient.handle(providerRequest);
+			jsonobj = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj.toString());
+			sessionId = (String)jsonobj.get("id");
+			
+			
+			
 			System.out.println("Login executed by external free diver:"+ freediverId);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -100,14 +139,14 @@ public class LogbookManageDiveSessionUseCaseTest {
 			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
 			fParam_prov.add("external_token", externalToken);
 			fParam_prov.add("freediver_id", freediverId);
-			fParam_prov.add("dive_date", ds1_date);
-			fParam_prov.add("deep", Double.toString(ds1_deep));
-			fParam_prov.add("equipment", ds1_equipment); 
-			fParam_prov.add("location", ds1_location);
-			fParam_prov.add("meteo",ds1_meteo);
-			fParam_prov.add("note", ds1_note);
-			fParam_prov.add("water_temp", ds1_waterTemp);
-		    fParam_prov.add("weight", Double.toString(ds1_weight));
+			fParam_prov.add("dive_date", ds2_date);
+			fParam_prov.add("deep", Double.toString(ds2_deep));
+			fParam_prov.add("equipment", ds2_equipment); 
+			fParam_prov.add("location", ds2_location);
+			fParam_prov.add("meteo",ds2_meteo);
+			fParam_prov.add("note", ds2_note);
+			fParam_prov.add("water_temp", ds2_waterTemp);
+		    fParam_prov.add("weight", Double.toString(ds2_weight));
 		    fParam_prov.add("deep_unit", Integer.toString(deepUnit));
 		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
 		    fParam_prov.add("temp_unit", Integer.toString(tempUnit));
@@ -119,17 +158,17 @@ public class LogbookManageDiveSessionUseCaseTest {
 		
 			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
 			System.out.println(jsonobj_prov.toString());
-			assertTrue(((String)jsonobj_prov.get("note")).equals(ds1_note));
-			assertTrue(((Double)jsonobj_prov.getDouble("waterTempAsCelsius")).doubleValue()==new Double(ds1_waterTemp));
+			assertTrue(((String)jsonobj_prov.get("note")).equals(ds2_note));
+			assertTrue(((Double)jsonobj_prov.getDouble("waterTempAsCelsius")).doubleValue()==new Double(ds2_waterTemp));
 			assertTrue(jsonobj_prov.getDouble("waterTempAsFahrehneit")==68.0);
 			assertTrue(((String)jsonobj_prov.get("externalToken")).equals(externalToken));
-			assertTrue(((String)jsonobj_prov.get("equipment")).equals(ds1_equipment));
-			assertTrue(((Double)jsonobj_prov.getDouble("deepAsMeter")).doubleValue()==new Double(ds1_deep));
+			assertTrue(((String)jsonobj_prov.get("equipment")).equals(ds2_equipment));
+			assertTrue(((Double)jsonobj_prov.getDouble("deepAsMeter")).doubleValue()==new Double(ds2_deep));
 			assertTrue(jsonobj_prov.getDouble("deepAsFeet")==116.79790026200001);
-			assertTrue(((String)jsonobj_prov.get("meteoDesc")).equals(ds1_meteo));
-			assertTrue(((String)jsonobj_prov.get("locationDesc")).equals(ds1_location));
-			assertTrue(((String)jsonobj_prov.get("diveDate")).equals("Sat Mar 07 00:00:00 CET 2015"));
-			assertTrue(jsonobj_prov.getDouble("weightAsKilogram")== ds1_weight);
+			assertTrue(((String)jsonobj_prov.get("meteoDesc")).equals(ds2_meteo));
+			assertTrue(((String)jsonobj_prov.get("locationDesc")).equals(ds2_location));
+			assertTrue(((String)jsonobj_prov.get("diveDate")).equals("Sun Mar 08 00:00:00 CET 2015"));
+			assertTrue(jsonobj_prov.getDouble("weightAsKilogram")== ds2_weight);
 			assertTrue(jsonobj_prov.getDouble("weightAsPound")== 11.023);
 			assertTrue(jsonobj_prov.get("message").equals("Dive session added"));
 			assertTrue(jsonobj_prov.get("result").equals("OK"));
@@ -179,499 +218,7 @@ public class LogbookManageDiveSessionUseCaseTest {
 			assertTrue(jsonobj_prov.getInt("errorCode")==-11);
 			
 			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
-			/*
-			System.out.println("------start missing external token-----");
-			providerClient = new Client(Protocol.HTTP);
-			providerRequest = new Request(Method.POST, diveSessionAddRequest);
-			fParam_prov = new Form();
-			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
-			//fParam_prov.add("external_token", externalToken);
-			fParam_prov.add("freediver_id", freediverId);
-			fParam_prov.add("dive_date", ds1_date);
-			fParam_prov.add("deep", Double.toString(ds1_deep));
-			fParam_prov.add("equipment", ds1_equipment); 
-			fParam_prov.add("location", ds1_location);
-			fParam_prov.add("meteo",ds1_meteo);
-			fParam_prov.add("note", ds1_note);
-			fParam_prov.add("water_temp", ds1_waterTemp);
-		    fParam_prov.add("weight", Double.toString(ds1_weight));
-		    fParam_prov.add("deep_unit", Integer.toString(deepUnit));
-		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
-		    fParam_prov.add("temp_unit", Integer.toString(tempUnit));
-		    
-		    			
-			providerRequest.setEntity(fParam_prov.getWebRepresentation());
-			providerResponse = providerClient.handle(providerRequest);
 			
-		
-			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
-			System.out.println(jsonobj_prov.toString());
-			assertTrue(jsonobj_prov.getString("errorMessage").equals("Parameter external_token missing"));
-			assertTrue(jsonobj_prov.getInt("errorCode")==-11);
-			
-			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
-		
-			System.out.println("------end missing external token-----");
-			
-			
-			
-			
-			
-			System.out.println("------start missing freediver id-----");
-			providerClient = new Client(Protocol.HTTP);
-			providerRequest = new Request(Method.POST, diveSessionAddRequest);
-			fParam_prov = new Form();
-			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
-			fParam_prov.add("external_token", externalToken);
-			//fParam_prov.add("freediver_id", freediverId);
-			fParam_prov.add("dive_date", ds1_date);
-			fParam_prov.add("deep", Double.toString(ds1_deep));
-			fParam_prov.add("equipment", ds1_equipment); 
-			fParam_prov.add("location", ds1_location);
-			fParam_prov.add("meteo",ds1_meteo);
-			fParam_prov.add("note", ds1_note);
-			fParam_prov.add("water_temp", ds1_waterTemp);
-		    fParam_prov.add("weight", Double.toString(ds1_weight));
-		    fParam_prov.add("deep_unit", Integer.toString(deepUnit));
-		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
-		    fParam_prov.add("temp_unit", Integer.toString(tempUnit));
-		    
-		    			
-			providerRequest.setEntity(fParam_prov.getWebRepresentation());
-			providerResponse = providerClient.handle(providerRequest);
-			
-		
-			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
-			System.out.println(jsonobj_prov.toString());
-			assertTrue(jsonobj_prov.getString("errorMessage").equals("Parameter freediver_id missing"));
-			assertTrue(jsonobj_prov.getInt("errorCode")==-11);
-			
-			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
-		
-			System.out.println("------end missing free diver id-----");
-			
-			
-			
-			System.out.println("------start missing dive date-----");
-			providerClient = new Client(Protocol.HTTP);
-			providerRequest = new Request(Method.POST, diveSessionAddRequest);
-			fParam_prov = new Form();
-			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
-			fParam_prov.add("external_token", externalToken);
-			fParam_prov.add("freediver_id", freediverId);
-			//fParam_prov.add("dive_date", ds1_date);
-			fParam_prov.add("deep", Double.toString(ds1_deep));
-			fParam_prov.add("equipment", ds1_equipment); 
-			fParam_prov.add("location", ds1_location);
-			fParam_prov.add("meteo",ds1_meteo);
-			fParam_prov.add("note", ds1_note);
-			fParam_prov.add("water_temp", ds1_waterTemp);
-		    fParam_prov.add("weight", Double.toString(ds1_weight));
-		    fParam_prov.add("deep_unit", Integer.toString(deepUnit));
-		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
-		    fParam_prov.add("temp_unit", Integer.toString(tempUnit));
-		    
-		    			
-			providerRequest.setEntity(fParam_prov.getWebRepresentation());
-			providerResponse = providerClient.handle(providerRequest);
-			
-		
-			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
-			System.out.println(jsonobj_prov.toString());
-			assertTrue(jsonobj_prov.getString("errorMessage").equals("Parameter dive_date missing"));
-			assertTrue(jsonobj_prov.getInt("errorCode")==-11);
-			
-			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
-		
-			System.out.println("------end missing dive date-----");
-			
-			
-			System.out.println("------start missing deep_unit-----");
-			providerClient = new Client(Protocol.HTTP);
-			providerRequest = new Request(Method.POST, diveSessionAddRequest);
-			fParam_prov = new Form();
-			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
-			fParam_prov.add("external_token", externalToken);
-			fParam_prov.add("freediver_id", freediverId);
-			fParam_prov.add("dive_date", ds1_date);
-			fParam_prov.add("deep", Double.toString(ds1_deep));
-			fParam_prov.add("equipment", ds1_equipment); 
-			fParam_prov.add("location", ds1_location);
-			fParam_prov.add("meteo",ds1_meteo);
-			fParam_prov.add("note", ds1_note);
-			fParam_prov.add("water_temp", ds1_waterTemp);
-		    fParam_prov.add("weight", Double.toString(ds1_weight));
-		    //fParam_prov.add("deep_unit", Integer.toString(deepUnit));
-		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
-		    fParam_prov.add("temp_unit", Integer.toString(tempUnit));
-		    
-		    			
-			providerRequest.setEntity(fParam_prov.getWebRepresentation());
-			providerResponse = providerClient.handle(providerRequest);
-			
-		
-			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
-			System.out.println(jsonobj_prov.toString());
-			assertTrue(jsonobj_prov.getString("errorMessage").equals("Parameter deep_unit missing"));
-			assertTrue(jsonobj_prov.getInt("errorCode")==-11);
-			
-			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
-		
-			System.out.println("------end missing deep_unit-----");
-			
-			
-			
-			System.out.println("------start missing weight_unit-----");
-			providerClient = new Client(Protocol.HTTP);
-			providerRequest = new Request(Method.POST, diveSessionAddRequest);
-			fParam_prov = new Form();
-			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
-			fParam_prov.add("external_token", externalToken);
-			fParam_prov.add("freediver_id", freediverId);
-			fParam_prov.add("dive_date", ds1_date);
-			fParam_prov.add("deep", Double.toString(ds1_deep));
-			fParam_prov.add("equipment", ds1_equipment); 
-			fParam_prov.add("location", ds1_location);
-			fParam_prov.add("meteo",ds1_meteo);
-			fParam_prov.add("note", ds1_note);
-			fParam_prov.add("water_temp", ds1_waterTemp);
-		    fParam_prov.add("weight", Double.toString(ds1_weight));
-		    fParam_prov.add("deep_unit", Integer.toString(deepUnit));
-		    //fParam_prov.add("weight_unit", Integer.toString(weightUnit));
-		    fParam_prov.add("temp_unit", Integer.toString(tempUnit));
-		    
-		    			
-			providerRequest.setEntity(fParam_prov.getWebRepresentation());
-			providerResponse = providerClient.handle(providerRequest);
-			
-		
-			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
-			System.out.println(jsonobj_prov.toString());
-			assertTrue(jsonobj_prov.getString("errorMessage").equals("Parameter weight_unit missing"));
-			assertTrue(jsonobj_prov.getInt("errorCode")==-11);
-			
-			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
-		
-			System.out.println("------end missing weight_unit-----");
-			
-			
-			System.out.println("------start missing temp_unit-----");
-			providerClient = new Client(Protocol.HTTP);
-			providerRequest = new Request(Method.POST, diveSessionAddRequest);
-			fParam_prov = new Form();
-			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
-			fParam_prov.add("external_token", externalToken);
-			fParam_prov.add("freediver_id", freediverId);
-			fParam_prov.add("dive_date", ds1_date);
-			fParam_prov.add("deep", Double.toString(ds1_deep));
-			fParam_prov.add("equipment", ds1_equipment); 
-			fParam_prov.add("location", ds1_location);
-			fParam_prov.add("meteo",ds1_meteo);
-			fParam_prov.add("note", ds1_note);
-			fParam_prov.add("water_temp", ds1_waterTemp);
-		    fParam_prov.add("weight", Double.toString(ds1_weight));
-		    fParam_prov.add("deep_unit", Integer.toString(deepUnit));
-		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
-		    //fParam_prov.add("temp_unit", Integer.toString(tempUnit));
-		    
-		    			
-			providerRequest.setEntity(fParam_prov.getWebRepresentation());
-			providerResponse = providerClient.handle(providerRequest);
-			
-		
-			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
-			System.out.println(jsonobj_prov.toString());
-			assertTrue(jsonobj_prov.getString("errorMessage").equals("Parameter temp_unit missing"));
-			assertTrue(jsonobj_prov.getInt("errorCode")==-11);
-			
-			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
-		
-			System.out.println("------end missing temp_unit-----");
-			
-			
-			System.out.println("------start wrong platform id-----");
-			providerClient = new Client(Protocol.HTTP);
-			providerRequest = new Request(Method.POST, diveSessionAddRequest);
-			fParam_prov = new Form();
-			//here we code 8 as platform Id wich is not managed
-			fParam_prov.add("external_platform_id","8");
-			fParam_prov.add("external_token", externalToken);
-			fParam_prov.add("freediver_id", freediverId);
-			fParam_prov.add("dive_date", ds1_date);
-			fParam_prov.add("deep", Double.toString(ds1_deep));
-			fParam_prov.add("equipment", ds1_equipment); 
-			fParam_prov.add("location", ds1_location);
-			fParam_prov.add("meteo",ds1_meteo);
-			fParam_prov.add("note", ds1_note);
-			fParam_prov.add("water_temp", ds1_waterTemp);
-		    fParam_prov.add("weight", Double.toString(ds1_weight));
-		    fParam_prov.add("deep_unit", Integer.toString(deepUnit));
-		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
-		    fParam_prov.add("temp_unit", Integer.toString(tempUnit));
-		    
-		    			
-			providerRequest.setEntity(fParam_prov.getWebRepresentation());
-			providerResponse = providerClient.handle(providerRequest);
-			
-		
-			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
-			System.out.println(jsonobj_prov.toString());
-			//assertTrue(jsonobj_prov.getString("errorMessage").equals("Parameter temp_unit missing"));
-			assertTrue(jsonobj_prov.getInt("errorCode")==ErrorResource.PLATFORM_NOT_MANAGED_ERROR);
-			
-			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
-		
-			System.out.println("------end wrong platform id-----");
-			
-			
-			System.out.println("------start wrong external token -----");
-			providerClient = new Client(Protocol.HTTP);
-			providerRequest = new Request(Method.POST, diveSessionAddRequest);
-			fParam_prov = new Form();
-			
-			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
-			//here we pass a wrong token
-			fParam_prov.add("external_token", "WRONGTOKEN");
-			fParam_prov.add("freediver_id", freediverId);
-			fParam_prov.add("dive_date", ds1_date);
-			fParam_prov.add("deep", Double.toString(ds1_deep));
-			fParam_prov.add("equipment", ds1_equipment); 
-			fParam_prov.add("location", ds1_location);
-			fParam_prov.add("meteo",ds1_meteo);
-			fParam_prov.add("note", ds1_note);
-			fParam_prov.add("water_temp", ds1_waterTemp);
-		    fParam_prov.add("weight", Double.toString(ds1_weight));
-		    fParam_prov.add("deep_unit", Integer.toString(deepUnit));
-		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
-		    fParam_prov.add("temp_unit", Integer.toString(tempUnit));
-		    
-		    			
-			providerRequest.setEntity(fParam_prov.getWebRepresentation());
-			providerResponse = providerClient.handle(providerRequest);
-			
-		
-			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
-			System.out.println(jsonobj_prov.toString());
-			//assertTrue(jsonobj_prov.getString("errorMessage").equals("Parameter temp_unit missing"));
-			assertTrue(jsonobj_prov.getInt("errorCode")==ErrorResource.WRONG_OAUTH_TOKEN);
-			
-			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
-		
-			System.out.println("------end wrong external token-----");
-			
-			System.out.println("------start wrong date format -----");
-			providerClient = new Client(Protocol.HTTP);
-			providerRequest = new Request(Method.POST, diveSessionAddRequest);
-			fParam_prov = new Form();
-			
-			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
-			fParam_prov.add("external_token", externalToken);
-			fParam_prov.add("freediver_id", freediverId);
-			//wrong format date
-			fParam_prov.add("dive_date", "2015/01/22");
-			fParam_prov.add("deep", Double.toString(ds1_deep));
-			fParam_prov.add("equipment", ds1_equipment); 
-			fParam_prov.add("location", ds1_location);
-			fParam_prov.add("meteo",ds1_meteo);
-			fParam_prov.add("note", ds1_note);
-			fParam_prov.add("water_temp", ds1_waterTemp);
-		    fParam_prov.add("weight", Double.toString(ds1_weight));
-		    fParam_prov.add("deep_unit", Integer.toString(deepUnit));
-		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
-		    fParam_prov.add("temp_unit", Integer.toString(tempUnit));
-		    
-		    			
-			providerRequest.setEntity(fParam_prov.getWebRepresentation());
-			providerResponse = providerClient.handle(providerRequest);
-			
-		
-			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
-			System.out.println(jsonobj_prov.toString());
-			assertTrue(jsonobj_prov.getString("errorMessage").startsWith("Parameter dive_date Unparseable date:"));
-			assertTrue(jsonobj_prov.getInt("errorCode")==ErrorResource.WRONG_PARAMETER_ERROR);
-			
-			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
-		
-			System.out.println("------end wrong external token-----");
-			
-			
-			
-			
-			System.out.println("------start wrong freediver id -----");
-			providerClient = new Client(Protocol.HTTP);
-			providerRequest = new Request(Method.POST, diveSessionAddRequest);
-			fParam_prov = new Form();
-			
-			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
-			fParam_prov.add("external_token", externalToken);
-			//wrong feeediver id
-			fParam_prov.add("freediver_id", "unkown");
-			fParam_prov.add("dive_date", ds1_date);
-			fParam_prov.add("deep", Double.toString(ds1_deep));
-			fParam_prov.add("equipment", ds1_equipment); 
-			fParam_prov.add("location", ds1_location);
-			fParam_prov.add("meteo",ds1_meteo);
-			fParam_prov.add("note", ds1_note);
-			fParam_prov.add("water_temp", ds1_waterTemp);
-		    fParam_prov.add("weight", Double.toString(ds1_weight));
-		    fParam_prov.add("deep_unit", Integer.toString(deepUnit));
-		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
-		    fParam_prov.add("temp_unit", Integer.toString(tempUnit));
-		    
-		    			
-			providerRequest.setEntity(fParam_prov.getWebRepresentation());
-			providerResponse = providerClient.handle(providerRequest);
-			
-		
-			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
-			System.out.println(jsonobj_prov.toString());
-			assertTrue(jsonobj_prov.getString("errorMessage").startsWith("Could not parse Reference"));
-			assertTrue(jsonobj_prov.getInt("errorCode")==ErrorResource.FREEDIVER_ID_ERROR);
-			
-			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
-		
-			System.out.println("------end wrong freediver id-----");
-			
-			
-			System.out.println("------start wrong deep unit format -----");
-			providerClient = new Client(Protocol.HTTP);
-			providerRequest = new Request(Method.POST, diveSessionAddRequest);
-			fParam_prov = new Form();
-			
-			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
-			fParam_prov.add("external_token", externalToken);
-			fParam_prov.add("freediver_id", freediverId);
-			fParam_prov.add("dive_date", ds1_date);
-			fParam_prov.add("deep", Double.toString(ds1_deep));
-			fParam_prov.add("equipment", ds1_equipment); 
-			fParam_prov.add("location", ds1_location);
-			fParam_prov.add("meteo",ds1_meteo);
-			fParam_prov.add("note", ds1_note);
-			fParam_prov.add("water_temp", ds1_waterTemp);
-		    fParam_prov.add("weight", Double.toString(ds1_weight));
-		    //wrong deep unit
-		    fParam_prov.add("deep_unit", Integer.toString(5));
-		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
-		    fParam_prov.add("temp_unit", Integer.toString(tempUnit));
-		    
-		    			
-			providerRequest.setEntity(fParam_prov.getWebRepresentation());
-			providerResponse = providerClient.handle(providerRequest);
-			
-		
-			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
-			System.out.println(jsonobj_prov.toString());
-			assertTrue(jsonobj_prov.getString("errorMessage").startsWith("Parameter deep_unit wrong value"));
-			assertTrue(jsonobj_prov.getInt("errorCode")==ErrorResource.WRONG_PARAMETER_ERROR);
-			
-			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
-		
-			System.out.println("------end wrong deep unit format-----");
-			
-			System.out.println("------start wrong weight unit format -----");
-			providerClient = new Client(Protocol.HTTP);
-			providerRequest = new Request(Method.POST, diveSessionAddRequest);
-			fParam_prov = new Form();
-			
-			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
-			fParam_prov.add("external_token", externalToken);
-			fParam_prov.add("freediver_id", freediverId);
-			fParam_prov.add("dive_date", ds1_date);
-			fParam_prov.add("deep", Double.toString(ds1_deep));
-			fParam_prov.add("equipment", ds1_equipment); 
-			fParam_prov.add("location", ds1_location);
-			fParam_prov.add("meteo",ds1_meteo);
-			fParam_prov.add("note", ds1_note);
-			fParam_prov.add("water_temp", ds1_waterTemp);
-		    fParam_prov.add("weight", Double.toString(ds1_weight));
-		    fParam_prov.add("deep_unit", Integer.toString(0));
-		    //wrong weight unit
-		    fParam_prov.add("weight_unit", Integer.toString(5));
-		    fParam_prov.add("temp_unit", Integer.toString(tempUnit));
-		    
-		    			
-			providerRequest.setEntity(fParam_prov.getWebRepresentation());
-			providerResponse = providerClient.handle(providerRequest);
-			
-		
-			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
-			System.out.println(jsonobj_prov.toString());
-			assertTrue(jsonobj_prov.getString("errorMessage").startsWith("Parameter weight_unit wrong value"));
-			assertTrue(jsonobj_prov.getInt("errorCode")==ErrorResource.WRONG_PARAMETER_ERROR);
-			
-			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
-		
-			System.out.println("------end wrong weight unit format-----");
-			
-			
-			System.out.println("------start wrong temp unit format -----");
-			providerClient = new Client(Protocol.HTTP);
-			providerRequest = new Request(Method.POST, diveSessionAddRequest);
-			fParam_prov = new Form();
-			
-			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
-			fParam_prov.add("external_token", externalToken);
-			fParam_prov.add("freediver_id", freediverId);
-			fParam_prov.add("dive_date", ds1_date);
-			fParam_prov.add("deep", Double.toString(ds1_deep));
-			fParam_prov.add("equipment", ds1_equipment); 
-			fParam_prov.add("location", ds1_location);
-			fParam_prov.add("meteo",ds1_meteo);
-			fParam_prov.add("note", ds1_note);
-			fParam_prov.add("water_temp", ds1_waterTemp);
-		    fParam_prov.add("weight", Double.toString(ds1_weight));
-		    fParam_prov.add("deep_unit", Integer.toString(0));
-		   fParam_prov.add("weight_unit", Integer.toString(0));
-		    fParam_prov.add("temp_unit", Integer.toString(5));
-		    
-		    			
-			providerRequest.setEntity(fParam_prov.getWebRepresentation());
-			providerResponse = providerClient.handle(providerRequest);
-			
-		
-			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
-			System.out.println(jsonobj_prov.toString());
-			assertTrue(jsonobj_prov.getString("errorMessage").startsWith("Parameter temp_unit wrong value"));
-			assertTrue(jsonobj_prov.getInt("errorCode")==ErrorResource.WRONG_PARAMETER_ERROR);
-			
-			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
-		
-			System.out.println("------end wrong temp unit format-----");
-			
-			
-			System.out.println("------start wrong temp unit value number format exception -----");
-			providerClient = new Client(Protocol.HTTP);
-			providerRequest = new Request(Method.POST, diveSessionAddRequest);
-			fParam_prov = new Form();
-			
-			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
-			fParam_prov.add("external_token", externalToken);
-			fParam_prov.add("freediver_id", freediverId);
-			fParam_prov.add("dive_date", ds1_date);
-			fParam_prov.add("deep", Double.toString(ds1_deep));
-			fParam_prov.add("equipment", ds1_equipment); 
-			fParam_prov.add("location", ds1_location);
-			fParam_prov.add("meteo",ds1_meteo);
-			fParam_prov.add("note", ds1_note);
-			fParam_prov.add("water_temp", ds1_waterTemp);
-		    fParam_prov.add("weight", Double.toString(ds1_weight));
-		    fParam_prov.add("deep_unit", Integer.toString(0));
-		    fParam_prov.add("weight_unit", Integer.toString(0));
-		    fParam_prov.add("temp_unit", "A");
-		    
-		    			
-			providerRequest.setEntity(fParam_prov.getWebRepresentation());
-			providerResponse = providerClient.handle(providerRequest);
-			
-		
-			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
-			System.out.println(jsonobj_prov.toString());
-			assertTrue(jsonobj_prov.getString("errorMessage").startsWith("Parameter temp_unit For input string:"));
-			assertTrue(jsonobj_prov.getInt("errorCode")==ErrorResource.WRONG_PARAMETER_ERROR);
-			
-			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
-		*/
-			System.out.println("------endwrong temp unit value number format exception -----");
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -691,7 +238,7 @@ public class LogbookManageDiveSessionUseCaseTest {
 	public void updateAndRemoveDiveSession() {
 		try {
 			
-			System.out.println("-----Start addDiveSession()---------");
+			/*System.out.println("-----Start addDiveSession()---------");
 			Client providerClient = new Client(Protocol.HTTP);
 			Request providerRequest = new Request(Method.POST, diveSessionAddRequest);
 			//create a post entity for Representation
@@ -722,7 +269,7 @@ public class LogbookManageDiveSessionUseCaseTest {
 			//get divesession of session added
 			String divesessionId = jsonobj_prov.getString("id");
 			System.out.println("-----End addDiveSession()---------");
-			
+			*/
 			System.out.println("-----Start updateDiveSession()---------");
 			//changed data
 			String ds2_date = "07-04-2015";
@@ -734,13 +281,13 @@ public class LogbookManageDiveSessionUseCaseTest {
 			String ds2_waterTemp = "23";
 			double ds2_weight= 1;
 			
-			providerClient = new Client(Protocol.HTTP);
-			providerRequest = new Request(Method.POST, diveSessionUpdateRequest);
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionUpdateRequest);
 			//create a post entity for Representation
-			fParam_prov = new Form();
+			Form fParam_prov = new Form();
 			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
 			fParam_prov.add("external_token", externalToken);
-			fParam_prov.add("divesession_id", divesessionId);
+			fParam_prov.add("divesession_id", sessionId);
 			//change date
 			fParam_prov.add("dive_date", ds2_date);
 			//change deep
@@ -765,10 +312,10 @@ public class LogbookManageDiveSessionUseCaseTest {
 		    
 		    			
 			providerRequest.setEntity(fParam_prov.getWebRepresentation());
-			providerResponse = providerClient.handle(providerRequest);
+			Response providerResponse = providerClient.handle(providerRequest);
 			
 		
-			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			JSONObject jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
 			System.out.println(jsonobj_prov.toString());
 			
 			
@@ -789,32 +336,7 @@ public class LogbookManageDiveSessionUseCaseTest {
 			
 			assertTrue(providerResponse.getStatus().getCode()==Status.SUCCESS_OK.getCode());
 			System.out.println("-----End updateDiveSession()---------");
-			
-			
-			
-			
-			System.out.println("-----Start RemoveDiveSession()---------");
-			providerClient = new Client(Protocol.HTTP);
-			providerRequest = new Request(Method.POST, diveSessionRemoveRequest);
-			//create a post entity for Representation
-			fParam_prov = new Form();
-			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
-			fParam_prov.add("external_token", externalToken);
-			fParam_prov.add("divesession_id", divesessionId);
-			
-			
-			providerRequest.setEntity(fParam_prov.getWebRepresentation());
-			providerResponse = providerClient.handle(providerRequest);
-			
-		
-			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
-			System.out.println(jsonobj_prov.toString());
-			assertTrue(jsonobj_prov.get("message").equals("Dive session removed"));
-			assertTrue(jsonobj_prov.get("result").equals("OK"));
-			
-			assertTrue(providerResponse.getStatus().getCode()==Status.SUCCESS_OK.getCode());
-			System.out.println("-----End RemoveDiveSession()---------");
-			
+				
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1627,5 +1149,1081 @@ public class LogbookManageDiveSessionUseCaseTest {
 		
 	}
 
+	@Test
+	public void updateDiveSessionMissingDeepUnit() {
+		try {
+			
+			System.out.println("-----Start updateDiveSessionMissingDeepUnit()---------");
+			
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionUpdateRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+			
+			
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("external_platform_id", Integer.toString(externalPlatform));
+			fParam_prov.add("divesession_id", sessionId);
+			fParam_prov.add("dive_date", ds1_date);
+			//fParam_prov.add("deep_unit", Integer.toString(deepUnit));
+		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
+		    fParam_prov.add("temp_unit", Integer.toString(tempUnit));
+		    
+			
+		    			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			JSONObject jsonobj_prov;
+		
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			assertTrue(jsonobj_prov.getString("errorMessage").equals("Parameter deep_unit missing"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==-11);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End updateDiveSessionMissingDeepUnit()---------");
+		
+	}
+
+	@Test
+	public void updateDiveSessionMissingDiveDate() {
+		try {
+			
+			System.out.println("-----Start updateDiveSessionMissingDiveDate()---------");
+			
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionUpdateRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+			
+			
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("external_platform_id", Integer.toString(externalPlatform));
+			fParam_prov.add("divesession_id", sessionId);
+			//fParam_prov.add("dive_date", ds1_date);
+			
+		    			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			JSONObject jsonobj_prov;
+		
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			assertTrue(jsonobj_prov.getString("errorMessage").equals("Parameter dive_date missing"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==-11);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End updateDiveSessionMissingDiveDate()---------");
+		
+	}
+
+	@Test
+	public void updateDiveSessionMissingExternalPlatformId() {
+		try {
+			
+			System.out.println("-----Start updateDiveSessionMissingExternalPlatformId()---------");
+			
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionUpdateRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+			
+			
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("divesession_id", sessionId);
+			fParam_prov.add("dive_date", ds1_date);
+			
+		    			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			JSONObject jsonobj_prov;
+		
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			assertTrue(jsonobj_prov.getString("errorMessage").equals("Parameter external_platform_id missing"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==-11);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End updateDiveSessionMissingExternalPlatformId()---------");
+		
+	}
+
+	@Test
+	public void updateDiveSessionMissingExternalToken() {
+		try {
+			
+			System.out.println("-----Start updateDiveSessionMissingExternalToken()---------");
+			
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionUpdateRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+			
+			
+			//fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("external_platform_id", Integer.toString(externalPlatform));
+			fParam_prov.add("divesession_id", sessionId);
+			fParam_prov.add("dive_date", ds1_date);
+			
+		    			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			JSONObject jsonobj_prov;
+		
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			assertTrue(jsonobj_prov.getString("errorMessage").equals("Parameter external_token missing"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==-11);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End updateDiveSessionMissingExternalToken()---------");
+		
+	}
+
+	@Test
+	public void updateDiveSessionMissingDivesessionId() {
+		try {
+			
+			System.out.println("-----Start updateDiveSessionMissingDivesessionId()---------");
+			
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionUpdateRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+			
+			
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("external_platform_id", Integer.toString(externalPlatform));
+			//fParam_prov.add("freediver_id", freediverId);
+			fParam_prov.add("dive_date", ds1_date);
+			
+		    			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			JSONObject jsonobj_prov;
+		
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			assertTrue(jsonobj_prov.getString("errorMessage").equals("Parameter divesession_id missing"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==-11);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End updateDiveSessionMissingDivesessionId()---------");
+		
+	}
+
+	@Test
+	public void updateDiveSessionMissingTempUnit() {
+		try {
+			
+			System.out.println("-----Start updateDiveSessionMissingTempUnit()---------");
+			
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionUpdateRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+			
+			
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("external_platform_id", Integer.toString(externalPlatform));
+			fParam_prov.add("divesession_id", sessionId);
+			fParam_prov.add("dive_date", ds1_date);
+			fParam_prov.add("deep_unit", Integer.toString(deepUnit));
+		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
+		    //fParam_prov.add("temp_unit", Integer.toString(tempUnit));
+		    
+			
+		    			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			JSONObject jsonobj_prov;
+		
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			assertTrue(jsonobj_prov.getString("errorMessage").equals("Parameter temp_unit missing"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==-11);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End updateDiveSessionMissingTempUnit()---------");
+		
+	}
+
+	@Test
+	public void updateDiveSessionMissingWeightUnit() {
+		try {
+			
+			System.out.println("-----Start updateDiveSessionMissingWeightUnit()---------");
+			
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionUpdateRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+			
+			
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("external_platform_id", Integer.toString(externalPlatform));
+			fParam_prov.add("divesession_id", sessionId);
+			fParam_prov.add("dive_date", ds1_date);
+			fParam_prov.add("deep_unit", Integer.toString(deepUnit));
+		    //fParam_prov.add("weight_unit", Integer.toString(weightUnit));
+		    fParam_prov.add("temp_unit", Integer.toString(tempUnit));
+		    
+			
+		    			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			JSONObject jsonobj_prov;
+		
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			assertTrue(jsonobj_prov.getString("errorMessage").equals("Parameter weight_unit missing"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==-11);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End updateDiveSessionMissingWeightUnit()---------");
+		
+	}
+
+	@Test
+	public void updateDiveSessionNotExistSession() {
+		try {
+			
+			System.out.println("-----Start UpdateDiveSessionNotExistSession()---------");
+			
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionUpdateRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+			
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("external_platform_id", Integer.toString(externalPlatform));
+			fParam_prov.add("divesession_id", "aglub19hcHBfazRyJwsSCUZyZWVkaXZlciIYRkFDRUJPT0stMTI1OTI3NTQ3NzU5MDcxDB");
+			fParam_prov.add("dive_date", ds1_date);
+			fParam_prov.add("deep_unit", Integer.toString(deepUnit));
+		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
+		    fParam_prov.add("temp_unit", Integer.toString(tempUnit));
+		    
+		    providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			JSONObject jsonobj_prov;
+		
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			//assertTrue(jsonobj_prov.getString("errorMessage").contains("Cannot parse:"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==-13);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End UpdateDiveSessionNotExistSession()---------");
+		
+	}
+
+	@Test
+	public void updateDiveSessionWrongDate() {
+		try {
+			
+			System.out.println("-----Start updateDiveSessionWrongDate()---------");
+			
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionUpdateRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+			
+			
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("external_platform_id", Integer.toString(externalPlatform));
+			fParam_prov.add("divesession_id", sessionId);
+			fParam_prov.add("dive_date", "wrong-date");
+			
+		    			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			JSONObject jsonobj_prov;
+		
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			//assertTrue(jsonobj_prov.get("ErrorMessage").equals("Platform with code:8 is not managed!"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==-11);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End updateDiveSessionWrongDate()---------");
+		
+	}
+
+	@Test
+	public void updateDiveSessionWrongDeepUnit() {
+		try {
+			
+			System.out.println("-----Start updateDiveSessionWrongDeepUnit()---------");
+			
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionUpdateRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+			
+			
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("external_platform_id", Integer.toString(externalPlatform));
+			fParam_prov.add("divesession_id", sessionId);
+			fParam_prov.add("dive_date", ds1_date);
+			fParam_prov.add("deep_unit", "10");
+		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
+		    fParam_prov.add("temp_unit", Integer.toString(tempUnit));
+		    
+			
+		    			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			JSONObject jsonobj_prov;
+		
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			assertTrue(jsonobj_prov.getString("errorMessage").equals("Parameter  deep_unit  wrong value"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==-11);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End updateDiveSessionWrongDeepUnit()---------");
+		
+	}
+
+	@Test
+	public void updateDiveSessionWrongDoubleValue() {
+		try {
+			
+			System.out.println("-----Start updateDiveSessionWrongDoubleValue()---------");
+			
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionUpdateRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+			
+			
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("external_platform_id", Integer.toString(externalPlatform));
+			fParam_prov.add("divesession_id", sessionId);
+			fParam_prov.add("dive_date", ds1_date);
+			fParam_prov.add("deep_unit", Integer.toString(deepUnit));
+		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
+		    fParam_prov.add("temp_unit", Integer.toString(tempUnit));
+		    
+		    fParam_prov.add("deep", "NOT DOUBLE");
+		    
+			
+		    			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			JSONObject jsonobj_prov;
+		
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			//assertTrue(jsonobj_prov.getString("errorMessage").contains("not integer"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==-11);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End updateDiveSessionWrongDoubleValue()---------");
+		
+	}
+
+	@Test
+	public void updateDiveSessionWrongDivesessionId() {
+		try {
+			
+			System.out.println("-----Start updateDiveSessionWrongDivesessionId()---------");
+			
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionUpdateRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+			
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("external_platform_id", Integer.toString(externalPlatform));
+			fParam_prov.add("divesession_id", "wrongfreediver");
+			fParam_prov.add("dive_date", ds1_date);
+			fParam_prov.add("deep_unit", Integer.toString(deepUnit));
+		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
+		    fParam_prov.add("temp_unit", Integer.toString(tempUnit));
+		    		    			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			JSONObject jsonobj_prov;
+		
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			//assertTrue(jsonobj_prov.getString("errorMessage").contains("Cannot parse:"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==-13);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End updateDiveSessionWrongDivesessionId()---------");
+		
+	}
+
+	@Test
+	public void updateDiveSessionWrongIntegerValue() {
+		try {
+			
+			System.out.println("-----Start updateDiveSessionWrongIntegerValue()---------");
+			
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionUpdateRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+			
+			
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("external_platform_id", Integer.toString(externalPlatform));
+			fParam_prov.add("divesession_id", freediverId);
+			fParam_prov.add("dive_date", ds1_date);
+			fParam_prov.add("deep_unit", Integer.toString(deepUnit));
+		    fParam_prov.add("weight_unit", "not integer");
+		    fParam_prov.add("temp_unit", Integer.toString(tempUnit));
+		    
+			
+		    			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			JSONObject jsonobj_prov;
+		
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			//assertTrue(jsonobj_prov.getString("errorMessage").contains("not integer"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==-11);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End updateDiveSessionWrongIntegerValue()---------");
+		
+	}
+
+	@Test
+	public void updateDiveSessionWrongPlatformId() {
+		try {
+			
+			System.out.println("-----Start updateDiveSessionWrongPlatformId()---------");
+			
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionUpdateRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+			
+			
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("external_platform_id", "666");
+			fParam_prov.add("divesession_id", sessionId);
+			fParam_prov.add("dive_date", ds1_date);
+			
+		    			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			JSONObject jsonobj_prov;
+		
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			//assertTrue(jsonobj_prov.get("ErrorMessage").equals("Platform with code:8 is not managed!"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==-9);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End updateDiveSessionWrongPlatformId()---------");
+		
+	}
+
+	@Test
+	public void updateDiveSessionWrongTempUnit() {
+		try {
+			
+			System.out.println("-----Start updateDiveSessionWrongTempUnit()---------");
+			
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionUpdateRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+				
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("external_platform_id", Integer.toString(externalPlatform));
+			fParam_prov.add("divesession_id", sessionId);
+			fParam_prov.add("dive_date", ds1_date);
+			fParam_prov.add("deep_unit", Integer.toString(deepUnit));
+		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
+		    fParam_prov.add("temp_unit", Integer.toString(10));
+		    			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			JSONObject jsonobj_prov;
+		
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			assertTrue(jsonobj_prov.getString("errorMessage").equals("Parameter temp_unit wrong value"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==-11);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End updateDiveSessionWrongTempUnit()---------");
+		
+	}
+
+	@Test
+	public void updateDiveSessionWrongToken() {
+		try {
+			
+			System.out.println("-----Start updateDiveSessionWrongToken()---------");
+			
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionUpdateRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+			
+			
+			fParam_prov.add("external_token", "wrong");
+			fParam_prov.add("external_platform_id", Integer.toString(externalPlatform));
+			fParam_prov.add("divesession_id", sessionId);
+			fParam_prov.add("dive_date", ds1_date);
+			
+		    			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			JSONObject jsonobj_prov;
+		
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			
+			assertTrue(jsonobj_prov.getInt("errorCode")==-7);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End updateDiveSessionWrongToken()---------");
+		
+	}
+
+	@Test
+	public void updateDiveSessionWrongWeightUnit() {
+		try {
+			
+			System.out.println("-----Start updateDiveSessionWrongWeightUnit()---------");
+			
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionUpdateRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+			
+			
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("external_platform_id", Integer.toString(externalPlatform));
+			fParam_prov.add("divesession_id", sessionId);
+			fParam_prov.add("dive_date", ds1_date);
+			fParam_prov.add("deep_unit", Integer.toString(deepUnit));
+		    fParam_prov.add("weight_unit", Integer.toString(10));
+		    fParam_prov.add("temp_unit", Integer.toString(tempUnit));
+		    
+			
+		    			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			JSONObject jsonobj_prov;
+		
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			assertTrue(jsonobj_prov.getString("errorMessage").equals("Parameter weight_unit wrong value"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==-11);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End updateDiveSessionWrongWeightUnit()---------");
+		
+	}
 	
+	@Test
+	public void removeDiveSession() {
+		try {
+			
+			System.out.println("-----Start removeDiveSession()---------");		
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionRemoveRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+	
+			providerClient = new Client(Protocol.HTTP);
+			providerRequest = new Request(Method.POST, diveSessionRemoveRequest);
+			//create a post entity for Representation
+			fParam_prov = new Form();
+			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("divesession_id", sessionId);
+			
+			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			
+		
+			JSONObject jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			assertTrue(jsonobj_prov.get("message").equals("Dive session removed"));
+			assertTrue(jsonobj_prov.get("result").equals("OK"));
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.SUCCESS_OK.getCode());
+			
+	
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End RemoveDiveSession()---------");
+	}	
+
+	@Test
+	public void removeDiveSessionMissinngExternalPlatform() {
+		try {
+			
+			System.out.println("-----Start removeDiveSession()---------");		
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionRemoveRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+	
+			providerClient = new Client(Protocol.HTTP);
+			providerRequest = new Request(Method.POST, diveSessionRemoveRequest);
+			//create a post entity for Representation
+			fParam_prov = new Form();
+			//fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("divesession_id", sessionId);
+			
+			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			
+		
+			JSONObject jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			assertTrue(jsonobj_prov.getString("errorMessage").equals("Parameter external_platform_id missing"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==-11);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			
+	
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End RemoveDiveSession()---------");
+	}	
+
+	@Test
+	public void removeDiveSessionMissinngExternalToken() {
+		try {
+			
+			System.out.println("-----Start removeDiveSession()---------");		
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionRemoveRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+	
+			providerClient = new Client(Protocol.HTTP);
+			providerRequest = new Request(Method.POST, diveSessionRemoveRequest);
+			//create a post entity for Representation
+			fParam_prov = new Form();
+			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
+			//fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("divesession_id", sessionId);
+			
+			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			
+		
+			JSONObject jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			assertTrue(jsonobj_prov.getString("errorMessage").equals("Parameter external_token missing"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==-11);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			
+	
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End removeDiveSessionMissinngExternalToken()---------");
+	}	
+
+	@Test
+	public void removeDiveSessionMissingDiveSessionId() {
+		try {
+			
+			System.out.println("-----Start removeDiveSessionMissingDiveSessionId()---------");		
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionRemoveRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+	
+			providerClient = new Client(Protocol.HTTP);
+			providerRequest = new Request(Method.POST, diveSessionRemoveRequest);
+			//create a post entity for Representation
+			fParam_prov = new Form();
+			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
+			fParam_prov.add("external_token", externalToken);
+			//fParam_prov.add("divesession_id", sessionId);
+			
+			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			
+		
+			JSONObject jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			assertTrue(jsonobj_prov.getString("errorMessage").equals("Parameter divesession_id missing"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==-11);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			
+	
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End removeDiveSessionMissingDiveSessionId()---------");
+	}
+
+	@Test
+	public void removeDiveSessionWrongToken() {
+		try {
+			
+			System.out.println("-----Start removeDiveSessionWrongToken()---------");		
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionRemoveRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+	
+			providerClient = new Client(Protocol.HTTP);
+			providerRequest = new Request(Method.POST, diveSessionRemoveRequest);
+			//create a post entity for Representation
+			fParam_prov = new Form();
+			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
+			fParam_prov.add("external_token", "wrongtoken");
+			fParam_prov.add("divesession_id", sessionId);
+			
+			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			
+		
+			JSONObject jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			
+			assertTrue(jsonobj_prov.getInt("errorCode")==-7);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			
+	
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End removeDiveSessionWrongToken()---------");
+	}
+
+	@Test
+	public void removeDiveSessionNotExistSession() {
+		try {
+			
+			System.out.println("-----Start removeDiveSessionNotExistSession()---------");		
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionRemoveRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+	
+			providerClient = new Client(Protocol.HTTP);
+			providerRequest = new Request(Method.POST, diveSessionRemoveRequest);
+			//create a post entity for Representation
+			fParam_prov = new Form();
+			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("divesession_id", "aglub19hcHBfazRyJwsSCUZyZWVkaXZlciIYRkFDRUJPT0stMTI1OTI3NTQ3NzU5MDcxDB");
+			
+			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			
+		
+			JSONObject jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			
+			assertTrue(jsonobj_prov.getInt("errorCode")==-13);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			
+	
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End removeDiveSessionNotExistSession()---------");
+	}	
+
 }

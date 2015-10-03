@@ -224,7 +224,7 @@ public class LogbookDAO {
 		Transaction tx = datastore.beginTransaction();
 			try {
 				
-				//ONLY CHECK IF freediverId exists!!!
+				//ONLY CHECK IF freediverId exists (referential integrity constraint)!!!
 				datastore.get(KeyFactory.stringToKey(freediverId));
 				
 				Entity e_diveSession = new Entity("DiveSession", KeyFactory.stringToKey(freediverId));
@@ -245,7 +245,7 @@ public class LogbookDAO {
 			
 			} catch (EntityNotFoundException e) {
 				log.info(e.getMessage());
-				throw new FreediverIdException(e.getMessage());
+				throw new FreediverIdException("Referential integrity constraint violation: Freediver id not exists");
 				
 				
 			} finally {
@@ -387,6 +387,9 @@ public class LogbookDAO {
 		Transaction tx = datastore.beginTransaction();
 			try {
 				
+				//ONLY CHECK IF divesessionId exists (referential integrity constraint)!!!
+				datastore.get(KeyFactory.stringToKey(divesessionId));
+				
 				Entity e_dive = new Entity("Dive", KeyFactory.stringToKey(divesessionId));
 				
 				LogbookEntityFactory.populateEntityDive(e_dive, diveTime_minute, diveType, duration_second, equipment, deep, neutralBuoyancy, note, weight, depthWaterTemp, deepUnit, tempUnit, weightUnit);
@@ -403,6 +406,10 @@ public class LogbookDAO {
 				throw new DiveSessionIdException(e.getMessage());
 				
 			
+			} catch (EntityNotFoundException e) {
+				log.info(e.getMessage());
+				throw new DiveSessionIdException("Referential integrity constraint violation: Dive sessionId not exists");
+				
 			} finally {
 			    if (tx.isActive()) {
 			        tx.rollback();
