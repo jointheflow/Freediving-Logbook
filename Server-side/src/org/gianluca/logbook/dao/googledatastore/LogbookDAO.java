@@ -484,9 +484,9 @@ public class LogbookDAO {
 		}
 	}
 
-	/*Get all dives of session by the session key passed as parameter*/
-	public static DivesOfDiveSession getDivesBySession(String diveSessionId){
-		
+	/*Get complete dive session by the session key passed as parameter*/
+	public static DiveSession getDiveSession(String diveSessionId) throws DiveSessionIdException{
+		DiveSession ds = null;
 		List<Dive> dives = null;
 		DivesOfDiveSession dOfSession = null;
 		
@@ -494,6 +494,9 @@ public class LogbookDAO {
 		Transaction tx = datastore.beginTransaction();
 		
 		try {
+			//get DiveSession
+			Entity e_divesession = datastore.get(KeyFactory.stringToKey(diveSessionId));
+			ds = LogbookEntityFactory.createDiveSessionFromEntity(e_divesession);
 			
 			//get all dives descend from diveSessionId key ancestor
 			Query q = new Query("Dive").setAncestor(KeyFactory.stringToKey(diveSessionId));//addSort("diveTime",SortDirection.DESCENDING);		
@@ -516,16 +519,22 @@ public class LogbookDAO {
 				
 			}
 			
-			
+			//if exist set dives
+			ds.setDives(dOfSession);
 				
 			tx.commit();
+			
+		} catch (EntityNotFoundException e) {
+			log.info(e.getMessage());
+			throw new DiveSessionIdException(e.getMessage());
+			
 		} finally {
 		    if (tx.isActive()) {
 		        tx.rollback();
 		    }
 		}
 		
-	     return dOfSession;
+	     return ds;
 	}
 	
 	/*build a freediver key basing on external id and external platform id*/

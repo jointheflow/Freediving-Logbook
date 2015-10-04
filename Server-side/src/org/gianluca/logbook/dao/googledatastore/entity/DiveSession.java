@@ -21,7 +21,14 @@ public class DiveSession {
 	private double weightAsKilogram;
 	private double weightAsPound;
 	private Text note;
+	private DivesOfDiveSession dives;
 	
+	public DivesOfDiveSession getDives() {
+		return dives;
+	}
+	public void setDives(DivesOfDiveSession dives) {
+		this.dives = dives;
+	}
 	public String getId() {
 		return id;
 	}

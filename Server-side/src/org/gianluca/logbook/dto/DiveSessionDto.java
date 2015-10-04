@@ -1,6 +1,7 @@
 package org.gianluca.logbook.dto;
 
 import java.util.Date;
+import java.util.List;
 
 public class DiveSessionDto extends LogbookDto {
 	public String id ;
@@ -17,6 +18,8 @@ public class DiveSessionDto extends LogbookDto {
 	public Double weightAsKilogram;
 	public Double weightAsPound;
 	public String note;
+	
+	public List<DiveDto>dives;
 	
 	public String getId() {
 		return id;

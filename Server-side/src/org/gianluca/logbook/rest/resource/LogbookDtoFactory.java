@@ -26,6 +26,7 @@ public class LogbookDtoFactory {
 	public static int REQUEST_ADD = 0;
 	public static int REQUEST_UPDATE =1;
 	public static int REQUEST_REMOVE = 2;
+	public static int REQUEST_GET = 3;
 	
 	public static void checkMandatory(String value, String name) throws WrongParameterException {
 		if (value==null) throw new WrongParameterException("Parameter "+name+" missing");
@@ -131,7 +132,7 @@ public class LogbookDtoFactory {
 		ExternalUserFactory.checkExternalToken(externalToken, new Integer(s_externalPlatformId));
 			    
 		
-		if (requestType == REQUEST_ADD) {
+		if (requestType == REQUEST_ADD || requestType == REQUEST_GET) {
 			String sessionId = form.getFirstValue("divesession_id");
 		    checkMandatory(sessionId, "divesession_id");
 		    diveInput.setDiveSessionId(sessionId);
@@ -369,6 +370,11 @@ public class LogbookDtoFactory {
 		dsDto.setWaterTempAsFahrehneit(ds.getWaterTempAsFahrehneit());
 		dsDto.setWeightAsKilogram(ds.getWeightAsKilogram());
 		dsDto.setWeightAsPound(ds.getWeightAsPound());
+		
+		if (ds.getDives()!=null) {
+			//TODO check all dives and add to dive session using createDiveDtoFromEntity
+		}
+		
 		return dsDto;
 		
 	}
