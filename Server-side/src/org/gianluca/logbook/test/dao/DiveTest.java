@@ -55,7 +55,13 @@ public class DiveTest {
 		
 		//first test empty dive session
 		//get all dives of divesession 
-		DivesOfDiveSession emptySession = LogbookDAO.getDivesBySession(ds.getId()); 
+		DivesOfDiveSession emptySession = null;
+		try {
+			emptySession = LogbookDAO.getDiveSession(ds.getId()).getDives();
+		} catch (DiveSessionIdException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} 
 		
 				
 				
@@ -122,7 +128,13 @@ public class DiveTest {
 		}
 		
 		//get all dives of divesession 
-		DivesOfDiveSession dOfDsPag1 = LogbookDAO.getDivesBySession(ds.getId()); 
+		DivesOfDiveSession dOfDsPag1 = null;
+		try {
+			dOfDsPag1 = LogbookDAO.getDiveSession(ds.getId()).getDives();
+		} catch (DiveSessionIdException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} 
 		List<Dive> dives = dOfDsPag1.getDives();
 		
 		
@@ -155,10 +167,13 @@ public class DiveTest {
 		try {
 			LogbookDAO.removeDive(dr1.getId());
 			//count number of dives
-			DivesOfDiveSession newDivesList = LogbookDAO.getDivesBySession(ds.getId());
+			DivesOfDiveSession newDivesList = LogbookDAO.getDiveSession(ds.getId()).getDives();
 			assertTrue(newDivesList.getDives().size()==2);
 			
 		} catch (DiveIdException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DiveSessionIdException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
