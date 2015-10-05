@@ -21,7 +21,7 @@ import org.restlet.ext.json.JsonRepresentation;
 public class LogbookManageDiveSessionUseCaseTest {
 	//set test constants
 	//get new toke from FB https://developers.facebook.com/tools/explorer
-	private String externalToken="CAAB4GhgAGN0BAE5CeinSmVJRSnPso0Lj5kvtNBzYeeI4ZAWYuLsjo0wkVtqHnZAzpzJLP0iC0W5uPxbH8uywkNmaPZAp82CLZAnRmPnJTcZC8MghKB3kTRMYaWtE6rcgOwb2Wcf6UNydU2AUo5ZCQHbRsrOQXbApQeJLNNSKesE279ibJTCF2ttThZAp7jQ1Lqz1FZBnFLe2ngZDZD";
+	private String externalToken="CAAB4GhgAGN0BAErZBiUtqpmGytjRfzcpBSZBLXGjRcTWHZB4rmdufitYexUY3GxLZCJaRvmlrOWSeSJTPOA79AJglsd3yVGyBZCzuAD9gWZBqQbZBYWkTMlsYDV668wnVcKH5ZCWI0TifMsZCdZBHjQyGT451sV4CAY0eVv5R0pVL3p4DZBoz1JDXVW758e2Uh4ZBp6pVbThxTeU6AZDZD";
 	//externalId associated to "freediving logbook" user on Facebook
 	@SuppressWarnings("unused")
 	private String externalId = "125927547759071";

@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.gianluca.logbook.dao.googledatastore.entity.Dive;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
@@ -372,7 +373,16 @@ public class LogbookDtoFactory {
 		dsDto.setWeightAsPound(ds.getWeightAsPound());
 		
 		if (ds.getDives()!=null) {
-			//TODO check all dives and add to dive session using createDiveDtoFromEntity
+			List<DiveDto> ListOfDivesDto = new ArrayList<DiveDto>();
+			//check all dives and add to dive session using createDiveDtoFromEntity
+			for ( int i=0; i< ds.getDives().getDives().size(); i++) {
+				Dive d = new Dive();
+				d = ds.getDives().getDives().get(i);
+				
+				DiveDto dDto = createDiveDtoFromEntity(d);
+				ListOfDivesDto.add(dDto);
+			}
+			dsDto.dives=ListOfDivesDto;
 		}
 		
 		return dsDto;
