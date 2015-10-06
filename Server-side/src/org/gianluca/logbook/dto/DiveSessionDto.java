@@ -21,6 +21,12 @@ public class DiveSessionDto extends LogbookDto {
 	
 	public List<DiveDto>dives;
 	
+	public List<DiveDto> getDives() {
+		return dives;
+	}
+	public void setDives(List<DiveDto> dives) {
+		this.dives = dives;
+	}
 	public String getId() {
 		return id;
 	}

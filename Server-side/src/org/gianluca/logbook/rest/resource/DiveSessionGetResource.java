@@ -3,6 +3,8 @@ package org.gianluca.logbook.rest.resource;
 import java.util.logging.Logger;
 
 
+
+import org.gianluca.logbook.dao.exception.DiveSessionIdException;
 import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
 import org.gianluca.logbook.dto.DiveInputDto;
@@ -12,7 +14,6 @@ import org.gianluca.logbook.external.integration.PlatformNotManagedException;
 import org.gianluca.logbook.rest.exception.WrongParameterException;
 import org.restlet.representation.Representation;
 import org.restlet.resource.*; 
-import org.restlet.data.Form;
 import org.restlet.data.Parameter;
 import org.restlet.data.Status;
 import org.restlet.ext.json.*;
@@ -30,16 +31,16 @@ public class DiveSessionGetResource<K> extends ServerResource {
 		log.info("start  GET getDiveSession");
 		//create json response
 		JsonRepresentation representation = null;
-	    Form form = new Form(entity); 
+	     
 		try {
 			 
-	        for (Parameter parameter : form) {
+	        for (Parameter parameter : this.getRequest().getResourceRef().getQueryAsForm()) {
 	        	log.info("parameter " + parameter.getName());
 	   		  	log.info("/" + parameter.getValue());
 	        }	
 	        
 	        //create dive input dto from request
-	        DiveInputDto diveInputDto = LogbookDtoFactory.createDiveInputDtoFromPOSTRequest(form, LogbookDtoFactory.REQUEST_GET);
+	        DiveInputDto diveInputDto = LogbookDtoFactory.createDiveInputDtoFromPOSTRequest(this.getRequest().getResourceRef().getQueryAsForm(), LogbookDtoFactory.REQUEST_GET);
 	        
 	        
 		    //add dive session
@@ -93,7 +94,16 @@ public class DiveSessionGetResource<K> extends ServerResource {
 			JsonRepresentation errorRepresentation = new JsonRepresentation(error);
 			return errorRepresentation;	
 			
-		}catch (Exception e) {
+		} catch (DiveSessionIdException e) {
+			e.printStackTrace();
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			ErrorResource error = new ErrorResource();
+			error.setErrorCode(ErrorResource.DIVESESSION_ID_ERROR);
+			error.setErrorMessage(e.getMessage());
+			JsonRepresentation errorRepresentation = new JsonRepresentation(error);
+			return errorRepresentation;	
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 			setStatus(Status.SERVER_ERROR_INTERNAL);
 			ErrorResource error = new ErrorResource();

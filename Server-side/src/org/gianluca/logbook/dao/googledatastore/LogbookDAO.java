@@ -526,9 +526,12 @@ public class LogbookDAO {
 			
 		} catch (EntityNotFoundException e) {
 			log.info(e.getMessage());
-			throw new DiveSessionIdException(e.getMessage());
+			throw new DiveSessionIdException("Dive session id not found");
 			
-		} finally {
+		} catch (IllegalArgumentException e){
+			log.info(e.getMessage());
+			throw new DiveSessionIdException("Wrong dive session id: "+diveSessionId);
+		}finally {
 		    if (tx.isActive()) {
 		        tx.rollback();
 		    }
