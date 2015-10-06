@@ -21,7 +21,7 @@ import org.restlet.ext.json.JsonRepresentation;
 public class LogbookManageDiveSessionUseCaseTest {
 	//set test constants
 	//get new toke from FB https://developers.facebook.com/tools/explorer
-	private String externalToken="CAAB4GhgAGN0BAErZBiUtqpmGytjRfzcpBSZBLXGjRcTWHZB4rmdufitYexUY3GxLZCJaRvmlrOWSeSJTPOA79AJglsd3yVGyBZCzuAD9gWZBqQbZBYWkTMlsYDV668wnVcKH5ZCWI0TifMsZCdZBHjQyGT451sV4CAY0eVv5R0pVL3p4DZBoz1JDXVW758e2Uh4ZBp6pVbThxTeU6AZDZD";
+	private String externalToken="CAAB4GhgAGN0BAFcayouAviRH7lUqZCbPzfEVA4mEDv9TxVX0yMOo3w1ci9CMrTL6fkcVP4hDGi5zxBd5HDuPxgIa2ZAmeOPpEwIVOIpXBZAOoPJhgPurW7SUf6cg8u1ulTZARFALSJMtXSqYg35IjWb0ZCgQuW7vEeyqeRxzfSX6ocsd9TYDTzJQq3xOLZBPsVQ48lLfrQ8gZDZD";
 	//externalId associated to "freediving logbook" user on Facebook
 	@SuppressWarnings("unused")
 	private String externalId = "125927547759071";
@@ -61,11 +61,11 @@ public class LogbookManageDiveSessionUseCaseTest {
     
     
     private int divePageSize1=1;
-   	private String freediverLoginRequest="http://localhost:8888/app/freediver/login?external_platform_id="+externalPlatform+"&external_token="+externalToken;
-	private String freediverRemoveRequest="http://localhost:8888/app/freediver/remove?external_platform_id="+externalPlatform+"&external_token="+externalToken;
-	private String diveSessionAddRequest ="http://localhost:8888/app/freediver/divesession/add";
-	private String diveSessionUpdateRequest ="http://localhost:8888/app/freediver/divesession/update";
-	private String diveSessionRemoveRequest ="http://localhost:8888/app/freediver/divesession/remove";
+   	private String freediverLoginRequest="http://freediving-logbook.appspot.com/app/freediver/login?external_platform_id="+externalPlatform+"&external_token="+externalToken;
+	private String freediverRemoveRequest="http://freediving-logbook.appspot.com/app/freediver/remove?external_platform_id="+externalPlatform+"&external_token="+externalToken;
+	private String diveSessionAddRequest ="http://freediving-logbook.appspot.com/app/freediver/divesession/add";
+	private String diveSessionUpdateRequest ="http://freediving-logbook.appspot.com/app/freediver/divesession/update";
+	private String diveSessionRemoveRequest ="http://freediving-logbook.appspot.com/app/freediver/divesession/remove";
 	
 	@Before
 	/*Executing login will create a user*/

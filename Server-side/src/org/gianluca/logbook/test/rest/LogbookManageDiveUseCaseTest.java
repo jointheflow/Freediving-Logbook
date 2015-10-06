@@ -22,7 +22,7 @@ import org.restlet.ext.json.JsonRepresentation;
 public class LogbookManageDiveUseCaseTest {
 	//set test constants
 	//get new toke from FB https://developers.facebook.com/tools/explorer
-	private String externalToken="CAAB4GhgAGN0BAMo8nGcqIGSWDS4v1NfpUlqa0YJSKZAtaEKDt0iT8pHxk8w86xsW75tDU9G6qTGnE1aXILJDy2Gn1ZAa8Qy0YMq7b505BNmp2eRRRWMZAl32ZBjF2BaWBDEzNprZBZBkJUOAOlrcwe7dguhwVQm4BE48rZBtw39inJCDeUAjD5N9TED5jEjtkfE1Sg3wBXU7AZDZD";
+	private String externalToken="CAAB4GhgAGN0BAFcayouAviRH7lUqZCbPzfEVA4mEDv9TxVX0yMOo3w1ci9CMrTL6fkcVP4hDGi5zxBd5HDuPxgIa2ZAmeOPpEwIVOIpXBZAOoPJhgPurW7SUf6cg8u1ulTZARFALSJMtXSqYg35IjWb0ZCgQuW7vEeyqeRxzfSX6ocsd9TYDTzJQq3xOLZBPsVQ48lLfrQ8gZDZD";
 	//externalId associated to "freediving logbook" user on Facebook
 	@SuppressWarnings("unused")
 	private String externalId = "125927547759071";
@@ -75,13 +75,13 @@ public class LogbookManageDiveUseCaseTest {
     
     
     private int divePageSize1=1;
-   	private String freediverLoginRequest="http://localhost:8888/app/freediver/login?external_platform_id="+externalPlatform+"&external_token="+externalToken;
-	private String freediverRemoveRequest="http://localhost:8888/app/freediver/remove?external_platform_id="+externalPlatform+"&external_token="+externalToken;
-	private String diveSessionAddRequest ="http://localhost:8888/app/freediver/divesession/add";
-	private String diveSessionGetRequest = "http://localhost:8888/app/freediver/divesession/get";
-	private String diveAddRequest ="http://localhost:8888/app/freediver/divesession/dive/add";
-	private String diveUpdateRequest ="http://localhost:8888/app/freediver/divesession/dive/update";
-	private String diveRemoveRequest ="http://localhost:8888/app/freediver/divesession/dive/remove";
+   	private String freediverLoginRequest="http://freediving-logbook.appspot.com/app/freediver/login?external_platform_id="+externalPlatform+"&external_token="+externalToken;
+	private String freediverRemoveRequest="http://freediving-logbook.appspot.com/app/freediver/remove?external_platform_id="+externalPlatform+"&external_token="+externalToken;
+	private String diveSessionAddRequest ="http://freediving-logbook.appspot.com/app/freediver/divesession/add";
+	private String diveSessionGetRequest = "http://freediving-logbook.appspot.com/app/freediver/divesession/get";
+	private String diveAddRequest ="http://freediving-logbook.appspot.com/app/freediver/divesession/dive/add";
+	private String diveUpdateRequest ="http://freediving-logbook.appspot.com/app/freediver/divesession/dive/update";
+	private String diveRemoveRequest ="http://freediving-logbook.appspot.com/app/freediver/divesession/dive/remove";
 	
 	@Test
 	public void addDive() {
