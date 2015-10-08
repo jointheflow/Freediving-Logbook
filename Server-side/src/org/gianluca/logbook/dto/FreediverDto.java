@@ -11,9 +11,19 @@ public class FreediverDto extends LogbookDto {
 	//public String externalToken;
 	public String status;
 	
+	//the cursor pointing to the first next dive session, if pagination is used
+	public String diveSessionCursor;
 	
 	
+	
+	public String getDiveSessionCursor() {
+		return diveSessionCursor;
+	}
+	public void setDiveSessionCursor(String diveSessionCursor) {
+		this.diveSessionCursor = diveSessionCursor;
+	}
 	public List<DiveSessionDto> diveSessions;
+	
 	public String getId() {
 		return id;
 	}

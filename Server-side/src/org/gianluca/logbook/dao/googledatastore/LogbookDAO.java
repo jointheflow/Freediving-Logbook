@@ -271,6 +271,7 @@ public class LogbookDAO {
 		try {
 			//set pageSize limit
 			FetchOptions fetchOptions = FetchOptions.Builder.withLimit(pageSize);
+			FetchOptions fetchOptions_check = FetchOptions.Builder.withLimit(pageSize+1);
 			//set startCursor, if exists
 			if (startCursor != null) {
 			      fetchOptions.startCursor(Cursor.fromWebSafeString(startCursor));
@@ -280,6 +281,12 @@ public class LogbookDAO {
 			Query q = new Query("DiveSession").setAncestor(KeyFactory.stringToKey(freediverId)).addSort("diveDate",SortDirection.DESCENDING);		
 			PreparedQuery pq = datastore.prepare(q);
 			QueryResultList<Entity> results = pq.asQueryResultList(fetchOptions);
+			
+			//use this query only to check if there are more result and then pass a cursor
+			Query q_check = new Query("DiveSession").setAncestor(KeyFactory.stringToKey(freediverId)).addSort("diveDate",SortDirection.DESCENDING);		
+			PreparedQuery pq_check = datastore.prepare(q_check);
+			QueryResultList<Entity> results_check = pq_check.asQueryResultList(fetchOptions_check);
+			
 			
 			if (!results.isEmpty())  {
 				diveSessions = new ArrayList<DiveSession>();
@@ -292,10 +299,13 @@ public class LogbookDAO {
 			}
 			
 			if (!results.isEmpty())  {
-			
+				
 				dsOfFree = new DiveSessionsOfFreeediver();
 				dsOfFree.setDiveSessions(diveSessions);
-				dsOfFree.setCursor(results.getCursor().toWebSafeString());
+				
+				//IMPORTANT******decide here if put the cursor for next "page"******
+				if (results_check.size()>pageSize)
+					dsOfFree.setCursor(results.getCursor().toWebSafeString());
 			}
 			
 			

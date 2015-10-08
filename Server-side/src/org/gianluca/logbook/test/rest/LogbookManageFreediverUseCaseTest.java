@@ -22,7 +22,7 @@ import org.restlet.ext.json.JsonRepresentation;
 public class LogbookManageFreediverUseCaseTest {
 	//set test constants
 	//get new toke from FB https://developers.facebook.com/tools/explorer
-	private String externalToken="CAAB4GhgAGN0BAFcayouAviRH7lUqZCbPzfEVA4mEDv9TxVX0yMOo3w1ci9CMrTL6fkcVP4hDGi5zxBd5HDuPxgIa2ZAmeOPpEwIVOIpXBZAOoPJhgPurW7SUf6cg8u1ulTZARFALSJMtXSqYg35IjWb0ZCgQuW7vEeyqeRxzfSX6ocsd9TYDTzJQq3xOLZBPsVQ48lLfrQ8gZDZD";
+	private String externalToken= LogbookConstant.FACEBOOK_ACCESSS_TOKEN;
 	//externalId associated to "freediving logbook" user on Facebook
 	private String externalId = "125927547759071";
 	@SuppressWarnings("unused")
@@ -69,10 +69,10 @@ public class LogbookManageFreediverUseCaseTest {
     
     private int divePageSize10=10;
     private int divePageSize2=2;
-    private String freediverLoginRequestNoParams="http://freediving-logbook.appspot.com/app/freediver/login";    
-	private String freediverLoginRequest="http://freediving-logbook.appspot.com/app/freediver/login?external_platform_id="+externalPlatform+"&external_token="+externalToken;
-	private String freediverRemoveRequest="http://freediving-logbook.appspot.com/app/freediver/remove";//?external_platform_id="+externalPlatform+"&external_token="+externalToken;
-	private String diveSessionAddRequest ="http://freediving-logbook.appspot.com/app/freediver/divesession/add";
+    private String freediverLoginRequestNoParams=LogbookConstant.HOST_NAME+"/app/freediver/login";    
+	private String freediverLoginRequest=LogbookConstant.HOST_NAME+"/app/freediver/login?external_platform_id="+externalPlatform+"&external_token="+externalToken;
+	private String freediverRemoveRequest=LogbookConstant.HOST_NAME+"/app/freediver/remove";//?external_platform_id="+externalPlatform+"&external_token="+externalToken;
+	private String diveSessionAddRequest =LogbookConstant.HOST_NAME+"/app/freediver/divesession/add";
 	
 	/*Add a freediver and 3 dive sessions*/
 	@Before
@@ -244,6 +244,13 @@ public class LogbookManageFreediverUseCaseTest {
 			assertTrue(((String)jsonDs3.get("locationDesc")).equals(ds1_location));
 			//assertTrue(((String)jsonDs3.get("diveDate")).equals("Sat Mar 07 00:00:00 CET 2015"));
 			//assertTrue(((Double)jsonDs3.get("weightAsKilogram")).doubleValue()==new Double(ds1_weight));
+			String diveSessionCursor =null;
+			try {
+				
+				diveSessionCursor = (String)jsonobj.getString("diveSessionCursor");
+			}catch(JSONException e) {
+				assertTrue(diveSessionCursor==null);
+			} 
 			
 			System.out.println(jsonDiveSessions.length());
 			
@@ -285,6 +292,8 @@ public class LogbookManageFreediverUseCaseTest {
 			assertTrue(loginResponse.getStatus().getCode()==Status.SUCCESS_OK.getCode());
 			JSONArray jsonDiveSessions = jsonobj.getJSONArray("diveSessions");
 			assertTrue(jsonDiveSessions.length()==2);
+			String diveSessionCursor = (String)jsonobj.getString("diveSessionCursor");
+			assertTrue(diveSessionCursor!=null);
 			JSONObject jsonDs1 = jsonDiveSessions.getJSONObject(0);
 			JSONObject jsonDs2 = jsonDiveSessions.getJSONObject(1);
 			
@@ -297,8 +306,9 @@ public class LogbookManageFreediverUseCaseTest {
 			
 			
 			//assertTrue(((Double)jsonDs3.get("weightAsKilogram")).doubleValue()==new Double(ds1_weight));
-			
+			 
 			System.out.println(jsonDiveSessions.length());
+			System.out.println(diveSessionCursor);
 			
 		}catch (Exception e) {
 			e.printStackTrace();

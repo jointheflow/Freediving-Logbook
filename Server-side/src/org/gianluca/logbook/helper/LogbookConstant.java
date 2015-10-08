@@ -1,6 +1,14 @@
 package org.gianluca.logbook.helper;
 
 public class LogbookConstant {
+	/*start values for test*/
+	//public final static String HOST_NAME ="http://freediving-logbook.appspot.com";
+	public final static String HOST_NAME ="http://localhost:8888";
+	//get new toke from FB https://developers.facebook.com/tools/explorer
+	public final static String FACEBOOK_ACCESSS_TOKEN="CAAB4GhgAGN0BAASUdfZAZB2ITbcvzoXgUmfdPSGmTWAcrbTfF42XuSj4UmNBf5rlgHhy4xhkpv4EtUh2FDG8ZCObDXHi9scMh93iOOEQdvINh4kboAQA6AoxU3oDeiuirQs4vh5LkYodXE5SHnxMuJdFhIKWAo8UEwogIBOYY9VDtXdtO2OkM12EcX8IjWOZCujCjQkkXgZDZD";
+	/*end values for test*/
+	
+	
 	public static final int FACEBOOK_PLATFORM=0;
 	public static final int GOOGLE_PLATFORM=1;
 		

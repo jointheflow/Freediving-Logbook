@@ -433,6 +433,7 @@ public class LogbookDtoFactory {
 		//add dive session to dto
 		if (dsOfFree != null) {
 			fdDto.diveSessions = new ArrayList<DiveSessionDto>();
+			fdDto.setDiveSessionCursor(dsOfFree.getCursor());
 			
 			for (DiveSession ds : dsOfFree.getDiveSessions()) {
 				DiveSessionDto dsDto = new DiveSessionDto();
