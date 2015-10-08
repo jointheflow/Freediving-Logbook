@@ -361,7 +361,7 @@ public class LogbookManageFreediverUseCaseTest {
 			
 			
 			//execute Login with wrong external platform 
-			System.out.println("Login as a freediver without external platform");
+			System.out.println("Login as a freediver with wrong external platform");
 			loginClient = new Client(Protocol.HTTP);
 			loginRequest = new Request(Method.GET, freediverLoginRequestNoParams+"?external_token="+externalToken+"&dive_page_size="+10+"&external_platform_id="+8);
 					
@@ -593,6 +593,26 @@ public class LogbookManageFreediverUseCaseTest {
 			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
 			
 			System.out.println("------end error removing freediver platform not managed----------");
+			System.out.println("------start error removing freediver platform not number----------");
+			providerClient = new Client(Protocol.HTTP);
+			providerRequest = new Request(Method.POST, freediverRemoveRequest);
+			//create a post entity for Representation
+			fParam_prov = new Form();
+			fParam_prov.add("external_platform_id","A");
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("freediver_id", freediverId);
+			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			providerResponse = providerClient.handle(providerRequest);
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			
+			System.out.println(jsonobj_prov.toString());
+			//assertTrue(jsonobj_prov.getString("errorMessage").startsWith("Parameter temp_unit For input string:"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==ErrorResource.PLATFORM_NOT_MANAGED_ERROR);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			System.out.println("------end  error removing freediver platform not number----------");
 		}catch (Exception e) {
 			e.printStackTrace();
 			

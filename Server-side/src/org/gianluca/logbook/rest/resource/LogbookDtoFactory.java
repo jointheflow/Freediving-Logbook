@@ -38,10 +38,10 @@ public class LogbookDtoFactory {
 				
 			if (Integer.parseInt(externalPlatformId) < LogbookConstant.FACEBOOK_PLATFORM &&
 					Integer.parseInt(externalPlatformId) > LogbookConstant.GOOGLE_PLATFORM) {
-				throw new WrongParameterException("Parameter external_platform_id wrong value");
+				throw new WrongParameterException("Parameter external_platform_id "+externalPlatformId+" wrong value");
 			}
 		 } catch (NumberFormatException e) {
-			  throw new WrongParameterException("Parameter external_platform_id wrong "+ e.getMessage());
+			  throw new WrongParameterException("Parameter external_platform_id "+externalPlatformId+" wrong value");
 		 }
 	}
 	
@@ -81,7 +81,7 @@ public class LogbookDtoFactory {
 		try {
 			if (intValue!=null) new Integer(intValue);
 		 }catch (NumberFormatException e) {
-			  throw new WrongParameterException("Parameter "+ name +" "+ e.getMessage());
+			  throw new WrongParameterException("Parameter "+ name +" "+ intValue+" wrong value");
 		 }
 	}
 	

@@ -5,7 +5,7 @@ public class LogbookConstant {
 	//public final static String HOST_NAME ="http://freediving-logbook.appspot.com";
 	public final static String HOST_NAME ="http://localhost:8888";
 	//get new toke from FB https://developers.facebook.com/tools/explorer
-	public final static String FACEBOOK_ACCESSS_TOKEN="CAAB4GhgAGN0BAASUdfZAZB2ITbcvzoXgUmfdPSGmTWAcrbTfF42XuSj4UmNBf5rlgHhy4xhkpv4EtUh2FDG8ZCObDXHi9scMh93iOOEQdvINh4kboAQA6AoxU3oDeiuirQs4vh5LkYodXE5SHnxMuJdFhIKWAo8UEwogIBOYY9VDtXdtO2OkM12EcX8IjWOZCujCjQkkXgZDZD";
+	public final static String FACEBOOK_ACCESSS_TOKEN="CAAB4GhgAGN0BAIZAgKGyzYYlP2Xz38Ukwgvgd0IjvtZCdiYpBFkOLK4zUclZCJKt0MZAf3l9iExnjBHO0gcRCpUVM7S1xQLW07tM9x9BYfqVU4N2d8yOoba3ZCFnFjOQ7QnZBiqxoRFrJieWVc7RkMOOs5q2f0Fg3vegNSBsVOJs0HqTDkcoFwbTDeIfT9qd1xlHvTh3fdAgZDZD";
 	/*end values for test*/
 	
 	

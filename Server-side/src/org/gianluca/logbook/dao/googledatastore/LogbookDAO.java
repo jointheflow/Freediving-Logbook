@@ -207,7 +207,7 @@ public class LogbookDAO {
 			tx.commit();
 		}catch (IllegalArgumentException e) {
 			log.info(e.getMessage());
-			throw new FreediverIdException(e.getMessage());
+			throw new FreediverIdException("Freediverid error for value "+freediverId);
 		} finally {
 			if (tx.isActive()) {
 		        tx.rollback();
