@@ -49,11 +49,14 @@ public class DiveSessionGetResource<K> extends ServerResource {
 		    DiveSessionDto diveSessionDto = LogbookDtoFactory.createDiveSessionDtoFromEntity(ds);
 		    
 		    //Set dto status and message
-		    diveSessionDto.setExternalToken(diveInputDto.externalToken);
-		    diveSessionDto.setResult(LogbookDto.RESULT_OK);
-		    diveSessionDto.setMessage("Dive session found");
-		    		
-			representation= new JsonRepresentation(diveSessionDto);
+		    LogbookDto lDto = new LogbookDto();
+		    
+		    lDto.setExternalToken(diveInputDto.externalToken);
+		    lDto.setResult(LogbookDto.RESULT_OK);
+		    lDto.setMessage("Dive session found");
+		    lDto.setDetail(diveSessionDto);
+		    
+			representation= new JsonRepresentation(lDto);
 			representation.setIndenting(true);
 			
 			return representation;

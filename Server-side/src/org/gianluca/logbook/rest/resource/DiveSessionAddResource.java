@@ -66,12 +66,13 @@ public class DiveSessionAddResource<K> extends ServerResource {
 		    
 		   
 			//Set dto status and message
-		    dsDto.setExternalToken(diveSessionInputDto.externalToken);
-		    dsDto.setResult(LogbookDto.RESULT_OK);
-			dsDto.setMessage("Dive session added");
+		    LogbookDto lDto = new LogbookDto();
+		    lDto.setExternalToken(diveSessionInputDto.externalToken);
+		    lDto.setResult(LogbookDto.RESULT_OK);
+		    lDto.setMessage("Dive session added");
+			lDto.setDetail(dsDto);
 			
-			
-			representation= new JsonRepresentation(dsDto);
+			representation= new JsonRepresentation(lDto);
 			representation.setIndenting(true);
 			
 			return representation;

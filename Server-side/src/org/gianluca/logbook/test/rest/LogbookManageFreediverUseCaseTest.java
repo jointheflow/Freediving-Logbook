@@ -89,9 +89,9 @@ public class LogbookManageFreediverUseCaseTest {
 			JSONObject jsonobj = new JsonRepresentation(loginResponse.getEntityAsText()).getJsonObject();
 			System.out.println(jsonobj.toString());
 			
-			freediverId = (String)jsonobj.get("id");
+			freediverId = ((JSONObject)jsonobj.get("detail")).getString("id");
 			@SuppressWarnings("unused")
-			String externalId = (String)jsonobj.get("externalId");
+			String externalId = ((JSONObject)jsonobj.get("detail")).getString("externalId");
 			
 			System.out.println("Login executed by external free diver:"+ freediverId);
 			/*----END Login of a freediver----*/
@@ -175,6 +175,7 @@ public class LogbookManageFreediverUseCaseTest {
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			fail();
 		}finally {
 			System.out.println("-------END setUp()--------");
 			
@@ -202,13 +203,14 @@ public class LogbookManageFreediverUseCaseTest {
 			
 			assertTrue(loginResponse.getStatus().getCode()==Status.SUCCESS_OK.getCode());	
 			//check freediving data and dive session data
-			assertTrue(((String)jsonobj.get("id")).equals(freediverId));
-			assertTrue(((String)jsonobj.get("externalId")).equals(externalId));
+			JSONObject detailObj = ((JSONObject)jsonobj.get("detail"));
+			assertTrue(((String)detailObj.get("id")).equals(freediverId));
+			assertTrue(((String)detailObj.get("externalId")).equals(externalId));
 			assertTrue(((String)jsonobj.get("result")).equals("OK"));
 			assertTrue(((String)jsonobj.get("message")).equals("Freediver login executed"));
 			assertTrue(((String)jsonobj.get("externalToken")).equals(externalToken));
 			
-			JSONArray jsonDiveSessions = jsonobj.getJSONArray("diveSessions");
+			JSONArray jsonDiveSessions = detailObj.getJSONArray("diveSessions");
 			assertTrue(jsonDiveSessions.length()==3);
 			JSONObject jsonDs1 = jsonDiveSessions.getJSONObject(0);
 			JSONObject jsonDs2 = jsonDiveSessions.getJSONObject(1);
@@ -216,7 +218,7 @@ public class LogbookManageFreediverUseCaseTest {
 			
 			assertTrue(((String)jsonDs1.get("note")).equals(ds3_note));
 			assertTrue(((Double)jsonDs1.getDouble("waterTempAsCelsius")).doubleValue()==new Double(ds3_waterTemp));
-			assertTrue(((String)jsonDs1.get("externalToken")).equals(externalToken));
+			//assertTrue(((String)jsonDs1.get("externalToken")).equals(externalToken));
 			assertTrue(((String)jsonDs1.get("equipment")).equals(ds3_equipment));
 			assertTrue(((Double)jsonDs1.getDouble("deepAsMeter")).doubleValue()==new Double(ds3_deep));
 			assertTrue(((String)jsonDs1.get("meteoDesc")).equals(ds3_meteo));
@@ -226,7 +228,7 @@ public class LogbookManageFreediverUseCaseTest {
 			
 			assertTrue(((String)jsonDs2.get("note")).equals(ds2_note));
 			assertTrue(((Double)jsonDs2.getDouble("waterTempAsCelsius")).doubleValue()==new Double(ds2_waterTemp));
-			assertTrue(((String)jsonDs2.get("externalToken")).equals(externalToken));
+			//assertTrue(((String)jsonDs2.get("externalToken")).equals(externalToken));
 			assertTrue(((String)jsonDs2.get("equipment")).equals(ds2_equipment));
 			assertTrue(((Double)jsonDs2.getDouble("deepAsMeter")).doubleValue()==new Double(ds2_deep));
 			assertTrue(((String)jsonDs2.get("meteoDesc")).equals(ds2_meteo));
@@ -237,7 +239,7 @@ public class LogbookManageFreediverUseCaseTest {
 			
 			assertTrue(((String)jsonDs3.get("note")).equals(ds1_note));
 			assertTrue(((Double)jsonDs3.getDouble("waterTempAsCelsius")).doubleValue()==new Double(ds1_waterTemp));
-			assertTrue(((String)jsonDs3.get("externalToken")).equals(externalToken));
+			//assertTrue(((String)jsonDs3.get("externalToken")).equals(externalToken));
 			assertTrue(((String)jsonDs3.get("equipment")).equals(ds1_equipment));
 			assertTrue(((Double)jsonDs3.getDouble("deepAsMeter")).doubleValue()==new Double(ds1_deep));
 			assertTrue(((String)jsonDs3.get("meteoDesc")).equals(ds1_meteo));
@@ -247,7 +249,7 @@ public class LogbookManageFreediverUseCaseTest {
 			String diveSessionCursor =null;
 			try {
 				
-				diveSessionCursor = (String)jsonobj.getString("diveSessionCursor");
+				diveSessionCursor = (String)detailObj.getString("diveSessionCursor");
 			}catch(JSONException e) {
 				assertTrue(diveSessionCursor==null);
 			} 
@@ -255,6 +257,7 @@ public class LogbookManageFreediverUseCaseTest {
 			System.out.println(jsonDiveSessions.length());
 			
 		}catch (Exception e) {
+			fail();
 			e.printStackTrace();
 			
 		}finally {		
@@ -284,15 +287,16 @@ public class LogbookManageFreediverUseCaseTest {
 			
 				
 			//check freediving data and dive session data
-			assertTrue(((String)jsonobj.get("id")).equals(freediverId));
-			assertTrue(((String)jsonobj.get("externalId")).equals(externalId));
+			JSONObject detailObj = ((JSONObject)jsonobj.get("detail"));
+			assertTrue(((String)detailObj.get("id")).equals(freediverId));
+			assertTrue(((String)detailObj.get("externalId")).equals(externalId));
 			assertTrue(((String)jsonobj.get("result")).equals("OK"));
 			assertTrue(((String)jsonobj.get("message")).equals("Freediver login executed"));
 			assertTrue(((String)jsonobj.get("externalToken")).equals(externalToken));
 			assertTrue(loginResponse.getStatus().getCode()==Status.SUCCESS_OK.getCode());
-			JSONArray jsonDiveSessions = jsonobj.getJSONArray("diveSessions");
+			JSONArray jsonDiveSessions = detailObj.getJSONArray("diveSessions");
 			assertTrue(jsonDiveSessions.length()==2);
-			String diveSessionCursor = (String)jsonobj.getString("diveSessionCursor");
+			String diveSessionCursor = (String)detailObj.getString("diveSessionCursor");
 			assertTrue(diveSessionCursor!=null);
 			JSONObject jsonDs1 = jsonDiveSessions.getJSONObject(0);
 			JSONObject jsonDs2 = jsonDiveSessions.getJSONObject(1);
@@ -312,6 +316,7 @@ public class LogbookManageFreediverUseCaseTest {
 			
 		}catch (Exception e) {
 			e.printStackTrace();
+			fail();
 			
 		}finally {		
 			System.out.println("-------END test()--------");
@@ -386,7 +391,7 @@ public class LogbookManageFreediverUseCaseTest {
 			System.out.println(jsonobj.toString());
 			assertTrue(loginResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
 			assertTrue(jsonobj.getInt("errorCode")==ErrorResource.WRONG_PARAMETER_ERROR);
-			assertTrue(jsonobj.getString("errorMessage").startsWith("Parameter external_platform_id wrong"));
+			assertTrue(jsonobj.getString("errorMessage").startsWith("Parameter external_platform_id"));
 			
 			//execute Login with wrong external platform 
 			System.out.println("Login as a freediver with wrong external platform ID (not managed)");
@@ -608,13 +613,14 @@ public class LogbookManageFreediverUseCaseTest {
 			
 			System.out.println(jsonobj_prov.toString());
 			//assertTrue(jsonobj_prov.getString("errorMessage").startsWith("Parameter temp_unit For input string:"));
-			assertTrue(jsonobj_prov.getInt("errorCode")==ErrorResource.PLATFORM_NOT_MANAGED_ERROR);
+			assertTrue(jsonobj_prov.getInt("errorCode")==ErrorResource.WRONG_PARAMETER_ERROR);
 			
 			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
 			
 			System.out.println("------end  error removing freediver platform not number----------");
 		}catch (Exception e) {
 			e.printStackTrace();
+			fail();
 			
 		}
 	}
@@ -643,6 +649,7 @@ public class LogbookManageFreediverUseCaseTest {
 			Thread.sleep(5000);
 		}catch (Exception e) {
 			e.printStackTrace();
+			fail();
 			//TODO manage all excpetions
 			
 		}finally {

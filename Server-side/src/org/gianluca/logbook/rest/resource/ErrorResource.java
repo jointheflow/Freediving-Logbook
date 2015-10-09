@@ -1,5 +1,7 @@
 package org.gianluca.logbook.rest.resource;
 
+import org.gianluca.logbook.helper.LogbookConstant;
+
 public class ErrorResource {
 	public static final int TOKEN_ERROR = -4;
 	public static final int NUMBER_FORMAT_ERROR=-1;
@@ -18,7 +20,15 @@ public class ErrorResource {
 	
 	private int errorCode;
 	private String errorMessage;
+	private String serverVersion = LogbookConstant.SW_VERSION;
 	
+	
+	public String getServerVersion() {
+		return serverVersion;
+	}
+	public void setServerVersion(String serverVersion) {
+		this.serverVersion = serverVersion;
+	}
 	public String getErrorMessage() {
 		return errorMessage;
 	}

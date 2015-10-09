@@ -2,7 +2,7 @@ package org.gianluca.logbook.dto;
 
 import java.util.List;
 
-public class FreediverDto extends LogbookDto {
+public class FreediverDto /*extends LogbookDto*/ {
 	
 	
 	public String id;
@@ -57,12 +57,7 @@ public class FreediverDto extends LogbookDto {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public int getDeepUnit() {
-		return deepUnit;
-	}
-	public void setDeepUnit(int deepUnit) {
-		this.deepUnit = deepUnit;
-	}
+	
 	
 	
 	

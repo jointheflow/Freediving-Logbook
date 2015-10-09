@@ -76,11 +76,17 @@ public class FreediverLoginResource<K>  extends ServerResource {
 				FreediverDto fdDto = LogbookDtoFactory.createFreediverDtoFromEntity(fd, dsOfFree, fdStatus, freediverInputDto.externalToken);
 								
 				//Set dto status and message
-				fdDto.setResult(LogbookDto.RESULT_OK);
-				fdDto.setMessage("Freediver login executed");
-				fdDto.externalToken = freediverInputDto.externalToken;
+				LogbookDto lDto = new LogbookDto();
 				
-				representation= new JsonRepresentation(fdDto);
+				lDto.setResult(LogbookDto.RESULT_OK);
+				lDto.setMessage("Freediver login executed");
+				lDto.externalToken = freediverInputDto.externalToken;
+				lDto.setDetail(fdDto);
+				lDto.deepUnit = fd.getDeepUnit();
+				lDto.tempUnit = fd.getTemperatureUnit();
+				lDto.weightUnit = fd.getWeightUnit();
+				
+				representation= new JsonRepresentation(lDto);
 				representation.setIndenting(true);
 				
 				return representation;

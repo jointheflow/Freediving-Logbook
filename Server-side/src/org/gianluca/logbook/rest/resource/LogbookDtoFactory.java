@@ -249,6 +249,7 @@ public class LogbookDtoFactory {
 		dDto.setNeutralBuoyanceAsFeet(d.getNeutralBuoyancyAsFeet());
 		dDto.setNeutralBuoyanceAsMeter(d.getNeutralBuoyancyAsMeter());
 		dDto.setDiveType(d.getDiveType());
+		
 		return dDto;
 	}
 	
@@ -421,15 +422,15 @@ public class LogbookDtoFactory {
 	public static FreediverDto createFreediverDtoFromEntity(Freediver fd, DiveSessionsOfFreeediver dsOfFree, String fdStatus, String externalToken) {
 		
 		FreediverDto fdDto = new FreediverDto();
-	
+		fdDto.setStatus(LogbookConstant.SW_VERSION);
 		fdDto.status=fdStatus;
 		fdDto.externalId= fd.getExternalId();
-		fdDto.externalPlatformId = fd.getExternalPlatformId();
+		//fdDto.externalPlatformId = fd.getExternalPlatformId();
 		fdDto.externalUsername = fd.getExternalName();
 		fdDto.id = fd.getId();
-		fdDto.deepUnit = fd.getDeepUnit();
-		fdDto.tempUnit = fd.getTemperatureUnit();
-		fdDto.externalToken= externalToken;				
+		//fdDto.deepUnit = fd.getDeepUnit();
+		//fdDto.tempUnit = fd.getTemperatureUnit();
+		//fdDto.externalToken= externalToken;				
 		//add dive session to dto
 		if (dsOfFree != null) {
 			fdDto.diveSessions = new ArrayList<DiveSessionDto>();
@@ -441,7 +442,7 @@ public class LogbookDtoFactory {
 				dsDto.setDeepAsMeter(ds.getDeepAsMeter());
 				dsDto.setDiveDate(ds.getDiveDate());
 				dsDto.setEquipment(ds.getEquipment());
-				dsDto.setExternalToken(externalToken);
+				//dsDto.setExternalToken(externalToken);
 				dsDto.setId(ds.getId());
 				dsDto.setLocationDesc(ds.getLocationDesc());
 				if (ds.getLocationGeoPt() != null) {

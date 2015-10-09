@@ -66,12 +66,13 @@ public class DiveUpdateResource<K> extends ServerResource {
 						
 					
 					//Set dto status and message
-					dDto.setExternalToken(diveInputDto.externalToken);
-					dDto.setResult(LogbookDto.RESULT_OK);
-					dDto.setMessage("Dive updated");
+					LogbookDto lDto = new LogbookDto();
+					lDto.setExternalToken(diveInputDto.externalToken);
+					lDto.setResult(LogbookDto.RESULT_OK);
+					lDto.setMessage("Dive updated");
+					lDto.setDetail(dDto);
 					
-					
-					representation= new JsonRepresentation(dDto);
+					representation= new JsonRepresentation(lDto);
 					representation.setIndenting(true);
 					
 					return representation;

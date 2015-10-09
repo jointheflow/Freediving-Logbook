@@ -65,12 +65,14 @@ public class DiveAddResource<K> extends ServerResource {
 		    DiveDto dDto = LogbookDtoFactory.createDiveDtoFromEntity(d);
 					
 		    //Set dto status and message
-			dDto.setExternalToken(diveInputDto.externalToken);
-			dDto.setResult(LogbookDto.RESULT_OK);
-			dDto.setMessage("Dive added");
+			LogbookDto lDto = new LogbookDto();
+		    lDto.setExternalToken(diveInputDto.externalToken);
+			lDto.setResult(LogbookDto.RESULT_OK);
+			lDto.setMessage("Dive added");
+			lDto.setDetail(dDto);
 			
 			//return object
-			representation= new JsonRepresentation(dDto);
+			representation= new JsonRepresentation(lDto);
 			representation.setIndenting(true);
 			
 			return representation;

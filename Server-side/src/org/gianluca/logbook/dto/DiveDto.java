@@ -1,7 +1,7 @@
 package org.gianluca.logbook.dto;
 
 
-public class DiveDto extends LogbookDto {
+public class DiveDto /*extends LogbookDto*/ {
 	public String id ;
 	public int diveTime;
 	public int duration;

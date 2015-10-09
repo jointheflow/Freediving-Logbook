@@ -1,8 +1,10 @@
 package org.gianluca.logbook.dto;
 
+import org.gianluca.logbook.helper.LogbookConstant;
+
 public class LogbookDto {
 	public final static String RESULT_OK="OK";
-	
+	public String serverVersion=LogbookConstant.SW_VERSION;
 	public String externalToken;
 	public int externalPlatformId;
 	public String result;
@@ -11,8 +13,33 @@ public class LogbookDto {
 	public int deepUnit;
 	public int weightUnit;
 	
+	public Object detail;
 	
 	
+	public Object getDetail() {
+		return detail;
+	}
+
+
+
+	public void setDetail(Object detail) {
+		this.detail = detail;
+	}
+
+
+
+	public void setServerVersion(String serverVersion) {
+		this.serverVersion = serverVersion;
+	}
+
+
+
+	public String getServerVersion() {
+		return serverVersion;
+	}
+
+	
+
 	public int getExternalPlatformId() {
 		return externalPlatformId;
 	}
