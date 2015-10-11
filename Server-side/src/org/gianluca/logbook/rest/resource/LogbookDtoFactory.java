@@ -60,7 +60,7 @@ public class LogbookDtoFactory {
 			if (doubleValue!=null) new Double(doubleValue);
 		
 		 }catch (NumberFormatException e) {
-			  throw new WrongParameterException("Parameter "+ name +" "+ e.getMessage());
+			 throw new WrongParameterException("Parameter "+ name +" "+ doubleValue+" wrong value");
 		 }
 	}
 	

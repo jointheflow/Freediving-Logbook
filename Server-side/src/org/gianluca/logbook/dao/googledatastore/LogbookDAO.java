@@ -240,12 +240,12 @@ public class LogbookDAO {
 			
 			}catch (IllegalArgumentException e) {
 				log.info(e.getMessage());
-				throw new FreediverIdException(e.getMessage());
+				throw new FreediverIdException("Referential integrity constraint violation: Freediver id "+ freediverId+" not exists");
 				
 			
 			} catch (EntityNotFoundException e) {
 				log.info(e.getMessage());
-				throw new FreediverIdException("Referential integrity constraint violation: Freediver id not exists");
+				throw new FreediverIdException("Referential integrity constraint violation: Freediver id "+ freediverId +" not exists");
 				
 				
 			} finally {
@@ -342,7 +342,7 @@ public class LogbookDAO {
 			
 			}catch (IllegalArgumentException e) {
 				log.info(e.getMessage());
-				throw new DiveSessionIdException(e.getMessage());
+				throw new DiveSessionIdException("Dive session id wrong or not found for "+diveSessionId);
 				
 			
 			}catch (EntityNotFoundException f) {
@@ -382,7 +382,7 @@ public class LogbookDAO {
 			tx.commit();
 		}catch (IllegalArgumentException e) {
 			log.info(e.getMessage());
-			throw new DiveSessionIdException(e.getMessage());
+			throw new DiveSessionIdException("Dive session id wrong or not found for "+diveSessionId);
 		} finally {
 			if (tx.isActive()) {
 		        tx.rollback();

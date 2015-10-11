@@ -83,7 +83,8 @@ public class LogbookManageDiveSessionUseCaseTest {
 			Response loginResponse = loginClient.handle(loginRequest);
 			JSONObject jsonobj = new JsonRepresentation(loginResponse.getEntityAsText()).getJsonObject();
 			System.out.println(jsonobj.toString());
-			freediverId = (String)jsonobj.get("id");
+			JSONObject detailObj = ((JSONObject)jsonobj.get("detail"));
+			freediverId = (String)detailObj.get("id");
 			
 			
 			Request providerRequest = new Request(Method.POST, diveSessionAddRequest);
@@ -110,7 +111,8 @@ public class LogbookManageDiveSessionUseCaseTest {
 			Response providerResponse = addClient.handle(providerRequest);
 			jsonobj = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
 			System.out.println(jsonobj.toString());
-			sessionId = (String)jsonobj.get("id");
+			detailObj = ((JSONObject)jsonobj.get("detail"));
+			sessionId = (String)detailObj.get("id");
 			
 			
 			
@@ -118,9 +120,11 @@ public class LogbookManageDiveSessionUseCaseTest {
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			fail();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			fail();
 		}finally {
 			System.out.println("-------END setUp()--------");
 			
@@ -158,18 +162,19 @@ public class LogbookManageDiveSessionUseCaseTest {
 		
 			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
 			System.out.println(jsonobj_prov.toString());
-			assertTrue(((String)jsonobj_prov.get("note")).equals(ds2_note));
-			assertTrue(((Double)jsonobj_prov.getDouble("waterTempAsCelsius")).doubleValue()==new Double(ds2_waterTemp));
-			assertTrue(jsonobj_prov.getDouble("waterTempAsFahrehneit")==68.0);
+			JSONObject detailObj = ((JSONObject)jsonobj_prov.get("detail"));
+			assertTrue(((String)detailObj.get("note")).equals(ds2_note));
+			assertTrue(((Double)detailObj.getDouble("waterTempAsCelsius")).doubleValue()==new Double(ds2_waterTemp));
+			assertTrue(detailObj.getDouble("waterTempAsFahrehneit")==68.0);
 			assertTrue(((String)jsonobj_prov.get("externalToken")).equals(externalToken));
-			assertTrue(((String)jsonobj_prov.get("equipment")).equals(ds2_equipment));
-			assertTrue(((Double)jsonobj_prov.getDouble("deepAsMeter")).doubleValue()==new Double(ds2_deep));
-			assertTrue(jsonobj_prov.getDouble("deepAsFeet")==116.79790026200001);
-			assertTrue(((String)jsonobj_prov.get("meteoDesc")).equals(ds2_meteo));
-			assertTrue(((String)jsonobj_prov.get("locationDesc")).equals(ds2_location));
-			assertTrue(((String)jsonobj_prov.get("diveDate")).equals("Sun Mar 08 00:00:00 CET 2015"));
-			assertTrue(jsonobj_prov.getDouble("weightAsKilogram")== ds2_weight);
-			assertTrue(jsonobj_prov.getDouble("weightAsPound")== 11.023);
+			assertTrue(((String)detailObj.get("equipment")).equals(ds2_equipment));
+			assertTrue(((Double)detailObj.getDouble("deepAsMeter")).doubleValue()==new Double(ds2_deep));
+			assertTrue(detailObj.getDouble("deepAsFeet")==116.79790026200001);
+			assertTrue(((String)detailObj.get("meteoDesc")).equals(ds2_meteo));
+			assertTrue(((String)detailObj.get("locationDesc")).equals(ds2_location));
+			assertTrue(((String)detailObj.get("diveDate")).equals("Sun Mar 08 00:00:00 CET 2015"));
+			assertTrue(detailObj.getDouble("weightAsKilogram")== ds2_weight);
+			assertTrue(detailObj.getDouble("weightAsPound")== 11.023);
 			assertTrue(jsonobj_prov.get("message").equals("Dive session added"));
 			assertTrue(jsonobj_prov.get("result").equals("OK"));
 			assertTrue(providerResponse.getStatus().getCode()==Status.SUCCESS_OK.getCode());
@@ -237,39 +242,6 @@ public class LogbookManageDiveSessionUseCaseTest {
 	@Test
 	public void updateAndRemoveDiveSession() {
 		try {
-			
-			/*System.out.println("-----Start addDiveSession()---------");
-			Client providerClient = new Client(Protocol.HTTP);
-			Request providerRequest = new Request(Method.POST, diveSessionAddRequest);
-			//create a post entity for Representation
-			Form fParam_prov = new Form();
-			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
-			fParam_prov.add("external_token", externalToken);
-			fParam_prov.add("freediver_id", freediverId);
-			fParam_prov.add("dive_date", ds1_date);
-			fParam_prov.add("deep", Double.toString(ds1_deep));
-			fParam_prov.add("equipment", ds1_equipment); 
-			fParam_prov.add("location", ds1_location);
-			fParam_prov.add("meteo",ds1_meteo);
-			fParam_prov.add("note", ds1_note);
-			fParam_prov.add("water_temp", ds1_waterTemp);
-		    fParam_prov.add("weight", Double.toString(ds1_weight));
-		    fParam_prov.add("deep_unit", Integer.toString(deepUnit));
-		    fParam_prov.add("weight_unit", Integer.toString(weightUnit));
-		    fParam_prov.add("temp_unit", Integer.toString(tempUnit));
-		    
-		    			
-			providerRequest.setEntity(fParam_prov.getWebRepresentation());
-			Response providerResponse = providerClient.handle(providerRequest);
-			JSONObject jsonobj_prov;
-		
-			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
-			System.out.println(jsonobj_prov.toString());
-			
-			//get divesession of session added
-			String divesessionId = jsonobj_prov.getString("id");
-			System.out.println("-----End addDiveSession()---------");
-			*/
 			System.out.println("-----Start updateDiveSession()---------");
 			//changed data
 			String ds2_date = "07-04-2015";
@@ -317,19 +289,19 @@ public class LogbookManageDiveSessionUseCaseTest {
 		
 			JSONObject jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
 			System.out.println(jsonobj_prov.toString());
+			JSONObject detailObj = ((JSONObject)jsonobj_prov.get("detail"));
 			
-			
-			assertTrue(((String)jsonobj_prov.get("note")).equals(ds2_note));
-			assertTrue(((Double)jsonobj_prov.getDouble("waterTempAsCelsius")).doubleValue()==new Double(ds2_waterTemp));
+			assertTrue(((String)detailObj.get("note")).equals(ds2_note));
+			assertTrue(((Double)detailObj.getDouble("waterTempAsCelsius")).doubleValue()==new Double(ds2_waterTemp));
 			
 			assertTrue(((String)jsonobj_prov.get("externalToken")).equals(externalToken));
-			assertTrue(((String)jsonobj_prov.get("equipment")).equals(ds2_equipment));
-			assertTrue(((Double)jsonobj_prov.getDouble("deepAsMeter")).doubleValue()==new Double(ds2_deep));
+			assertTrue(((String)detailObj.get("equipment")).equals(ds2_equipment));
+			assertTrue(((Double)detailObj.getDouble("deepAsMeter")).doubleValue()==new Double(ds2_deep));
 			
-			assertTrue(((String)jsonobj_prov.get("meteoDesc")).equals(ds2_meteo));
-			assertTrue(((String)jsonobj_prov.get("locationDesc")).equals(ds2_location));
-			assertTrue(((String)jsonobj_prov.get("diveDate")).equals("Tue Apr 07 00:00:00 CEST 2015"));
-			assertTrue(jsonobj_prov.getDouble("weightAsKilogram")== ds2_weight);
+			assertTrue(((String)detailObj.get("meteoDesc")).equals(ds2_meteo));
+			assertTrue(((String)detailObj.get("locationDesc")).equals(ds2_location));
+			assertTrue(((String)detailObj.get("diveDate")).equals("Tue Apr 07 00:00:00 CEST 2015"));
+			assertTrue(detailObj.getDouble("weightAsKilogram")== ds2_weight);
 			
 			assertTrue(jsonobj_prov.get("message").equals("Dive session updated"));
 			assertTrue(jsonobj_prov.get("result").equals("OK"));
@@ -377,6 +349,7 @@ public class LogbookManageDiveSessionUseCaseTest {
 			
 		}catch (Exception e) {
 			e.printStackTrace();
+			fail();
 			//TODO manage all excpetions
 			
 		}finally {
@@ -1971,6 +1944,7 @@ public class LogbookManageDiveSessionUseCaseTest {
 		
 			JSONObject jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
 			System.out.println(jsonobj_prov.toString());
+			
 			assertTrue(jsonobj_prov.get("message").equals("Dive session removed"));
 			assertTrue(jsonobj_prov.get("result").equals("OK"));
 			
@@ -2224,6 +2198,53 @@ public class LogbookManageDiveSessionUseCaseTest {
 		}
 		
 		System.out.println("-----End removeDiveSessionNotExistSession()---------");
+	}
+
+	@Test
+	public void removeDiveSessionWrongSession() {
+		try {
+			
+			System.out.println("-----Start removeDiveSessionWrongSession()---------");		
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionRemoveRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+	
+			providerClient = new Client(Protocol.HTTP);
+			providerRequest = new Request(Method.POST, diveSessionRemoveRequest);
+			//create a post entity for Representation
+			fParam_prov = new Form();
+			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("divesession_id", "wrongsession");
+			
+			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			
+		
+			JSONObject jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			
+			assertTrue(jsonobj_prov.getInt("errorCode")==-13);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			
+	
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End removeDiveSessionWrongSession()---------");
 	}	
 
 }
