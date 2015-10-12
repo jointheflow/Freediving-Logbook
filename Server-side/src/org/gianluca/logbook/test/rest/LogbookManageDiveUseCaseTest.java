@@ -114,22 +114,23 @@ public class LogbookManageDiveUseCaseTest {
 			Response providerResponse = providerClient.handle(providerRequest);
 					
 			JSONObject jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			JSONObject detailobj = jsonobj_prov.getJSONObject("detail");
 			System.out.println(jsonobj_prov.toString());
 			
 			assertTrue(((String)jsonobj_prov.get("externalToken")).equals(externalToken));
-			assertTrue(jsonobj_prov.getInt("diveTime")==new Integer(d1_diveTime));	
-			assertTrue(((String)jsonobj_prov.get("diveType")).equals(d1_diveType));
-			assertTrue(((Integer)jsonobj_prov.get("duration")).intValue()==d1_duration);
-			assertTrue(((String)jsonobj_prov.get("note")).equals(d1_note));
-			assertTrue(((String)jsonobj_prov.get("equipment")).equals(d1_equipment));
-			assertTrue(jsonobj_prov.getDouble("depthWaterTempAsCelsius")==new Double(d1_depthWaterTemp));
-			assertTrue(jsonobj_prov.getDouble("depthWaterTempAsFahrehneit")==61.7);
-			assertTrue(((Double)jsonobj_prov.get("neutralBuoyanceAsFeet")).doubleValue()==65.61679790000001);										   
-			assertTrue(((Integer)jsonobj_prov.get("neutralBuoyanceAsMeter")).doubleValue()==20.0);
-			assertTrue(jsonobj_prov.getDouble("maxDeepAsMeter")==new Double(d1_maxDeep));
-			assertTrue(jsonobj_prov.getDouble("maxDeepAsFeet")==65.61679790000001);
-			assertTrue(jsonobj_prov.getDouble("weightAsKilogram")== d1_weight);
-			assertTrue(jsonobj_prov.getDouble("weightAsPound")== 12.125300000000001);
+			assertTrue(detailobj.getInt("diveTime")==new Integer(d1_diveTime));	
+			assertTrue(((String)detailobj.get("diveType")).equals(d1_diveType));
+			assertTrue(((Integer)detailobj.get("duration")).intValue()==d1_duration);
+			assertTrue(((String)detailobj.get("note")).equals(d1_note));
+			assertTrue(((String)detailobj.get("equipment")).equals(d1_equipment));
+			assertTrue(detailobj.getDouble("depthWaterTempAsCelsius")==new Double(d1_depthWaterTemp));
+			assertTrue(detailobj.getDouble("depthWaterTempAsFahrehneit")==61.7);
+			assertTrue(((Double)detailobj.get("neutralBuoyanceAsFeet")).doubleValue()==65.61679790000001);										   
+			assertTrue(((Integer)detailobj.get("neutralBuoyanceAsMeter")).doubleValue()==20.0);
+			assertTrue(detailobj.getDouble("maxDeepAsMeter")==new Double(d1_maxDeep));
+			assertTrue(detailobj.getDouble("maxDeepAsFeet")==65.61679790000001);
+			assertTrue(detailobj.getDouble("weightAsKilogram")== d1_weight);
+			assertTrue(detailobj.getDouble("weightAsPound")== 12.125300000000001);
 			
 			assertTrue(jsonobj_prov.get("message").equals("Dive added"));
 			assertTrue(jsonobj_prov.get("result").equals("OK"));
@@ -202,7 +203,8 @@ public class LogbookManageDiveUseCaseTest {
 			Response loginResponse = loginClient.handle(loginRequest);
 			JSONObject jsonobj = new JsonRepresentation(loginResponse.getEntityAsText()).getJsonObject();
 			System.out.println(jsonobj.toString());
-			freediverId = (String)jsonobj.get("id");
+			JSONObject detailobj = jsonobj.getJSONObject("detail");
+			freediverId = (String)detailobj.get("id");
 			
 			System.out.println("Add dive session");
 			Request providerRequest = new Request(Method.POST, diveSessionAddRequest);
@@ -229,8 +231,10 @@ public class LogbookManageDiveUseCaseTest {
 			Response providerResponse = addClient.handle(providerRequest);
 			JSONObject jsonobj2 = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
 			System.out.println(jsonobj2.toString());
-			System.out.println("sessionId:"+jsonobj2.getString("id"));
-			sessionId = (String)jsonobj2.getString("id");
+			
+			JSONObject detail2 = (JSONObject) jsonobj2.get("detail");
+			sessionId = (String)detail2.getString("id");
+			System.out.println("sessionId:"+detail2.getString("id"));
 			
 			System.out.println("Add dive");
 			Client providerClient = new Client(Protocol.HTTP);
@@ -261,7 +265,8 @@ public class LogbookManageDiveUseCaseTest {
 					
 			JSONObject jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
 			System.out.println(jsonobj_prov);
-			diveId2 = jsonobj_prov.getString("id");
+			detailobj = jsonobj_prov.getJSONObject("detail");
+			diveId2 = detailobj.getString("id");
 			
 			
 			System.out.println("Login executed by external free diver:"+ freediverId);
@@ -312,22 +317,23 @@ public class LogbookManageDiveUseCaseTest {
 			Response providerResponse = providerClient.handle(providerRequest);
 					
 			JSONObject jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			JSONObject detailobj = jsonobj_prov.getJSONObject("detail");
 			System.out.println(jsonobj_prov.toString());
 			
 			assertTrue(((String)jsonobj_prov.get("externalToken")).equals(externalToken));
-			assertTrue(jsonobj_prov.getInt("diveTime")==new Integer(d1_diveTime));	
-			assertTrue(((String)jsonobj_prov.get("diveType")).equals(d1_diveType));
-			assertTrue(((Integer)jsonobj_prov.get("duration")).intValue()==d1_duration);
-			assertTrue(((String)jsonobj_prov.get("note")).equals(d1_note));
-			assertTrue(((String)jsonobj_prov.get("equipment")).equals(d1_equipment));
-			assertTrue(jsonobj_prov.getDouble("depthWaterTempAsCelsius")==new Double(d1_depthWaterTemp));
-			assertTrue(jsonobj_prov.getDouble("depthWaterTempAsFahrehneit")==61.7);
-			assertTrue(((Double)jsonobj_prov.get("neutralBuoyanceAsFeet")).doubleValue()==65.61679790000001);										   
-			assertTrue(((Integer)jsonobj_prov.get("neutralBuoyanceAsMeter")).doubleValue()==20.0);
-			assertTrue(jsonobj_prov.getDouble("maxDeepAsMeter")==new Double(d1_maxDeep));
-			assertTrue(jsonobj_prov.getDouble("maxDeepAsFeet")==65.61679790000001);
-			assertTrue(jsonobj_prov.getDouble("weightAsKilogram")== ds1_weight);
-			assertTrue(jsonobj_prov.getDouble("weightAsPound")== 11.023);
+			assertTrue(detailobj.getInt("diveTime")==new Integer(d1_diveTime));	
+			assertTrue(((String)detailobj.get("diveType")).equals(d1_diveType));
+			assertTrue(((Integer)detailobj.get("duration")).intValue()==d1_duration);
+			assertTrue(((String)detailobj.get("note")).equals(d1_note));
+			assertTrue(((String)detailobj.get("equipment")).equals(d1_equipment));
+			assertTrue(detailobj.getDouble("depthWaterTempAsCelsius")==new Double(d1_depthWaterTemp));
+			assertTrue(detailobj.getDouble("depthWaterTempAsFahrehneit")==61.7);
+			assertTrue(((Double)detailobj.get("neutralBuoyanceAsFeet")).doubleValue()==65.61679790000001);										   
+			assertTrue(((Integer)detailobj.get("neutralBuoyanceAsMeter")).doubleValue()==20.0);
+			assertTrue(detailobj.getDouble("maxDeepAsMeter")==new Double(d1_maxDeep));
+			assertTrue(detailobj.getDouble("maxDeepAsFeet")==65.61679790000001);
+			assertTrue(detailobj.getDouble("weightAsKilogram")== ds1_weight);
+			assertTrue(detailobj.getDouble("weightAsPound")== 11.023);
 			
 			assertTrue(jsonobj_prov.get("message").equals("Dive updated"));
 			assertTrue(jsonobj_prov.get("result").equals("OK"));
@@ -1954,14 +1960,15 @@ public class LogbookManageDiveUseCaseTest {
 			Response providerResponse = providerClient.handle(providerRequest);
 					
 			JSONObject jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			JSONObject jsondetail = jsonobj_prov.getJSONObject("detail");
 			System.out.println(jsonobj_prov.toString());
 			
-			assertTrue(((String)jsonobj_prov.get("id")).equals(sessionId));
+			assertTrue(((String)jsondetail.get("id")).equals(sessionId));
 			assertTrue(jsonobj_prov.get("message").equals("Dive session found"));
 			assertTrue(jsonobj_prov.get("result").equals("OK"));
 			
 			//check if there is the dive session added during setup
-			JSONArray jsonDives = jsonobj_prov.getJSONArray("dives");
+			JSONArray jsonDives = jsondetail.getJSONArray("dives");
 			assertTrue(jsonDives.length()==1);
 			JSONObject jsonD1 = jsonDives.getJSONObject(0);
 			assertTrue(jsonD1.get("id").equals(diveId2));

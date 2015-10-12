@@ -2,13 +2,13 @@ package org.gianluca.logbook.helper;
 
 public class LogbookConstant {
 	/*start values for test*/
-	//public final static String HOST_NAME ="http://freediving-logbook.appspot.com";
-	public final static String HOST_NAME ="http://localhost:8888";
+	public final static String HOST_NAME ="http://app-nea-it.appspot.com";
+	//public final static String HOST_NAME ="http://localhost:8888";
 	//get new toke from FB https://developers.facebook.com/tools/explorer
-	public final static String FACEBOOK_ACCESSS_TOKEN="CAAB4GhgAGN0BAJQIgwyTYDKP73L4j6VfAcjIEjGCmPFcu22nyPY77YuceILKst1tuf2MlS8xymBQmg4nNO2p6L3hz1x55rS4wfC6F1uC3zmAWTZA2z5ZCj5vZCJVZCNExM4UFy0LsPlAcGEP4YuqSSFbIqa7uKaQrENEfVqpG8LIWbzYZCgJUrOprZAAkAZBjL0o3C5vOrAgAZDZD";
+	public final static String FACEBOOK_ACCESSS_TOKEN="CAAB4GhgAGN0BAKZBiMD7wyLolbfOMkyZA5y8LXZCaBSJXd0dD9bkpzUIcFwxNKQVangL7luRsUTnzNnMGeglHvJt81ixMtKsZBDHMCmn3QQe8jvpobB66ilfNvjZB5zVXw6M4LxgNT2jZAZBgp9aTcvTD87nK7ZBRgHZBbzZB0AHJ88i4PGyws765KKrpOZAZBNhIVIthQI1Y2GVrwZDZD";
 	/*end values for test*/
 	
-	public static final String SW_VERSION="1.0.0 (grouperino)";
+	public static final String SW_VERSION="0.0.0 (grouperino)";
 	
 	public static final int FACEBOOK_PLATFORM=0;
 	public static final int GOOGLE_PLATFORM=1;

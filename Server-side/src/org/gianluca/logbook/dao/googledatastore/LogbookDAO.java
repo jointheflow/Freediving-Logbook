@@ -413,12 +413,12 @@ public class LogbookDAO {
 			
 			}catch (IllegalArgumentException e) {
 				log.info(e.getMessage());
-				throw new DiveSessionIdException(e.getMessage());
+				throw new DiveSessionIdException("Referential integrity constraint violation: Dive sessionId not exists or wrong");
 				
 			
 			} catch (EntityNotFoundException e) {
 				log.info(e.getMessage());
-				throw new DiveSessionIdException("Referential integrity constraint violation: Dive sessionId not exists");
+				throw new DiveSessionIdException("Referential integrity constraint violation: Dive sessionId not exists or wrong");
 				
 			} finally {
 			    if (tx.isActive()) {
@@ -452,7 +452,7 @@ public class LogbookDAO {
 				
 			}catch (IllegalArgumentException | EntityNotFoundException e) {
 				log.info(e.getMessage());
-				throw new DiveIdException(e.getMessage());
+				throw new DiveIdException("Dive id wrong or not found for "+diveId);
 				
 			
 			} finally {

@@ -177,6 +177,7 @@ public class LogbookManage_APP_ENGINE_TestCase {
 		
 		Response loginResponse = loginClient.handle(loginRequest);
 		JSONObject jsonobj = null;
+		JSONObject detailobj = null;
 		try {
 			jsonobj = new JsonRepresentation(loginResponse.getEntityAsText()).getJsonObject();
 		} catch (JSONException e) {
@@ -185,7 +186,8 @@ public class LogbookManage_APP_ENGINE_TestCase {
 		}
 		System.out.println(jsonobj.toString());
 		try {
-			freediverId = (String)jsonobj.get("id");
+			detailobj = jsonobj.getJSONObject("detail");
+			freediverId = (String)detailobj.get("id");
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -201,9 +203,11 @@ public class LogbookManage_APP_ENGINE_TestCase {
 		
 		Response loginResponse = loginClient.handle(loginRequest);
 		JSONObject jsonobj = null;
+		JSONObject detailobj = null;
 		jsonobj = new JsonRepresentation(loginResponse.getEntityAsText()).getJsonObject();
 		System.out.println(jsonobj.toString());
-		freediverId = (String)jsonobj.get("id");
+		detailobj = jsonobj.getJSONObject("detail");
+		freediverId = (String)detailobj.get("id");
 		
 		System.out.println("Add dive session");
 		Request providerRequest = new Request(Method.POST, diveSessionAddRequest);
@@ -229,9 +233,11 @@ public class LogbookManage_APP_ENGINE_TestCase {
 		providerRequest.setEntity(fParam_prov.getWebRepresentation());
 		Response providerResponse = addClient.handle(providerRequest);
 		JSONObject jsonobj2 = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+		
 		System.out.println(jsonobj2.toString());
-		System.out.println("sessionId:"+jsonobj2.getString("id"));
-		sessionId = (String)jsonobj2.getString("id");
+		detailobj = jsonobj2.getJSONObject("detail");
+		System.out.println("sessionId:"+detailobj.getString("id"));
+		sessionId = (String)detailobj.getString("id");
 		
 		
 	}
