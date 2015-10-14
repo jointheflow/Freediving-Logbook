@@ -14,3 +14,6 @@ http://restfb.com/
 
 
 --------How to deploy on Google App Engine-----------
+1) select app name
+2) make compiler compatibility to 1.7
+3) deploy

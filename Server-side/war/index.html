@@ -9,10 +9,40 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>App-nea platform</title>
+    <title>App-nea: freediver's logbook platform</title>
   </head>
 
   <body>
+    <script>
+  		  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '132053467142365',
+      xfbml      : true,
+      version    : 'v2.5'
+    });
+    
+    
+    FB.getLoginStatus(function(response) {
+  if (response.status === 'connected') {
+    console.log('Logged in.');
+    console.log(response.authResponse.accessToken);
+  }
+  else {
+    FB.login();
+  }
+});
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+	</script>
+	
+	
     <h1>Welcome to App-nea platform!</h1>
 	
     <table>
@@ -23,5 +53,7 @@
         <td><a href="https://docs.google.com/document/d/1R5_QRElu40hTb6ErLYQW1fbh7MSRgfpP-Fmz8yEmnk8/pub">App-nea rest API documentation</a></td>
       </tr>
     </table>
+   
+	
   </body>
 </html>
