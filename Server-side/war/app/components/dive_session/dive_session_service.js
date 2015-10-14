@@ -8,7 +8,7 @@ var diveSessionModule = angular.module('diveSessionModule');
 
 diveSessionModule.service('diveSessionServices', function () {
 	this.login = function (externalPlatform, externalToken, platformId) {
-		
+		return 'fake login data';
 	};
 	this.get = function (diveSessionId) {
 		
