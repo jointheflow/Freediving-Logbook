@@ -12,5 +12,9 @@ var freedivingLogbookConstant = freedivingLogbookConstant || {
 	apiDiveSessionAdd:'/freediver/divesession/add',
 	apiDiveAdd: '/freediver/divesession/dive/add',
 	apiDiveUpdate: '/freediver/divesession/dive/update',
-	apiDiveRemove: '/freediver/divesession/dive/remove'
+	apiDiveRemove: '/freediver/divesession/dive/remove',
+	
+	pNameExternalPlatform : 'external_platform_id',
+	pNamePageSize :'dive_page_size',
+	pNameExternalToken : 'external_token'
 };
