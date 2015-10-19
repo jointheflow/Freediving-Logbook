@@ -2,8 +2,13 @@ package org.gianluca.logbook.rest.application;
 
 
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.restlet.Application;
 import org.restlet.Restlet;
+import org.restlet.engine.application.CorsFilter;
 import org.restlet.routing.Router;
 
 public class LogbookApplication extends Application {
@@ -32,6 +37,10 @@ public class LogbookApplication extends Application {
         router.attach("/freediver/divesession/dive/remove", org.gianluca.logbook.rest.resource.DiveRemoveResource.class);
        
         
+     // Add a CORS filter to allow cross-domain requests
+        CorsFilter corsFilter = new CorsFilter(getContext(), router);
+        corsFilter.setAllowedOrigins(new HashSet<String>(Arrays.asList("*")));
+        corsFilter.setAllowedCredentials(true);
         
         return router;
 

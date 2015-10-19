@@ -12,6 +12,10 @@ freediving Logbook
 1) Facebook external platform integration 
 http://restfb.com/
 
+2) client side:
+https://github.com/Ciul/angular-facebook
+
+
 
 --------How to deploy on Google App Engine-----------
 1) select app name
