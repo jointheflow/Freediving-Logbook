@@ -1,0 +1,22 @@
+<!doctype html>
+<html ng-app="appNeaClient">
+  <head>
+    <script src="assets/libs/angular/angular.min.js"></script>
+    <script src="src/common/constant.js"></script>
+    <script src="src/app.js"></script>
+    <script src="src/service/freediver_service.js"></script>
+    <script src="src/controller/freediver_controller.js"></script>
+    <!--script src="assets/libs/angular-facebook/angular-facebook.js"></script-->
+    <script src="src/service/facebook_service.js"></script>  
+  </head>
+  <body>
+    <div ng-controller="freediverController">  
+        <div class="fb-login-button" data-max-rows="1" data-size="small" data-show-faces="true" data-auto-logout-link="true"></div>
+        <div>
+            <input type="text" ng-model="externalToken"/>
+            <input type="text" ng-model="freediver.externalUsername "/>
+        </div>
+    </div>
+      
+  </body>
+</html>
