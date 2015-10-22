@@ -1,7 +1,7 @@
 /*Creates all application module*/
 //appNeaClient is the main module that represents the app. It needs all other modules dependencies
-var appNeaClient = angular.module('appNeaClient', ['appNeaClient.service', 'appNeaClient.facebook.service']);
-var appNeaClientService = angular.module('appNeaClient.service', []);
+var appNeaClient = angular.module('appNeaClient', ['appNeaClient.rest.service', 'appNeaClient.facebook.service']);
+var appNeaClientService = angular.module('appNeaClient.rest.service', []);
 var appNeaClientFacebookService = angular.module('appNeaClient.facebook.service', []);
 
 
@@ -34,7 +34,7 @@ appNeaClient.run(['$rootScope', '$window', 'fbAuth',
                To register a new app visit Facebook App Dashboard
                ( https://developers.facebook.com/apps/ ) 
               */
-              appId: '132053467142365',  
+              appId: freedivingLogbookConstant.facebook_app_id,  
               /* 
                Adding a Channel File improves the performance 
                of the javascript SDK, by addressing issues 

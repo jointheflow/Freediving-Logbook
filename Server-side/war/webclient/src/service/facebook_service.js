@@ -1,4 +1,4 @@
-/*Contains wrapper of all freediver http services*/
+/*Contains wrapper of all facebook sdk services*/
 
 //get reference to the service module defined in app.js
 var appNeaClientFacebookService = angular.module('appNeaClient.facebook.service');
