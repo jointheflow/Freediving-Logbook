@@ -1,16 +1,39 @@
 <!doctype html>
 <html ng-app="appNeaClient">
   <head>
+    <!-- AngularJS -->
     <script src="assets/libs/angular/angular.min.js"></script>
+    <script src="assets/libs/angular/ui-bootstrap-tpls-0.14.3.min.js"></script>
+      
+    <!-- Facebook sdk -->
+    <!--script src="assets/libs/angular-facebook/angular-facebook.js"></script-->
+    <!--AppNea code -->
     <script src="src/common/constant.js"></script>
     <script src="src/app.js"></script>
     <script src="src/service/freediver_service.js"></script>
+    <script src="src/service/facebook_service.js"></script> 
     <script src="src/controller/freediver_controller.js"></script>
-    <!--script src="assets/libs/angular-facebook/angular-facebook.js"></script-->
-    <script src="src/service/facebook_service.js"></script>  
+    <!-- Bootstrap -->
+    <link href="assets/libs/bootstrap/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="assets/libs/bootstrap/bootstrap-theme.min.css" rel="stylesheet" media="screen">
+	
   </head>
   <body>
-    <div ng-controller="freediverController">  
+    
+    <header>
+    </header>
+    
+    <!-- Start View section --> 
+    <div class="container-fluid">
+  	 <div data-ng-view></div>
+    </div>
+    <!-- End View section -->
+
+      
+    <footer>
+    </footer>
+      
+    <!--div ng-controller="freediverController">  
         <div class="fb-login-button" data-max-rows="1" data-size="small" data-show-faces="true" data-auto-logout-link="true"></div>
         <div>
             <input type="text" ng-model="externalToken"/>
@@ -19,7 +42,7 @@
             <input type="text" ng-model="freediver.weightUnit"/>
             <input type="text" ng-model="freediver.diveSessions"/>
         </div>
-    </div>
+    </div-->
       
   </body>
 </html>
