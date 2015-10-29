@@ -25,4 +25,5 @@ var freedivingLogbookConstant = freedivingLogbookConstant || {
     APPNEA_STATUS_UNKNOWN : -2,
     
     facebook_app_id: '132053467142365'
+    	
 };

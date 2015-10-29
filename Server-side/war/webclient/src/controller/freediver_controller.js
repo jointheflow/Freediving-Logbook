@@ -3,12 +3,16 @@ var appNeaClient = angular.module('appNeaClient');
 
 /*controller definition */
 appNeaClient.controller('freediverController',  
-	function ($scope,$rootScope, freediverService, $log, $timeout, fbAuth) {
+	function ($scope,$rootScope, freediverService, $log, $timeout, fbAuth, usSpinnerService) {
 	
 	
 	/*manages rest server login success*/
 	$scope.onLoginSuccess = function(data) {
-		alert('Login success '+ data.message);
+		//stop the spinner
+        usSpinnerService.stop('spinner');
+        
+        //alert('Login success '+ data.message);
+        //initialize the the scope with value fetch from login
         $scope.externalToken=$rootScope.externalToken;
         $scope.freediver=data.detail;
         $scope.freediver.weightUnit=data.weightUnit;
@@ -16,11 +20,14 @@ appNeaClient.controller('freediverController',
         $scope.freediver.tempUnit=data.tempUnit;
         
         
+        
 	};
 	
 	/*manages rest server login error*/
 	$scope.onLoginError = function(data) {
-		alert('Login error '+ data.errorMessage);
+		//stop the spinner
+        usSpinnerService.stop('spinner');
+        alert('Login error '+ data.errorMessage);
 		
 	};
 	
@@ -30,12 +37,22 @@ appNeaClient.controller('freediverController',
     $rootScope.$watch('externalToken', function() {
         $log.info('externalToken change to:'+$rootScope.externalToken);
         
+        /*If external token has been changed to new value, we need to do Login on server side*/
         if ($rootScope.externalToken!=null) {
+            //start the spinner
+            usSpinnerService.spin('spinner');
+            
             freediverService.login(0,
     	    					$rootScope.externalToken,
     	    					100, 
     	    					$scope.onLoginSuccess, 
     	    					$scope.onLoginError);
+        /*if external token is null clean the context because user has been logged out*/
+        } else {
+        	$scope.externalToken=$rootScope.externalToken;
+            $scope.freediver=null;
+           
+        	
         }
     });
     

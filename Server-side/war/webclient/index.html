@@ -1,9 +1,13 @@
 <!doctype html>
-<html ng-app="appNeaClient">
+<html ng-app="appNeaClient" ng-controller="rootController">
   <head>
     <!-- AngularJS -->
     <script src="assets/libs/angular/angular.min.js"></script>
     <script src="assets/libs/angular/ui-bootstrap-tpls-0.14.3.min.js"></script>
+    <!--Spinner-->  
+    <script src="assets/libs/spinner/spin.min.js"></script>
+    <script src="assets/libs/spinner/angular-spinner.min.js"></script>
+    
       
     <!-- Facebook sdk -->
     <!--script src="assets/libs/angular-facebook/angular-facebook.js"></script-->
@@ -13,26 +17,54 @@
     <script src="src/service/freediver_service.js"></script>
     <script src="src/service/facebook_service.js"></script> 
     <script src="src/controller/freediver_controller.js"></script>
+    <script src="src/controller/root_controller.js"></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,  user-scalable=no">
     <!-- Bootstrap -->
     <link href="assets/libs/bootstrap/bootstrap.min.css" rel="stylesheet" media="screen">
 	<link href="assets/libs/bootstrap/bootstrap-theme.min.css" rel="stylesheet" media="screen">
 	
   </head>
-  <body>
+  <body ng-controller="freediverController">
     
     <header>
+         <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header navbar-left">
+                    <!-- brand section-->
+                    <div ng-include="'src/view/brand_view.html'"></div>    
+                    <!-- end brand section -->
+                </div>
+                
+                <!--facebook login section -->
+                <div ng-include="'src/view/facebook_login_button_view.html'"></div>
+                <!--end facebook login section -->
+                <!-- freediver user section-->
+                <div ng_include="'src/view/freediver_login_view.html'"></div>
+                <!-- end freediver user section-->
+                
+            </div>
+        </div>
     </header>
     
     <!-- Start View section --> 
     <div class="container-fluid">
-  	 <div data-ng-view></div>
+  	 <div data-ng-view>
+        <button ng-click="" ng-show="freediver!=null">
+  Logout
+</button>
+         </div>
     </div>
     <!-- End View section -->
 
       
     <footer>
+        
+        
+
     </footer>
-      
+    <span us-spinner spinner-key="spinner"></span>  
+    
     <!--div ng-controller="freediverController">  
         <div class="fb-login-button" data-max-rows="1" data-size="small" data-show-faces="true" data-auto-logout-link="true"></div>
         <div>
