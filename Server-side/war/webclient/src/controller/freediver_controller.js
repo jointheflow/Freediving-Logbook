@@ -74,10 +74,11 @@ appNeaClient.controller('freediverController',
 	};
     */
 	
-    /* manege logout on fb but we let fb manage logout directly +/
+    //manege logout on fb but we let fb manage logout directly +/
     $scope.logout = function() {
         fbAuth.logout();
+        window.location.reload();
     };
-    */
+    
          
 });   
