@@ -43,7 +43,7 @@
             <ul class="nav navbar-nav navbar-right" ng-show="freediver==null">
                 <li><a href="#"><div ng-include="'src/view/facebook_login_button_view.html'"></div></a></li>
             </ul>
-            <ul class="nav navbar-nav navbar-right" ng-show="freediver!=null">
+            <ul class="nav navbar-brand navbar-right" ng-show="freediver!=null">
                 <div class="btn-group" uib-dropdown is-open="status.isopen">
                     <button id="single-button" type="button" class="btn btn-primary btn-xs" uib-dropdown-toggle ng-disabled="disabled">
             {{freediver.externalUsername}} <span class="caret"></span>
@@ -65,6 +65,25 @@
 
     <!-- Start View section --> 
         <div>
+            <div class="list-group">
+                <a href="#" class="list-group-item ">
+                    <h4 class="list-group-item-heading">dive session 1</h4>
+                    <p class="list-group-item-text">...</p>
+                </a>
+                <a href="#" class="list-group-item active">
+                    <h4 class="list-group-item-heading">dive session 2</h4>
+                    <p class="list-group-item-text">...</p>
+                </a>
+                <a href="#" class="list-group-item ">
+                    <h4 class="list-group-item-heading">dive session 3</h4>
+                    <p class="list-group-item-text">...</p>
+                </a>
+                <a href="#" class="list-group-item ">
+                    <h4 class="list-group-item-heading">dive session 4</h4>
+                    <p class="list-group-item-text">...</p>
+                </a>
+            </div>
+            
             <!--button ng-click="" ng-show="freediver!=null">
             Logout
             </button>
