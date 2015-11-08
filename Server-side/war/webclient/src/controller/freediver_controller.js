@@ -3,13 +3,13 @@ var appNeaClient = angular.module('appNeaClient');
 
 /*controller definition */
 appNeaClient.controller('freediverController',  
-	function ($scope,$rootScope, freediverService, $log, $timeout, fbAuth, usSpinnerService) {
+	function ($scope,$rootScope, freediverService, $log, $timeout, fbAuth) {
 	
 	
 	/*manages rest server login success*/
 	$scope.onLoginSuccess = function(data) {
 		//stop the spinner
-        usSpinnerService.stop('spinner');
+        $scope.spinner="";
         
         //alert('Login success '+ data.message);
         //initialize the the scope with value fetch from login
@@ -26,7 +26,7 @@ appNeaClient.controller('freediverController',
 	/*manages rest server login error*/
 	$scope.onLoginError = function(data) {
 		//stop the spinner
-        usSpinnerService.stop('spinner');
+        $scope.spinner="";
         alert('Login error '+ data.errorMessage);
 		
 	};
@@ -40,7 +40,7 @@ appNeaClient.controller('freediverController',
         /*If external token has been changed to new value, we need to do Login on server side*/
         if ($rootScope.externalToken!=null) {
             //start the spinner
-            usSpinnerService.spin('spinner');
+            $scope.spinner="indeterminate";
             
             freediverService.login(0,
     	    					$rootScope.externalToken,

@@ -1,10 +1,18 @@
 /*Creates all application module*/
 //appNeaClient is the main module that represents the app. It needs all other modules dependencies
-var appNeaClient = angular.module('appNeaClient', ['appNeaClient.rest.service', 'appNeaClient.facebook.service']);
+var appNeaClient = angular.module('appNeaClient', ['ngMaterial', 'appNeaClient.rest.service', 'appNeaClient.facebook.service']);
+
+
 var appNeaClientService = angular.module('appNeaClient.rest.service', []);
+
 var appNeaClientFacebookService = angular.module('appNeaClient.facebook.service', []);
 
-
+/*Angular Material theme configuration*/
+appNeaClient.config(function($mdThemingProvider) {
+  $mdThemingProvider.theme('default')
+    .primaryPalette('blue')
+    .accentPalette('light-blue');
+});
 
 
 

@@ -1,0 +1,94 @@
+<!doctype html>
+<html ng-app="appNeaClient" ng-controller="rootController">
+  <head>
+     <!-- Angular Material CSS now available via Google CDN; version 0.11.2 used here -->
+    <!--link rel="stylesheet" href="assets/libs/angular-material/angular-material.min.css"-->
+      <link rel="stylesheet"    href="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.2/angular-material.min.css">
+
+      
+   <!-- Angular Material Dependencies -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script>
+
+
+    <!-- Angular Material Javascript now available via Google CDN; version 0.11.2 used here -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.2/angular-material.min.js"></script>
+    
+    
+      
+    <!-- Facebook sdk -->
+    <!--script src="assets/libs/angular-facebook/angular-facebook.js"></script-->
+    <!--AppNea code -->
+    <script src="src/common/constant.js"></script>
+    <script src="src/app_material.js"></script>
+    <script src="src/service/freediver_service.js"></script>
+    <script src="src/service/facebook_service.js"></script> 
+    <script src="src/controller/freediver_controller.js"></script>
+    <script src="src/controller/root_controller.js"></script>
+    
+    
+  </head>
+  <body ng-controller="freediverController" layout="column">
+        
+      
+    <md-toolbar>  
+            <div class="md-toolbar-tools">
+                <h2>app-nea</h2>
+                <span flex></span>
+                <div class="fb-login-button" data-max-rows="1" data-size="small" data-show-faces="false" data-auto-logout-link="true"></div>
+                <md-button class="md-icon-button" aria-label="Settings">
+                    <md-icon md-svg-icon="assets/img/menu.svg"></md-icon>
+                </md-button>
+            </div>
+    </md-toolbar>
+    <div layout="row">
+        <md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="right" md-is-locked-open="">
+            <md-toolbar class="md-theme-light">
+                <h1 class="md-toolbar-tools">Sidenav right</h1>
+            </md-toolbar>
+            <md-content  layout-padding>
+                <form>
+                    <md-input-container>
+                        <label for="testInput">Test input</label>
+                        <input type="text" id="testInput"
+                   ng-model="data" md-autofocus>
+                    </md-input-container>
+                </form>
+                <md-button ng-click="close()" class="md-primary">
+                    Close Sidenav Right
+                </md-button>
+            </md-content>
+        </md-sidenav>
+      
+        <md-content flex>
+            <md-list>
+                <md-list-item>
+                    <span>Item content in list</span>
+                </md-list-item>
+                <md-list-item>
+                    <span>Item content in list</span>
+                </md-list-item>
+                <md-list-item>
+                    <span>Item content in list</span>
+                </md-list-item>
+                <md-list-item>
+                    <span>Item content in list</span>
+                </md-list-item>
+                <md-list-item>
+                    <span>Item content in list</span>
+                </md-list-item>
+                <md-list-item>
+            </md-list>          
+        </md-content>
+    </div>
+    <div layout="row" layout-sm="column" layout-align="space-around">
+        <md-progress-circular md-mode="{{spinner}}"></md-progress-circular>
+    </div>
+            
+    <md-button class="md-fab md-fab-bottom-right" aria-label=”Add”>
+        <ng-md-icon icon=”add”></ng-md-icon>
+    </md-button>
+    
+  </body>
+</html>

@@ -5,26 +5,15 @@ var appNeaClient = angular.module('appNeaClient');
 
 appNeaClient.controller('rootController', 
     
-    function ($rootScope, $scope, $modal, $log, $timeout, $location) {
+    //function ($rootScope, $scope, $modal, $log, $timeout, $location) {
+    function ($rootScope, $scope, $log, $timeout, $location) {
         
-        /*defining loader icon manager, show and hide method */
-        Loader = function(booleanDefault) {
-            this.loading = booleanDefault;           
-        };
-        Loader.prototype.showloader = function() {
-            this.loading = true;
-        };        
-        Loader.prototype.hideloader = function() {
-            this.loading = false;
-        };
-        //loader instantiation: we will use the global loader in the rest of the application
-        $rootScope.globalLoader = new Loader(false);
-        /*loader icon manager end*/
+       
 		
 		
 		/*defining and managing alert, show message receive a _msg text a type and a focus _fcs that
 		represent the elementID in the dom where the focus must be when the modal view is closed*/
-      	$rootScope.showMsg = function (_msg, _tpe, _fcs) {
+      	/*$rootScope.showMsg = function (_msg, _tpe, _fcs) {
             var l_alerts =[{type: _tpe, msg: _msg}];
 			
 			var modalInstance = $modal.open({
@@ -47,7 +36,7 @@ appNeaClient.controller('rootController',
             });
         };
 		
-        
+        */
         
         //set focus to destinationId or destinationId.destinationTag basing key event and key code
         //for example key code 13 correponds to RETURN
