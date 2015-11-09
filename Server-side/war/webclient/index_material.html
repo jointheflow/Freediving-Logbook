@@ -26,62 +26,45 @@
     <script src="src/service/facebook_service.js"></script> 
     <script src="src/controller/freediver_controller.js"></script>
     <script src="src/controller/root_controller.js"></script>
+    <script src="src/controller/sidenav_controller.js"></script>
     
     
   </head>
   <body ng-controller="freediverController" layout="column">
         
       
-    <md-toolbar>  
+    <md-toolbar ng-controller="MyController">  
             <div class="md-toolbar-tools">
                 <h2>app-nea</h2>
                 <span flex></span>
-                <div class="fb-login-button" data-max-rows="1" data-size="small" data-show-faces="false" data-auto-logout-link="true"></div>
-                <md-button class="md-icon-button" aria-label="Settings">
+                <div  ng-show="freediver==null" class="fb-login-button" data-max-rows="1" data-size="small" data-show-faces="false" data-auto-logout-link="true"></div>
+                <md-button class="md-icon-button" aria-label="Settings" ng-click="openLeftMenu()" ng-show="freediver!=null" >
                     <md-icon md-svg-icon="assets/img/menu.svg"></md-icon>
                 </md-button>
             </div>
     </md-toolbar>
-    <div layout="row">
-        <md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="right" md-is-locked-open="">
-            <md-toolbar class="md-theme-light">
-                <h1 class="md-toolbar-tools">Sidenav right</h1>
+    <md-content layout="row" layout-fill>
+       <div ng-include="'src/view/divesession_view_material.html'"></div>
+       <md-sidenav md-component-id="right" class="md-sidenav-right">
+            <md-toolbar>
+                  <md-icon md-svg-icon="assets/img/ic_account_box_white_18px.svg" class="avatar"></md-icon>
+                    {{freediver.externalUsername}} 
             </md-toolbar>
-            <md-content  layout-padding>
-                <form>
-                    <md-input-container>
-                        <label for="testInput">Test input</label>
-                        <input type="text" id="testInput"
-                   ng-model="data" md-autofocus>
-                    </md-input-container>
-                </form>
-                <md-button ng-click="close()" class="md-primary">
-                    Close Sidenav Right
-                </md-button>
-            </md-content>
-        </md-sidenav>
-      
-        <md-content flex>
+           
             <md-list>
                 <md-list-item>
-                    <span>Item content in list</span>
-                </md-list-item>
+               
+                    </md-list-item>
+                
                 <md-list-item>
-                    <span>Item content in list</span>
+                    <md-button ng-click="logout()"> Logout</md-button>
                 </md-list-item>
-                <md-list-item>
-                    <span>Item content in list</span>
-                </md-list-item>
-                <md-list-item>
-                    <span>Item content in list</span>
-                </md-list-item>
-                <md-list-item>
-                    <span>Item content in list</span>
-                </md-list-item>
-                <md-list-item>
-            </md-list>          
-        </md-content>
-    </div>
+            </md-list>
+          
+       </md-sidenav>
+ 
+       
+    </md-content>
     <div layout="row" layout-sm="column" layout-align="space-around">
         <md-progress-circular md-mode="{{spinner}}"></md-progress-circular>
     </div>

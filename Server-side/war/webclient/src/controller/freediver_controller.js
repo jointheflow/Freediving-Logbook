@@ -80,5 +80,4 @@ appNeaClient.controller('freediverController',
         window.location.reload();
     };
     
-         
 });   
