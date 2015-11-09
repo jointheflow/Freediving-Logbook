@@ -43,18 +43,17 @@
                 </md-button>
             </div>
     </md-toolbar>
-    <md-content layout="row" layout-fill>
+    <md-content flex layout="row">
        <div ng-include="'src/view/divesession_view_material.html'"></div>
-       <md-sidenav md-component-id="right" class="md-sidenav-right">
-            <md-toolbar>
-                  <md-icon md-svg-icon="assets/img/ic_account_box_white_18px.svg" class="avatar"></md-icon>
-                    {{freediver.externalUsername}} 
-            </md-toolbar>
-           
+       <md-sidenav md-component-id="right" class="md-sidenav-right"> 
             <md-list>
                 <md-list-item>
-               
-                    </md-list-item>
+                    <img ng-src="assets/img/app-nea-def_noname_150x79.png" class="md-avatar" alt="{{freediver.externalUsername}}" />
+                    <div class="md-list-item-text" layout="column">
+                        <h4>{{freediver.externalUsername}}</h4>
+                    </div>
+                    <md-divider></md-divider>
+                </md-list-item>
                 
                 <md-list-item>
                     <md-button ng-click="logout()"> Logout</md-button>
