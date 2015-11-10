@@ -35,27 +35,25 @@
       
     <md-toolbar ng-controller="MyController">  
             <div class="md-toolbar-tools">
-                <h2>app-nea</h2>
-                <span flex></span>
+               
+                <span flex>app-nea</span>
                 <div  ng-show="freediver==null" class="fb-login-button" data-max-rows="1" data-size="small" data-show-faces="false" data-auto-logout-link="true"></div>
                 <md-button class="md-icon-button" aria-label="Settings" ng-click="openLeftMenu()" ng-show="freediver!=null" >
                     <md-icon md-svg-icon="assets/img/menu.svg"></md-icon>
                 </md-button>
             </div>
     </md-toolbar>
-    <md-content layout="row" layout-fill>
+    <md-content layout="row" layout-fill style="min-height: 224px;">
        <div ng-include="'src/view/divesession_view_material.html'"></div>
        <md-sidenav md-component-id="right" class="md-sidenav-right">
-            <md-toolbar>
-                  <md-icon md-svg-icon="assets/img/ic_account_box_white_18px.svg" class="avatar"></md-icon>
-                    {{freediver.externalUsername}} 
+           <md-toolbar>
+               <div class="md-toolbar-tools">
+                   <md-icon md-svg-icon="assets/img/ic_account_box_white_18px.svg" class="avatar"></md-icon>   
+                   <span>{{freediver.externalUsername}}</span>
+               </div>
+                     
             </md-toolbar>
-           
             <md-list>
-                <md-list-item>
-               
-                    </md-list-item>
-                
                 <md-list-item>
                     <md-button ng-click="logout()"> Logout</md-button>
                 </md-list-item>
