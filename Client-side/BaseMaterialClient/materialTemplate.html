@@ -1,0 +1,70 @@
+<html ng-app="materialApp">
+    <head>
+    
+    <!-- Angular Material CSS now available via Google CDN; version 0.11.4 used here -->
+    <!--link rel="stylesheet" href="assets/libs/angular-material/angular-material.min.css"-->
+      <link rel="stylesheet"  href="https://gitcdn.xyz/repo/angular/bower-material/v0.11.4/angular-material.css">
+
+      
+   <!-- Angular Material Dependencies -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-aria.min.js"></script>
+
+
+    <!-- Angular Material Javascript now available via Google CDN; version 0.11.2 used here -->
+    <script src="https://gitcdn.xyz/repo/angular/bower-material/v0.11.4/angular-material.js"></script>
+        
+    <script src="materialApp.js"></script>   
+         
+    </head>
+
+    <body>
+        
+        <div layout="row" flex ng-controller="MyController">
+            <!-- Defines a left sidebar -->
+            <md-sidenav class="md-sidenav-left" md-component-id="left">
+                <md-list>
+                    <md-list-item>
+                        <p>left Sidenav</p>
+                    </md-list-item>
+                </md-list>
+            </md-sidenav>
+            
+            <!-- Defines a column layout with top fixed toolbar anc scrollable content. Must use layout-fill-->
+            <div layout="column" layout-fill>
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <md-button class="md-icon-button" aria-label="menu" ng-click="openLeftMenu()" >
+                            <md-icon md-svg-src="menu.svg"></md-icon>
+                        </md-button>
+                        <p>Toolbar</p>
+                    </div>
+                    
+                </md-toolbar>
+                <md-content flex>
+                    <md-list>
+                        <md-list-item>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <md-divider></md-divider>
+                        </md-list-item>
+                        <md-list-item>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <md-divider></md-divider>
+                        </md-list-item>
+                        <md-list-item>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <md-divider></md-divider>
+                        </md-list-item>
+                        <md-list-item>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <md-divider></md-divider>
+                        </md-list-item>
+                    </md-list>
+                </md-content>
+            </div>
+            
+        </div>
+    
+    </body>
+</html>
