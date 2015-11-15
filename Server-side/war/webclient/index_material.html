@@ -1,76 +1,40 @@
-<!doctype html>
-<html ng-app="appNeaClient" ng-controller="rootController">
-  <head>
-     <!-- Angular Material CSS now available via Google CDN; version 0.11.2 used here -->
+<html ng-app="appNeaClient">
+    <head>
+    
+    <!-- Angular Material CSS now available via Google CDN; version 0.11.4 used here -->
     <!--link rel="stylesheet" href="assets/libs/angular-material/angular-material.min.css"-->
-      <link rel="stylesheet"    href="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.2/angular-material.min.css">
+      <link rel="stylesheet"  href="https://gitcdn.xyz/repo/angular/bower-material/v0.11.4/angular-material.css">
 
       
    <!-- Angular Material Dependencies -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-animate.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-aria.min.js"></script>
 
 
     <!-- Angular Material Javascript now available via Google CDN; version 0.11.2 used here -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.2/angular-material.min.js"></script>
+    <script src="https://gitcdn.xyz/repo/angular/bower-material/v0.11.4/angular-material.js"></script>
     
-    
-      
-    <!-- Facebook sdk -->
-    <!--script src="assets/libs/angular-facebook/angular-facebook.js"></script-->
-    <!--AppNea code -->
-    <script src="src/common/constant.js"></script>
-    <script src="src/app_material.js"></script>
-    <script src="src/service/freediver_service.js"></script>
-    <script src="src/service/facebook_service.js"></script> 
-    <script src="src/controller/freediver_controller.js"></script>
-    <script src="src/controller/root_controller.js"></script>
-    <script src="src/controller/sidenav_controller.js"></script>
-    
-    
-  </head>
-  <body ng-controller="freediverController" layout="column">
+        <!-- appnea source code reference -->    
+    <script src="src/materialApp.js"></script> 
+    <script src="src/shared/constant.js"></script>
+    <script src="src/shared/controller/appnea_controller.js"></script>
+    <script src="src/shared/service/facebook_service.js"></script>
+    <script src="src/shared/service/freediver_service.js"></script>
+    <script src="src/divesession/divesession_controller.js"></script>
+         
+    </head>
+
+    <body>
         
-      
-    <md-toolbar ng-controller="MyController">  
-            <div class="md-toolbar-tools">
-                <h2>app-nea</h2>
-                <span flex></span>
-                <div  ng-show="freediver==null" class="fb-login-button" data-max-rows="1" data-size="small" data-show-faces="false" data-auto-logout-link="true"></div>
-                <md-button class="md-icon-button" aria-label="Settings" ng-click="openLeftMenu()" ng-show="freediver!=null" >
-                    <md-icon md-svg-icon="assets/img/menu.svg"></md-icon>
-                </md-button>
-            </div>
-    </md-toolbar>
-    <md-content flex layout="row">
-       <div ng-include="'src/view/divesession_view_material.html'"></div>
-       <md-sidenav md-component-id="right" class="md-sidenav-right"> 
-            <md-list>
-                <md-list-item>
-                    <img ng-src="assets/img/app-nea-def_noname_150x79.png" class="md-avatar" alt="{{freediver.externalUsername}}" />
-                    <div class="md-list-item-text" layout="column">
-                        <h4>{{freediver.externalUsername}}</h4>
-                    </div>
-                    <md-divider></md-divider>
-                </md-list-item>
-                
-                <md-list-item>
-                    <md-button ng-click="logout()"> Logout</md-button>
-                </md-list-item>
-            </md-list>
-          
-       </md-sidenav>
- 
-       
-    </md-content>
-    <div layout="row" layout-sm="column" layout-align="space-around">
-        <md-progress-circular md-mode="{{spinner}}"></md-progress-circular>
-    </div>
+        <div layout="row" flex ng-controller="appNeaController">
+            <!-- Include a left sidebar --> 
+            <ng-include src="'/src/shared/view/sidenav_view_material.html'"></ng-include>            
             
-    <md-button class="md-fab md-fab-bottom-right" aria-label=”Add”>
-        <ng-md-icon icon=”add”></ng-md-icon>
-    </md-button>
+            <!-- Defines a column layout with top fixed toolbar anc scrollable content. Must use layout-fill-->
+            <div ng-include="'/src/divesession/divesession_view.html'" layout="column" layout-fill ng-controller="diveSessionController"></div>
+            
+        </div>
     
-  </body>
+    </body>
 </html>
