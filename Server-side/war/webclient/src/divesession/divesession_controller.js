@@ -3,8 +3,16 @@ var appNeaClient = angular.module('appNeaClient');
 
 /*controller definition */
 appNeaClient.controller('diveSessionController',  
-	function ($scope,$rootScope, freediverService, $log, $timeout, fbAuth) {
+	function ($scope,$rootScope, freediverService, $log, $timeout, $mdSidenav, fbAuth) {
 	
+    $scope.applicationName = freedivingLogbookConstant.applicationName;
+    
+    //toggle left side menu  
+    $scope.openLeftMenu = function() {
+        $mdSidenav('left').toggle();
+    };
+    
+    
 	
 	/*manages rest server login success*/
 	$scope.onLoginSuccess = function(data) {
@@ -12,13 +20,14 @@ appNeaClient.controller('diveSessionController',
         $scope.spinner="";
         
         //alert('Login success '+ data.message);
-        //initialize the the scope with value fetch from login
-        $scope.externalToken=$rootScope.externalToken;
+        //initialize the the scope and $rootscope with value fetch from login
+        
         $scope.freediver=data.detail;
         $scope.freediver.weightUnit=data.weightUnit;
         $scope.freediver.deepUnit=data.deepUnit;
         $scope.freediver.tempUnit=data.tempUnit;
         
+                
         
         
 	};

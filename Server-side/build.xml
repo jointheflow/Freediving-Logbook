@@ -16,15 +16,15 @@
 	<target name="prepareForTest" description="prepare source for test distribution">
 		<replace file="${server_src}/org/gianluca/logbook/helper/LogbookConstant.java" token="${appnea_server_PRODUCTION_url}" value="${appnea_server_TEST_url}"/>
 		<replace file="${server_src}/org/gianluca/logbook/helper/LogbookConstant.java" token="${facebook_app_secret_PRODUCTION}" value="${facebook_app_secret_TEST}"/>
-		<replace file="${client_src}/common/constant.js" token="${appnea_server_PRODUCTION_url}" value="${appnea_server_TEST_url}"/>
-		<replace file="${client_src}/common/constant.js" token="${facebook_app_PRODUCTION_id}" value="${facebook_app_TEST_id}"/>
+		<replace file="${client_src}/shared/constant.js" token="${appnea_server_PRODUCTION_url}" value="${appnea_server_TEST_url}"/>
+		<replace file="${client_src}/shared/constant.js" token="${facebook_app_PRODUCTION_id}" value="${facebook_app_TEST_id}"/>
 	</target>
 	
 	<target  name="prepareForProd" description="prepare source for production distribution">
 		<replace file="${server_src}/org/gianluca/logbook/helper/LogbookConstant.java" token="${appnea_server_TEST_url}" value="${appnea_server_PRODUCTION_url}" />
 		<replace file="${server_src}/org/gianluca/logbook/helper/LogbookConstant.java" token="${facebook_app_secret_TEST}" value="${facebook_app_secret_PRODUCTION}" />
-		<replace file="${client_src}/common/constant.js" token="${appnea_server_TEST_url}" value="${appnea_server_PRODUCTION_url}"/>
-		<replace file="${client_src}/common/constant.js" token="${facebook_app_TEST_id}" value="${facebook_app_PRODUCTION_id}" />
+		<replace file="${client_src}/shared/constant.js" token="${appnea_server_TEST_url}" value="${appnea_server_PRODUCTION_url}"/>
+		<replace file="${client_src}/shared/constant.js" token="${facebook_app_TEST_id}" value="${facebook_app_PRODUCTION_id}" />
 	</target>
 	
  

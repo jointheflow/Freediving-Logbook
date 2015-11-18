@@ -1,6 +1,6 @@
 <html ng-app="appNeaClient">
     <head>
-    
+    <meta name="viewport" content="initial-scale=1" />
     <!-- Angular Material CSS now available via Google CDN; version 0.11.4 used here -->
     <!--link rel="stylesheet" href="assets/libs/angular-material/angular-material.min.css"-->
       <link rel="stylesheet"  href="https://gitcdn.xyz/repo/angular/bower-material/v0.11.4/angular-material.css">
@@ -27,12 +27,12 @@
 
     <body>
         
-        <div layout="row" flex ng-controller="appNeaController">
+        <div layout="row" flex ng-controller="diveSessionController" ng-cloak>
             <!-- Include a left sidebar --> 
-            <ng-include src="'/src/shared/view/sidenav_view_material.html'"></ng-include>            
+            <ng-include src="'src/shared/view/sidenav_view_material.html'"></ng-include>            
             
             <!-- Defines a column layout with top fixed toolbar anc scrollable content. Must use layout-fill-->
-            <div ng-include="'/src/divesession/divesession_view.html'" layout="column" layout-fill ng-controller="diveSessionController"></div>
+            <div ng-include="'src/divesession/divesession_view.html'" layout="column" layout-fill ng-controller="diveSessionController"></div>
             
         </div>
     

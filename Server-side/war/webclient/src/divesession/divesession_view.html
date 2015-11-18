@@ -1,12 +1,14 @@
-
+<!-- toobar -->
     <md-toolbar>
         <div class="md-toolbar-tools" layout-align="space-between end">
             <md-button class="md-icon-button" aria-label="menu" ng-click="openLeftMenu()" >
-                <md-icon md-svg-src="/assets/img/menu.svg"></md-icon>
+                <md-icon flex md-svg-src="assets/img/menu.svg"></md-icon>
             </md-button>
-            <p>Application Title</p>
+            <p>{{applicationName}}</p>
 
-            <md-button>Login</md-button>
+            <!--Inlclude fb button taht will show/hide respect user status --> 
+            <md-button ng-show="fbStatus != 0"><div  class="fb-login-button" data-max-rows="1" data-size="small" data-show-faces="false" data-auto-logout-link="true"></div></md-button>
+            <span ng-show="fbStatus == 0"></span>
         </div>                    
     </md-toolbar>
 
@@ -17,7 +19,7 @@
     </md-button>
 
     <!--Insert a progress circular to show during ajax call-->
-    <div layout="row" layout-align="center center"><md-progress-circular md-mode="indeterminate"></md-progress-circular></div>
+    <div ng-show="spinner" layout="row" layout-align="center center"><md-progress-circular md-mode="indeterminate"></md-progress-circular></div>
 
 
     <!-- content contains divesession list -->

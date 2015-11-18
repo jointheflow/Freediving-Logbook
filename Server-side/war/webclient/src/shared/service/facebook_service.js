@@ -20,8 +20,12 @@ appNeaClientFacebookService.service('fbAuth', function ($log, $rootScope) {
                 $rootScope.$apply(function() { 
                     if (res.status === 'connected') {
                         $rootScope.externalToken = res.authResponse.accessToken;
+                        $rootScope.fbStatus = freedivingLogbookConstant.FB_STATUS_LOGGED;
+                       
                     }else {
                         $rootScope.externalToken = null;
+                        $rootScope.fbStatus = freedivingLogbookConstant.FB_STATUS_UNKNOWN;
+                        $rootScope.fbUsername = "";
                     }
                 });
                 
