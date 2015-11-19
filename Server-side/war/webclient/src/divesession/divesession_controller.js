@@ -83,6 +83,11 @@ appNeaClient.controller('diveSessionController',
 	};
     */
 	
+    //manage login on fb
+    $scope.login = function() {
+        fbAuth.login();
+        
+    };
     //manege logout on fb but we let fb manage logout directly +/
     $scope.logout = function() {
         fbAuth.logout();

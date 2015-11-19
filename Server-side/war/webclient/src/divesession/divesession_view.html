@@ -1,21 +1,33 @@
 <!-- toobar -->
     <md-toolbar>
         <div class="md-toolbar-tools" layout-align="space-between end">
-            <md-button class="md-icon-button" aria-label="menu" ng-click="openLeftMenu()" >
-                <md-icon flex md-svg-src="assets/img/menu.svg"></md-icon>
+            <!--fill left space with a blank div -->
+            <div ng-show="fbStatus != 0" style="height:48px; width:48px"></div>
+            <md-button class="md-icon-button" ng-show="fbStatus == 0" aria-label="menu" ng-click="openLeftMenu()" >
+                <!--md-icon flex md-svg-src="assets/img/menu.svg"></md-icon-->
+                <md-icon flex md-font-set="material-icons">reorder</md-icon>
+
             </md-button>
             <p>{{applicationName}}</p>
 
             <!--Inlclude fb button taht will show/hide respect user status --> 
-            <md-button ng-show="fbStatus != 0"><div  class="fb-login-button" data-max-rows="1" data-size="small" data-show-faces="false" data-auto-logout-link="true"></div></md-button>
-            <span ng-show="fbStatus == 0"></span>
+            <!--md-button ng-show="fbStatus != 0"><div  class="fb-login-button" data-max-rows="1" data-size="small" data-show-faces="false" data-auto-logout-link="true"></div></md-button-->
+            <md-button class="md-icon-button" aria-label="login" ng-show="fbStatus != 0" ng-click="login()">
+                <!--md-icon flex md-font-set="material-icons">person</md-icon-->
+                <md-icon flex md-svg-src="assets/img/facebook3.svg"></md-icon>
+            </md-button>
+            <!--fill right space with a blank div -->
+            <div ng-show="fbStatus == 0" style="height:48px; width:48px"></div>
+            
+            
         </div>                    
     </md-toolbar>
 
 
     <!-- fab button for add new divesession -->
     <md-button class="md-fab md-fab-bottom-right" aria-label="Add">
-        <ng-md-icon icon="add"></ng-md-icon>
+        <md-icon icon="add" md-font-set="material-icons">add circle outline</md-icon>
+        
     </md-button>
 
     <!--Insert a progress circular to show during ajax call-->
