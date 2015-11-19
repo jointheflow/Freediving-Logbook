@@ -3,7 +3,7 @@ var appNeaClient = angular.module('appNeaClient');
 
 /*controller definition */
 appNeaClient.controller('diveSessionController',  
-	function ($scope,$rootScope, freediverService, $log, $timeout, $mdSidenav, fbAuth) {
+	function ($scope,$rootScope, freediverService, $log, $timeout, $mdSidenav, fbAuth, $mdDialog) {
 	
     $scope.applicationName = freedivingLogbookConstant.applicationName;
     
@@ -21,11 +21,13 @@ appNeaClient.controller('diveSessionController',
         
         //alert('Login success '+ data.message);
         //initialize the the scope and $rootscope with value fetch from login
-        
+        $scope.externalToken = data.externalToken;
+        $scope.externalPlatformId = data.externalPlatformId;
+        $scope.deepUnit = data.deepUnit;
+        $scope.tempUnit = data.tempUnit;
+        $scope.weightUnit = data.weightUnit;
         $scope.freediver=data.detail;
-        $scope.freediver.weightUnit=data.weightUnit;
-        $scope.freediver.deepUnit=data.deepUnit;
-        $scope.freediver.tempUnit=data.tempUnit;
+       
         
                 
         
@@ -93,5 +95,44 @@ appNeaClient.controller('diveSessionController',
         fbAuth.logout();
         window.location.reload();
     };
+    
+    //Open dive session detail dialog
+     $scope.showDivesessionDetailDialog = function(ev) {
+        $mdDialog.show({
+            controller: 'diveSessionController',
+            templateUrl: 'src/divesession/divesession_detail_dialog.html',
+            targetEvent: ev,
+        })
+            .then(function(answer) {
+                $log.info('dive session dialog Save press');
+                $log.info($scope.divesessionDate);
+                //$log.info($scope.divesession.location);
+                freediverService.addDiveSession($scope.freediver.externalId,
+                                                $scope.externalPlatformId,
+                                                $scope.externalToken,
+                                                $scope.deepUnit,
+                                                $scope.tempUnit,
+                                                $scope.weightUnit,
+                                                $scope.divesession.date);
+            
+                $scope.alert = 'You said the information was "' + answer + '".';
+            }, function() {
+                $log.info('dive session dialog Canecel press');
+                $scope.alert = 'You cancelled the dialog.';
+        });
+    };
+    
+
+    //cancel dive session detail dialog
+      $scope.cancelDialog = function() {
+        $mdDialog.cancel();
+      };
+    
+    //save dive session detail dialog
+      $scope.saveDialog = function() {
+        $mdDialog.hide();
+      };
+      
+    
     
 });   

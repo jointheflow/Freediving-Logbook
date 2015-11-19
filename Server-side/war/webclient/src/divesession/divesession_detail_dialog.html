@@ -1,0 +1,48 @@
+<md-dialog aria-label="Dive session detail">
+    <md-content class="md-padding"> 
+        <form name="divesessionForm"> 
+            <div layout="column"> 
+                <div>
+                    <md-datepicker ng-model="divesessionDate" md-placeholder="Date">
+                    </md-datepicker>
+                </div>
+                <md-input-container flex> 
+                    <label>Location</label> 
+                    <input ng-model="divesession.location"> 
+                </md-input-container> 
+                <md-input-container flex> 
+                    <label>Meteo</label> 
+                    <input ng-model="divesession.meteo"> 
+                </md-input-container> 
+                <md-input-container flex> 
+                    <label>Equipment</label> 
+                    <input ng-model="divesession.equipment"> 
+                </md-input-container>
+                <div layout="row">
+                    <md-input-container flex> 
+                        <label>Depth</label> 
+                        <input ng-model="divesession.depth"> 
+                    </md-input-container> 
+                    <md-input-container flex> 
+                        <label>Surf.temp</label> 
+                        <input ng-model="divesession.temp"> 
+                    </md-input-container> 
+                    <md-input-container flex> 
+                        <label>Weight</label> 
+                        <input ng-model="divesession.weight"> 
+                    </md-input-container> 
+                </div>
+                <md-input-container flex> 
+                        <label>Note</label> 
+                        <textarea ng-model="divesession.note" columns="1" md-maxlength="150"></textarea> 
+                </md-input-container> 
+              </div>
+    
+        </form> 
+    </md-content> 
+    <div class="md-actions" layout="row"> 
+        <span flex></span> 
+        <md-button ng-click="cancelDialog()"> Cancel </md-button> 
+        <md-button ng-click="saveDialog()" class="md-primary"> Save </md-button> 
+    </div>
+</md-dialog>

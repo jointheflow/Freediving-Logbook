@@ -32,6 +32,50 @@ appNeaClientService.service('freediverService', function ($http, $log) {
 	    	errorCallBack(data);
 	    });
 	};
+    
+    /*add a dive session*/
+    this.addDiveSession = function (freediverId, externalPlatform, externalToken, deepUnit, tempUnit, weightUnit, diveDate, location, meteo, equipment, weight, temp, deep, okCallBack, errorCallBack) {
+        var addDiveSessionUrl = freedivingLogbookConstant.apiHostName+freedivingLogbookConstant.apiDiveSessionAdd;
+        
+        var dataParam = "external_platform_id="+externalPlatform+
+                        "&external_token="+externalToken+
+                        "&freediver_id="+freediverId+
+                        "&dive_date="+diveDate+
+                        "&deep_unit="+deepUnit+
+                        "&weight_unit="+weightUnit+
+                        "&temp_unit="+tempUnit+
+                        "&deep="+deep+
+                        "&equipment="+equipment+
+                        "&location="+location+
+                        "&meteo="+meteo+
+                        "&water_temp="+temp+
+                        "&weight="+weight;
+        
+        $log.info('freediverService.addDiveSession executing:'+addDiveSessionUrl);
+        $log.info('Params:'+ dataParam);
+        
+        var addDiveSessionPromiseResponse = $http({method: 'POST',
+                                                    url: addDiveSessionUrl,
+                                                    data: dataParam,
+                                                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                                                  });
+        
+        //managing success
+        addDiveSessionPromiseResponse.success(function(data, status, headers, config) {
+            $log.info(data);
+            //TODO
+        }); 
+        
+        //managin error
+         addDiveSessionPromiseResponse.error(function(data, status, headers, config) {
+            $log.info(data);
+            //TODO
+        }); 
+    
+    
+    
+    }
+    
 	
 	
 	
