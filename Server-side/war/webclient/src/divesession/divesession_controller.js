@@ -68,29 +68,13 @@ appNeaClient.controller('diveSessionController',
     });
     
     
-    
-    /*This function executes facebook login and populate the scope model,
-	 * invoking login service and finding dive sessions data about the user */
-	/*$scope.login = function() {
-		
-        //executes fb login
-		//$scope.fbIntentLogin();
-        fbAuth.login();
-        freediverService.login(0,
-    	    					$rootScope.externalToken,
-    	    					100, 
-    	    					$scope.onLoginSuccess, 
-    	    					$scope.onLoginError);
-		
-	};
-    */
-	
     //manage login on fb
     $scope.login = function() {
         fbAuth.login();
         
     };
-    //manege logout on fb but we let fb manage logout directly +/
+    
+    //manage logout on fb but we let fb manage logout directly +/
     $scope.logout = function() {
         fbAuth.logout();
         window.location.reload();
@@ -99,7 +83,8 @@ appNeaClient.controller('diveSessionController',
     //Open dive session detail dialog
      $scope.showDivesessionDetailDialog = function(ev) {
         $mdDialog.show({
-            controller: 'diveSessionController',
+            scope: $scope.$new(),
+            controller: DialogController,
             templateUrl: 'src/divesession/divesession_detail_dialog.html',
             targetEvent: ev,
         })
@@ -136,3 +121,15 @@ appNeaClient.controller('diveSessionController',
     
     
 });   
+
+function DialogController($scope, $mdDialog) {
+  $scope.hide = function() {
+    $mdDialog.hide();
+  };
+  $scope.cancel = function() {
+    $mdDialog.cancel();
+  };
+  $scope.answer = function(answer) {
+    $mdDialog.hide(answer);
+  };
+};
