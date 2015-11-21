@@ -1,11 +1,11 @@
 /*Creates all application module*/
 //appNeaClient is the main module that represents the app. It needs all other modules dependencies
-var appNeaClient = angular.module('appNeaClient', ['appNeaClient.rest.service', 'appNeaClient.facebook.service']);
-var appNeaClientService = angular.module('appNeaClient.rest.service', []);
-var appNeaClientFacebookService = angular.module('appNeaClient.facebook.service', []);
 
 
+var appNeaClient = angular.module('appNeaClient', ['appNeaClient.service',  'ngMaterial']);
 
+//defines appNeaClient.service module
+var appNeaClientService = angular.module('appNeaClient.service', []);
 
 
 /*CORS management*/
@@ -16,6 +16,15 @@ appNeaClient.config(['$httpProvider', function ($httpProvider) {
 	  $httpProvider.defaults.headers.put = {};
 	  $httpProvider.defaults.headers.patch = {};
 }]);
+
+
+/*Angular Material theme configuration*/
+appNeaClient.config(function($mdThemingProvider) {
+  $mdThemingProvider.theme('default')
+    .primaryPalette('blue')
+    .accentPalette('light-blue');
+});
+
 
 /*Init facebook SDK*/
 appNeaClient.run(['$rootScope', '$window', 'fbAuth', 
@@ -78,3 +87,7 @@ appNeaClient.run(['$rootScope', '$window', 'fbAuth',
   }(document));
 
   }]);
+
+
+
+

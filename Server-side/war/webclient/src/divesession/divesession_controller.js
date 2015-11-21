@@ -3,8 +3,17 @@ var appNeaClient = angular.module('appNeaClient');
 
 /*controller definition */
 appNeaClient.controller('diveSessionController',  
-	function ($scope,$rootScope, freediverService, $log, $timeout, $mdSidenav, fbAuth, $mdDialog) {
+	function ($scope,$rootScope, freediverService, modelService, $log, $timeout, $mdSidenav, fbAuth, $mdDialog) {
 	
+    //******model definition
+    //application setting
+    $scope.settings = null;
+    //current freediver
+    $scope.freediver = null;
+    //current dive session
+    $scope.divesession = {date: null, location: null};
+    
+    
     $scope.applicationName = freedivingLogbookConstant.applicationName;
     
     //toggle left side menu  
@@ -27,7 +36,13 @@ appNeaClient.controller('diveSessionController',
         $scope.tempUnit = data.tempUnit;
         $scope.weightUnit = data.weightUnit;
         $scope.freediver=data.detail;
-       
+        
+        modelService.freediverMdl.externalToken = data.externalToken;
+        modelService.freediverMdl.externalPlatformId = data.externalPlatformId;
+        modelService.freediverMdl.depthUnit = data.deepUnit;
+        modelService.freediverMdl.tempUnit = data.tempUnit;
+        modelService.freediverMdl.wheightUnit = data.weightUnit;
+        
         
                 
         
@@ -83,22 +98,21 @@ appNeaClient.controller('diveSessionController',
     //Open dive session detail dialog
      $scope.showDivesessionDetailDialog = function(ev) {
         $mdDialog.show({
-            scope: $scope.$new(),
-            controller: DialogController,
+            controller: 'diveSessionDialogController',
             templateUrl: 'src/divesession/divesession_detail_dialog.html',
             targetEvent: ev,
         })
             .then(function(answer) {
                 $log.info('dive session dialog Save press');
-                $log.info($scope.divesessionDate);
+                $log.info('dive session date:'+$scope.divesession.date);
                 //$log.info($scope.divesession.location);
-                freediverService.addDiveSession($scope.freediver.externalId,
+                /*freediverService.addDiveSession($scope.freediver.externalId,
                                                 $scope.externalPlatformId,
                                                 $scope.externalToken,
                                                 $scope.deepUnit,
                                                 $scope.tempUnit,
                                                 $scope.weightUnit,
-                                                $scope.divesession.date);
+                                                $scope.divesession.date);*/
             
                 $scope.alert = 'You said the information was "' + answer + '".';
             }, function() {
@@ -106,30 +120,7 @@ appNeaClient.controller('diveSessionController',
                 $scope.alert = 'You cancelled the dialog.';
         });
     };
-    
-
-    //cancel dive session detail dialog
-      $scope.cancelDialog = function() {
-        $mdDialog.cancel();
-      };
-    
-    //save dive session detail dialog
-      $scope.saveDialog = function() {
-        $mdDialog.hide();
-      };
-      
-    
-    
+          
+        
 });   
 
-function DialogController($scope, $mdDialog) {
-  $scope.hide = function() {
-    $mdDialog.hide();
-  };
-  $scope.cancel = function() {
-    $mdDialog.cancel();
-  };
-  $scope.answer = function(answer) {
-    $mdDialog.hide(answer);
-  };
-};

@@ -1,7 +1,7 @@
 /*Contains wrapper of all freediver http rest services*/
 
 //get reference to the service module defined in app.js
-var appNeaClientService = angular.module('appNeaClient.rest.service');
+var appNeaClientService = angular.module('appNeaClient.service');
 
 /*add freediver services*/
 appNeaClientService.service('freediverService', function ($http, $log) {

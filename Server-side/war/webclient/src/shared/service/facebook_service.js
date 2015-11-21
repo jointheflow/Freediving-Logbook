@@ -1,10 +1,10 @@
 /*Contains wrapper of all facebook sdk services*/
 
 //get reference to the service module defined in app.js
-var appNeaClientFacebookService = angular.module('appNeaClient.facebook.service');
+var appNeaClientService = angular.module('appNeaClient.service');
 
 /*add facebook authentication services*/
-appNeaClientFacebookService.service('fbAuth', function ($log, $rootScope) {
+appNeaClientService.service('fbAuth', function ($log, $rootScope) {
 
     this.watchLoginChange = function(fbConnectedCallBack, fbDisconnectedCallBack) {
         var _self = this;

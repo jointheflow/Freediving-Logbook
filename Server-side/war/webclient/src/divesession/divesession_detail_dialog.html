@@ -3,7 +3,7 @@
         <form name="divesessionForm"> 
             <div layout="column"> 
                 <div>
-                    <md-datepicker ng-model="divesessionDate" md-placeholder="Date">
+                    <md-datepicker ng-model="divesession.date" md-placeholder="Date">
                     </md-datepicker>
                 </div>
                 <md-input-container flex> 
@@ -42,7 +42,7 @@
     </md-content> 
     <div class="md-actions" layout="row"> 
         <span flex></span> 
-        <md-button ng-click="cancelDialog()"> Cancel </md-button> 
-        <md-button ng-click="saveDialog()" class="md-primary"> Save </md-button> 
+        <md-button ng-click="cancel()"> Cancel </md-button> 
+        <md-button ng-click="save()" class="md-primary"> Save </md-button> 
     </div>
 </md-dialog>

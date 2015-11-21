@@ -1,119 +1,44 @@
-<!doctype html>
-<html ng-app="appNeaClient" ng-controller="rootController">
-  <head>
-    <!-- AngularJS -->
-    <script src="assets/libs/angular/angular.min.js"></script>
-    <script src="assets/libs/angular/ui-bootstrap-tpls-0.14.3.min.js"></script>
-    <!--Spinner-->  
-    <script src="assets/libs/spinner/spin.min.js"></script>
-    <script src="assets/libs/spinner/angular-spinner.min.js"></script>
+<html ng-app="appNeaClient">
+    <head>
+    <meta name="viewport" content="width=device-width" content="initial-scale=1" />
+    <!-- Angular Material CSS now available via Google CDN; version 0.11.4 used here -->
+    <!--link rel="stylesheet" href="assets/libs/angular-material/angular-material.min.css"-->
+    <link rel="stylesheet"  href="https://gitcdn.xyz/repo/angular/bower-material/v0.11.4/angular-material.css">
     
+    <!-- material icon -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
       
-    <!-- Facebook sdk -->
-    <!--script src="assets/libs/angular-facebook/angular-facebook.js"></script-->
-    <!--AppNea code -->
-    <script src="src/common/constant.js"></script>
-    <script src="src/app.js"></script>
-    <script src="src/service/freediver_service.js"></script>
-    <script src="src/service/facebook_service.js"></script> 
-    <script src="src/controller/freediver_controller.js"></script>
-    <script src="src/controller/root_controller.js"></script>
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1.0,  user-scalable=no">
-    <!-- Bootstrap -->
-    <link href="assets/libs/bootstrap/bootstrap.min.css" rel="stylesheet" media="screen">
-	<link href="assets/libs/bootstrap/bootstrap-theme.min.css" rel="stylesheet" media="screen">
-	
-  </head>
-  <body ng-controller="freediverController">
-          
-    <nav role="navigation" class="navbar navbar-default">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" ng-click="isCollapsed = !isCollapsed" ng-init="isCollapsed = true" class="navbar-toggle">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <div ng-include="'src/view/brand_view.html'"></div>
-        </div>
-        <!-- Collection of nav links, forms, and other content for toggling -->
-        <div id="navbarCollapse" class="navbar-collapse" ng-class="{collapse: isCollapsed}">
-            <ul class="nav navbar-nav navbar-right" ng-show="freediver==null">
-                <li><a href="#"><div ng-include="'src/view/facebook_login_button_view.html'"></div></a></li>
-            </ul>
-            <ul class="nav navbar-brand navbar-right" ng-show="freediver!=null">
-                <div class="btn-group" uib-dropdown is-open="status.isopen">
-                    <button id="single-button" type="button" class="btn btn-primary btn-xs" uib-dropdown-toggle ng-disabled="disabled">
-            {{freediver.externalUsername}} <span class="caret"></span>
-                    </button>
-                    <ul class="uib-dropdown-menu" role="menu" aria-labelledby="single-button">
-                        <li role="menuitem"><a href="#">todo1</a></li>
-                        <li role="menuitem"><a href="#">todo2</a></li>
-                        <li role="menuitem"><a href="#">todo3</a></li>
-                        <li class="divider"></li>
-                        <li role="menuitem"><a href="#" ng-click="logout()">Logout</a></li>
-                    </ul>
-                </div>  
-            </ul>
-        </div>
-    </nav>
+   <!-- Angular Material Dependencies -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-aria.min.js"></script>
 
+
+    <!-- Angular Material Javascript now available via Google CDN; version 0.11.2 used here -->
+    <script src="https://gitcdn.xyz/repo/angular/bower-material/v0.11.4/angular-material.js"></script>
+    
+        <!-- appnea source code reference -->    
+    <script src="src/app.js"></script> 
+    <script src="src/shared/constant.js"></script>
+    <script src="src/shared/service/facebook_service.js"></script>
+    <script src="src/shared/service/freediver_service.js"></script>
+    <script src="src/shared/service/model_service.js"></script>
+    <script src="src/shared/model.js"></script>
+    <script src="src/divesession/divesession_controller.js"></script>
+    <script src="src/divesession/divesession_detail_dialog_controller.js"></script>
+         
+    </head>
+
+    <body>
         
-    
-
-    <!-- Start View section --> 
-        <div>
-            <div ng-include="'src/view/divesession_view.html'"></div>
-            <!--div class="list-group">
-                <a href="#" class="list-group-item ">
-                    <h4 class="list-group-item-heading">dive session 1</h4>
-                    <p class="list-group-item-text">...</p>
-                </a>
-                <a href="#" class="list-group-item active">
-                    <h4 class="list-group-item-heading">dive session 2</h4>
-                    <p class="list-group-item-text">...</p>
-                </a>
-                <a href="#" class="list-group-item ">
-                    <h4 class="list-group-item-heading">dive session 3</h4>
-                    <p class="list-group-item-text">...</p>
-                </a>
-                <a href="#" class="list-group-item ">
-                    <h4 class="list-group-item-heading">dive session 4</h4>
-                    <p class="list-group-item-text">...</p>
-                </a>
-            </div-->
+        <div layout="row" flex ng-controller="diveSessionController" ng-cloak>
+            <!-- Include a left sidebar --> 
+            <ng-include src="'src/shared/view/sidenav_view_material.html'"></ng-include>            
             
-            <!--button ng-click="" ng-show="freediver!=null">
-            Logout
-            </button>
-             <span class="label label-default">Default</span>
+            <!-- Defines a column layout with top fixed toolbar anc scrollable content. Must use layout-fill-->
+            <div ng-include="'src/divesession/divesession_view.html'" layout="column" layout-fill ng-controller="diveSessionController"></div>
+            
         </div>
-  	     <div data-ng-view>
-            <button ng-click="" ng-show="freediver!=null">
-            Logout
-            </button>
-             <span class="label label-default">Default</span-->
-        </div>
-
-    <!-- End View section -->
-
-      
-        <footer>
-        </footer>
-        <span us-spinner spinner-key="spinner"></span>  
     
-    <!--div ng-controller="freediverController">  
-        <div class="fb-login-button" data-max-rows="1" data-size="small" data-show-faces="true" data-auto-logout-link="true"></div>
-        <div>
-            <input type="text" ng-model="externalToken"/>
-            <input type="text" ng-model="freediver.externalUsername "/>
-            <input type="text" ng-model="freediver.status "/>
-            <input type="text" ng-model="freediver.weightUnit"/>
-            <input type="text" ng-model="freediver.diveSessions"/>
-        </div>
-    </div-->
- 
-  </body>
+    </body>
 </html>

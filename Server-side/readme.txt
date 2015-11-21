@@ -26,6 +26,10 @@ https://github.com/Ciul/angular-facebook
 -----Angular material---------
 https://stories.uplabs.io/getting-started-with-angular-material-3ee3cdb8ecd8?gi=99be308736f
 
-
+——Interesting reading
 http://work.smarchal.com/twbscolor/
+——about dialog
 http://codepen.io/kyleledbetter/pen/gbQOaV?editors=001  (example material dialog)
+
+—about scope and inheritance
+https://github.com/angular/angular.js/wiki/Understanding-Scopes
