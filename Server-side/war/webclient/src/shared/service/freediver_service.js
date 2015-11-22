@@ -37,19 +37,19 @@ appNeaClientService.service('freediverService', function ($http, $log) {
     this.addDiveSession = function (freediverId, externalPlatform, externalToken, deepUnit, tempUnit, weightUnit, diveDate, location, meteo, equipment, weight, temp, deep, okCallBack, errorCallBack) {
         var addDiveSessionUrl = freedivingLogbookConstant.apiHostName+freedivingLogbookConstant.apiDiveSessionAdd;
         
-        var dataParam = "external_platform_id="+externalPlatform+
-                        "&external_token="+externalToken+
-                        "&freediver_id="+freediverId+
-                        "&dive_date="+diveDate+
-                        "&deep_unit="+deepUnit+
-                        "&weight_unit="+weightUnit+
-                        "&temp_unit="+tempUnit+
-                        "&deep="+deep+
-                        "&equipment="+equipment+
-                        "&location="+location+
-                        "&meteo="+meteo+
-                        "&water_temp="+temp+
-                        "&weight="+weight;
+        var dataParam = 'external_platform_id='+externalPlatform+
+                        '&external_token='+externalToken+
+                        '&freediver_id='+freediverId+
+                        '&dive_date='+diveDate+
+                        ((deepUnit == null) ? '' : '&deep_unit='+deepUnit)+
+                        ((weightUnit == null) ? '' :'&weight_unit='+weightUnit)+
+                        ((tempUnit == null) ? '' : "&temp_unit="+tempUnit)+
+                        ((deep == null) ? '' :'&deep='+deep)+
+                        ((equipment == null) ? '' : '&equipment='+equipment)+
+                        ((location == null) ? '' : '&location='+location)+
+                        ((meteo == null) ? '' : '&meteo='+meteo)+
+                        ((temp == null) ? '' : '&water_temp='+temp)+
+                        ((weight == null) ? '' : '&weight='+weight);
         
         $log.info('freediverService.addDiveSession executing:'+addDiveSessionUrl);
         $log.info('Params:'+ dataParam);

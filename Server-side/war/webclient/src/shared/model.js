@@ -5,7 +5,7 @@ function FreediverMdl() {
     this.externalPlatformId = null;
     this.externalToken = null;
     this.username = 'fake usename';
-    this.wheightUnit = null;
+    this.weightUnit = null;
     this.tempUnit = null;
     this.depthUnit = null;
     //array of DiveSessionMdl

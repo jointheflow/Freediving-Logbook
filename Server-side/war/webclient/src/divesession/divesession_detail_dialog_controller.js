@@ -1,6 +1,6 @@
 //controls the dialog view
 appNeaClient.controller('diveSessionDialogController',  
-	function ($scope, modelService, freediverService, $mdDialog, $log) {
+	function ($scope, modelService, freediverService, $mdDialog, $log, $filter) {
         
         //hide the dialog
         $scope.hide = function() {
@@ -19,13 +19,13 @@ appNeaClient.controller('diveSessionDialogController',
             //TODO: activate dialog spinner
             
             //TODO:invoke Asynch add dive session rest service passing callback function
-            freediverService.addDiveSession(modelService.freediver.externalId,
-                                            modelService.freediver.externalPlatformId$scope.externalPlatformId,
-                                            modelService.freediver.externalToken,
-                                            modelService.freediver.depthUnit,
-                                            modelService.freediver.tempUnit,
-                                            modelService.freediver.weightUnit,
-                                            $scope.divesession.date,
+            freediverService.addDiveSession(modelService.freediverMdl.id,
+                                            modelService.freediverMdl.externalPlatformId,
+                                            modelService.freediverMdl.externalToken,
+                                            modelService.freediverMdl.depthUnit,
+                                            modelService.freediverMdl.tempUnit,
+                                            modelService.freediverMdl.weightUnit,
+                                            $filter('date')($scope.divesession.date,'dd-MM-yyyy'),
                                             $scope.divesession.location,
                                             $scope.divesession.meteo,
                                             $scope.divesession.equipment,
@@ -41,11 +41,11 @@ appNeaClient.controller('diveSessionDialogController',
         //dive session save success callback
         $scope.onSaveSuccess = function (data) {
             
-            $log.inf('dive session saved!');
+            $log.info('dive session saved!');
             //TODO: stop dialog spinner
             
             //TODO: populate the model with the new divesession
-            
+            $log.info('model population with:'+data);
             //close the dialog
             $mdDialog.hide();
         };

@@ -37,11 +37,13 @@ appNeaClient.controller('diveSessionController',
         $scope.weightUnit = data.weightUnit;
         $scope.freediver=data.detail;
         
+        modelService.freediverMdl.externalId = data.detail.externalId;
+        modelService.freediverMdl.id = data.detail.id;
         modelService.freediverMdl.externalToken = data.externalToken;
         modelService.freediverMdl.externalPlatformId = data.externalPlatformId;
         modelService.freediverMdl.depthUnit = data.deepUnit;
         modelService.freediverMdl.tempUnit = data.tempUnit;
-        modelService.freediverMdl.wheightUnit = data.weightUnit;
+        modelService.freediverMdl.weightUnit = data.weightUnit;
         
         
                 
@@ -103,18 +105,8 @@ appNeaClient.controller('diveSessionController',
             targetEvent: ev,
         })
             .then(function(answer) {
-                $log.info('dive session dialog Save press');
-                $log.info('dive session date:'+$scope.divesession.date);
-                //$log.info($scope.divesession.location);
-                /*freediverService.addDiveSession($scope.freediver.externalId,
-                                                $scope.externalPlatformId,
-                                                $scope.externalToken,
-                                                $scope.deepUnit,
-                                                $scope.tempUnit,
-                                                $scope.weightUnit,
-                                                $scope.divesession.date);*/
-            
-                $scope.alert = 'You said the information was "' + answer + '".';
+                $log.info('dive session dialog Save pressed');
+                
             }, function() {
                 $log.info('dive session dialog Canecel press');
                 $scope.alert = 'You cancelled the dialog.';
