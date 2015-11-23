@@ -12,6 +12,34 @@ function FreediverMdl() {
     this.diveSessions = [];
 }
 
+//find the first occurrence of divesessionid in divesessions array.
+//return the array index if username exists, null otherwise
+FreediverMdl.prototype.indexOfDiveSession = function (divesessionid) {
+    
+    for (var i = 0; i < this.diveSessions.length; i++){
+        if (this.diveSessions[i].id == divesessionid){
+            return i;
+        }
+        
+    }
+    return null;
+} 
+
+//add a new dive session or update id exists
+FreediverMdl.prototype.addOrUpdateDiveSession = function(aDiveSession) {
+    var i;
+    i = this.indexOfDiveSession (aDiveSession.id);
+    if (i == null) {
+        this.diveSessions.push(aDiveSession);
+    } else {
+    //divesession already exists
+       this.diveSessions[i] = aDiveSession;
+        
+    }
+};
+
+
+
 //DiveSession model
 function DiveSessionMdl() {
     this.id = null;

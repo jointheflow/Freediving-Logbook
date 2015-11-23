@@ -450,7 +450,7 @@ public class LogbookDtoFactory {
 					dsDto.setLocationLongitude(ds.getLocationGeoPt().getLongitude());
 				}
 				dsDto.setMeteoDesc(ds.getMeteoDesc());
-				dsDto.setNote(ds.getNote().getValue());
+				if (ds.getNote() != null) dsDto.setNote(ds.getNote().getValue());
 				dsDto.setWaterTempAsCelsius(ds.getWaterTempAsCelsius());
 				dsDto.setWaterTempAsFahrehneit(ds.getWaterTempAsFahrehneit());
 				dsDto.setWeightAsKilogram(ds.getWeightAsKilogram());

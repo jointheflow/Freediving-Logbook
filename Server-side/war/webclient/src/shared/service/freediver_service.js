@@ -63,13 +63,13 @@ appNeaClientService.service('freediverService', function ($http, $log) {
         //managing success
         addDiveSessionPromiseResponse.success(function(data, status, headers, config) {
             $log.info(data);
-            //TODO
+            okCallBack(data);
         }); 
         
         //managin error
          addDiveSessionPromiseResponse.error(function(data, status, headers, config) {
             $log.info(data);
-            //TODO
+            errorCallBack(data);
         }); 
     
     

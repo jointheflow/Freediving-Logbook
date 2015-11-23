@@ -37,6 +37,7 @@ appNeaClient.controller('diveSessionController',
         $scope.weightUnit = data.weightUnit;
         $scope.freediver=data.detail;
         
+        //TODO populare model service!!!!!
         modelService.freediverMdl.externalId = data.detail.externalId;
         modelService.freediverMdl.id = data.detail.id;
         modelService.freediverMdl.externalToken = data.externalToken;
@@ -106,6 +107,7 @@ appNeaClient.controller('diveSessionController',
         })
             .then(function(answer) {
                 $log.info('dive session dialog Save pressed');
+                //TODO update scope with model service
                 
             }, function() {
                 $log.info('dive session dialog Canecel press');
