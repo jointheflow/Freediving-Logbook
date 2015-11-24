@@ -37,7 +37,7 @@
     <!-- content contains divesession list -->
     <md-content flex>                    
         <md-list>
-            <md-list-item ng-repeat="diveSession in freediver.diveSessions">
+            <md-list-item ng-repeat="diveSession in freediver.diveSessions | orderBy : '-diveDate'">
                 
                 <div layout="row" layout-align="center center" flex>
                     <div>
@@ -50,10 +50,10 @@
                     <div layout="column" flex>
                         <div layout="row" layout-wrap>
                             <div flex="50">
-                                <h4>{{diveSession.locationDesc}}</h4>
+                                <h4>{{diveSession.location}}</h4>
                             </div>
                             <div flex="50">
-                                <h4>{{diveSession.diveDate}}</h4>
+                                <h4>{{diveSession.diveDate | date: 'dd-MM-yyyy'}}</h4>
                             </div>
                         </div>
                             

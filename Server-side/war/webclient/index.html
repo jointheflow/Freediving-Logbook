@@ -26,14 +26,15 @@
     <script src="src/shared/model.js"></script>
     <script src="src/divesession/divesession_controller.js"></script>
     <script src="src/divesession/divesession_detail_dialog_controller.js"></script>
+    <script src="src/sidenav/sidenav_controller.js"></script>
          
     </head>
 
     <body>
         
-        <div layout="row" flex ng-controller="diveSessionController" ng-cloak>
+        <div layout="row" flex  ng-cloak>
             <!-- Include a left sidebar --> 
-            <ng-include src="'src/shared/view/sidenav_view_material.html'"></ng-include>            
+            <ng-include src="'src/sidenav/sidenav_view.html'" ng-controller="sidenavController"></ng-include>            
             
             <!-- Defines a column layout with top fixed toolbar anc scrollable content. Must use layout-fill-->
             <div ng-include="'src/divesession/divesession_view.html'" layout="column" layout-fill ng-controller="diveSessionController"></div>

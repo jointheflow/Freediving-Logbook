@@ -30,22 +30,17 @@ appNeaClient.controller('diveSessionController',
         
         //alert('Login success '+ data.message);
         //initialize the the scope and $rootscope with value fetch from login
-        $scope.externalToken = data.externalToken;
+        /*$scope.externalToken = data.externalToken;
         $scope.externalPlatformId = data.externalPlatformId;
         $scope.deepUnit = data.deepUnit;
         $scope.tempUnit = data.tempUnit;
         $scope.weightUnit = data.weightUnit;
-        $scope.freediver=data.detail;
+        */
         
-        //TODO populare model service!!!!!
-        modelService.freediverMdl.externalId = data.detail.externalId;
-        modelService.freediverMdl.id = data.detail.id;
-        modelService.freediverMdl.externalToken = data.externalToken;
-        modelService.freediverMdl.externalPlatformId = data.externalPlatformId;
-        modelService.freediverMdl.depthUnit = data.deepUnit;
-        modelService.freediverMdl.tempUnit = data.tempUnit;
-        modelService.freediverMdl.weightUnit = data.weightUnit;
-        
+        //populare model service!!!!!
+        modelService.updateFreediverFromData(data);
+        //put the freediver on the scope
+        $scope.freediver=modelService.freediverMdl;
         
                 
         

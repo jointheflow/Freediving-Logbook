@@ -33,8 +33,8 @@ public class DiveSessionDto /*extends LogbookDto*/ {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public Date getDiveDate() {
-		return diveDate;
+	public long getDiveDate() {
+		return diveDate.getTime();
 	}
 	public void setDiveDate(Date diveDate) {
 		this.diveDate = diveDate;

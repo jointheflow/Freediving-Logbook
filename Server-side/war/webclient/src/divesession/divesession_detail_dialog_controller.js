@@ -21,7 +21,7 @@ appNeaClient.controller('diveSessionDialogController',
             //activate dialog spinner
             $scope.spinner = true;
             
-            //TODO:invoke Asynch add dive session rest service passing callback function
+            //invoke Asynch add dive session rest service passing callback function
             freediverService.addDiveSession(modelService.freediverMdl.id,
                                             modelService.freediverMdl.externalPlatformId,
                                             modelService.freediverMdl.externalToken,
@@ -50,12 +50,13 @@ appNeaClient.controller('diveSessionDialogController',
             
             //TODO: populate the model with the new divesession
             $log.info('model population with:'+data);
-            diveSession = new DiveSessionMdl();
-            //diveSession.id = null;
-            //TODO add service must return an id!!!!
-            diveSession.diveDate =  $filter('date')($scope.divesession.date,'dd-MM-yyyy');
-            diveSession.location = $scope.divesession.location;
+            modelService.addOrUpdateDiveSessionFromData(data.detail);
+            /*diveSession = new DiveSessionMdl();
+            diveSession.id = data.detail.id;
+            diveSession.diveDate = data.detail.diveDate;
+            diveSession.location = data.detail.locationDesc;
             diveSession.depth = $scope.divesession.depth;
+            
             diveSession.meteo = $scope.divesession.meteo;
             diveSession.equipment =  $scope.divesession.equipment;
             diveSession.weight = $scope.divesession.weight;
@@ -63,6 +64,7 @@ appNeaClient.controller('diveSessionDialogController',
             diveSession.note = null;
             
             modelService.freediverMdl.diveSessions.push(diveSession);
+            */
             //close the dialog
             $mdDialog.hide();
         };
@@ -73,7 +75,7 @@ appNeaClient.controller('diveSessionDialogController',
             $scope.spinner = false;
             //TODO: manage error
             alert(data);
-            $log.inf('dive session saved error!');
+            $log.info('dive session saved error!');
               
         };
     
