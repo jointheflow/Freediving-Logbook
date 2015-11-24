@@ -40,16 +40,19 @@ FreediverMdl.prototype.addOrUpdateDiveSession = function(aDiveSession) {
 };
 
 
-
 //*******DiveSession model
 function DiveSessionMdl() {
     this.id = null;
     this.diveDate = null;
     this.location = null;
-    this.depth = null;
+    this.depthAsMeter = null;
+    this.depthAsFeet = null;
     this.meteo = null;
     this.equipment = null;
-    this.weight = null;
+    this.weightAsKilogram = null;
+    this.weightAsPound = null;
+    this.tempAsCelsius = null;
+    this.tempAsFarheneit =null;
     this.note = null;
     //array of DiveMdl
     this.dives = [];
