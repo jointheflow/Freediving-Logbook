@@ -35,6 +35,7 @@ appNeaClient.controller('diveSessionDialogController',
                                             $scope.divesession.weight,
                                             $scope.divesession.temp,
                                             $scope.divesession.depth,
+                                            $scope.divesession.note,
                                             $scope.onSaveSuccess,
                                             $scope.onSaveError);                
             

@@ -37,12 +37,19 @@
     <!-- content contains divesession list -->
     <md-content flex>                    
         <md-list>
-            <md-list-item ng-repeat="diveSession in freediver.diveSessions | orderBy : '-diveDate'">
-                
-                <div layout="row" layout-align="center center" flex>
+            <md-list-item class="md-3-line" ng-repeat="diveSession in freediver.diveSessions | orderBy : '-diveDate'">
+                <img ng-src="assets/img/twitter_diver.png" class="md-avatar" alt="diver">
+                <!--md-icon flex md-font-set="material-icons">pool</md-icon-->
+                <div layout="column" class="md-list-item-text">
+                    <h3>{{diveSession.location}}, Depth:{{diveSession.depthAsMeter}}</h3>
+                    <h4>{{diveSession.diveDate | date: 'dd-MM-yyyy'}}</h6>
+                    <p>{{diveSession.note}}</p>
+                </div>
+                <!--div layout="row" layout-align="center center" flex>
                     <div>
                         <md-icon flex md-font-set="material-icons">pool</md-icon>
                     </div>
+                    
                     
                     <div style="width:10px">                  
                     </div>
@@ -50,10 +57,10 @@
                     <div layout="column" flex>
                         <div layout="row" layout-wrap>
                             <div flex="50">
-                                <h4>{{diveSession.location}}</h4>
+                                <h6>{{diveSession.location}}</h6>
                             </div>
                             <div flex="50">
-                                <h4>{{diveSession.diveDate | date: 'dd-MM-yyyy'}}</h4>
+                                <h6>{{diveSession.diveDate | date: 'dd-MM-yyyy'}}</h6>
                             </div>
                         </div>
                             
@@ -62,7 +69,7 @@
                         </div>
                         
                     </div>
-                </div> 
+                </div--> 
                  
                 <md-divider></md-divider>
             </md-list-item>

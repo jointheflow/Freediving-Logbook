@@ -34,7 +34,7 @@ appNeaClientService.service('freediverService', function ($http, $log) {
 	};
     
     /*add a dive session*/
-    this.addDiveSession = function (freediverId, externalPlatform, externalToken, deepUnit, tempUnit, weightUnit, diveDate, location, meteo, equipment, weight, temp, deep, okCallBack, errorCallBack) {
+    this.addDiveSession = function (freediverId, externalPlatform, externalToken, deepUnit, tempUnit, weightUnit, diveDate, location, meteo, equipment, weight, temp, deep, note, okCallBack, errorCallBack) {
         var addDiveSessionUrl = freedivingLogbookConstant.apiHostName+freedivingLogbookConstant.apiDiveSessionAdd;
         
         var dataParam = 'external_platform_id='+externalPlatform+
@@ -49,7 +49,8 @@ appNeaClientService.service('freediverService', function ($http, $log) {
                         ((location == null) ? '' : '&location='+location)+
                         ((meteo == null) ? '' : '&meteo='+meteo)+
                         ((temp == null) ? '' : '&water_temp='+temp)+
-                        ((weight == null) ? '' : '&weight='+weight);
+                        ((weight == null) ? '' : '&weight='+weight)+
+                        ((note == null) ? '' : '&note='+note);
         
         $log.info('freediverService.addDiveSession executing:'+addDiveSessionUrl);
         $log.info('Params:'+ dataParam);
