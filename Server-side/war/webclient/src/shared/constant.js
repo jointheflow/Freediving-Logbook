@@ -24,6 +24,14 @@ var freedivingLogbookConstant = freedivingLogbookConstant || {
     APPNEA_STATUS_LOGGED :0,
     APPNEA_STATUS_UNKNOWN : -2,
     
-    facebook_app_id: '132053467142365'
+    facebook_app_id: '132053467142365',
+    
+    //constant for freediver unit
+    TEMPERATURE_CELSIUS : 0,
+	TEMPERATURE_FAHRHENEIT : 1 ,
+	DEEP_METER : 0,
+	DEEP_FEET : 1,
+	WEIGHT_KILOGRAM : 0,
+	WEIGHT_POUND : 1
     	
 };

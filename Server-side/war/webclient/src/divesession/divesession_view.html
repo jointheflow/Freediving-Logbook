@@ -41,9 +41,15 @@
                 <img ng-src="assets/img/twitter_diver.png" class="md-avatar" alt="diver">
                 <!--md-icon flex md-font-set="material-icons">pool</md-icon-->
                 <div layout="column" class="md-list-item-text">
-                    <h3>{{diveSession.location}}, Depth:{{diveSession.depthAsMeter}}</h3>
-                    <h4>{{diveSession.diveDate | date: 'dd-MM-yyyy'}}</h6>
-                    <p>{{diveSession.note}}</p>
+                    <div layout="row" layout-align="space-between end">
+                        <h4><b>{{diveSession.location}}</b></h4> <h4>{{diveSession.diveDate | date: 'dd-MM-yyyy'}}</h4>
+                    </div>
+                    <div layout="row" layout-align="space-between center"> 
+                        <p class="md-caption">depth:{{diveSession.getDepth(freediver.depthUnit)}}</p>
+                        <p>temp:{{diveSession.getTemp(freediver.tempUnit)}}</p>
+                        <p>weight:{{diveSession.getWeight(freediver.weightUnit)}}</p>
+                    </div>
+                    <p><i>{{diveSession.note | limitTo:45}}...</i></p>
                 </div>
                 <!--div layout="row" layout-align="center center" flex>
                     <div>
