@@ -10,6 +10,7 @@
       
    <!-- Angular Material Dependencies -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-route.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-animate.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-aria.min.js"></script>
 
@@ -24,6 +25,7 @@
     <script src="src/shared/service/freediver_service.js"></script>
     <script src="src/shared/service/model_service.js"></script>
     <script src="src/shared/model.js"></script>
+    <script src="src/shared/controller/display_controller.js"></script>
     <script src="src/divesession/divesession_controller.js"></script>
     <script src="src/divesession/divesession_detail_dialog_controller.js"></script>
     <script src="src/sidenav/sidenav_controller.js"></script>
@@ -32,14 +34,18 @@
 
     <body>
         
-        <div layout="row" flex  ng-cloak>
+        <div layout="row" flex  ng-cloak ng-controller="displayController">
             <!-- Include a left sidebar --> 
             <ng-include src="'src/sidenav/sidenav_view.html'" ng-controller="sidenavController"></ng-include>            
             
-            <!-- Defines a column layout with top fixed toolbar anc scrollable content. Must use layout-fill-->
-            <div ng-include="'src/divesession/divesession_view.html'" layout="column" layout-fill ng-controller="diveSessionController"></div>
+            <!-- switch view depending on $scope.view attributes -->
+            
+                <!-- Defines a column layout with top fixed toolbar anc scrollable content. Must use layout-fill-->
+            <!--ng-include src="'src/divesession/divesession_list_view.html'" layout="column" layout-fill ng-controller="diveSessionController">
+            </ng-include-->
+            <ng-view layout="column" layout-fill></ng-view>
             
         </div>
-    
+       
     </body>
 </html>

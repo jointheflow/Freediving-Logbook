@@ -2,10 +2,34 @@
 //appNeaClient is the main module that represents the app. It needs all other modules dependencies
 
 
-var appNeaClient = angular.module('appNeaClient', ['appNeaClient.service',  'ngMaterial']);
+var appNeaClient = angular.module('appNeaClient', ['appNeaClient.service',  'ngMaterial', 'ngRoute']);
 
 //defines appNeaClient.service module
 var appNeaClientService = angular.module('appNeaClient.service', []);
+
+
+/*Configuring route*/
+appNeaClient.config(['$routeProvider',
+  function($routeProvider) {
+    $routeProvider.
+      when('/divesessionlist', {
+        //templateUrl: 'view-add',
+		templateUrl: 'src/divesession/divesession_list_view.html',
+        controller: 'diveSessionController'
+      }).
+      when('/divesessiondetail', {
+        //templateUrl: 'view-settings',
+		templateUrl: 'src/divesession/divesession_detail_view.html',
+        controller: 'diveSessionController'
+      }).
+      otherwise({
+        redirectTo: '/divesessionlist',
+		controller: 'diveSessionController'
+      });
+  }]);
+
+
+
 
 
 /*CORS management*/
