@@ -8,19 +8,17 @@ var appNeaClient = angular.module('appNeaClient', ['appNeaClient.service',  'ngM
 var appNeaClientService = angular.module('appNeaClient.service', []);
 
 
-/*Configuring route*/
+/*Configuring routes*/
 appNeaClient.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
       when('/divesessionlist', {
-        //templateUrl: 'view-add',
 		templateUrl: 'src/divesession/divesession_list_view.html',
-        controller: 'diveSessionController'
+        controller: 'diveSessionListController'
       }).
       when('/divesessiondetail', {
-        //templateUrl: 'view-settings',
 		templateUrl: 'src/divesession/divesession_detail_view.html',
-        controller: 'diveSessionController'
+        controller: 'diveSessionDetailController'
       }).
       otherwise({
         redirectTo: '/divesessionlist',

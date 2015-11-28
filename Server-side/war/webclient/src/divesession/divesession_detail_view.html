@@ -1,7 +1,7 @@
 <!-- toobar -->
     <md-toolbar layout-align="space-between end">
         <div class="md-toolbar-tools" layout-align="space-between end">
-            <md-button class="md-icon-button" ng-show="fbStatus == 0" aria-label="back" ng-click="openLeftMenu()" >
+            <md-button class="md-icon-button" ng-show="fbStatus == 0" aria-label="back" ng-click="back()" >
                     <!--md-icon flex md-svg-src="assets/img/menu.svg"></md-icon-->
                     <md-icon flex md-font-set="material-icons">arrow_back</md-icon>
 
@@ -25,7 +25,8 @@
 
 
     <!-- content contains divesession list -->
-    <md-content flex>                    
+    <md-content flex>
+        <div><span>Show divesession detail</span></div>
         <md-list>
             <md-list-item class="md-3-line" ng-repeat="dive in divesession.dives | orderBy : '-diveDate'">
                 <img ng-src="assets/img/twitter_diver.png" class="md-avatar" alt="diver">
@@ -40,33 +41,7 @@
                         <p>weight:{{diveSession.getWeight(freediver.weightUnit)}}</p>
                     </div>
                     <p><i>{{diveSession.note | limitTo:45}}...</i></p>
-                </div>
-                <!--div layout="row" layout-align="center center" flex>
-                    <div>
-                        <md-icon flex md-font-set="material-icons">pool</md-icon>
-                    </div>
-                    
-                    
-                    <div style="width:10px">                  
-                    </div>
-                    
-                    <div layout="column" flex>
-                        <div layout="row" layout-wrap>
-                            <div flex="50">
-                                <h6>{{diveSession.location}}</h6>
-                            </div>
-                            <div flex="50">
-                                <h6>{{diveSession.diveDate | date: 'dd-MM-yyyy'}}</h6>
-                            </div>
-                        </div>
-                            
-                        <div>
-                            <p>{{diveSession.note}}</p>
-                        </div>
-                        
-                    </div>
-                </div--> 
-                 
+                </div> 
                 <md-divider></md-divider>
             </md-list-item>
             

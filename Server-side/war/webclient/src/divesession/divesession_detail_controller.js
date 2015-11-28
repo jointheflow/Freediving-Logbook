@@ -1,25 +1,19 @@
 //controls the dialog view
-appNeaClient.controller('diveSessionDialogController',  
-	function ($scope, modelService, freediverService, $mdDialog, $log, $filter) {
-        //manage scope spinner showing/hinding
-        $scope.spinner = false;
-    
-        //hide the dialog
-        $scope.hide = function() {
-            $mdDialog.hide();
-        };
-  
-        //cancel the dialog
-        $scope.cancel = function() {
-            $mdDialog.cancel();
-        };
+appNeaClient.controller('diveSessionDetailController',  
+	function ($scope, modelService, freediverService, $log, $filter, $location) {
         
+               
+        
+        $scope.back = function () {
+            $location.path('/divesessionlist');
+        };
+    
         //save the dive session
         $scope.save = function() {
             $log.info('saving dive session.....');
             
             //activate dialog spinner
-            $scope.spinner = true;
+            //$scope.spinner = true;
             
             //invoke Asynch add dive session rest service passing callback function
             freediverService.addDiveSession(modelService.freediverMdl.id,
@@ -47,7 +41,7 @@ appNeaClient.controller('diveSessionDialogController',
             
             $log.info('dive session saved!');
             //stop dialog spinner
-            $scope.spinner = false;
+            //$scope.spinner = false;
             
             //TODO: populate the model with the new divesession
             $log.info('model population with:'+data);
@@ -66,8 +60,7 @@ appNeaClient.controller('diveSessionDialogController',
             
             modelService.freediverMdl.diveSessions.push(diveSession);
             */
-            //close the dialog
-            $mdDialog.hide();
+            
         };
     
         //dive session save error callback

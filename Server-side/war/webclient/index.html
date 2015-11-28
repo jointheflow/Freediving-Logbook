@@ -1,51 +1,44 @@
 <html ng-app="appNeaClient">
     <head>
-    <meta name="viewport" content="width=device-width" content="initial-scale=1" />
-    <!-- Angular Material CSS now available via Google CDN; version 0.11.4 used here -->
-    <!--link rel="stylesheet" href="assets/libs/angular-material/angular-material.min.css"-->
-    <link rel="stylesheet"  href="https://gitcdn.xyz/repo/angular/bower-material/v0.11.4/angular-material.css">
-    
-    <!-- material icon -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-      
-   <!-- Angular Material Dependencies -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-route.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-animate.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-aria.min.js"></script>
+        <meta name="viewport" content="width=device-width" content="initial-scale=1" />
+        <!-- Angular Material CSS now available via Google CDN; version 0.11.4 used here -->
+        <!--link rel="stylesheet" href="assets/libs/angular-material/angular-material.min.css"-->
+        <link rel="stylesheet"  href="https://gitcdn.xyz/repo/angular/bower-material/v0.11.4/angular-material.css">
+
+        <!-- material icon -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+       <!-- Angular Material Dependencies -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-route.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-animate.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-aria.min.js"></script>
 
 
-    <!-- Angular Material Javascript now available via Google CDN; version 0.11.2 used here -->
-    <script src="https://gitcdn.xyz/repo/angular/bower-material/v0.11.4/angular-material.js"></script>
-    
-        <!-- appnea source code reference -->    
-    <script src="src/app.js"></script> 
-    <script src="src/shared/constant.js"></script>
-    <script src="src/shared/service/facebook_service.js"></script>
-    <script src="src/shared/service/freediver_service.js"></script>
-    <script src="src/shared/service/model_service.js"></script>
-    <script src="src/shared/model.js"></script>
-    <script src="src/shared/controller/display_controller.js"></script>
-    <script src="src/divesession/divesession_controller.js"></script>
-    <script src="src/divesession/divesession_detail_dialog_controller.js"></script>
-    <script src="src/sidenav/sidenav_controller.js"></script>
-         
+        <!-- Angular Material Javascript now available via Google CDN; version 0.11.2 used here -->
+        <script src="https://gitcdn.xyz/repo/angular/bower-material/v0.11.4/angular-material.js"></script>
+
+            <!-- appnea source code reference -->    
+        <script src="src/app.js"></script> 
+        <script src="src/shared/constant.js"></script>
+        <script src="src/shared/service/facebook_service.js"></script>
+        <script src="src/shared/service/freediver_service.js"></script>
+        <script src="src/shared/service/model_service.js"></script>
+        <script src="src/shared/model/model.js"></script>
+        <script src="src/divesession/divesession_list_controller.js"></script>
+        <script src="src/divesession/divesession_detail_controller.js"></script>
+        <script src="src/sidenav/sidenav_controller.js"></script>
+
     </head>
 
     <body>
-        
-        <div layout="row" flex  ng-cloak ng-controller="displayController">
+        <div layout="row" flex  ng-cloak>
             <!-- Include a left sidebar --> 
             <ng-include src="'src/sidenav/sidenav_view.html'" ng-controller="sidenavController"></ng-include>            
             
-            <!-- switch view depending on $scope.view attributes -->
-            
-                <!-- Defines a column layout with top fixed toolbar anc scrollable content. Must use layout-fill-->
-            <!--ng-include src="'src/divesession/divesession_list_view.html'" layout="column" layout-fill ng-controller="diveSessionController">
-            </ng-include-->
-            <ng-view layout="column" layout-fill></ng-view>
-            
-        </div>
-       
+            <!-- view switch depending on path attributes, see app.js for routing.
+            Then ng-view defines a common column layout with top fixed toolbar and scrollable content for every view. Must use layout-fill-->
+            <ng-view layout="column" layout-fill></ng-view>            
+        </div>       
     </body>
 </html>

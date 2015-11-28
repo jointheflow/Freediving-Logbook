@@ -2,8 +2,8 @@
 var appNeaClient = angular.module('appNeaClient');
 
 /*controller definition */
-appNeaClient.controller('diveSessionController',  
-	function ($scope,$rootScope, freediverService, modelService, $log, $timeout, $mdSidenav, fbAuth, $mdDialog) {
+appNeaClient.controller('diveSessionListController',  
+	function ($scope, $rootScope, freediverService, modelService, $log, $timeout, $mdSidenav, fbAuth, $location) {
 	
     //******model definition
     //application setting
@@ -94,8 +94,9 @@ appNeaClient.controller('diveSessionController',
     };
     
     //Open dive session detail dialog
-     $scope.showDivesessionDetailDialog = function(ev) {
-        $mdDialog.show({
+     $scope.showDivesessionDetail = function(ev) {
+        $location.path('/divesessiondetail');
+         /*$mdDialog.show({
             controller: 'diveSessionDialogController',
             templateUrl: 'src/divesession/divesession_detail_dialog.html',
             targetEvent: ev,
@@ -108,6 +109,7 @@ appNeaClient.controller('diveSessionController',
                 $log.info('dive session dialog Canecel press');
                 $scope.alert = 'You cancelled the dialog.';
         });
+        */
     };
           
         
