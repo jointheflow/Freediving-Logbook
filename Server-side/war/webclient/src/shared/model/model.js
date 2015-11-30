@@ -43,7 +43,7 @@ FreediverMdl.prototype.addOrUpdateDiveSession = function(aDiveSession) {
 
 
 //*******DiveSession model
-function DiveSessionMdl() {
+function DiveSessionMdl () {
     this.id = null;
     this.diveDate = null;
     this.location = null;

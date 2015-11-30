@@ -73,9 +73,49 @@ appNeaClientService.service('freediverService', function ($http, $log) {
             errorCallBack(data);
         }); 
     
-    
-    
     }
+    
+     /*update a dive session*/
+    this.updateDiveSession = function (externalPlatform, externalToken, deepUnit, tempUnit, weightUnit, divesessionId, diveDate, location, meteo, equipment, weight, temp, deep, note, okCallBack, errorCallBack)   {
+        var updateDiveSessionUrl = freedivingLogbookConstant.apiHostName+freedivingLogbookConstant.apiDiveSessionUpdate;
+        
+        var dataParam = 'external_platform_id='+externalPlatform+
+                        '&external_token='+externalToken+
+                        '&divesession_id='+divesessionId+
+                        '&dive_date='+diveDate+
+                        ((deepUnit == null) ? '' : '&deep_unit='+deepUnit)+
+                        ((weightUnit == null) ? '' :'&weight_unit='+weightUnit)+
+                        ((tempUnit == null) ? '' : "&temp_unit="+tempUnit)+
+                        ((deep == null) ? '' :'&deep='+deep)+
+                        ((equipment == null) ? '' : '&equipment='+equipment)+
+                        ((location == null) ? '' : '&location='+location)+
+                        ((meteo == null) ? '' : '&meteo='+meteo)+
+                        ((temp == null) ? '' : '&water_temp='+temp)+
+                        ((weight == null) ? '' : '&weight='+weight)+
+                        ((note == null) ? '' : '&note='+note);
+        
+        $log.info('freediverService.updateDiveSession executing:'+updateDiveSessionUrl);
+        $log.info('Params:'+ dataParam);
+        
+        var updateDiveSessionPromiseResponse = $http({method: 'POST',
+                                                    url: updateDiveSessionUrl,
+                                                    data: dataParam,
+                                                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                                                  });
+        
+        //managing success
+        updateDiveSessionPromiseResponse.success(function(data, status, headers, config) {
+            $log.info(data);
+            okCallBack(data);
+        }); 
+        
+        //managin error
+         updateDiveSessionPromiseResponse.error(function(data, status, headers, config) {
+            $log.info(data);
+            errorCallBack(data);
+        }); 
+    
+    } 
     
 	
 	

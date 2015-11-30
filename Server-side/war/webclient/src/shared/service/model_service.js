@@ -36,7 +36,7 @@ appNeaClientService.service('modelService', function ($log) {
         ds = new DiveSessionMdl();
         //set all attributes.....
         ds.id = data.id;
-        ds.diveDate = data.diveDate;
+        ds.diveDate = new Date(data.diveDate);
         ds.location = data.locationDesc;
         ds.depthAsMeter = data.deepAsMeter;
         ds.depthAsFeet = data.deepAsFeet;

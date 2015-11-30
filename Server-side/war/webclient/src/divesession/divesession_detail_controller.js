@@ -15,25 +15,47 @@ appNeaClient.controller('diveSessionDetailController',
             
             //activate dialog spinner
             //$scope.spinner = true;
+            //basing on current dive session id we know if it is a new dive session (add) or update an existent dive session (update)
+            if ($scope.divesession.id == null) {
             
-            //invoke Asynch add dive session rest service passing callback function
-            freediverService.addDiveSession(modelService.freediverMdl.id,
-                                            modelService.freediverMdl.externalPlatformId,
-                                            modelService.freediverMdl.externalToken,
-                                            modelService.freediverMdl.depthUnit,
-                                            modelService.freediverMdl.tempUnit,
-                                            modelService.freediverMdl.weightUnit,
-                                            $filter('date')($scope.divesession.date,'dd-MM-yyyy'),
-                                            $scope.divesession.location,
-                                            $scope.divesession.meteo,
-                                            $scope.divesession.equipment,
-                                            $scope.divesession.weight,
-                                            $scope.divesession.temp,
-                                            $scope.divesession.depth,
-                                            $scope.divesession.note,
-                                            $scope.onSaveSuccess,
-                                            $scope.onSaveError);                
+                //invoke Asynch add dive session rest service passing callback function
+                freediverService.addDiveSession(modelService.freediverMdl.id,
+                                                modelService.freediverMdl.externalPlatformId,
+                                                modelService.freediverMdl.externalToken,
+                                                modelService.freediverMdl.depthUnit,
+                                                modelService.freediverMdl.tempUnit,
+                                                modelService.freediverMdl.weightUnit,
+                                                $filter('date')($scope.divesession.diveDate,'dd-MM-yyyy'),
+                                                $scope.divesession.location,
+                                                $scope.divesession.meteo,
+                                                $scope.divesession.equipment,
+                                                $scope.divesession.weight,
+                                                $scope.divesession.temp,
+                                                $scope.divesession.depth,
+                                                $scope.divesession.note,
+                                                $scope.onSaveSuccess,
+                                                $scope.onSaveError);                
+            }else {
             
+                 //invoke Asynch update dive session rest service passing callback function
+                freediverService.updateDiveSession(modelService.freediverMdl.externalPlatformId,
+                                                modelService.freediverMdl.externalToken,
+                                                modelService.freediverMdl.depthUnit,
+                                                modelService.freediverMdl.tempUnit,
+                                                modelService.freediverMdl.weightUnit,
+                                                $scope.divesession.id,
+                                                $filter('date')($scope.divesession.diveDate,'dd-MM-yyyy'),
+                                                $scope.divesession.location,
+                                                $scope.divesession.meteo,
+                                                $scope.divesession.equipment,
+                                                $scope.divesession.weight,
+                                                $scope.divesession.temp,
+                                                $scope.divesession.depth,
+                                                $scope.divesession.note,
+                                                $scope.onSaveSuccess,
+                                                $scope.onSaveError);    
+            }
+
         };
     
     
