@@ -2,9 +2,10 @@
 appNeaClient.controller('diveSessionDetailController',  
 	function ($scope, modelService, freediverService, $log, $filter, $location) {
         
-               
+        //set the current divesession with that selected in the model
+        $scope.divesession = modelService.freediverMdl.currentDiveSession;       
         
-        $scope.back = function () {
+        $scope.back = function() {
             $location.path('/divesessionlist');
         };
     

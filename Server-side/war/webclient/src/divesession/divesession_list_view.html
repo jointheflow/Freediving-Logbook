@@ -37,7 +37,7 @@
     <!-- content contains divesession list -->
     <md-content flex>                    
         <md-list>
-            <md-list-item class="md-3-line" ng-repeat="diveSession in freediver.diveSessions | orderBy : '-diveDate'">
+            <md-list-item class="md-3-line" ng-repeat="diveSession in freediver.diveSessions | orderBy : '-diveDate'" ng-click="showDivesessionDetail(diveSession)">
                 <img ng-src="assets/img/twitter_diver.png" class="md-avatar" alt="diver">
                 <!--md-icon flex md-font-set="material-icons">pool</md-icon-->
                 <div layout="column" class="md-list-item-text">

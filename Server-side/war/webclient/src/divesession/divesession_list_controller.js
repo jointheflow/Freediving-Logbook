@@ -93,8 +93,16 @@ appNeaClient.controller('diveSessionListController',
         window.location.reload();
     };
     
-    //Open dive session detail dialog
-     $scope.showDivesessionDetail = function(ev) {
+    //Open dive session detail view in view or insert mode depending on aDivesession parameter
+     $scope.showDivesessionDetail = function(aDivesession) {
+        if (aDivesession == null) 
+            //set the current divesession on model to null (add new divesession)
+            modelService.freediverMdl.currentDiveSession=null;
+        else
+            //set the current divesession on model to the divesession selected (edit/display an old dive session)
+            modelService.freediverMdl.currentDiveSession=aDivesession;
+        
+        //change location to detail 
         $location.path('/divesessiondetail');
          /*$mdDialog.show({
             controller: 'diveSessionDialogController',

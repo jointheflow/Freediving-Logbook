@@ -11,7 +11,9 @@ function FreediverMdl() {
     this.tempUnit = null;
     this.depthUnit = null;
     //array of DiveSessionMdl
-    this.diveSessions = [];
+    this.diveSessions = [];    
+    //the "current" dive session, null if is new - a dive session of divesessions[] ortherwise
+    this.currentDiveSession = null;
 }
 
 //finds the first occurrence of divesessionid in divesessions array.
@@ -55,7 +57,9 @@ function DiveSessionMdl() {
     this.tempAsFarheneit =null;
     this.note = null;
     //array of DiveMdl
-    this.dives = [];
+    this.dives = [];   
+    //the "current" dive, null if new, a dive of dives[] otherwise
+    this.currentDive=null;
 }
 
 /*Getter method*/
