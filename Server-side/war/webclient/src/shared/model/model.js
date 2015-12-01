@@ -47,14 +47,11 @@ function DiveSessionMdl () {
     this.id = null;
     this.diveDate = null;
     this.location = null;
-    this.depthAsMeter = null;
-    this.depthAsFeet = null;
+    this.depth = null;
     this.meteo = null;
     this.equipment = null;
-    this.weightAsKilogram = null;
-    this.weightAsPound = null;
-    this.tempAsCelsius = null;
-    this.tempAsFarheneit =null;
+    this.weight=null;
+    this.temp = null;
     this.note = null;
     //array of DiveMdl
     this.dives = [];   
@@ -65,24 +62,24 @@ function DiveSessionMdl () {
 /*Getter method*/
 //get depth basing depth unit defined
 DiveSessionMdl.prototype.getDepth = function (unit) {
-    if (unit == freedivingLogbookConstant.DEEP_METER) return this.depthAsMeter + ' meters';
-    if (unit == freedivingLogbookConstant.DEEP_FEET) return this.depthAsFeet + ' feet';
+    if (unit == freedivingLogbookConstant.DEEP_METER) return this.depth + ' meters';
+    if (unit == freedivingLogbookConstant.DEEP_FEET) return this.depth + ' feet';
     return 'error value';
     
 }
 
 //get depth basing weight unit defined
 DiveSessionMdl.prototype.getWeight= function (unit) {
-    if (unit == freedivingLogbookConstant.WEIGHT_KILOGRAM) return this.weightAsKilogram + ' kg';
-    if (unit == freedivingLogbookConstant.WEIGHT_POUND) return this.weightAsPound + ' pounds';
+    if (unit == freedivingLogbookConstant.WEIGHT_KILOGRAM) return this.weight + ' kg';
+    if (unit == freedivingLogbookConstant.WEIGHT_POUND) return this.weight + ' pounds';
     return 'error value';
     
 }
 
 //get depth basing temp unit defined
 DiveSessionMdl.prototype.getTemp= function (unit) {
-    if (unit == freedivingLogbookConstant.TEMPERATURE_CELSIUS) return this.weightAsKilogram + ' C';
-    if (unit == freedivingLogbookConstant.TEMPERATURE_FAHRHENEIT) return this.weightAsPound + ' F';
+    if (unit == freedivingLogbookConstant.TEMPERATURE_CELSIUS) return this.temp + ' C';
+    if (unit == freedivingLogbookConstant.TEMPERATURE_FAHRHENEIT) return this.temp + ' F';
     return 'error value';
     
 }

@@ -22,7 +22,10 @@ appNeaClientService.service('modelService', function ($log) {
         if (data.detail.diveSessions != null) {
             divesessions = data.detail.diveSessions;
             for (i = 0; i < divesessions.length; i++) { 
-                this.addOrUpdateDiveSessionFromData(divesessions[i]);
+                this.addOrUpdateDiveSessionFromData(divesessions[i], 
+                                                    this.freediverMdl.tempUnit,
+                                                    this.freediverMdl.weightUnit,
+                                                    this.freediverMdl.depthUnit);
         
             }
         }
@@ -30,7 +33,7 @@ appNeaClientService.service('modelService', function ($log) {
     };
     
     //update or add divesessions
-    this.addOrUpdateDiveSessionFromData = function (data) {
+    this.addOrUpdateDiveSessionFromData = function (data, _tempUnit, _weightUnit, _depthUnit) {
         //regarding the current model, if divesession exists update else add
         //create an istance of dive session
         ds = new DiveSessionMdl();
@@ -38,17 +41,19 @@ appNeaClientService.service('modelService', function ($log) {
         ds.id = data.id;
         ds.diveDate = new Date(data.diveDate);
         ds.location = data.locationDesc;
-        ds.depthAsMeter = data.deepAsMeter;
-        ds.depthAsFeet = data.deepAsFeet;
         ds.meteo = data.meteoDesc;
         ds.equipment = data.equipment;
-        ds.weightAsKilogram = data.weightAsKilogram;
-        ds.weightAsPound = data.weightAsPound
-        ds.tempAsCelsius = data.waterTempAsCelsius;
-        ds.tempAsFarheneit = data.waterTempAsFahrehneit;
         ds.note = data.note;
-            
         
+        if (_depthUnit == freedivingLogbookConstant.DEEP_METER) ds.depth = data.deepAsMeter;
+        if (_depthUnit == freedivingLogbookConstant.DEEP_FEET) ds.depth = data.deepAsFeet;
+               
+        if (_weightUnit == freedivingLogbookConstant.WEIGHT_KILOGRAM) ds.weight = data.weightAsKilogram;
+        if (_weightUnit == freedivingLogbookConstant.WEIGHT_POUND) ds.weight = data.weightAsPound;
+        
+        if (_tempUnit == freedivingLogbookConstant.TEMPERATURE_CELSIUS) ds.temp = data.waterTempAsCelsius;
+        if (_tempUnit == freedivingLogbookConstant.TEMPERATURE_FAHRHENEIT) ds.temp = data.waterTempAsFahrehneit;
+                
         //invokes model method to update
         this.freediverMdl.addOrUpdateDiveSession(ds);
         
