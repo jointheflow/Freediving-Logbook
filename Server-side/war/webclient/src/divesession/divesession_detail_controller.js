@@ -1,8 +1,11 @@
 //controls the dialog view
 appNeaClient.controller('diveSessionDetailController',  
 	function ($scope, modelService, freediverService, $log, $filter, $location) {
-        
+        //index of the current tab
         $scope.selectedIndex=0;
+        //icon for the current fab button
+        $scope.actionIcon='done';
+    
         //set the current divesession with that selected in the model
         $scope.divesession = modelService.freediverMdl.currentDiveSession;       
         
@@ -14,12 +17,21 @@ appNeaClient.controller('diveSessionDetailController',
         $scope.$watch('selectedIndex', function(current, old) {
             $log.info('selected index:'+current);   
             $scope.selectedIndex = current;
+            if (current==0) $scope.actionIcon='done';
+            if (current==1) $scope.actionIcon='add';
         });
     
         /*Dependig on active tab invoke saving detail dive session or add new dive action*/
         $scope.tabAction = function () {
-            if ($scope.selectedIndex ==0) alert('save');
-            if ($scope.selectedIndex ==1) alert('add dive')
+            if ($scope.selectedIndex ==0) {
+                alert('save');
+                $scope.saveDivesession();
+                                          
+            }
+            if ($scope.selectedIndex ==1) {
+                alert('add dive');
+            
+            }
         
         
         };

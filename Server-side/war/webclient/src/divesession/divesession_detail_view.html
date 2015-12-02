@@ -15,13 +15,14 @@
         
     <!-- fab button for add new dive or saving detail, depending on the tab -->
     <md-button class="md-fab md-fab-bottom-right" aria-label="Add" ng-click="tabAction()">
-            <md-icon icon="add" md-font-set="material-icons">add</md-icon>
+            <md-icon icon="add" md-font-set="material-icons">{{actionIcon}}</md-icon>
     </md-button> 
             
 
     <!--Insert a progress circular to show during ajax call-->
     <div ng-show="spinner" layout="row" layout-align="center center"><md-progress-circular md-mode="indeterminate"></md-progress-circular></div>
-<md-tabs md-dynamic-height md-border-bottom md-selected="selectedIndex">
+<md-content>
+    <md-tabs md-dynamic-height md-border-bottom md-selected="selectedIndex">
     
     <!--**************************DIVE SESSION DETAIL SECTION*******************************-->
         <!-- this content is used to show dive session detail both for edit and display mode -->
@@ -107,4 +108,5 @@
         </md-content>
     </md-tab> 
        
-</md-tabs>
+  </md-tabs>
+</md-content>
