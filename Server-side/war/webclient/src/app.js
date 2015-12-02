@@ -42,9 +42,12 @@ appNeaClient.config(['$httpProvider', function ($httpProvider) {
 
 /*Angular Material theme configuration*/
 appNeaClient.config(function($mdThemingProvider) {
+  //$mdThemingProvider.theme('appnea') 
   $mdThemingProvider.theme('default')
     .primaryPalette('blue')
     .accentPalette('light-blue');
+  
+  //$mdThemingProvider.setDefaultTheme('appnea');
 });
 
 

@@ -2,6 +2,7 @@
 appNeaClient.controller('diveSessionDetailController',  
 	function ($scope, modelService, freediverService, $log, $filter, $location) {
         
+        $scope.selectedIndex=0;
         //set the current divesession with that selected in the model
         $scope.divesession = modelService.freediverMdl.currentDiveSession;       
         
@@ -9,8 +10,27 @@ appNeaClient.controller('diveSessionDetailController',
             $location.path('/divesessionlist');
         };
     
+        
+        $scope.$watch('selectedIndex', function(current, old) {
+            $log.info('selected index:'+current);   
+            $scope.selectedIndex = current;
+        });
+    
+        /*Dependig on active tab invoke saving detail dive session or add new dive action*/
+        $scope.tabAction = function () {
+            if ($scope.selectedIndex ==0) alert('save');
+            if ($scope.selectedIndex ==1) alert('add dive')
+        
+        
+        };
+    
+        /*call add new dive menu*/
+        $scope.callAddNewDive = function() {
+        };
+        
+        
         //save the dive session
-        $scope.save = function() {
+        $scope.saveDivesession = function() {
             $log.info('saving dive session.....');
             
             //activate dialog spinner
