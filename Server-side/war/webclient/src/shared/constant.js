@@ -32,6 +32,10 @@ var freedivingLogbookConstant = freedivingLogbookConstant || {
 	DEEP_METER : 0,
 	DEEP_FEET : 1,
 	WEIGHT_KILOGRAM : 0,
-	WEIGHT_POUND : 1
+	WEIGHT_POUND : 1,
+    
+    //detail dive session TAB constant
+    TAB_DETAIL : 0,
+    TAB_DIVES : 1
     	
 };
