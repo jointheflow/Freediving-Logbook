@@ -2,9 +2,10 @@
 appNeaClient.controller('diveSessionDetailController',  
 	function ($scope, modelService, freediverService, $log, $filter, $location) {
         //index of the current tab
-        $scope.selectedIndex=0;
+        $scope.selectedIndex=freedivingLogbookConstant.TAB_DETAIL;
+        
         //icon for the current fab button
-        $scope.actionIcon='done';
+        $scope.actionIcon= freedivingLogbookConstant.ICON_SAVE_DIVESESSION;
     
         //set the current divesession with that selected in the model
         $scope.divesession = modelService.freediverMdl.currentDiveSession;       
@@ -13,22 +14,24 @@ appNeaClient.controller('diveSessionDetailController',
             $location.path('/divesessionlist');
         };
     
-        
+        /*watch the current tab index and change icon and selected index according*/
         $scope.$watch('selectedIndex', function(current, old) {
             $log.info('selected index:'+current);   
             $scope.selectedIndex = current;
-            if (current==0) $scope.actionIcon='done';
-            if (current==1) $scope.actionIcon='add';
+            
+            if (current==freedivingLogbookConstant.TAB_DETAIL)
+                $scope.actionIcon=freedivingLogbookConstant.ICON_SAVE_DIVESESSION;
+            if (current==freedivingLogbookConstant.TAB_DIVES) 
+                $scope.actionIcon=freedivingLogbookConstant.ICOND_ADD_DIVE;
         });
     
         /*Dependig on active tab invoke saving detail dive session or add new dive action*/
         $scope.tabAction = function () {
-            if ($scope.selectedIndex ==0) {
-                alert('save');
+            if ($scope.selectedIndex == freedivingLogbookConstant.TAB_DETAIL) {
                 $scope.saveDivesession();
                                           
             }
-            if ($scope.selectedIndex ==1) {
+            if ($scope.selectedIndex == freedivingLogbookConstant.TAB_DIVES) {
                 alert('add dive');
             
             }
@@ -101,20 +104,9 @@ appNeaClient.controller('diveSessionDetailController',
             //TODO: populate the model with the new divesession
             $log.info('model population with:'+data);
             modelService.addOrUpdateDiveSessionFromData(data.detail);
-            /*diveSession = new DiveSessionMdl();
-            diveSession.id = data.detail.id;
-            diveSession.diveDate = data.detail.diveDate;
-            diveSession.location = data.detail.locationDesc;
-            diveSession.depth = $scope.divesession.depth;
-            
-            diveSession.meteo = $scope.divesession.meteo;
-            diveSession.equipment =  $scope.divesession.equipment;
-            diveSession.weight = $scope.divesession.weight;
-            //TODO
-            diveSession.note = null;
-            
-            modelService.freediverMdl.diveSessions.push(diveSession);
-            */
+            //update the scope!
+            $scope.divesession = modelService.freediverMdl.currentDiveSession; 
+           
             
         };
     

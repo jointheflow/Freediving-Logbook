@@ -57,6 +57,9 @@ appNeaClientService.service('modelService', function ($log) {
         //invokes model method to update
         this.freediverMdl.addOrUpdateDiveSession(ds);
         
+        //set the current dive session
+        this.freediverMdl.currentDiveSession=ds;
+        
         
         
     }; 
