@@ -120,8 +120,33 @@ appNeaClientService.service('freediverService', function ($http, $log) {
 	
 	
 	
-	/*TODO: add remove service*/
-	this.remove = function (externalPlatform, externalToken, freediverId) {
-		return 'fake remove action';
+	/*remove dive session service*/
+	this.removeDiveSession = function (externalPlatform, externalToken, divesessionId, okCallBack, errorCallBack) {
+		var removeDiveSessionUrl = freedivingLogbookConstant.apiHostName+freedivingLogbookConstant.apiDiveSessionRemove;
+       
+        var dataParam = 'external_platform_id='+externalPlatform+
+                        '&external_token='+externalToken+
+                        '&divesession_id='+divesessionId;
+        $log.info('freediverService.removeDiveSession executing:'+removeDiveSessionUrl);
+        $log.info('Params:'+ dataParam);
+        
+        var removeDiveSessionPromiseResponse = $http({method: 'POST',
+                                                    url: removeDiveSessionUrl,
+                                                    data: dataParam,
+                                                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                                                  });
+        
+        //managing success
+       removeDiveSessionPromiseResponse.success(function(data, status, headers, config) {
+            $log.info(data);
+            okCallBack(data, divesessionId);
+        }); 
+        
+        //managin error
+        removeDiveSessionPromiseResponse.error(function(data, status, headers, config) {
+            $log.info(data);
+            errorCallBack(data);
+        }); 
+         
 	};
 });

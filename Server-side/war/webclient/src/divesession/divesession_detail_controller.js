@@ -92,7 +92,18 @@ appNeaClient.controller('diveSessionDetailController',
             }
 
         };
+        
     
+    
+        /*remove dive session*/
+        $scope.removeDivesession = function() {
+            freediverService.removeDiveSession(modelService.freediverMdl.externalPlatformId,
+                                               modelService.freediverMdl.externalToken,
+                                               $scope.divesession.id, 
+                                               $scope.onDivesessionRemoveSuccess,
+                                               $scope.onSaveError);
+        
+        };
     
         //dive session save success callback
         $scope.onSaveSuccess = function (data) {
@@ -119,6 +130,18 @@ appNeaClient.controller('diveSessionDetailController',
             $log.info('dive session saved error!');
               
         };
+    
+        //manage removing success
+        $scope.onDivesessionRemoveSuccess = function (data, divesessionId) {
+            $log.info('dive session removed');
+            //update the current model
+            modelService.freediverMdl.removeDiveSession(divesessionId);
+            
+            //route to dive list page
+            $scope.back();
+        };
+        
+        
     
 });
 	

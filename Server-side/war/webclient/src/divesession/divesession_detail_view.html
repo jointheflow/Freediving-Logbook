@@ -16,14 +16,52 @@
     <!-- fab button for add new dive or saving detail, depending on the tab, also the fab button is showned depending the follwoing condition:
     -ever shown if tab is detail tab
     -if tab if dive tab shown only if there is alreday saved dive session (e.g. divesession.id !=null-->
-    <md-button class="md-fab md-fab-bottom-right" aria-label="Add" ng-click="tabAction()" 
+    <!--md-button class="md-fab md-fab-bottom-right" aria-label="Add" ng-click="tabAction()" 
                ng-show="(selectedIndex == 0) || (selectedIndex == 1 && divesession.id != null)"  >
             <md-icon icon="add" md-font-set="material-icons">{{actionIcon}}</md-icon>
-    </md-button> 
+    </md-button-->
+
+    
+    <!-- different fab speed dial depending on tab -->
+
+    <!-- fab speed dial for tab DETAILS -->
+    <md-fab-speed-dial md-direction="up" class="md-fab-bottom-right md-fling" md-open="false" 
+                      ng-show="selectedIndex == 0">
+        <md-fab-trigger>
+            <md-button aria-label="menu...." class="md-fab"> <md-icon flex md-font-set="material-icons">reorder</md-icon></md-icon></md-button>
+        </md-fab-trigger>
+        <md-fab-actions>
+            <md-button aria-label="save" class="md-fab md-mini" ng-click="saveDivesession()" >
+                <md-icon icon="add" md-font-set="material-icons">done</md-icon>
+            </md-button>
+            <md-button aria-label="delete"  class="md-fab md-mini">
+               <md-icon icon="add" md-font-set="material-icons" ng-click="removeDivesession()">delete</md-icon>
+            </md-button>
+        </md-fab-actions>
+    </md-fab-speed-dial>
+    
+    <!-- fab speed dial for tab DIVES -->
+    <!--md-fab-speed-dial md-direction="up" class="md-fab-bottom-right md-fling" md-open="false" 
+                       ng-show="(selectedIndex == 1) && (divesession.id != null)">
+         <md-fab-trigger>
+            <md-button aria-label="menu...." class="md-fab"> <md-icon flex md-font-set="material-icons">reorder</md-icon></md-icon></md-button>
+        </md-fab-trigger>
+        <md-fab-actions-->
+            <md-button aria-label="add" class="md-fab md-fab-bottom-right" ng-show="(selectedIndex == 1) && (divesession.id != null)">
+                <md-icon icon="add" md-font-set="material-icons" ng-click="addDive()">add</md-icon>
+            </md-button>
+            <!--md-button aria-label="delete"  class="md-fab">
+               <md-icon icon="add" md-font-set="material-icons">delete</md-icon>
+            </md-button-->
+        <!--/md-fab-actions>
+    </md-fab-speed-dial-->
+    
+    
             
 
     <!--Insert a progress circular to show during ajax call-->
-    <div ng-show="spinner" layout="row" layout-align="center center"><md-progress-circular md-mode="indeterminate"></md-progress-circular></div>
+    <!--div ng-show="spinner" layout="row" layout-align="center center"><md-progress-circular md-mode="indeterminate"></md-progress-circular></div-->
+
 <md-content>
     <md-tabs md-dynamic-height md-dynamic-width md-border-bottom md-selected="selectedIndex" md-center-tabs="true">
         
@@ -31,14 +69,10 @@
     
     <!--**************************DIVE SESSION DETAIL SECTION*******************************-->
         <!-- this content is used to show dive session detail both for edit and display mode -->
-    <md-tab label="Details">
-        <md-content class="md-padding"> 
-
-            <!--Insert a progress circular to show during ajax call-->
-            <div ng-show="spinner" layout="row" layout-align="center center"><md-progress-circular md-mode="indeterminate">
-            </md-progress-circular></div>
-            <div  ng-show="!spinner">
-                <form name="divesessionForm"> 
+    <md-tab label="Details" layout-wrap>
+        <md-content layout-margin> 
+              <div ng-show="!spinner">
+                <form name="divesessionForm" layout-margin> 
                     <div layout="column"> 
                         <md-datepicker name="divedate" ng-model="divesession.diveDate" md-placeholder="Date" required>
                         </md-datepicker>
@@ -76,10 +110,10 @@
                                 <input ng-model="divesession.weight"> 
                             </md-input-container> 
                     </div>
-                    <md-input-container > 
+                            <md-input-container > 
                                 <label>Note</label> 
                                 <textarea ng-model="divesession.note" columns="1" md-maxlength="150"></textarea> 
-                    </md-input-container> 
+                            </md-input-container> 
                  </div>
               </form> 
             </div>

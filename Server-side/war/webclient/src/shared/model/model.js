@@ -41,6 +41,16 @@ FreediverMdl.prototype.addOrUpdateDiveSession = function(aDiveSession) {
     }
 };
 
+//remove dive session if exists
+FreediverMdl.prototype.removeDiveSession = function (aDivesessionId) {
+    var i;
+    i = this.indexOfDiveSession (aDivesessionId);
+    if (i != null) {
+        //add
+        this.diveSessions.splice(i,1);
+    } 
+}
+
 
 //*******DiveSession model
 function DiveSessionMdl () {
