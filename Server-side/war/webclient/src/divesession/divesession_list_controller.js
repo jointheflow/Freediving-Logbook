@@ -95,15 +95,25 @@ appNeaClient.controller('diveSessionListController',
     
     //Open dive session detail view in view or insert mode depending on aDivesession parameter
      $scope.showDivesessionDetail = function(aDivesession) {
-        if (aDivesession == null) 
+        if (aDivesession == null) {
             //set the current divesession on model to null (add new divesession)
             modelService.freediverMdl.currentDiveSession=null;
-        else
-            //set the current divesession on model to the divesession selected (edit/display an old dive session)
-            modelService.freediverMdl.currentDiveSession=aDivesession;
-        
+            //change location path
+            $location.path('/divesessiondetail');
+        }else{
+            //get the complete dive session detail from service, is asynchronous, must manage result with callback
+            freediverService.getDetailDiveSession(0,
+                                                  $rootScope.externalToken,
+                                                  aDivesession.id,
+                                                  $scope.onGetDiveSessionSuccess,
+                                                  $scope.onGetDiveSessionError);
+            
+            //set the current divesession on model to the divesession selected (edit/display an old dive session)   
+            //modelService.freediverMdl.currentDiveSession=aDivesession;
+            
+        }
         //change location to detail 
-        $location.path('/divesessiondetail');
+       
          /*$mdDialog.show({
             controller: 'diveSessionDialogController',
             templateUrl: 'src/divesession/divesession_detail_dialog.html',
@@ -119,6 +129,27 @@ appNeaClient.controller('diveSessionListController',
         });
         */
     };
+    
+    
+   /*manages get detail dive session success*/
+	$scope.onGetDiveSessionSuccess = function(data) {
+		//update model with detailed dive session
+        modelService.addOrUpdateDiveSessionFromData(data.detail,
+                                                    $scope.freediver.tempUnit,
+                                                    $scope.freediver.weightUnit,
+                                                    $scope.freediver.depthUnit);
+        //change location to detail dive session view
+        $location.path('/divesessiondetail');
+		
+	}; 
+    
+    
+   /*manages get detail dive sessio error*/
+	$scope.onGetDiveSessionError = function(data) {
+		
+        alert('Get dive session error:'+ data.errorMessage);
+		
+	}; 
           
         
 });   

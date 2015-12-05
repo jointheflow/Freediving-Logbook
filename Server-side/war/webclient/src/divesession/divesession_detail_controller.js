@@ -140,6 +140,29 @@ appNeaClient.controller('diveSessionDetailController',
             //route to dive list page
             $scope.back();
         };
+    
+    
+        /*add fake dive*/
+        $scope.addFakeDive = function() {
+            freediverService.addDive($scope.divesession.id,
+                                     modelService.freediverMdl.externalPlatformId,
+                                     modelService.freediverMdl.externalToken,
+                                     modelService.freediverMdl.depthUnit,
+                                     modelService.freediverMdl.weightUnit, 
+                                     modelService.freediverMdl.tempUnit,
+                                     1210,
+                                     120,
+                                     'test equipment',
+                                     5,
+                                     12,
+                                     30,
+                                     10,
+                                     'test note',
+                                     'constant',
+                                     null,
+                                     null);
+                                     
+        };
         
         
     

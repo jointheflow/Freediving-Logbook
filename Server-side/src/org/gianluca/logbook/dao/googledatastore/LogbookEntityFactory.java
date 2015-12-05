@@ -225,14 +225,14 @@ public class LogbookEntityFactory {
 			if (neutralBuoyancy !=null)
 				switch (deepUnit) {
 					case LogbookConstant.DEEP_METER: {
-						e_dive.setProperty("neutralBuoyancyAsMeter", deep);
-						e_dive.setProperty("neutralBuoyancyAsFeet", (deep*LogbookConstant.METER_AS_FEET));
+						e_dive.setProperty("neutralBuoyancyAsMeter", neutralBuoyancy);
+						e_dive.setProperty("neutralBuoyancyAsFeet", (neutralBuoyancy*LogbookConstant.METER_AS_FEET));
 					}
 						break;
 					
 					case LogbookConstant.DEEP_FEET: {
-						e_dive.setProperty("neutralBuoyancyAsFeet", deep);
-						e_dive.setProperty("neutralBuoyancyAsMeter", (deep/LogbookConstant.METER_AS_FEET));
+						e_dive.setProperty("neutralBuoyancyAsFeet", neutralBuoyancy);
+						e_dive.setProperty("neutralBuoyancyAsMeter", (neutralBuoyancy/LogbookConstant.METER_AS_FEET));
 					}
 						break;
 						

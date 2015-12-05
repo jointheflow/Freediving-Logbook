@@ -128,4 +128,30 @@ function DiveMdl() {
     this.neutralBuoyance = null;
     this.depthTemp = null;
     this.weight = null;
+    this.note = null;
+}
+
+/*Getter method*/
+//get depth basing depth unit defined
+DiveMdl.prototype.getMaxDepth = function (unit) {
+    if (unit == freedivingLogbookConstant.DEEP_METER) return this.maxDepth + ' meters';
+    if (unit == freedivingLogbookConstant.DEEP_FEET) return this.maxDepth + ' feet';
+    return 'error value';
+    
+}
+
+//get neutral buoynace depth basing depth unit defined
+DiveMdl.prototype.getNeutralBuoyance = function (unit) {
+    if (unit == freedivingLogbookConstant.DEEP_METER) return this.getNeutralBuoyance + ' meters';
+    if (unit == freedivingLogbookConstant.DEEP_FEET) return this.getNeutralBuoyance + ' feet';
+    return 'error value';
+    
+}
+
+//get depth basing weight unit defined
+DiveMdl.prototype.getWeight= function (unit) {
+    if (unit == freedivingLogbookConstant.WEIGHT_KILOGRAM) return this.weight + ' kg';
+    if (unit == freedivingLogbookConstant.WEIGHT_POUND) return this.weight + ' pounds';
+    return 'error value';
+    
 }

@@ -53,7 +53,21 @@ appNeaClientService.service('modelService', function ($log) {
         
         if (_tempUnit == freedivingLogbookConstant.TEMPERATURE_CELSIUS) ds.temp = data.waterTempAsCelsius;
         if (_tempUnit == freedivingLogbookConstant.TEMPERATURE_FAHRHENEIT) ds.temp = data.waterTempAsFahrehneit;
-                
+        
+        
+        //get dives
+        if (data.dives!=null) {
+            dives = data.dives;
+            for (i = 0; i < dives.length; i++) {
+                //dive
+                dive = this.addOrUpdateDiveFromData(dives[i], 
+                                                    this.freediverMdl.tempUnit,
+                                                    this.freediverMdl.weightUnit,
+                                                    this.freediverMdl.depthUnit);
+                ds.addOrUpdateDive(dive);
+            } 
+        }
+        
         //invokes model method to update
         this.freediverMdl.addOrUpdateDiveSession(ds);
         
@@ -65,8 +79,31 @@ appNeaClientService.service('modelService', function ($log) {
     }; 
     
     
-    this.addOrUpdateDiveFromData = function (data) {
+    this.addOrUpdateDiveFromData = function (data, _tempUnit, _weightUnit, _depthUnit) {
         //regarding the current model, if dive exists update else add
+        d = new DiveMdl();
+        
+        d.id = data.id;
+        d.diveTime = data.diveTime;
+        d.equipment = data.equipment;
+        d.duration = data.duration;
+        d.diveType = data.diveType;
+        d.note = data.note;
+        
+        if (_depthUnit == freedivingLogbookConstant.DEEP_METER) d.maxDepth = data.maxDeepAsMeter;
+        if (_depthUnit == freedivingLogbookConstant.DEEP_FEET) d.maxDepth = data.maxDeepAsFeet;
+        
+        if (_depthUnit == freedivingLogbookConstant.DEEP_METER) d.neutralBuoyance = data.neutralBuoyanceAsMeter;
+        if (_depthUnit == freedivingLogbookConstant.DEEP_FEET) d.neutralBuoyance = data.neutralBuoyanceAsFeet;
+        
+        if (_weightUnit == freedivingLogbookConstant.WEIGHT_KILOGRAM) d.weight = data.weightAsKilogram;
+        if (_weightUnit == freedivingLogbookConstant.WEIGHT_POUND) d.weight = data.weightAsPound;
+        
+        if (_tempUnit == freedivingLogbookConstant.TEMPERATURE_CELSIUS) d.depthTemp = data.depthWaterTempAsCelsius;
+        if (_tempUnit == freedivingLogbookConstant.TEMPERATURE_FAHRHENEIT) d.depthTemp = data.depthWaterTempAsFahrehneit;
+        
+        return d;
+       
     };
 
 });

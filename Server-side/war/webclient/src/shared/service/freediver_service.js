@@ -149,4 +149,78 @@ appNeaClientService.service('freediverService', function ($http, $log) {
         }); 
          
 	};
+    
+    /*get detailed dive session*/
+    this.getDetailDiveSession = function (externalPlatform, externalToken, divesessionId, okCallBack, errorCallBack) {
+        var getDiveSessionUrl = freedivingLogbookConstant.apiHostName+freedivingLogbookConstant.apiDiveSessionGet +
+						'?'+freedivingLogbookConstant.pNameExternalPlatform+'='+externalPlatform+
+						'&'+freedivingLogbookConstant.pNameExternalToken+'='+externalToken+
+                        '&'+freedivingLogbookConstant.pNameDiveSessionId+'='+divesessionId;
+        
+		$log.info('freediverService.getDetailDiveSession executing:'+getDiveSessionUrl);
+		
+		
+		
+		var getDiveSessionPromiseResponse = $http({method: 'GET', url: getDiveSessionUrl}); 
+		
+		
+	    //managing success response
+		getDiveSessionPromiseResponse.success(function(data, status, headers, config) {
+	    	console.log(data);
+	    	//invoking callback function
+	    	okCallBack(data);
+	    });
+	    
+	    //managing error response
+		getDiveSessionPromiseResponse.error(function(data, status, headers, config) {
+	    	console.log(data);
+	    	//invoking callback function
+	    	errorCallBack(data);
+	    });
+    };
+    
+    
+    /*add a dive*/
+    this.addDive = function (divesessionId, externalPlatform, externalToken, deepUnit, tempUnit, weightUnit, diveTime, duration, equipment, weight, temp, deep, neutralBuoyance, note, diveType, okCallBack, errorCallBack) {
+        var addDiveUrl = freedivingLogbookConstant.apiHostName+freedivingLogbookConstant.apiDiveAdd;
+        
+        var dataParam = 'external_platform_id='+externalPlatform+
+                        '&external_token='+externalToken+
+                        '&divesession_id='+divesessionId+
+                        '&dive_time='+diveTime+
+                        ((deepUnit == null) ? '' : '&deep_unit='+deepUnit)+
+                        ((weightUnit == null) ? '' :'&weight_unit='+weightUnit)+
+                        ((tempUnit == null) ? '' : "&temp_unit="+tempUnit)+
+                        ((deep == null) ? '' :'&max_depth='+deep)+
+                        ((duration == null) ? '' :'&duration='+duration)+
+                        ((neutralBuoyance == null) ? '' : '&neutral_buoyance='+neutralBuoyance)+
+                        ((equipment == null) ? '' : '&equipment='+equipment)+
+                        ((temp == null) ? '' : '&depth_water_temp='+temp)+
+                        ((weight == null) ? '' : '&weight='+weight)+
+                        ((diveType == null) ? '' : '&dive_type='+diveType)+
+                        ((note == null) ? '' : '&note='+note);
+        
+        $log.info('freediverService.addDive executing:'+addDiveUrl);
+        $log.info('Params:'+ dataParam);
+        
+        var addDivePromiseResponse = $http({method: 'POST',
+                                                    url: addDiveUrl,
+                                                    data: dataParam,
+                                                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                                                  });
+        
+        //managing success
+        addDivePromiseResponse.success(function(data, status, headers, config) {
+            $log.info(data);
+            okCallBack(data);
+        }); 
+        
+        //managin error
+         addDivePromiseResponse.error(function(data, status, headers, config) {
+            $log.info(data);
+            errorCallBack(data);
+        }); 
+    
+    };
+    
 });

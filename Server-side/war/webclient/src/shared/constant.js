@@ -3,7 +3,7 @@ var freedivingLogbookConstant = freedivingLogbookConstant || {
 	applicationClientVersion: '0.0.0 (grouperino)',
 	applicationServerVersion: '0.0.0 (grouperino)',
 
-	apiHostName: 'https://app-nea-it.appspot.com',
+	apiHostName: 'http://localhost:8888',
 	apiFreediverLoginPath:'/app/freediver/login',
 	apiFreediverRemovePath:'/app/freediver/remove',
 	apiDiveSessionGet:'/app/freediver/divesession/get',
@@ -17,6 +17,7 @@ var freedivingLogbookConstant = freedivingLogbookConstant || {
 	pNameExternalPlatform : 'external_platform_id',
 	pNamePageSize :'dive_page_size',
 	pNameExternalToken : 'external_token',
+    pNameDiveSessionId : 'divesession_id',
     
     FB_STATUS_LOGGED : 0,
     FB_STATUS_NOT_AUTH : -1,
@@ -24,7 +25,7 @@ var freedivingLogbookConstant = freedivingLogbookConstant || {
     APPNEA_STATUS_LOGGED :0,
     APPNEA_STATUS_UNKNOWN : -2,
     
-    facebook_app_id: '132053467142365',
+    facebook_app_id: '164570873890624',
     
     //constant for freediver unit
     TEMPERATURE_CELSIUS : 0,

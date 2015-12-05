@@ -48,7 +48,7 @@
         </md-fab-trigger>
         <md-fab-actions-->
             <md-button aria-label="add" class="md-fab md-fab-bottom-right" ng-show="(selectedIndex == 1) && (divesession.id != null)">
-                <md-icon icon="add" md-font-set="material-icons" ng-click="addDive()">add</md-icon>
+                <md-icon icon="add" md-font-set="material-icons" ng-click="addFakeDive()">add</md-icon>
             </md-button>
             <!--md-button aria-label="delete"  class="md-fab">
                <md-icon icon="add" md-font-set="material-icons">delete</md-icon>
@@ -122,33 +122,27 @@
         <!--************************DIVES LIST SECTION**********************************************-->
         <!-- content contains divesession list -->
     <md-tab label="Dives">
-      <md-content flex>
-          <div><span>Show divesession detail</span></div>
+      <!--md-content flex>
             <md-list>
                 <md-list-item class="md-3-line" ng-repeat="dive in divesession.dives | orderBy : '-diveDate'">
                     <img ng-src="assets/img/twitter_diver.png" class="md-avatar" alt="diver">
-                    <!--md-icon flex md-font-set="material-icons">pool</md-icon-->
                     <div layout="column" class="md-list-item-text">
                         <div layout="row" layout-align="space-between end">
-                            <h4><b>{{diveSession.location}}</b></h4> <h4>{{diveSession.diveDate | date: 'dd-MM-yyyy'}}</h4>
+                            <h4><b>{{dive.diveDate}}</b></h4>
                         </div>
                         <div layout="row" layout-align="space-between center"> 
-                            <p class="md-caption">depth:{{diveSession.getDepth(freediver.depthUnit)}}</p>
-                            <p>temp:{{diveSession.getTemp(freediver.tempUnit)}}</p>
-                            <p>weight:{{diveSession.getWeight(freediver.weightUnit)}}</p>
-                        </div>
-                        <p><i>{{diveSession.note | limitTo:45}}...</i></p>
-                    </div> 
+                            <p class="md-caption"> maxDepth: {{dive.maxDepth}}</p>
+                            <p>duration:{{dive.duration.getTemp(freediver.tempUnit)}}</p>
+                        </div> 
                     <md-divider></md-divider>
                 </md-list-item>
 
             </md-list>
-        </md-content>
+        </md-content-->
     </md-tab> 
         
-        <!-************************STATISTICS **********************************-->
-        <md-tab label="Statistics">
-        </md-tab>
+        <!-- ************************STATISTICS ********************************** -->
+    <md-tab label="Statistics"></md-tab>
        
   </md-tabs>
 </md-content>
