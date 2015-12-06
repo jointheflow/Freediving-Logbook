@@ -20,6 +20,10 @@ appNeaClient.config(['$routeProvider',
 		templateUrl: 'src/divesession/divesession_detail_view.html',
         controller: 'diveSessionDetailController'
       }).
+      when('/divedetail', {
+		templateUrl: 'src/dive/dive_detail_view.html',
+        controller: 'diveDetailController'
+      }).
       otherwise({
         redirectTo: '/divesessionlist',
 		controller: 'diveSessionController'

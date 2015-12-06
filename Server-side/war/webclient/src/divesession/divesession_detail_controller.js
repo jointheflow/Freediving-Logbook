@@ -1,4 +1,7 @@
-//controls the dialog view
+//get reference to the app module defined in app.js
+var appNeaClient = angular.module('appNeaClient');
+
+//controls the divesession detail view
 appNeaClient.controller('diveSessionDetailController',  
 	function ($scope, modelService, freediverService, $log, $filter, $location) {
         //index of the current tab
@@ -144,7 +147,8 @@ appNeaClient.controller('diveSessionDetailController',
     
         /*add fake dive*/
         $scope.addFakeDive = function() {
-            freediverService.addDive($scope.divesession.id,
+           $location.path('/divedetail');
+           /* freediverService.addDive($scope.divesession.id,
                                      modelService.freediverMdl.externalPlatformId,
                                      modelService.freediverMdl.externalToken,
                                      modelService.freediverMdl.depthUnit,
@@ -161,10 +165,14 @@ appNeaClient.controller('diveSessionDetailController',
                                      'constant',
                                      null,
                                      null);
-                                     
+             */                        
         };
         
-        
+    //Open dive detail view in edit or insert mode depending on aDive parameter
+    $scope.showDiveDetail = function(aDive) {
+        modelService.freediverMdl.currentDiveSession.currentDive=aDive;
+        $location.path('/divedetail');
+    }    
     
 });
 	

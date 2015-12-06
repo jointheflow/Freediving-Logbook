@@ -27,6 +27,10 @@ var freedivingLogbookConstant = freedivingLogbookConstant || {
     
     facebook_app_id: '164570873890624',
     
+    //plaform managed
+    PLATFORM_FACEBOOK : 0,
+    PLATFORM_GOOGLE : 1, 
+    
     //constant for freediver unit
     TEMPERATURE_CELSIUS : 0,
 	TEMPERATURE_FAHRHENEIT : 1 ,

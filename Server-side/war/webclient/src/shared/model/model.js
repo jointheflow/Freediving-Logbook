@@ -13,7 +13,9 @@ function FreediverMdl() {
     //array of DiveSessionMdl
     this.diveSessions = [];    
     //the "current" dive session, null if is new - a dive session of divesessions[] ortherwise
-    this.currentDiveSession = null;
+    this.currentDiveSession = null;   
+    
+    
 }
 
 //finds the first occurrence of divesessionid in divesessions array.

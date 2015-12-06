@@ -1,0 +1,14 @@
+<!-- toobar -->
+    <md-toolbar layout-align="space-between end">
+        <div class="md-toolbar-tools" layout-align="space-between end">
+            <md-button class="md-icon-button" ng-show="fbStatus == 0" aria-label="back" ng-click="back()" >
+                    <!--md-icon flex md-svg-src="assets/img/menu.svg"></md-icon-->
+                    <md-icon flex md-font-set="material-icons">arrow_back</md-icon>
+
+            </md-button>
+            <p>Dive</p>
+            <!--fill right space with a blank div -->
+            <div ng-show="fbStatus == 0" style="height:48px; width:48px"></div>
+            
+        </div>
+    </md-toolbar>

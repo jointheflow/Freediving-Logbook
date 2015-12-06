@@ -66,7 +66,7 @@ appNeaClient.controller('diveSessionListController',
             //start the spinner
             $scope.spinner="indeterminate";
             
-            freediverService.login(0,
+            freediverService.login(freedivingLogbookConstant.PLATFORM_FACEBOOK,
     	    					$rootScope.externalToken,
     	    					100, 
     	    					$scope.onLoginSuccess, 
@@ -102,7 +102,7 @@ appNeaClient.controller('diveSessionListController',
             $location.path('/divesessiondetail');
         }else{
             //get the complete dive session detail from service, is asynchronous, must manage result with callback
-            freediverService.getDetailDiveSession(0,
+            freediverService.getDetailDiveSession(freedivingLogbookConstant.PLATFORM_FACEBOOK,
                                                   $rootScope.externalToken,
                                                   aDivesession.id,
                                                   $scope.onGetDiveSessionSuccess,
