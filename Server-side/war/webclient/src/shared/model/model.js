@@ -124,6 +124,7 @@ DiveSessionMdl.prototype.addOrUpdateDive = function (aDive) {
 function DiveMdl() {
     this.id = null;
     this.diveTime = null;
+    this.diveType = null;
     this.equipment = null;
     this.maxDepth = null;
     this.duration = null;

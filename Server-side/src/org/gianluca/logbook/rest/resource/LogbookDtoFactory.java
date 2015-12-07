@@ -157,9 +157,9 @@ public class LogbookDtoFactory {
 	        diveInput.setDiveTime(diveTime);
 	        
 	        
-	        String s_maxDeep = form.getFirstValue("max_deep");
+	        String s_maxDeep = form.getFirstValue("max_depth");
 	        if (s_maxDeep !=null){
-		        checkDouble(s_maxDeep, "max_deep");
+		        checkDouble(s_maxDeep, "max_depth");
 		        Double maxDeep = new Double(s_maxDeep);
 		        diveInput.setMaxDeep(maxDeep);
 	        }

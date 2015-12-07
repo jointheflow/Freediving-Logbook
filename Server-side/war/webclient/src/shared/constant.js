@@ -33,7 +33,7 @@ var freedivingLogbookConstant = freedivingLogbookConstant || {
     
     //constant for freediver unit
     TEMPERATURE_CELSIUS : 0,
-	TEMPERATURE_FAHRHENEIT : 1 ,
+	TEMPERATURE_FAHRHENEIT : 1,
 	DEEP_METER : 0,
 	DEEP_FEET : 1,
 	WEIGHT_KILOGRAM : 0,

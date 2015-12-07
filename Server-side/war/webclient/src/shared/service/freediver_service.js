@@ -223,4 +223,80 @@ appNeaClientService.service('freediverService', function ($http, $log) {
     
     };
     
+    
+    
+    /*update a dive*/
+    this.updateDive = function (diveId, externalPlatform, externalToken, deepUnit, tempUnit, weightUnit, diveTime, duration, equipment, weight, temp, deep, neutralBuoyance, note, diveType, okCallBack, errorCallBack) {
+        var updateDiveUrl = freedivingLogbookConstant.apiHostName+freedivingLogbookConstant.apiDiveUpdate;
+        
+        var dataParam = 'external_platform_id='+externalPlatform+
+                        '&external_token='+externalToken+
+                        '&dive_id='+diveId+
+                        '&dive_time='+diveTime+
+                        ((deepUnit == null) ? '' : '&deep_unit='+deepUnit)+
+                        ((weightUnit == null) ? '' :'&weight_unit='+weightUnit)+
+                        ((tempUnit == null) ? '' : "&temp_unit="+tempUnit)+
+                        ((deep == null) ? '' :'&max_depth='+deep)+
+                        ((duration == null) ? '' :'&duration='+duration)+
+                        ((neutralBuoyance == null) ? '' : '&neutral_buoyance='+neutralBuoyance)+
+                        ((equipment == null) ? '' : '&equipment='+equipment)+
+                        ((temp == null) ? '' : '&depth_water_temp='+temp)+
+                        ((weight == null) ? '' : '&weight='+weight)+
+                        ((diveType == null) ? '' : '&dive_type='+diveType)+
+                        ((note == null) ? '' : '&note='+note);
+        
+        $log.info('freediverService.updateDive executing:'+updateDiveUrl);
+        $log.info('Params:'+ dataParam);
+        
+        var updateDivePromiseResponse = $http({method: 'POST',
+                                                    url: updateDiveUrl,
+                                                    data: dataParam,
+                                                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                                                  });
+        
+        //managing success
+        updateDivePromiseResponse.success(function(data, status, headers, config) {
+            $log.info(data);
+            okCallBack(data);
+        }); 
+        
+        //managin error
+         updateDivePromiseResponse.error(function(data, status, headers, config) {
+            $log.info(data);
+            errorCallBack(data);
+        }); 
+    
+    };
+    
+    /*remove a dive*/
+    this.removeDive = function(diveId, externalPlatform, externalToken, okCallBack, errorCallBack) {
+        var removeDiveUrl = freedivingLogbookConstant.apiHostName+freedivingLogbookConstant.apiDiveRemove;
+        
+        var dataParam = 'external_platform_id='+externalPlatform+
+                        '&external_token='+externalToken+
+                        '&dive_id='+diveId;
+        
+        $log.info('freediverService.removeDive executing:'+removeDiveUrl);
+        $log.info('Params:'+ dataParam);
+        
+        var removeDivePromiseResponse = $http({method: 'POST',
+                                               url: removeDiveUrl,
+                                               data: dataParam,
+                                               headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                                            });
+        
+        //managing success
+        removeDivePromiseResponse.success(function(data, status, headers, config) {
+            $log.info(data);
+            okCallBack(data);
+        }); 
+        
+        //managin error
+        removeDivePromiseResponse.error(function(data, status, headers, config) {
+            $log.info(data);
+            errorCallBack(data);
+        }); 
+    
+    };
+    
 });

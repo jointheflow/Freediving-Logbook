@@ -145,28 +145,6 @@ appNeaClient.controller('diveSessionDetailController',
         };
     
     
-        /*add fake dive*/
-        $scope.addFakeDive = function() {
-           $location.path('/divedetail');
-           /* freediverService.addDive($scope.divesession.id,
-                                     modelService.freediverMdl.externalPlatformId,
-                                     modelService.freediverMdl.externalToken,
-                                     modelService.freediverMdl.depthUnit,
-                                     modelService.freediverMdl.weightUnit, 
-                                     modelService.freediverMdl.tempUnit,
-                                     1210,
-                                     120,
-                                     'test equipment',
-                                     5,
-                                     12,
-                                     30,
-                                     10,
-                                     'test note',
-                                     'constant',
-                                     null,
-                                     null);
-             */                        
-        };
         
     //Open dive detail view in edit or insert mode depending on aDive parameter
     $scope.showDiveDetail = function(aDive) {

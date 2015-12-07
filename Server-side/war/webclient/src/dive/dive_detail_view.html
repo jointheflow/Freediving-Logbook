@@ -12,3 +12,70 @@
             
         </div>
     </md-toolbar>
+
+<!-- fab speed dial manage save and delete dive-->
+    <md-fab-speed-dial md-direction="up" class="md-fab-bottom-right md-scale" md-open="false">
+        <md-fab-trigger>
+            <md-button aria-label="menu...." class="md-fab"> <md-icon flex md-font-set="material-icons">reorder</md-icon></md-icon></md-button>
+        </md-fab-trigger>
+        <md-fab-actions>
+            <md-button aria-label="save" class="md-fab md-mini" ng-click="saveDive()" >
+                <md-icon icon="add" md-font-set="material-icons">done</md-icon>
+            </md-button>
+            <md-button aria-label="delete"  class="md-fab md-mini">
+               <md-icon icon="add" md-font-set="material-icons" ng-click="removeDive()">delete</md-icon>
+            </md-button>
+        </md-fab-actions>
+    </md-fab-speed-dial>
+    
+
+
+ <!--**************************DIVE DETAIL SECTION*******************************-->
+    <!-- this content is used to show dive detail both for edit and display mode -->
+    <md-content layout-margin> 
+        <div ng-show="!spinner">
+            <form name="diveForm" layout-margin> 
+                <div layout="column"> 
+                    <md-input-container > 
+                        <label>Time</label> 
+                        <input name="time" ng-model="dive.diveTime" required> 
+                    </md-input-container> 
+                    <md-input-container > 
+                        <label>Dive type</label> 
+                        <input name="diveType" ng-model="dive.diveType" required> 
+                        </md-input-container> 
+                    <md-input-container > 
+                        <label>Equipment</label> 
+                        <input ng-model="dive.equipment"> 
+                    </md-input-container>
+                    <div layout="row">
+                        <md-input-container > 
+                            <label>Max depth</label> 
+                            <input ng-model="dive.maxDepth"> 
+                        </md-input-container>
+                        <md-input-container > 
+                            <label>Duration</label> 
+                            <input ng-model="dive.duration"> 
+                        </md-input-container>
+                        <md-input-container > 
+                            <label>Neutral buoyance</label> 
+                            <input ng-model="dive.neutralBuoyance"> 
+                        </md-input-container>
+                        <md-input-container > 
+                            <label>Temp bottom</label> 
+                            <input ng-model="dive.depthTemp"> 
+                        </md-input-container> 
+                        <md-input-container > 
+                            <label>Weight</label> 
+                            <input ng-model="dive.weight"> 
+                        </md-input-container> 
+                    </div>
+                    <md-input-container > 
+                        <label>Note</label> 
+                        <textarea ng-model="dive.note" columns="1" md-maxlength="150"></textarea> 
+                    </md-input-container> 
+                </div>
+            </form> 
+        </div>
+    </md-content> 
+

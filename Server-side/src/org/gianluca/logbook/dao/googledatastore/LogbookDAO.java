@@ -329,7 +329,9 @@ public class LogbookDAO {
 			try {
 				//find entity
 				Entity e_diveSession = datastore.get(KeyFactory.stringToKey(diveSessionId));
-				
+				//check entity type (must be DiveSession)
+				if (!e_diveSession.getKind().equals("DiveSession")) 
+					throw new DiveSessionIdException("DiveSession id wrong or not found for "+diveSessionId);
 				//populate entity
 				LogbookEntityFactory.populateEntityDiveSession(e_diveSession, diveDate, deep, equipment, locationDesc, locationGeoPt, meteoDesc, note, waterTemp, weight, deepUnit, tempUnit, weightUnit);
 						
@@ -440,6 +442,10 @@ public class LogbookDAO {
 				
 				//find entity
 				Entity e_dive = datastore.get(KeyFactory.stringToKey(diveId));
+				//check entity type (must be Dive)
+				if (!e_dive.getKind().equals("Dive")) 
+					throw new DiveIdException("Dive id wrong or not found for "+diveId);
+				
 				LogbookEntityFactory.populateEntityDive(e_dive, diveTime_minute, diveType, duration_second, equipment, deep, neutralBuoyancy, note, weight, depthWaterTemp, deepUnit, tempUnit, weightUnit);
 				
 				datastore.put(e_dive);
