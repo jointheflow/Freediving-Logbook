@@ -288,7 +288,7 @@ appNeaClientService.service('freediverService', function ($http, $log) {
         //managing success
         removeDivePromiseResponse.success(function(data, status, headers, config) {
             $log.info(data);
-            okCallBack(data);
+            okCallBack(data, diveId);
         }); 
         
         //managin error

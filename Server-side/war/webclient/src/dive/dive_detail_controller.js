@@ -69,10 +69,10 @@ appNeaClient.controller ('diveDetailController',
 
 
     /*remove dive*/
-    $scope.removeDivesession = function() {
-        freediverService.removeDive(modelService.freediverMdl.externalPlatformId,
+    $scope.removeDive = function() {
+        freediverService.removeDive($scope.dive.id, 
+                                    modelService.freediverMdl.externalPlatformId,
                                     modelService.freediverMdl.externalToken,
-                                    $scope.dive.id, 
                                     $scope.onDiveRemoveSuccess,
                                     $scope.onSaveError);
 
@@ -113,10 +113,10 @@ appNeaClient.controller ('diveDetailController',
     };
 
     //manage removing success
-    $scope.onDiveRemoveSuccess = function (data, divesessionId) {
+    $scope.onDiveRemoveSuccess = function (data, diveId) {
         $log.info('dive removed');
         //update the current model
-        modelService.freediverMdl.removeDiveSession(diveiId);
+        modelService.freediverMdl.currentDiveSession.removeDive(diveId);
 
         //route to dive session list page
         $scope.back();

@@ -120,6 +120,19 @@ DiveSessionMdl.prototype.addOrUpdateDive = function (aDive) {
     }
 };
 
+
+
+//remove dive  if exists
+DiveSessionMdl.prototype.removeDive = function (aDiveId) {
+    var i;
+    i = this.indexOfDive (aDiveId);
+    if (i != null) {
+        //remove
+        this.dives.splice(i,1);
+    } 
+}
+
+
 //******Dive model
 function DiveMdl() {
     this.id = null;
