@@ -32,11 +32,13 @@
         <script src="src/divesession/divesession_detail_controller.js"></script>
         <script src="src/dive/dive_detail_controller.js"></script>
         <script src="src/sidenav/sidenav_controller.js"></script>
+        <script src="src/shared/controller/root_controller.js"></script>
 
     </head>
 
     <body>
-        <div layout="row" flex  ng-cloak>
+        <!-- root controller is used to set and define global attributes and functions -->
+        <div layout="row" flex  ng-cloak ng-controller="rootController">
             <!-- Include a left sidebar --> 
             <ng-include src="'src/sidenav/sidenav_view.html'" ng-controller="sidenavController"></ng-include>            
             

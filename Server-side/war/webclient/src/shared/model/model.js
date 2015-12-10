@@ -15,6 +15,9 @@ function FreediverMdl() {
     //the "current" dive session, null if is new - a dive session of divesessions[] ortherwise
     this.currentDiveSession = null;   
     
+    //the active tab on dive session view. Used to manage back from dive detail to dive session
+    this.diveSessionActiveTabIndex = 0;
+    
     
 }
 

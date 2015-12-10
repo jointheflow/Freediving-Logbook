@@ -3,8 +3,10 @@ var appNeaClient = angular.module('appNeaClient');
 
 /*controller definition */
 appNeaClient.controller('diveSessionListController',  
-	function ($scope, $rootScope, freediverService, modelService, $log, $timeout, $mdSidenav, fbAuth, $location) {
+	function ($scope, $rootScope, freediverService, modelService, $log, $timeout, $mdSidenav, fbAuth, $location, $mdDialog) {
 	
+    
+    
     //******model definition
     //application setting
     $scope.settings = null;
@@ -26,16 +28,7 @@ appNeaClient.controller('diveSessionListController',
 	/*manages rest server login success*/
 	$scope.onLoginSuccess = function(data) {
 		//stop the spinner
-        $scope.spinner="";
-        
-        //alert('Login success '+ data.message);
-        //initialize the the scope and $rootscope with value fetch from login
-        /*$scope.externalToken = data.externalToken;
-        $scope.externalPlatformId = data.externalPlatformId;
-        $scope.deepUnit = data.deepUnit;
-        $scope.tempUnit = data.tempUnit;
-        $scope.weightUnit = data.weightUnit;
-        */
+        $rootScope.closeWaitingSpinner();
         
         //populare model service!!!!!
         modelService.updateFreediverFromData(data);
@@ -50,7 +43,7 @@ appNeaClient.controller('diveSessionListController',
 	/*manages rest server login error*/
 	$scope.onLoginError = function(data) {
 		//stop the spinner
-        $scope.spinner="";
+        $rootScope.closeWaitingSpinner();
         alert('Login error '+ data.errorMessage);
 		
 	};
@@ -64,7 +57,7 @@ appNeaClient.controller('diveSessionListController',
         /*If external token has been changed to new value, we need to do Login on server side*/
         if ($rootScope.externalToken!=null) {
             //start the spinner
-            $scope.spinner="indeterminate";
+            $rootScope.showWaitingSpinner();
             
             freediverService.login(freedivingLogbookConstant.PLATFORM_FACEBOOK,
     	    					$rootScope.externalToken,
@@ -83,24 +76,28 @@ appNeaClient.controller('diveSessionListController',
     
     //manage login on fb
     $scope.login = function() {
-        fbAuth.login();
-        
+        fbAuth.login();                
     };
     
     //manage logout on fb but we let fb manage logout directly +/
     $scope.logout = function() {
         fbAuth.logout();
         window.location.reload();
+        
     };
     
     //Open dive session detail view in view or insert mode depending on aDivesession parameter
      $scope.showDivesessionDetail = function(aDivesession) {
+         
         if (aDivesession == null) {
             //set the current divesession on model to null (add new divesession)
             modelService.freediverMdl.currentDiveSession=null;
             //change location path
             $location.path('/divesessiondetail');
         }else{
+            //start the spinner
+            $rootScope.showWaitingSpinner();
+            
             //get the complete dive session detail from service, is asynchronous, must manage result with callback
             freediverService.getDetailDiveSession(freedivingLogbookConstant.PLATFORM_FACEBOOK,
                                                   $rootScope.externalToken,
@@ -112,33 +109,21 @@ appNeaClient.controller('diveSessionListController',
             //modelService.freediverMdl.currentDiveSession=aDivesession;
             
         }
-        //change location to detail 
-       
-         /*$mdDialog.show({
-            controller: 'diveSessionDialogController',
-            templateUrl: 'src/divesession/divesession_detail_dialog.html',
-            targetEvent: ev,
-        })
-            .then(function(answer) {
-                $log.info('dive session dialog Save pressed');
-                //TODO update scope with model service
-                
-            }, function() {
-                $log.info('dive session dialog Canecel press');
-                $scope.alert = 'You cancelled the dialog.';
-        });
-        */
     };
     
     
    /*manages get detail dive session success*/
 	$scope.onGetDiveSessionSuccess = function(data) {
+        //stop the spinner
+        $rootScope.closeWaitingSpinner();
+        
 		//update model with detailed dive session
         modelService.addOrUpdateDiveSessionFromData(data.detail,
                                                     $scope.freediver.tempUnit,
                                                     $scope.freediver.weightUnit,
                                                     $scope.freediver.depthUnit);
         //change location to detail dive session view
+        modelService.freediverMdl.diveSessionActiveTabIndex = freedivingLogbookConstant.TAB_DETAIL;
         $location.path('/divesessiondetail');
 		
 	}; 
@@ -146,7 +131,8 @@ appNeaClient.controller('diveSessionListController',
     
    /*manages get detail dive sessio error*/
 	$scope.onGetDiveSessionError = function(data) {
-		
+        //stop the spinner
+        $rootScope.closeWaitingSpinner();
         alert('Get dive session error:'+ data.errorMessage);
 		
 	}; 

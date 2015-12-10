@@ -3,40 +3,22 @@
 //get reference to the app module defined in app.js
 var appNeaClient = angular.module('appNeaClient');
 
-appNeaClient.controller('rootController', 
-    
-    //function ($rootScope, $scope, $modal, $log, $timeout, $location) {
-    function ($rootScope, $scope, $log, $timeout, $location) {
-        
-       
-		
-		
-		/*defining and managing alert, show message receive a _msg text a type and a focus _fcs that
-		represent the elementID in the dom where the focus must be when the modal view is closed*/
-      	/*$rootScope.showMsg = function (_msg, _tpe, _fcs) {
-            var l_alerts =[{type: _tpe, msg: _msg}];
-			
-			var modalInstance = $modal.open({
-              templateUrl: 'showMessageModal.html',
-              controller: 'ShowMsgController',
-              resolve: {
-                alerts: function () {
-                  return l_alerts;
-                },
-				focusTo: function () {
-			  		return _fcs;
-			  	}
-              }
-            });
-
-            modalInstance.result.then(function () {
-              //$scope.selected = selectedItem;
-            }, function () {
-              $log.info('Modal dismissed at: ' + new Date());
+appNeaClient.controller('rootController',  
+                         
+    function ($rootScope, $scope, $log, $timeout, $location, $mdDialog) {
+        //show the spinner
+        $rootScope.showWaitingSpinner = function() {
+            $mdDialog.show({
+                    //controller: 'diveSessionDialogController',
+                    templateUrl: 'src/spinnerdialog/spinner_dlg.html'
             });
         };
-		
-        */
+        //hide the spinner                
+        $rootScope.closeWaitingSpinner = function() {
+            $mdDialog.cancel();
+        };
+    
+    
         
         //set focus to destinationId or destinationId.destinationTag basing key event and key code
         //for example key code 13 correponds to RETURN

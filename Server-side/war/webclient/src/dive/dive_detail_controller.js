@@ -3,14 +3,16 @@ var appNeaClient = angular.module('appNeaClient');
 
 //controls the dive detail view
 appNeaClient.controller ('diveDetailController',  
-	function ($scope, modelService, freediverService, $log, $filter, $location, $route) {
+	function ($rootScope, $scope, modelService, freediverService, $log, $filter, $location, $route) {
     
     //set the current dive
     $scope.dive = modelService.freediverMdl.currentDiveSession.currentDive;
     
     //go to back
     $scope.back = function() {
-            $location.path('/divesessiondetail');
+            modelService.freediverMdl.diveSessionActiveTabIndex = freedivingLogbookConstant.TAB_DIVES;
+            window.history.back();
+            //$location.path('/divesessiondetail');
     };
     
     
@@ -20,7 +22,7 @@ appNeaClient.controller ('diveDetailController',
         $log.info('saving dive.....');
 
         //activate dialog spinner
-        //$scope.spinner = true;
+        $rootScope.showWaitingSpinner();
         //basing on current dive  id we know if it is a new dive (add) or update an existed dive (update)
         if ($scope.dive.id == null) {
             
@@ -70,6 +72,9 @@ appNeaClient.controller ('diveDetailController',
 
     /*remove dive*/
     $scope.removeDive = function() {
+        //activare wait spinner
+        $rootScope.showWaitingSpinner();
+        
         freediverService.removeDive($scope.dive.id, 
                                     modelService.freediverMdl.externalPlatformId,
                                     modelService.freediverMdl.externalToken,
@@ -83,9 +88,9 @@ appNeaClient.controller ('diveDetailController',
 
         $log.info('dive saved!');
         //stop dialog spinner
-        //$scope.spinner = false;
+        $rootScope.closeWaitingSpinner();
 
-        //TODO: populate the model with the new divesession
+        //populate the model with the new divesession
         $log.info('model population with:'+data);
         modelService.freediverMdl.currentDiveSession.currentDive = modelService.addOrUpdateDiveFromData(data.detail,
                                                                                                         modelService.freediverMdl.depthUnit,
@@ -105,7 +110,7 @@ appNeaClient.controller ('diveDetailController',
     //dive session save error callback
     $scope.onSaveError = function (data) {
         //stop dialog spinner
-        $scope.spinner = false;
+        $rootScope.closeWaitingSpinner();
         //TODO: manage error
         alert(data);
         $log.info('dive session saved error!');
@@ -115,6 +120,8 @@ appNeaClient.controller ('diveDetailController',
     //manage removing success
     $scope.onDiveRemoveSuccess = function (data, diveId) {
         $log.info('dive removed');
+        //stop dialog spinner
+        $rootScope.closeWaitingSpinner();
         //update the current model
         modelService.freediverMdl.currentDiveSession.removeDive(diveId);
 
