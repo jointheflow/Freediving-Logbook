@@ -3,7 +3,7 @@ var appNeaClient = angular.module('appNeaClient');
 
 //controls the divesession detail view
 appNeaClient.controller('diveSessionDetailController',  
-	function ($rootScope, $scope, modelService, freediverService, $log, $filter, $location) {
+	function ($rootScope, $scope, modelService, freediverService, $log, $filter, $location, $mdDialog, $mdToast, $route) {
         //index of the current tab
         $scope.selectedIndex=modelService.freediverMdl.diveSessionActiveTabIndex;
         
@@ -124,6 +124,16 @@ appNeaClient.controller('diveSessionDetailController',
             modelService.addOrUpdateDiveSessionFromData(data.detail);
             //update the scope!
             $scope.divesession = modelService.freediverMdl.currentDiveSession; 
+            
+            //refresh location
+            $route.reload();
+            
+            //show an action executed message
+            $mdToast.show($mdToast.simple()
+                          .content('Dive session saved!')
+                          .position('bottom right')
+                          .hideDelay(2000)
+                         );
            
             
         };
@@ -147,6 +157,14 @@ appNeaClient.controller('diveSessionDetailController',
             //update the current model
             modelService.freediverMdl.removeDiveSession(divesessionId);
             
+            //show an action executed message
+            $mdToast.show($mdToast.simple()
+                          .content('Dive session removed!')
+                          .position('bottom right')
+                          .hideDelay(2000)
+                         );
+           
+            
             //route to dive list page
             $scope.back();
         };
@@ -157,7 +175,27 @@ appNeaClient.controller('diveSessionDetailController',
     $scope.showDiveDetail = function(aDive) {
         modelService.freediverMdl.currentDiveSession.currentDive=aDive;
         $location.path('/divedetail');
-    }    
+    }
+    
+    
+    
+    //managed remove confirmation with confirmation dialog
+    $scope.showRemoveConfirmation = function(ev) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Would you like to remove this dive session?')
+          .textContent('Current dive session will be removed permanently.')
+          .ariaLabel('remove dive session')
+          .targetEvent(ev)
+          .ok('Please do it!')
+          .cancel('No thanks');
+    $mdDialog.show(confirm).then(function() {
+      $scope.removeDivesession();
+        
+    }, function() {
+      $log.info('cancel remove!');
+    });
+  };
     
 });
 	

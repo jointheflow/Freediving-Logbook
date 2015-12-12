@@ -3,7 +3,7 @@ var appNeaClient = angular.module('appNeaClient');
 
 //controls the dive detail view
 appNeaClient.controller ('diveDetailController',  
-	function ($rootScope, $scope, modelService, freediverService, $log, $filter, $location, $route) {
+	function ($rootScope, $scope, modelService, freediverService, $log, $filter, $location, $route, $mdDialog, $mdToast) {
     
     //set the current dive
     $scope.dive = modelService.freediverMdl.currentDiveSession.currentDive;
@@ -102,6 +102,14 @@ appNeaClient.controller ('diveDetailController',
         $scope.dive = modelService.freediverMdl.currentDiveSession.currentDive; 
         //update the model
         modelService.freediverMdl.currentDiveSession.addOrUpdateDive($scope.dive);
+        
+        //show an action executed message
+        $mdToast.show($mdToast.simple()
+                          .content('Dive saved!')
+                          .position('bottom right')
+                          .hideDelay(2000)
+                         );
+           
         //refresh location
         $route.reload();
 
@@ -124,12 +132,35 @@ appNeaClient.controller ('diveDetailController',
         $rootScope.closeWaitingSpinner();
         //update the current model
         modelService.freediverMdl.currentDiveSession.removeDive(diveId);
-
+        
+        //show an action executed message
+        $mdToast.show($mdToast.simple()
+                          .content('Dive removed!')
+                          .position('bottom right')
+                          .hideDelay(2000)
+                         );
+           
         //route to dive session list page
         $scope.back();
     };
 
+    //managed remove confirmation with confirmation dialog
+    $scope.showRemoveConfirmation = function(ev) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Would you like to remove this dive?')
+          .textContent('Current dive will be removed permanently.')
+          .ariaLabel('remove dive')
+          .targetEvent(ev)
+          .ok('Please do it!')
+          .cancel('No thanks');
+    $mdDialog.show(confirm).then(function() {
+      $scope.removeDive();
         
+    }, function() {
+      $log.info('cancel remove!');
+    });
+  };   
     
         
 
