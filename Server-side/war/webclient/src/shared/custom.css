@@ -5,4 +5,11 @@
 
 label {
   font-size: 12px;
+  
+}
+fieldset {
+    font-size: 12px;
+    color: rgba(0,0,0,0.26);
+    border-color:rgba(0,0,0,0.26);
+    display: inline-block;
 }

@@ -33,3 +33,8 @@ http://codepen.io/kyleledbetter/pen/gbQOaV?editors=001  (example material dialog
 
 —about scope and inheritance
 https://github.com/angular/angular.js/wiki/Understanding-Scopes
+
+--dependency---
+http://simeonc.github.io/sc-date-time/material.html
+
+
