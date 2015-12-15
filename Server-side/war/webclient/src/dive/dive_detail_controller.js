@@ -10,7 +10,7 @@ appNeaClient.controller ('diveDetailController',
     //set the default date for time picker. The default date is the date caming from dive session. The default
     //date must be inn the following format AAAA-MM-DD
     $scope.diveDate = modelService.freediverMdl.currentDiveSession.diveDate.getFullYear()+'-'+
-                      modelService.freediverMdl.currentDiveSession.diveDate.getMonth()+'-'+
+                      (modelService.freediverMdl.currentDiveSession.diveDate.getMonth()+1)+'-'+
                       modelService.freediverMdl.currentDiveSession.diveDate.getDate();
     
     //go to back

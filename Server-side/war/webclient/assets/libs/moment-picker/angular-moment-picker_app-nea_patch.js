@@ -389,7 +389,11 @@ specified default date and not the current date. E.g. default-date="1995-12-25" 
 				if (angular.isDefined(model)) {
 					//check if there is a default date in this cace crate the valueMoment prepending to the model the default date
                     if (angular.isDefined($scope.defaultDate))
+						if (angular.isDefined($scope.defaultDate) && 
+                    	       angular.isDefined($scope.format &&
+                    	        $scope.format =='HH:mm'))
 						$scope.valueMoment = $scope.valueMoment = moment($scope.defaultDate + ' ' +model, 'YYYY-MM-DD HH:mm');
+					
 					else
 						$scope.valueMoment = moment(model, $scope.format, $scope.locale);
 					if (!$scope.valueMoment.isValid())
