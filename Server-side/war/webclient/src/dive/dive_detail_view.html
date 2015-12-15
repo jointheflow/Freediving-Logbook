@@ -43,33 +43,18 @@
         <div ng-show="!spinner">
             <form name="diveForm" layout-margin> 
                 <div layout="column"> 
-                    <div>
-                        <fieldset>
-                            <legend>Time</legend>
-                            <div layout="row">
-                                <md-input-container style="margin-right: 10px;">
-                                    <label>HH</label>
-                                    <md-select ng-model="hh">
-                                    <md-option ng-repeat="hh in h24" value="{{hh}}">{{hh}}</md-option>
-                                    </md-select>
-                                </md-input-container>
-                                <md-input-container style="margin-right: 10px;">
-                                    <label>MM</label>
-                                    <md-select ng-model="mm">
-                                    <md-option ng-repeat="mm in m60" value="{{mm}}">{{mm}}</md-option>
-                                    </md-select>
-                                </md-input-container>
-
-                            </div>
-                        </fieldset>
-                        
+                    <div class="input-group" moment-picker="ctrl.timepicker" format="HH:mm" min-view="hour" default-date={{diveDate}}>
+                        <md-input-container > 
+                            <label>Time</label> 
+                            <input name="time" ng-model="ctrl.timepicker" required> 
+                        </md-input-container> 
                     </div>
-                    <md-input-container><div moment-picker="myDate"> {{ myDate }} </div></md-input-container> 
                     
-                    <md-input-container > 
+                  
                         <label>Time</label> 
-                        <input name="time" ng-model="dive.diveTime" required> 
-                    </md-input-container> 
+                        <!--input type="number" name="time" ng-model="dive.diveTime" required--> 
+                        <input value="30" type="number" min="0" max="59"  class="ng-pristine ng-untouched ng-valid ng-valid-min ng-valid-max">
+                    
                     <md-input-container > 
                         <label>Dive type</label> 
                         <input name="diveType" ng-model="dive.diveType" required> 

@@ -8,6 +8,30 @@ var appNeaClient = angular.module('appNeaClient', ['appNeaClient.service',  'ngM
 var appNeaClientService = angular.module('appNeaClient.service', []);
 
 
+
+/*Configuring time picker*/
+/*appNeaClient.config(['momentPickerProvider', function (momentPickerProvider) {
+        momentPickerProvider.options({
+            /* Picker properties */
+  /*          locale:        'en',
+            format:        'L LT',
+            minView:       'hour',
+            maxView:       'hour',
+            startView:     'hour',
+            
+            /* Extra: Views properties */
+    /*        leftArrow:     '&larr;',
+            rightArrow:    '&rarr;',
+            monthsFormat:  'MMM',
+            daysFormat:    'D',
+            hoursFormat:   'HH:[00]',
+            minutesFormat: moment.localeData().longDateFormat('LT').replace(/[aA]/, ''),
+            minutesStep:   1
+        });
+    }]);
+
+
+
 /*Configuring routes*/
 appNeaClient.config(['$routeProvider',
   function($routeProvider) {
