@@ -5,13 +5,45 @@ var appNeaClient = angular.module('appNeaClient');
 appNeaClient.controller ('diveDetailController',  
 	function ($rootScope, $scope, modelService, freediverService, $log, $filter, $location, $route, $mdDialog, $mdToast) {
     
+    //regarding the status of the view set the defaut attribute to show
+    switch(modelService.freediverMdl.viewstatus) {
+        case freedivingLogbookConstant.VIEW_NEW:
+            //set the default date for time picker. The default date is the date caming from dive session. The default
+            //date must be inn the following format AAAA-MM-DD. The default date will show in the title of the picker
+            $scope.diveDate = modelService.freediverMdl.currentDiveSession.diveDate.getFullYear()+'-'+
+                             (modelService.freediverMdl.currentDiveSession.diveDate.getMonth()+1)+'-'+
+                              modelService.freediverMdl.currentDiveSession.diveDate.getDate();
+            
+            
+        break;
+        case freedivingLogbookConstant.VIEW_UPDATE:
+            //set the default date for time picker. The default date is the date caming from dive session plus
+            //the dive time of the selected dive.The default
+            //date must be inn the following format AAAA-MM-DD HH:mm
+            $scope.diveDate = modelService.freediverMdl.currentDiveSession.diveDate.getFullYear()+'-'+
+                             (modelService.freediverMdl.currentDiveSession.diveDate.getMonth()+1)+'-'+
+                              modelService.freediverMdl.currentDiveSession.diveDate.getDate()+ ' '+
+                              modelService.freediverMdl.currentDiveSession.currentDive.getTimeHHMM();
+            
+            //show the dive time of the selected dive
+            $scope.diveTime = modelService.freediverMdl.currentDiveSession.currentDive.getTimeHHMM();
+            
+            
+                
+            
+        break;
+        
+    }
+    
     //set the current dive
-    $scope.dive = modelService.freediverMdl.currentDiveSession.currentDive;
-    //set the default date for time picker. The default date is the date caming from dive session. The default
-    //date must be inn the following format AAAA-MM-DD
-    $scope.diveDate = modelService.freediverMdl.currentDiveSession.diveDate.getFullYear()+'-'+
-                      (modelService.freediverMdl.currentDiveSession.diveDate.getMonth()+1)+'-'+
-                      modelService.freediverMdl.currentDiveSession.diveDate.getDate();
+    //if (angular.isDefined (modelService.freediverMdl.currentDiveSession.currentDive))
+      //          $scope.ctrlDiveTime = modelService.freediverMdl.currentDiveSession.currentDive;
+    
+    //set the current time
+    //if (angular.isDefined($scope.dive)) 
+      //          $scope.dateTime = $scope.dive.getTimeHHMM();
+    
+    
     
     //go to back
     $scope.back = function() {
@@ -41,31 +73,18 @@ appNeaClient.controller ('diveDetailController',
 
         //activate dialog spinner
         $rootScope.showWaitingSpinner();
-        //basing on current dive  id we know if it is a new dive (add) or update an existed dive (update)
-        if ($scope.dive.id == null) {
+        
+        //convert dive time in abosulte minute in a day HH*60 + mm
+        var selectedMoment = moment($scope.diveTime, 'HH:mm');
+        $scope.dive =  new Object();
+        $scope.dive.diveTime = (selectedMoment.hours() * 60) + (selectedMoment.minutes());
             
-            //invoke Asynch add dive rest service passing callback function
-            freediverService.addDive(modelService.freediverMdl.currentDiveSession.id,
-                                    modelService.freediverMdl.externalPlatformId,
-                                    modelService.freediverMdl.externalToken,
-                                    modelService.freediverMdl.depthUnit,
-                                    modelService.freediverMdl.tempUnit,
-                                    modelService.freediverMdl.weightUnit,
-                                    $scope.dive.diveTime,
-                                    $scope.dive.duration,
-                                    $scope.dive.equipment,
-                                    $scope.dive.weight,
-                                    $scope.dive.depthTemp,
-                                    $scope.dive.maxDepth,
-                                    $scope.dive.neutralBuoyance,
-                                    $scope.dive.note,
-                                    $scope.dive.diveType,
-                                    $scope.onSaveSuccess,
-                                    $scope.onSaveError);               
-        }else {
-
-             //invoke Asynch update dive rest service passing callback function
-            freediverService.updateDive(modelService.freediverMdl.currentDiveSession.currentDive.id,
+        //basing on current view status we know if it is a new dive (add) or update an existed dive (update)
+        //regarding the status of the view set the defaut attribute to show
+        switch(modelService.freediverMdl.viewstatus) {
+            case freedivingLogbookConstant.VIEW_NEW:
+                //invoke Asynch add dive rest service passing callback function
+                freediverService.addDive(modelService.freediverMdl.currentDiveSession.id,
                                         modelService.freediverMdl.externalPlatformId,
                                         modelService.freediverMdl.externalToken,
                                         modelService.freediverMdl.depthUnit,
@@ -81,12 +100,33 @@ appNeaClient.controller ('diveDetailController',
                                         $scope.dive.note,
                                         $scope.dive.diveType,
                                         $scope.onSaveSuccess,
-                                        $scope.onSaveError);               
-        }
+                                        $scope.onSaveError);   
+                
+
+            break;
+            case freedivingLogbookConstant.VIEW_UPDATE:
+                 //invoke Asynch update dive rest service passing callback function
+                freediverService.updateDive(modelService.freediverMdl.currentDiveSession.currentDive.id,
+                                            modelService.freediverMdl.externalPlatformId,
+                                            modelService.freediverMdl.externalToken,
+                                            modelService.freediverMdl.depthUnit,
+                                            modelService.freediverMdl.tempUnit,
+                                            modelService.freediverMdl.weightUnit,
+                                            $scope.dive.diveTime,
+                                            $scope.dive.duration,
+                                            $scope.dive.equipment,
+                                            $scope.dive.weight,
+                                            $scope.dive.depthTemp,
+                                            $scope.dive.maxDepth,
+                                            $scope.dive.neutralBuoyance,
+                                            $scope.dive.note,
+                                            $scope.dive.diveType,
+                                            $scope.onSaveSuccess,
+                                            $scope.onSaveError);               
+            break;
+        };
 
     };
-
-
 
     /*remove dive*/
     $scope.removeDive = function() {
@@ -115,6 +155,8 @@ appNeaClient.controller ('diveDetailController',
                                                                                                         modelService.freediverMdl.tempUnit,
                                                                                                         modelService.freediverMdl.weightUnit);
                                         
+        //update the status of the view
+        modelService.freediverMdl.viewstatus = freedivingLogbookConstant.VIEW_UPDATE;  
         
         //update the scope!
         $scope.dive = modelService.freediverMdl.currentDiveSession.currentDive; 

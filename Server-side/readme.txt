@@ -15,6 +15,9 @@ http://restfb.com/
 2) client side:
 https://github.com/Ciul/angular-facebook
 
+3) moment date time picker (....but patched by me)
+https://github.com/indrimuska/angular-moment-picker
+
 
 
 --------How to deploy on Google App Engine-----------

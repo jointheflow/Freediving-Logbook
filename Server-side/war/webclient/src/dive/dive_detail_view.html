@@ -43,15 +43,12 @@
         <div ng-show="!spinner">
             <form name="diveForm" layout-margin> 
                 <div layout="column"> 
-                    <div class="input-group" moment-picker="ctrl.timepicker" format="HH:mm" min-view="hour" start-view="day" default-date={{diveDate}}>
+                    <div class="input-group" moment-picker="diveTime" format="HH:mm" min-view="hour" start-view="day" default-date={{diveDate}}>
                         <md-input-container > 
                             <label>Time</label> 
-                            <input name="time" ng-model="ctrl.timepicker" required> 
+                            <input name="time" ng-model="diveTime" required> 
                         </md-input-container> 
                     </div>
-                    
-                  
-                        
                     <md-input-container > 
                         <label>Dive type</label> 
                         <input name="diveType" ng-model="dive.diveType" required> 

@@ -44,7 +44,7 @@ appNeaClient.controller('diveSessionListController',
 	$scope.onLoginError = function(data) {
 		//stop the spinner
         $rootScope.closeWaitingSpinner();
-        alert('Login error '+ data.errorMessage);
+        alert('Login error '+ data);
 		
 	};
 	

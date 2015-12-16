@@ -45,7 +45,11 @@ var freedivingLogbookConstant = freedivingLogbookConstant || {
     
     //dive session icon names
     ICON_SAVE_DIVESESSION : 'done',
-    ICOND_ADD_DIVE : 'add'
+    ICOND_ADD_DIVE : 'add',
+    
+    //status of a view: NEW or UPDATE
+    VIEW_NEW: 0,
+    VIEW_UPDATE: 1
     
     	
 };

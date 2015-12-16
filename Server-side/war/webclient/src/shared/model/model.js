@@ -18,6 +18,10 @@ function FreediverMdl() {
     //the active tab on dive session view. Used to manage back from dive detail to dive session
     this.diveSessionActiveTabIndex = 0;
     
+    //this is the status of a view and could be UPADTE or NEW. NEW means you are inserting a new data, UPDATE yuou are reading or updating existing
+    //data
+    this.viewstatus = freedivingLogbookConstant.VIEW_UPDATE;
+    
     
 }
 
@@ -172,5 +176,13 @@ DiveMdl.prototype.getWeight= function (unit) {
     if (unit == freedivingLogbookConstant.WEIGHT_KILOGRAM) return this.weight + ' kg';
     if (unit == freedivingLogbookConstant.WEIGHT_POUND) return this.weight + ' pounds';
     return 'error value';
-    
 }
+//get the time in the format HH:mm
+DiveMdl.prototype.getTimeHHMM = function () {
+    if (this.diveTime != null) {
+        return (Math.floor(this.diveTime / 60)) + ':' + (this.diveTime % 60);
+        
+    }else return '00:00';
+        
+}   
+    

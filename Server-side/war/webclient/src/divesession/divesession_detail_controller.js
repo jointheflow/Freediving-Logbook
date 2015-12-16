@@ -173,7 +173,13 @@ appNeaClient.controller('diveSessionDetailController',
         
     //Open dive detail view in edit or insert mode depending on aDive parameter
     $scope.showDiveDetail = function(aDive) {
-        modelService.freediverMdl.currentDiveSession.currentDive=aDive;
+        
+        if (aDive == null)
+            modelService.freediverMdl.viewstatus = freedivingLogbookConstant.VIEW_NEW;
+        else { 
+            modelService.freediverMdl.viewstatus = freedivingLogbookConstant.VIEW_UPDATE;
+            modelService.freediverMdl.currentDiveSession.currentDive=aDive;
+        }
         $location.path('/divedetail');
     }
     

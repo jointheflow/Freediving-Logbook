@@ -391,9 +391,14 @@ specified default date and not the current date. E.g. default-date="1995-12-25" 
                     if (angular.isDefined($scope.defaultDate))
 						if (angular.isDefined($scope.defaultDate) && 
                     	       angular.isDefined($scope.format &&
-                    	        $scope.format =='HH:mm'))
-						$scope.valueMoment = $scope.valueMoment = moment($scope.defaultDate + ' ' +model, 'YYYY-MM-DD HH:mm');
-					
+                    	        $scope.format =='HH:mm')) {
+						
+						tempModel = moment(model, 'HH:mm');
+						defaultModel = moment($scope.defaultDate, 'YYYY-MM-DD HH:mm');
+						defaultModel.hour(tempModel.hour());
+						defaultModel.minute(tempModel.minute());
+						$scope.valueMoment = defaultModel;
+                   	}
 					else
 						$scope.valueMoment = moment(model, $scope.format, $scope.locale);
 					if (!$scope.valueMoment.isValid())
