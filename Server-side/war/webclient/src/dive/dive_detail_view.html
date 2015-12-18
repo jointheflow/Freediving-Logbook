@@ -43,12 +43,14 @@
         <div ng-show="!spinner">
             <form name="diveForm" layout-margin> 
                 <div layout="column"> 
-                    <div class="input-group" moment-picker="diveTime" format="HH:mm" min-view="hour" start-view="day" default-date={{diveDate}}>
-                        <md-input-container > 
+                    <!-- default diveDate is the date of the parent diveSession. It is not a field of this view but it is required because will be
+                    shown in the title of the time picker -->
+                    <md-input-container > 
+                        <div class="input-group" moment-picker="diveTime" format="HH:mm" min-view="hour" start-view="day" default-date={{diveDate}}>
                             <label>Time</label> 
                             <input name="time" ng-model="diveTime" required> 
-                        </md-input-container> 
-                    </div>
+                        </div>
+                    </md-input-container>
                     <md-input-container > 
                         <label>Dive type</label> 
                         <input name="diveType" ng-model="dive.diveType" required> 
@@ -57,11 +59,17 @@
                         <label>Equipment</label> 
                         <input ng-model="dive.equipment"> 
                     </md-input-container>
+                    <div layout>
+                        <div flex="10" layout layout-align="center center">
+                            <label>Max depth</label>
+                        </div>
+                        <md-slider flex min="1" max="150" step="0.1" ng-model="dive.maxDepth" aria-label="max depth" id="depth" class>
+                        </md-slider>
+                        <div flex="20" layout layout-align="center center">
+                            <input flex type="number" ng-model="dive.maxDepth" aria-label="max depth" aria-controls="depth">
+                        </div>
+                    </div>
                     <div layout="row">
-                        <md-input-container > 
-                            <label>Max depth</label> 
-                            <input ng-model="dive.maxDepth"> 
-                        </md-input-container>
                         <md-input-container > 
                             <label>Duration</label> 
                             <input ng-model="dive.duration"> 

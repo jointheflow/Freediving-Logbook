@@ -27,6 +27,8 @@ appNeaClient.controller ('diveDetailController',
             
             //show the dive time of the selected dive
             $scope.diveTime = modelService.freediverMdl.currentDiveSession.currentDive.getTimeHHMM();
+            //bind the scope dive to the current dive in the model
+            $scope.dive = modelService.freediverMdl.currentDiveSession.currentDive;
             
             
                 
@@ -34,16 +36,7 @@ appNeaClient.controller ('diveDetailController',
         break;
         
     }
-    
-    //set the current dive
-    //if (angular.isDefined (modelService.freediverMdl.currentDiveSession.currentDive))
-      //          $scope.ctrlDiveTime = modelService.freediverMdl.currentDiveSession.currentDive;
-    
-    //set the current time
-    //if (angular.isDefined($scope.dive)) 
-      //          $scope.dateTime = $scope.dive.getTimeHHMM();
-    
-    
+        
     
     //go to back
     $scope.back = function() {
@@ -76,7 +69,9 @@ appNeaClient.controller ('diveDetailController',
         
         //convert dive time in abosulte minute in a day HH*60 + mm
         var selectedMoment = moment($scope.diveTime, 'HH:mm');
-        $scope.dive =  new Object();
+        //check if $scope.dive if defined. If not create. This overwrite all field of $scope.dive
+        if (!angular.isDefined($scope.dive))   new Object();
+        
         $scope.dive.diveTime = (selectedMoment.hours() * 60) + (selectedMoment.minutes());
             
         //basing on current view status we know if it is a new dive (add) or update an existed dive (update)
@@ -182,6 +177,8 @@ appNeaClient.controller ('diveDetailController',
         //TODO: manage error
         alert(data);
         $log.info('dive session saved error!');
+        
+        //TODO: in this case the view state should remain the same
 
     };
 
@@ -193,13 +190,18 @@ appNeaClient.controller ('diveDetailController',
         //update the current model
         modelService.freediverMdl.currentDiveSession.removeDive(diveId);
         
+        //in this case the view state, before to go back, should bacame UPDATE
+        modelService.freediverMdl.viewstatus = freedivingLogbookConstant.VIEW_UPDATE;
+        
         //show an action executed message
         $mdToast.show($mdToast.simple()
                           .content('Dive removed!')
                           .position('bottom right')
                           .hideDelay(2000)
                          );
-           
+        
+        
+        
         //route to dive session list page
         $scope.back();
     };
