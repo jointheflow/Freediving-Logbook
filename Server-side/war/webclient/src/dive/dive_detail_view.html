@@ -47,50 +47,121 @@
                     shown in the title of the time picker -->
                     <md-input-container > 
                         <div class="input-group" moment-picker="diveTime" format="HH:mm" min-view="hour" start-view="day" default-date={{diveDate}}>
-                            <label>Time</label> 
+                            <label>Time (HH:mm) </label> 
                             <input name="time" ng-model="diveTime" required> 
                         </div>
                     </md-input-container>
-                    <md-input-container > 
-                        <label>Dive type</label> 
-                        <input name="diveType" ng-model="dive.diveType" required> 
-                        </md-input-container> 
+                   
+                    <md-input-container>
+                        <label>Dive Type</label>
+                        <md-select ng-model="dive.diveType">
+                          <md-option ng-repeat="type in diveTypes" value="{{type}}">
+                            {{type}}
+                          </md-option>
+                        </md-select>
+                    </md-input-container>
+                    
+                    <div layout>
+                        <div flex="25" layout layout-align="left center">
+                            <label>Max depth</label>
+                        </div>
+                        <md-slider flex min="1" max="100" step="0.1" ng-model="dive.maxDepth" aria-label="max depth" id="depth" class>
+                        </md-slider>
+                        <div flex="5"><span>  </span></div>
+                        <div flex="20" layout layout-align="center center">
+                            <input flex type="number" ng-model="dive.maxDepth" aria-label="max depth" aria-controls="depth">
+                        </div>
+                        <div flex="5"><span>  </span></div>
+                        <div flex="10" layout layout-align="right center"> <label><i>mt</i></label> </div>
+                         
+                    </div>
+                    <fieldset>
+                        <legend>Duration</legend>
+                        <div layout="column">
+                            <div layout>
+                                <div flex="20" layout layout-align="left center">
+                                    <label style="color: black">Minutes</label>
+                                </div>
+                                <md-slider flex  md-discerete min="0" max="10" step="1" ng-model="dive.minute" aria-label="minute" id="minute" class>
+                                </md-slider>
+                                <div flex="5"><span>  </span></div>
+                                <div flex="20" layout layout-align="center center">
+                                    <input flex type="number" ng-model="dive.minute" aria-label="minute" aria-controls="minute">
+                                </div>
+                                <div flex="5"><span>  </span></div>
+                                <div flex="10" layout layout-align="right center"> <label><i>m</i></label> </div>
+                            </div>
+
+                            <div layout>
+                                <div flex="20" layout layout-align="left center">
+                                    <label>Seconds</label>
+                                </div>
+                                <md-slider flex md-discerete min="0" max="59" step="1" ng-model="dive.second" aria-label="second" id="minute" class>
+                                </md-slider>
+                                <div flex="5"><span>  </span></div>
+                                <div flex="20" layout layout-align="center center">
+                                    <input flex type="number" ng-model="dive.second" aria-label="second" aria-controls="second">
+                                </div>
+                                 <div flex="5"><span>  </span></div>
+                                <div flex="10" layout layout-align="right center"> <label><i>s</i></label> </div>
+                            </div>
+                        </div>   
+                    </fieldset>
+
+                    <div layout>
+                        <div flex="25" layout layout-align="left center">
+                            <label>Neutral Buoyance</label>
+                        </div>
+                        <md-slider flex min="1" max="50" step="0.1" ng-model="dive.neutralBuoyance" aria-label="neutral" id="neutral" class>
+                        </md-slider>
+                        <div flex="5"><span>  </span></div>
+                        <div flex="20" layout layout-align="center center">
+                            <input flex type="number" ng-model="dive.neutralBuoyance" aria-label="neutral" aria-controls="neutral">
+                        </div>
+                        <div flex="5"><span>  </span></div>
+                        <div flex="10" layout layout-align="right center"> <label><i>mt</i></label> </div>
+                    </div>  
+                        
+                    <div layout>
+                        <div flex="25" layout layout-align="left center">
+                            <label>Weight</label>
+                        </div>
+                        <md-slider flex min="1" max="10" step="0.5" ng-model="dive.weight" aria-label="weight" id="weight" class>
+                        </md-slider>
+                        <div flex="5"><span>  </span></div>
+                        <div flex="20" layout layout-align="center center">
+                            <input flex type="number" ng-model="dive.weight" aria-label="weight" aria-controls="weight">
+                        </div>
+                        <div flex="5"><span>  </span></div>
+                        <div flex="10" layout layout-align="right center"> <label><i>kg</i></label> </div>
+                    </div>
+
+                    <div layout>
+                        <div flex="25" layout layout-align="left center">
+                            <label>Bottom Temp.</label>
+                        </div>
+                        <md-slider flex min="0" max="40" step="0.1" ng-model="dive.depthTemp" aria-label="depthTemp" id="depthTemp" class>
+                        </md-slider>
+                        <div flex="5"><span>  </span></div>
+                        <div flex="20" layout layout-align="center center">
+                            <input flex type="number" ng-model="dive.depthTemp" aria-label="depthTemp" aria-controls="depthTemp">
+                        </div>
+                        <div flex="5"><span>  </span></div>
+                        <div flex="10" layout layout-align="right center"> <label><i>°C</i></label> </div>
+                    </div>
+                    
+                    
                     <md-input-container > 
                         <label>Equipment</label> 
                         <input ng-model="dive.equipment"> 
                     </md-input-container>
-                    <div layout>
-                        <div flex="10" layout layout-align="center center">
-                            <label>Max depth</label>
-                        </div>
-                        <md-slider flex min="1" max="150" step="0.1" ng-model="dive.maxDepth" aria-label="max depth" id="depth" class>
-                        </md-slider>
-                        <div flex="20" layout layout-align="center center">
-                            <input flex type="number" ng-model="dive.maxDepth" aria-label="max depth" aria-controls="depth">
-                        </div>
-                    </div>
-                    <div layout="row">
-                        <md-input-container > 
-                            <label>Duration</label> 
-                            <input ng-model="dive.duration"> 
-                        </md-input-container>
-                        <md-input-container > 
-                            <label>Neutral buoyance</label> 
-                            <input ng-model="dive.neutralBuoyance"> 
-                        </md-input-container>
-                        <md-input-container > 
-                            <label>Temp bottom</label> 
-                            <input ng-model="dive.depthTemp"> 
-                        </md-input-container> 
-                        <md-input-container > 
-                            <label>Weight</label> 
-                            <input ng-model="dive.weight"> 
-                        </md-input-container> 
-                    </div>
+
+                    
                     <md-input-container > 
                         <label>Note</label> 
                         <textarea ng-model="dive.note" columns="1" md-maxlength="150"></textarea> 
                     </md-input-container> 
+
                 </div>
             </form> 
         </div>

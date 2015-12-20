@@ -45,6 +45,8 @@ appNeaClient.controller ('diveDetailController',
             //$location.path('/divesessiondetail');
     };
     
+    $scope.diveTypes = [ 'Constant Weight (CWT)', 'Constant Weight Without Fins (CNF)', 'Free Immersion (FIM)', 'Dynamic With Fins (DYN)', 'Dynamic Without Fins (DNF)', 'No Limit (NLT)', 'Variable Weight (VWT)', 'other'];
+    
     //hour array
     $scope.h24 = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'];
     //minute (or second) array
