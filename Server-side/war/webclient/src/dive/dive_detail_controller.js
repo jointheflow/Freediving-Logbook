@@ -29,6 +29,9 @@ appNeaClient.controller ('diveDetailController',
             $scope.diveTime = modelService.freediverMdl.currentDiveSession.currentDive.getTimeHHMM();
             //bind the scope dive to the current dive in the model
             $scope.dive = modelService.freediverMdl.currentDiveSession.currentDive;
+            //bind the scope to the minute and second from duration expressed in seconds
+            $scope.dive.minute = Math.floor(modelService.freediverMdl.currentDiveSession.currentDive.duration / 60);
+            $scope.dive.second = (modelService.freediverMdl.currentDiveSession.currentDive.duration % 60);
             
             
                 
@@ -70,12 +73,15 @@ appNeaClient.controller ('diveDetailController',
         $rootScope.showWaitingSpinner();
         
         //convert dive time in abosulte minute in a day HH*60 + mm
-        var selectedMoment = moment($scope.diveTime, 'HH:mm');
-        //check if $scope.dive if defined. If not create. This overwrite all field of $scope.dive
-        if (!angular.isDefined($scope.dive))   new Object();
+            var selectedMoment = moment($scope.diveTime, 'HH:mm');
+            //check if $scope.dive if defined. If not create. This overwrite all field of $scope.dive
+            if (!angular.isDefined($scope.dive))   new Object();
+
+            $scope.dive.diveTime = (selectedMoment.hours() * 60) + (selectedMoment.minutes());
+
+        //convert minute and second of duration in duration expressed in seconds
+            $scope.dive.duration = (($scope.dive.minute * 60) + $scope.dive.second);
         
-        $scope.dive.diveTime = (selectedMoment.hours() * 60) + (selectedMoment.minutes());
-            
         //basing on current view status we know if it is a new dive (add) or update an existed dive (update)
         //regarding the status of the view set the defaut attribute to show
         switch(modelService.freediverMdl.viewstatus) {
