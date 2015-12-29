@@ -8,30 +8,6 @@ var appNeaClient = angular.module('appNeaClient', ['appNeaClient.service',  'ngM
 var appNeaClientService = angular.module('appNeaClient.service', []);
 
 
-
-/*Configuring time picker*/
-/*appNeaClient.config(['momentPickerProvider', function (momentPickerProvider) {
-        momentPickerProvider.options({
-            /* Picker properties */
-  /*          locale:        'en',
-            format:        'L LT',
-            minView:       'hour',
-            maxView:       'hour',
-            startView:     'hour',
-            
-            /* Extra: Views properties */
-    /*        leftArrow:     '&larr;',
-            rightArrow:    '&rarr;',
-            monthsFormat:  'MMM',
-            daysFormat:    'D',
-            hoursFormat:   'HH:[00]',
-            minutesFormat: moment.localeData().longDateFormat('LT').replace(/[aA]/, ''),
-            minutesStep:   1
-        });
-    }]);
-
-
-
 /*Configuring routes*/
 appNeaClient.config(['$routeProvider',
   function($routeProvider) {
@@ -77,6 +53,32 @@ appNeaClient.config(function($mdThemingProvider) {
   
   //$mdThemingProvider.setDefaultTheme('appnea');
 });
+
+
+
+//configure an exception handler that override the default implementation
+//showing an alert in the Dialog
+appNeaClient.config(function($provide) {
+    $provide.decorator('$exceptionHandler', ['$delegate', '$injector', '$log', function($delegate, $injector, $log) {
+        return function(exception, cause) {
+            
+            $delegate(exception, cause);
+			
+            $log.error(exception + " caused by "+cause);
+			/* Alert manager start */
+			/*Avoid Circular dependency found: $modal <- $exceptionHandler <- $rootScope
+			we need to call the $injector manually to resolve the dependency at runtime*/
+            var ServiceDialogAlert;
+			ServiceDialogAlert = $injector.get('serviceDialogAlert');
+            
+            
+            //show a service dialog alert
+            ServiceDialogAlert.show(exception.message, exception.stack);
+    	};
+  	}
+  ]);        
+ });       
+        
 
 
 /*Init facebook SDK*/
@@ -138,8 +140,12 @@ appNeaClient.run(['$rootScope', '$window', 'fbAuth',
               
     ref.parentNode.insertBefore(js, ref);
   }(document));
+        
+}]);
 
-  }]);
+
+
+  
 
 
 

@@ -44,7 +44,10 @@ appNeaClient.controller('diveSessionListController',
 	$scope.onLoginError = function(data) {
 		//stop the spinner
         $rootScope.closeWaitingSpinner();
-        alert('Login error '+ data);
+        //throw the eexception
+        var error = new Error(data.errorMessage);
+        throw error;
+        
 		
 	};
 	
@@ -88,16 +91,19 @@ appNeaClient.controller('diveSessionListController',
     
     //Open dive session detail view in view or insert mode depending on aDivesession parameter
      $scope.showDivesessionDetail = function(aDivesession) {
-         
+        //throw new Error("You must select a current user!"); 
         if (aDivesession == null) {
             //set the current divesession on model to null (add new divesession)
             modelService.freediverMdl.currentDiveSession=null;
+            modelService.freediverMdl.viewstatus = freedivingLogbookConstant.VIEW_NEW;
             //change location path
             $location.path('/divesessiondetail');
+            
         }else{
+            
             //start the spinner
             $rootScope.showWaitingSpinner();
-            
+            modelService.freediverMdl.viewstatus = freedivingLogbookConstant.VIEW_UPDATE;
             //get the complete dive session detail from service, is asynchronous, must manage result with callback
             freediverService.getDetailDiveSession(freedivingLogbookConstant.PLATFORM_FACEBOOK,
                                                   $rootScope.externalToken,
@@ -129,11 +135,13 @@ appNeaClient.controller('diveSessionListController',
 	}; 
     
     
-   /*manages get detail dive sessio error*/
+   /*manages get detail dive session error*/
 	$scope.onGetDiveSessionError = function(data) {
         //stop the spinner
         $rootScope.closeWaitingSpinner();
-        alert('Get dive session error:'+ data.errorMessage);
+        //throw the eexception
+        var error = new Error(data.errorMessage);
+        throw error;
 		
 	}; 
           

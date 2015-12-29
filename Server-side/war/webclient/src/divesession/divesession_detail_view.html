@@ -9,10 +9,10 @@
             <p>Dive Session</p>
             <!--different button depending on tab, tab 0 - DETAILS - has save and delete action. Other tabs has not action -->
             <div ng-show="(fbStatus == 0) && ( selectedIndex == 0) ">
-                <md-button aria-label="save" class="md-icon-button" ng-click="saveDivesession()" >
+                <md-button aria-label="save" ng-disabled="divesessionForm.$invalid" class="md-icon-button" ng-click="saveDivesession()" >
                     <md-icon icon="add" md-font-set="material-icons">done</md-icon>
                 </md-button>
-                <md-button aria-label="delete"  class="md-icon-button">
+                <md-button aria-label="delete"  ng-disabled="viewStatus == 0" class="md-icon-button">
                    <md-icon icon="add" md-font-set="material-icons" ng-click="showRemoveConfirmation()">delete</md-icon>
                 </md-button>
             </div>

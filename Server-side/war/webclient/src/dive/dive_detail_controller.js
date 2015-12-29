@@ -5,6 +5,8 @@ var appNeaClient = angular.module('appNeaClient');
 appNeaClient.controller ('diveDetailController',  
 	function ($rootScope, $scope, modelService, freediverService, $log, $filter, $location, $route, $mdDialog, $mdToast) {
     
+    $scope.viewStatus = modelService.freediverMdl.viewstatus;
+    
     //regarding the status of the view set the defaut attribute to show
     switch(modelService.freediverMdl.viewstatus) {
         case freedivingLogbookConstant.VIEW_NEW:
@@ -71,8 +73,10 @@ appNeaClient.controller ('diveDetailController',
         
         //convert dive time in abosulte minute in a day HH*60 + mm
         var selectedMoment = moment($scope.diveTime, 'HH:mm');
-        //check if $scope.dive if defined. If not create. This overwrite all field of $scope.dive
-        if (!angular.isDefined($scope.dive))   new Object();
+        //check if $scope.dive if defined. If not create, this prevent exception if $scope.dive is not defined at all. This overwrite all field of $scope.dive
+        if ($scope.dive==null)  {
+            $scope.dive =  new Object();
+        }
         
         $scope.dive.diveTime = (selectedMoment.hours() * 60) + (selectedMoment.minutes());
             
@@ -176,11 +180,12 @@ appNeaClient.controller ('diveDetailController',
     $scope.onSaveError = function (data) {
         //stop dialog spinner
         $rootScope.closeWaitingSpinner();
-        //TODO: manage error
-        alert(data);
-        $log.info('dive session saved error!');
         
-        //TODO: in this case the view state should remain the same
+        $log.info('dive session saved error!');
+        //throw the eexception
+        var error = new Error(data.errorMessage);
+        throw error;
+        
 
     };
 

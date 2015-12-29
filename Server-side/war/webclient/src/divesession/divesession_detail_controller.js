@@ -4,6 +4,9 @@ var appNeaClient = angular.module('appNeaClient');
 //controls the divesession detail view
 appNeaClient.controller('diveSessionDetailController',  
 	function ($rootScope, $scope, modelService, freediverService, $log, $filter, $location, $mdDialog, $mdToast, $route) {
+        
+        $scope.viewStatus = modelService.freediverMdl.viewstatus;
+    
         //index of the current tab
         $scope.selectedIndex=modelService.freediverMdl.diveSessionActiveTabIndex;
         
@@ -51,52 +54,60 @@ appNeaClient.controller('diveSessionDetailController',
         $scope.saveDivesession = function() {
             $log.info('saving dive session.....');
             
+            //check if $scope.divesession if defined. If not create, this prevent exception saving new divesession with no parameters. This overwrite all field of $scope.divesession.
+            if ($scope.divesession==null) {
+                $scope.divesession =  new Object();
+            }
             //activate dialog spinner
             $rootScope.showWaitingSpinner();
             
             //basing on current dive session id we know if it is a new dive session (add) or update an existent dive session (update)
-            if ($scope.divesession.id == null) {
-            
-                //invoke Asynch add dive session rest service passing callback function
-                freediverService.addDiveSession(modelService.freediverMdl.id,
-                                                modelService.freediverMdl.externalPlatformId,
-                                                modelService.freediverMdl.externalToken,
-                                                modelService.freediverMdl.depthUnit,
-                                                modelService.freediverMdl.tempUnit,
-                                                modelService.freediverMdl.weightUnit,
-                                                $filter('date')($scope.divesession.diveDate,'dd-MM-yyyy'),
-                                                $scope.divesession.location,
-                                                $scope.divesession.meteo,
-                                                $scope.divesession.equipment,
-                                                $scope.divesession.weight,
-                                                $scope.divesession.temp,
-                                                $scope.divesession.depth,
-                                                $scope.divesession.note,
-                                                $scope.onSaveSuccess,
-                                                $scope.onSaveError);                
-            }else {
-            
-                 //invoke Asynch update dive session rest service passing callback function
-                freediverService.updateDiveSession(modelService.freediverMdl.externalPlatformId,
-                                                modelService.freediverMdl.externalToken,
-                                                modelService.freediverMdl.depthUnit,
-                                                modelService.freediverMdl.tempUnit,
-                                                modelService.freediverMdl.weightUnit,
-                                                $scope.divesession.id,
-                                                $filter('date')($scope.divesession.diveDate,'dd-MM-yyyy'),
-                                                $scope.divesession.location,
-                                                $scope.divesession.meteo,
-                                                $scope.divesession.equipment,
-                                                $scope.divesession.weight,
-                                                $scope.divesession.temp,
-                                                $scope.divesession.depth,
-                                                $scope.divesession.note,
-                                                $scope.onSaveSuccess,
-                                                $scope.onSaveError);    
-            }
+            //regarding the status of the view set the defaut attribute to show
+            switch(modelService.freediverMdl.viewstatus) {
+                case freedivingLogbookConstant.VIEW_NEW:    
+                    //if ($scope.divesession.id == null) {
+                        //invoke Asynch add dive session rest service passing callback function
+                    freediverService.addDiveSession(modelService.freediverMdl.id,
+                                                        modelService.freediverMdl.externalPlatformId,
+                                                        modelService.freediverMdl.externalToken,
+                                                        modelService.freediverMdl.depthUnit,
+                                                        modelService.freediverMdl.tempUnit,
+                                                        modelService.freediverMdl.weightUnit,
+                                                        $filter('date')($scope.divesession.diveDate,'dd-MM-yyyy'),
+                                                        $scope.divesession.location,
+                                                        $scope.divesession.meteo,
+                                                        $scope.divesession.equipment,
+                                                        $scope.divesession.weight,
+                                                        $scope.divesession.temp,
+                                                        $scope.divesession.depth,
+                                                        $scope.divesession.note,
+                                                        $scope.onSaveSuccess,
+                                                        $scope.onSaveError);                
+                    break;
+                    //}else {
+                case freedivingLogbookConstant.VIEW_UPDATE:
+                    //invoke Asynch update dive session rest service passing callback function
+                    freediverService.updateDiveSession(modelService.freediverMdl.externalPlatformId,
+                                                        modelService.freediverMdl.externalToken,
+                                                        modelService.freediverMdl.depthUnit,
+                                                        modelService.freediverMdl.tempUnit,
+                                                        modelService.freediverMdl.weightUnit,
+                                                        $scope.divesession.id,
+                                                        $filter('date')($scope.divesession.diveDate,'dd-MM-yyyy'),
+                                                        $scope.divesession.location,
+                                                        $scope.divesession.meteo,
+                                                        $scope.divesession.equipment,
+                                                        $scope.divesession.weight,
+                                                        $scope.divesession.temp,
+                                                        $scope.divesession.depth,
+                                                        $scope.divesession.note,
+                                                        $scope.onSaveSuccess,
+                                                        $scope.onSaveError);    
+                    break;
+                    //}
 
+                };
         };
-        
     
     
         /*remove dive session*/
@@ -143,8 +154,10 @@ appNeaClient.controller('diveSessionDetailController',
             //stop dialog spinner
             $rootScope.closeWaitingSpinner();
             //TODO: manage error
-            alert(data);
+            //alert(data);
             $log.info('dive session saved error!');
+            var error = new Error(data.errorMessage);
+            throw error;
               
         };
     
@@ -181,7 +194,7 @@ appNeaClient.controller('diveSessionDetailController',
             modelService.freediverMdl.currentDiveSession.currentDive=aDive;
         }
         $location.path('/divedetail');
-    }
+    };
     
     
     
