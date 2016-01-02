@@ -34,9 +34,10 @@
     <div ng-show="spinner" layout="row" layout-align="center center"><md-progress-circular md-mode="indeterminate"></md-progress-circular></div>
 
 
-    <!-- content contains divesession list -->
+    <!-- content contains divesession list or welcome card-->
     <md-content flex>                    
-        <md-list>
+        <!-- show the list if user has been logged on facebook -->
+        <md-list ng-show="(fbStatus == 0) && (freediver.diveSessions.length >0)">
             <md-list-item class="md-3-line" ng-repeat="diveSession in freediver.diveSessions | orderBy : '-diveDate'" ng-click="showDivesessionDetail(diveSession)">
                 <img ng-src="assets/img/twitter_diver.png" class="md-avatar" alt="diver">
                 <!--md-icon flex md-font-set="material-icons">pool</md-icon-->
@@ -52,7 +53,25 @@
                     <p><i>{{diveSession.note | limitTo:45}}...</i></p>
                 </div> 
                 <md-divider></md-divider>
-            </md-list-item>
-            
+            </md-list-item>            
         </md-list>
+        <!-- show a welcome card saying add the first dive session -->
+        <md-card ng-show="(fbStatus == 0) && (freediver.diveSessions.length<=0)"  >
+            <md-card-content>
+                <h4>There aren't dive session at the moment.</h4>
+                <h4>Use ADD button (+) in the bottom right corner, to add your first dive session.</h4>
+            </md-card-content>
+            <img src="assets/img/no_dive_session.jpg" class="md-card-image" alt="image caption">
+        </md-card>
+        <!-- show a welcome card if for anonymous user -->
+        <md-card ng-show="fbStatus != 0">
+            <md-card-content>
+                <h2>Welcome to APP-NEA,</h2>
+                <h3>the first social freediver's logbook.</h3>
+                <p>Please, use your facebook account to login into the platform.</p>
+            </md-card-content>
+            <img src="assets/img/before_login.jpg" class="md-card-image" alt="image caption">
+        </md-card>
+            
+        
     </md-content>
