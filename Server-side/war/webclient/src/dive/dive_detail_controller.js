@@ -75,13 +75,12 @@ appNeaClient.controller ('diveDetailController',
         $rootScope.showWaitingSpinner();
         
         //convert dive time in abosulte minute in a day HH*60 + mm
-<<<<<<< HEAD
+
         var selectedMoment = moment($scope.diveTime, 'HH:mm');
         //check if $scope.dive if defined. If not create, this prevent exception if $scope.dive is not defined at all. This overwrite all field of $scope.dive
         if ($scope.dive==null)  {
             $scope.dive =  new Object();
         }
-=======
             var selectedMoment = moment($scope.diveTime, 'HH:mm');
             //check if $scope.dive if defined. If not create. This overwrite all field of $scope.dive
             if (!angular.isDefined($scope.dive))   new Object();
@@ -90,7 +89,7 @@ appNeaClient.controller ('diveDetailController',
 
         //convert minute and second of duration in duration expressed in seconds
             $scope.dive.duration = (($scope.dive.minute * 60) + $scope.dive.second);
->>>>>>> origin/master
+
         
         //basing on current view status we know if it is a new dive (add) or update an existed dive (update)
         //regarding the status of the view set the defaut attribute to show

@@ -136,11 +136,11 @@
                 <img ng-src="assets/img/twitter_diver.png" class="md-avatar" alt="diver">
                 <div layout="column" class="md-list-item-text">
                     <div layout="row" layout-align="space-between end">
-                        <h4><b>{{dive.diveTime}}</b></h4>
+                        <h4><b>{{dive.getTimeHHMM()}}, {{dive.diveType}}</b></h4>
                     </div>
                     <div layout="row" layout-align="space-between center"> 
-                        <p class="md-caption"> maxDepth: {{dive.maxDepth}}</p>
-                        <p>duration:{{dive.duration}}</p>
+                        <p class="md-caption"> <i>max depth: {{dive.getMaxDepth(0)}} </i></p>
+                        <p><i>duration: {{dive.getDuration()}}</i></p>
                     </div>
                 </div>
                 <md-divider></md-divider>
@@ -151,6 +151,20 @@
         
         <!-- ************************STATISTICS ********************************** -->
     <md-tab label="Statistics">
+        <md-content layout-margin>
+            <div layout="column" layout-align="center center">
+                <md-list>
+                <p><label>max depth = <i>{{divesession.getMaxDiveDepth(0)}}</i></label></p>
+                <p><label>max duration = <i>{{divesession.getMaxDiveDuration()}}</i></label></p>
+                <md-divider></md-divider>
+                <p><label>min depth = <i>{{divesession.getMinDiveDepth(0)}}</i></label></p>
+                <p><label>min duration = <i>{{divesession.getMinDiveDuration()}}</i></label></p>
+                <md-divider></md-divider>
+                <p><label>avg depth = <i>{{divesession.getAvgDiveDepth(0)}}</i></label></p>
+                <p><label>avg duration = <i>{{divesession.getAvgDiveDuration()}}</i></label></p>
+                </md-list>
+            </div>
+        </md-content>
     </md-tab>
        
   </md-tabs>

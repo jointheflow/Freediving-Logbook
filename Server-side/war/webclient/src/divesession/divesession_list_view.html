@@ -42,12 +42,12 @@
                 <!--md-icon flex md-font-set="material-icons">pool</md-icon-->
                 <div layout="column" class="md-list-item-text">
                     <div layout="row" layout-align="space-between end">
-                        <h4><b>{{diveSession.location}}</b></h4> <h4>{{diveSession.diveDate | date: 'dd-MM-yyyy'}}</h4>
+                        <h4><b>@{{diveSession.location}}</b></h4> <h4>{{diveSession.diveDate | date: 'dd-MM-yyyy'}}</h4>
                     </div>
                     <div layout="row" layout-align="space-between center"> 
-                        <p class="md-caption">depth:{{diveSession.getDepth(freediver.depthUnit)}}</p>
-                        <p>temp:{{diveSession.getTemp(freediver.tempUnit)}}</p>
-                        <p>weight:{{diveSession.getWeight(freediver.weightUnit)}}</p>
+                        <p class="md-caption"><i>depth: {{diveSession.getDepth(freediver.depthUnit)}}</i></p>
+                        <p><i>temp: {{diveSession.getTemp(freediver.tempUnit)}}</i></p>
+                        <p><i>weight: {{diveSession.getWeight(freediver.weightUnit)}}</i></p>
                     </div>
                     <p><i>{{diveSession.note | limitTo:45}}...</i></p>
                 </div> 
