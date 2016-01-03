@@ -57,20 +57,21 @@
         </md-list>
         <!-- show a welcome card saying add the first dive session -->
         <md-card ng-show="(fbStatus == 0) && (freediver.diveSessions.length<=0)"  >
-            <md-card-content>
+            <!--md-card-content>
                 <h4>There aren't dive session at the moment.</h4>
                 <h4>Use ADD button (+) in the bottom right corner, to add your first dive session.</h4>
-            </md-card-content>
-            <img src="assets/img/no_dive_session.jpg" class="md-card-image" alt="image caption">
+            </md-card-content-->
+            <img src="assets/img/no_dive_session_en.jpg" class="md-card-image" alt="image caption">
         </md-card>
-        <!-- show a welcome card if for anonymous user -->
-        <md-card ng-show="fbStatus != 0">
-            <md-card-content>
-                <h2>Welcome to APP-NEA,</h2>
+        <!-- show a welcome card for anonymous user -->
+        <md-card ng-show="fbStatus != 0" layout-align="center center">
+            <!--md-card-content>
+                <h3>Welcome to APP-NEA,</h2>
                 <h3>the first social freediver's logbook.</h3>
                 <p>Please, use your facebook account to login into the platform.</p>
-            </md-card-content>
-            <img src="assets/img/before_login.jpg" class="md-card-image" alt="image caption">
+            </md-card-content-->
+            <img src="assets/img/before_login_en.jpg" class="md-card-image" alt="before login">
+            
         </md-card>
             
         

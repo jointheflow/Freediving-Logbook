@@ -10,10 +10,10 @@
             <!--different button depending on tab, tab 0 - DETAILS - has save and delete action. Other tabs has not action -->
             <div ng-show="(fbStatus == 0) && ( selectedIndex == 0) ">
                 <md-button aria-label="save" ng-disabled="divesessionForm.$invalid" class="md-icon-button" ng-click="saveDivesession()" >
-                    <md-icon icon="add" md-font-set="material-icons">done</md-icon>
+                    <md-icon icon="done" md-font-set="material-icons">done</md-icon>
                 </md-button>
                 <md-button aria-label="delete"  ng-disabled="viewStatus == 0" class="md-icon-button">
-                   <md-icon icon="add" md-font-set="material-icons" ng-click="showRemoveConfirmation()">delete</md-icon>
+                   <md-icon icon="delete" md-font-set="material-icons" ng-click="showRemoveConfirmation()">delete</md-icon>
                 </md-button>
             </div>
             <div ng-show="(fbStatus == 0) && (selectedIndex != 0)" style="height:48px; width:109.672px"></div>
@@ -131,7 +131,8 @@
         <!-- content contains divesession list -->
     <md-tab label="Dives">
     <md-content flex>
-        <md-list>
+        <!-- show dive list or a card depending of the number of dives in dive session -->
+        <md-list ng-show="divesession.dives >0">
             <md-list-item class="md-3-line" ng-repeat="dive in divesession.dives | orderBy : '-diveTime'" ng-click="showDiveDetail(dive)">
                 <img ng-src="assets/img/twitter_diver.png" class="md-avatar" alt="diver">
                 <div layout="column" class="md-list-item-text">
@@ -146,6 +147,11 @@
                 <md-divider></md-divider>
             </md-list-item>
         </md-list>
+        
+        <md-card ng-show="divesession.dives <= 0" layout-align="center center">
+            <img src="assets/img/no_dive_en.jpg" class="md-card-image" alt="no dive">            
+        </md-card>
+  
     </md-content>
     </md-tab> 
         
