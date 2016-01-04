@@ -87,8 +87,10 @@ appNeaClient.controller ('diveDetailController',
 
             $scope.dive.diveTime = (selectedMoment.hours() * 60) + (selectedMoment.minutes());
 
-        //convert minute and second of duration in duration expressed in seconds
-            $scope.dive.duration = (($scope.dive.minute * 60) + $scope.dive.second);
+        //convert minute and second of duration in duration expressed in seconds only 
+            var convMinute = ($scope.dive.minute == null)?0:$scope.dive.minute;
+            var convSecond = ($scope.dive.second == null)?0:$scope.dive.second;
+            $scope.dive.duration = ((convMinute * 60) + convSecond);
 
         
         //basing on current view status we know if it is a new dive (add) or update an existed dive (update)
