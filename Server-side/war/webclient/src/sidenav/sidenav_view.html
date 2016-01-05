@@ -1,7 +1,8 @@
 <md-sidenav class="md-sidenav-left" md-component-id="left">
     <md-list>
         <md-list-item>
-            <p>User: {{freediver.username}}</p>
+             <md-button ng-show="fbStatus == 0"><div  class="fb-login-button" data-max-rows="2" data-size="small" data-show-faces="true" data-auto-logout-link="false"></div></md-button>
+            <!--p>User: {{freediver.username}}</p-->
         </md-list-item>
         <md-list-item ng-show="fbStatus == 0">
             <md-button ng-click="logout()">Logout</md-button>
