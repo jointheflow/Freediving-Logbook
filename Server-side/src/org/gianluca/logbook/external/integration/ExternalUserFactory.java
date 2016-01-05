@@ -4,7 +4,9 @@ import org.gianluca.logbook.helper.LogbookConstant;
 
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
+import com.restfb.Parameter;
 import com.restfb.Version;
+import com.restfb.types.FacebookType;
 import com.restfb.types.User;
 
 /*Creates a user accessing specific external platform, using OAuth token*/
@@ -54,5 +56,15 @@ public class ExternalUserFactory {
 		
 		
 		
+	}
+	
+	public static void facebookPublishMsg(String token) throws PlatformNotManagedException {
+		//create Facebook client
+		FacebookClient facebookClient = new DefaultFacebookClient(token, LogbookConstant.FACEBOOK_SECRET_APP, Version.VERSION_2_4);
+		FacebookType publishMessageResponse =
+				  facebookClient.publish("me/feed", FacebookType.class,
+				    Parameter.with("message", "RestFB test"));
+
+				System.out.println("Published message ID: " + publishMessageResponse.getId());
 	}
 }
