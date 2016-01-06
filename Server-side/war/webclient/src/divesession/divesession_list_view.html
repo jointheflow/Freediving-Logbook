@@ -11,7 +11,7 @@
             <p>{{applicationName}}</p>
 
             <!--Inlclude fb button taht will show/hide respect user status --> 
-            <md-button ng-show="fbStatus != 0"><div  class="fb-login-button" data-max-rows="1" data-size="small" data-show-faces="false" data-auto-logout-link="true"></div></md-button>
+            <md-button ng-show="fbStatus != 0"><div  class="fb-login-button" scope="public_profile, publish_actions" data-max-rows="1" data-size="small" data-show-faces="false" data-auto-logout-link="true"></div></md-button>
             <!--md-button class="md-icon-button" aria-label="login" ng-show="fbStatus != 0" ng-click="login()">
                 
                 <md-icon flex md-svg-src="assets/img/facebook3.svg"></md-icon>
