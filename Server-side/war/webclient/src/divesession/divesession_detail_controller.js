@@ -135,7 +135,8 @@ appNeaClient.controller('diveSessionDetailController',
             modelService.addOrUpdateDiveSessionFromData(data.detail);
             //update the scope!
             $scope.divesession = modelService.freediverMdl.currentDiveSession; 
-            
+            //update the status of the view
+            modelService.freediverMdl.viewstatus = freedivingLogbookConstant.VIEW_UPDATE;
             //refresh location
             $route.reload();
             
@@ -216,5 +217,45 @@ appNeaClient.controller('diveSessionDetailController',
     });
   };
     
+   //managed share confirmation with confirmation dialog
+    $scope.showShareConfirmation = function(ev) {
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+          .title('Would you like to share this dive session with Facebook?')
+          .textContent('Current dive session will be posted in your Facebook profile by appnea.')
+          .ariaLabel('share dive session')
+          .targetEvent(ev)
+          .ok('Post to Facebook!')
+          .cancel('No thanks');
+    $mdDialog.show(confirm).then(function() {
+      $scope.shareSession();
+        
+    }, function() {
+      $log.info('cancel share!');
+    });
+  }; 
+    
+    //execute sharing
+    $scope.shareSession = function() {
+    //TODO
+        $scope.onShareSuccess();
+    };
+    
+    
+    //managing share success callback
+    $scope.onShareSuccess = function (data) {
+            
+            $log.info('dive session shared!');
+            //stop dialog spinner
+            $rootScope.closeWaitingSpinner();
+            //show an action executed message
+            $mdToast.show($mdToast.simple()
+                          .content('Dive session shared on Facebook!')
+                          .position('bottom right')
+                          .hideDelay(2000)
+                         );
+           
+            
+    };
 });
 	

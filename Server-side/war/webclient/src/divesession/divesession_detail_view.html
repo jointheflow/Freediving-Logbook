@@ -12,11 +12,16 @@
                 <md-button aria-label="save" ng-disabled="divesessionForm.$invalid" class="md-icon-button" ng-click="saveDivesession()" >
                     <md-icon icon="done" md-font-set="material-icons">done</md-icon>
                 </md-button>
+                
+                <md-button aria-label="share" ng-disabled="viewStatus == 0" class="md-icon-button" ng-click="showShareConfirmation()">
+                    <md-icon icon="share" md-font-set="material-icons">share</md-icon>
+                </md-button>
+                
                 <md-button aria-label="delete"  ng-disabled="viewStatus == 0" class="md-icon-button">
                    <md-icon icon="delete" md-font-set="material-icons" ng-click="showRemoveConfirmation()">delete</md-icon>
                 </md-button>
             </div>
-            <div ng-show="(fbStatus == 0) && (selectedIndex != 0)" style="height:48px; width:109.672px"></div>
+            <div ng-show="(fbStatus == 0) && (selectedIndex != 0)" style="height:48px; width:167.344px"></div>
             
         </div>
     </md-toolbar>

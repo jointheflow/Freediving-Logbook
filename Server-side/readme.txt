@@ -40,4 +40,9 @@ https://github.com/angular/angular.js/wiki/Understanding-Scopes
 --dependency---
 http://simeonc.github.io/sc-date-time/material.html
 
+-----Publish post on facebook on behalf an app
+1) get the token with the correcto scope via client
+2) reference to this https://developers.facebook.com/docs/graph-api/reference/v2.5/user/feed for the parameter
+
+
 

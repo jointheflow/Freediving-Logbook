@@ -58,12 +58,22 @@ public class ExternalUserFactory {
 		
 	}
 	
-	public static void facebookPublishMsg(String token) throws PlatformNotManagedException {
+	public static void facebookPublishMsg(String token, String link, String title, String msg) throws PlatformNotManagedException {
 		//create Facebook client
 		FacebookClient facebookClient = new DefaultFacebookClient(token, LogbookConstant.FACEBOOK_SECRET_APP, Version.VERSION_2_4);
 		FacebookType publishMessageResponse =
-				  facebookClient.publish("me/feed", FacebookType.class,
-				    Parameter.with("message", "RestFB test"));
+				/*  facebookClient.publish("me/feed", FacebookType.class,
+				    Parameter.with("message", "RestFB test"));*/
+		
+		/*facebookClient.publish("me/feed", FacebookType.class,
+			    Parameter.with("link", "https://app-nea-it.appspot.com/webclient/index.html"),
+			    Parameter.with("name", title),
+			    //Parameter.with("caption", msg)
+			    Parameter.with("description", msg)
+			    );*/
+				facebookClient.publish("me/freedivinglogbook:complete", FacebookType.class,
+					    Parameter.with("dive_session", "http://samples.ogp.me/200248120322899")  
+					    );
 
 				System.out.println("Published message ID: " + publishMessageResponse.getId());
 	}

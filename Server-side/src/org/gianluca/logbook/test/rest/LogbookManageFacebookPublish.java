@@ -24,7 +24,9 @@ public class LogbookManageFacebookPublish {
 	public void test() {
 		//fail("Not yet implemented");
 		try {
-			ExternalUserFactory.facebookPublishMsg(externalToken);
+			String title ="<username> has just completed a Dive Session with APPNEA! ";
+			String msg ="Number of dives:12, Max Depth:45 mt in CNF, Max Duration: 2\'45'\" in FYM ";
+			ExternalUserFactory.facebookPublishMsg(externalToken, null, title, msg);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
