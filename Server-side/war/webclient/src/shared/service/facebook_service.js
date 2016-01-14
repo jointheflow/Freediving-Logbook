@@ -4,7 +4,7 @@
 var appNeaClientService = angular.module('appNeaClient.service');
 
 /*add facebook authentication services*/
-appNeaClientService.service('fbAuth', function ($log, $rootScope) {
+appNeaClientService.service('fbAuth', function ($log, $rootScope, $facebook) {
 
     this.watchLoginChange = function(fbConnectedCallBack, fbDisconnectedCallBack) {
         var _self = this;
@@ -82,7 +82,7 @@ appNeaClientService.service('fbAuth', function ($log, $rootScope) {
         });
     };
     
-    this.getLoginStatus = function() {
+   /* this.getLoginStatus = function() {
         FB.getLoginStatus(function(response) {
             if (response.status === 'connected') {
                 // the user is logged in and has authenticated your
@@ -109,6 +109,44 @@ appNeaClientService.service('fbAuth', function ($log, $rootScope) {
                 });
             }
         });
+    };
+    */
+    
+    //check the login status using ngFacebook api
+    this.getLoginStatus = function() {
+        $facebook.getLoginStatus().then( 
+          function(response) {
+             if (response.status === 'connected') {
+                // the user is logged in and has authenticated your
+                // app, and response.authResponse supplies
+                // the user's ID, a valid access token, a signed
+                // request, and the time the access token 
+                // and signed request each expire
+                //$rootScope.$apply(function() { 
+                    $rootScope.fbStatus = freedivingLogbookConstant.FB_STATUS_LOGGED;
+                    $rootScope.externalToken = response.authResponse.accessToken;
+                //});
+            } else if (response.status === 'not_authorized') {
+                // the user is logged in to Facebook, 
+                // but has not authenticated your app
+                //$rootScope.$apply(function() { 
+                    $rootScope.fbStatus = freedivingLogbookConstant.FB_STATUS_NOT_AUTH;
+                    $rootScope.externalToken = $rootScope.externalToken =null;
+                //});
+            } else {
+                // the user isn't logged in to Facebook.
+                 //$rootScope.$apply(function() { 
+                    $rootScope.fbStatus = freedivingLogbookConstant.FB_STATUS_UNKNOWN;
+                    $rootScope.externalToken = $rootScope.externalToken =null;
+                //});
+            }
+                
+          },
+          function(err) {
+                $rootScope.fbStatus = freedivingLogbookConstant.FB_STATUS_UNKNOWN;
+                $rootScope.externalToken = $rootScope.externalToken =null;
+                
+          });
     };
 
 });

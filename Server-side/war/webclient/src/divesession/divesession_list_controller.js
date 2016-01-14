@@ -144,7 +144,8 @@ appNeaClient.controller('diveSessionListController',
         throw error;
 		
 	}; 
-          
-        
+    
+    fbAuth.getLoginStatus();
+
 });   
 

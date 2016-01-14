@@ -2,7 +2,7 @@
 //appNeaClient is the main module that represents the app. It needs all other modules dependencies
 
 
-var appNeaClient = angular.module('appNeaClient', ['appNeaClient.service',  'ngMaterial', 'ngRoute', 'moment-picker']);
+var appNeaClient = angular.module('appNeaClient', ['appNeaClient.service',  'ngMaterial', 'ngRoute', 'moment-picker','ngFacebook']);
 
 //defines appNeaClient.service module
 var appNeaClientService = angular.module('appNeaClient.service', []);
@@ -81,67 +81,32 @@ appNeaClient.config(function($provide) {
         
 
 
-/*Init facebook SDK*/
-appNeaClient.run(['$rootScope', '$window', 'fbAuth', 
-    function($rootScope, $window, fbAuth) {
-        
-        /*Init facebook authentication status and app-nea status*/
-        $rootScope.fbStatus= freedivingLogbookConstant.FB_STATUS_UNKNOWN;
-        $rootScope.appNeaStatus = freedivingLogbookConstant.APPNEA_STATUS_UNKNOWN;
-        $rootScope.externalToken=null;
-        
-        $window.fbAsyncInit = function() {
-            // Executed when the SDK is loaded
-            FB.init({ 
-              /* 
-               The app id of the web app;
-               To register a new app visit Facebook App Dashboard
-               ( https://developers.facebook.com/apps/ ) 
-              */
-              appId: freedivingLogbookConstant.facebook_app_id,  
-              /* 
-               Adding a Channel File improves the performance 
-               of the javascript SDK, by addressing issues 
-               with cross-domain communication in certain browsers. 
-              */
-              channelUrl: 'app/channel.html', 
-              /* 
-               Set if you want to check the authentication status
-               at the start up of the app 
-              */
-              status: true, 
-              /* 
-               Enable cookies to allow the server to access 
-               the session 
-              */
-              cookie: true,
-              version: 'v2.0',    
-              /* Parse XFBML */
-              xfbml: true 
-            });
-            
-           // fbAuth.getLoginStatus();
-            fbAuth.watchLoginChange();
-          };
+/*Configuring ngFacebook*/
+appNeaClient.config( function( $facebookProvider ) {
+  $facebookProvider.setAppId(freedivingLogbookConstant.facebook_app_id);
+});
 
-  // Are you familiar to IIFE ( http://bit.ly/iifewdb ) ?
-  (function(d){
-    // load the Facebook javascript SDK
-    var js, 
-    id = 'facebook-jssdk', 
-    ref = d.getElementsByTagName('script')[0];
-    if (d.getElementById(id)) {
-      return;
-    }
-    js = d.createElement('script'); 
-    js.id = id; 
-    js.async = true;
-    js.src = "//connect.facebook.net/en_US/sdk.js";
-              
-    ref.parentNode.insertBefore(js, ref);
-  }(document));
-        
-}]);
+
+/*Init facebook SDK*/
+appNeaClient.run(['$rootScope', 
+    (function($rootScope){
+     // If we've already installed the SDK, we're done
+     if (document.getElementById('facebook-jssdk')) {return;}
+
+     // Get the first script element, which we'll use to find the parent node
+     var firstScriptElement = document.getElementsByTagName('script')[0];
+
+     // Create a new script element and set its id
+     var facebookJS = document.createElement('script'); 
+     facebookJS.id = 'facebook-jssdk';
+
+     // Set the new script's source to the source of the Facebook JS SDK
+     facebookJS.src = '//connect.facebook.net/en_US/all.js';
+
+     // Insert the Facebook JS SDK into the DOM
+     firstScriptElement.parentNode.insertBefore(facebookJS, firstScriptElement);
+   })    
+]);
 
 
 
