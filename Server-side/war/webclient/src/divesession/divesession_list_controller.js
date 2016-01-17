@@ -3,7 +3,7 @@ var appNeaClient = angular.module('appNeaClient');
 
 /*controller definition */
 appNeaClient.controller('diveSessionListController',  
-	function ($scope, $rootScope, freediverService, modelService, $log, $timeout, $mdSidenav, fbAuth, $location, $mdDialog) {
+	function ($scope, $rootScope, freediverService, modelService, $log, $timeout, $mdSidenav, $location, $mdDialog, $facebook) {
 	
     
     
@@ -77,18 +77,6 @@ appNeaClient.controller('diveSessionListController',
     });
     
     
-    //manage login on fb
-    $scope.login = function() {
-        fbAuth.login();                
-    };
-    
-    //manage logout on fb but we let fb manage logout directly +/
-    $scope.logout = function() {
-        fbAuth.logout();
-        window.location.reload();
-        
-    };
-    
     //Open dive session detail view in view or insert mode depending on aDivesession parameter
      $scope.showDivesessionDetail = function(aDivesession) {
         //throw new Error("You must select a current user!"); 
@@ -145,7 +133,13 @@ appNeaClient.controller('diveSessionListController',
 		
 	}; 
     
-    fbAuth.getLoginStatus();
+    //redirect login to $rootScope login
+    $scope.login = function() {
+        $rootScope.login();
+    };
+    
+    //every time the controller starts get the login status and refresh the info accordly
+    $rootScope.getLoginStatus();
 
 });   
 

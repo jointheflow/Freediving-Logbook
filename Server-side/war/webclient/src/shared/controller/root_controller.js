@@ -5,7 +5,7 @@ var appNeaClient = angular.module('appNeaClient');
 
 appNeaClient.controller('rootController',  
                          
-    function ($rootScope, $scope, $log, $timeout, $location, $mdDialog) {
+    function ($rootScope, $scope, $log, $timeout, $location, $mdDialog, $facebook) {
         //show the spinner
         $rootScope.showWaitingSpinner = function() {
             $mdDialog.show({
@@ -18,31 +18,68 @@ appNeaClient.controller('rootController',
             $mdDialog.cancel();
         };
     
-    
-        
-        //set focus to destinationId or destinationId.destinationTag basing key event and key code
-        //for example key code 13 correponds to RETURN
-        $scope.setFocus = function(keyEvent, keyCode, destinationId, destinationTag) {
-            if (keyEvent.which === keyCode) { 
-              /*fix using $timeout https://docs.angularjs.org/error/$rootScope/inprog?p0=
-			  because It is possible to workaround this problem by moving the call to set 
-			  the focus outside of the digest, by using $timeout(fn, 0, false), where the
-			  false value tells Angular not to wrap this fn in a $apply block*/
-				$timeout(function () {
-							//alert('Focus to '+destinationId);
-							var element = document.getElementById(destinationId);
-
-							if(element && destinationTag) {
-
-								var childs = element.getElementsByTagName(destinationTag); 
-								if (childs) childs[0].focus();
-							}
-							else if (element) 
-								element.focus();
-						}, 0, false);
-            }
+        //manage facebook login
+        $rootScope.login = function() {
+            $timeout(function() {
+                $facebook.login().then(function() {
+                    $rootScope.getLoginStatus();
+                })},
+                1000,
+                false);
         };
-		
-		
+    
+        //manage facebook login
+        $rootScope.logout = function() {
+            $facebook.logout().then(function() {
+                $rootScope.getLoginStatus();
+            });
+        };
+    
+        //check the login status using ngFacebook api
+        $rootScope.getLoginStatus = function() {
+            $log.info('getting login status.......');
+            $facebook.getLoginStatus().then( 
+              function(response) {
+
+                 if (response.status === 'connected') {
+                    // the user is logged in and has authenticated your
+                    // app, and response.authResponse supplies
+                    // the user's ID, a valid access token, a signed
+                    // request, and the time the access token 
+                    // and signed request each expire
+                    //$rootScope.$apply(function() {
+                        $log.info('got login status! connected');
+                        $rootScope.fbStatus = freedivingLogbookConstant.FB_STATUS_LOGGED;
+                        $rootScope.externalToken = response.authResponse.accessToken;
+                    //});
+                } else if (response.status === 'not_authorized') {
+                    // the user is logged in to Facebook, 
+                    // but has not authenticated your app
+                    //$rootScope.$apply(function() { 
+                        $log.info('got login status! not_authorized');
+                        $rootScope.fbStatus = freedivingLogbookConstant.FB_STATUS_NOT_AUTH;
+                        $rootScope.externalToken = $rootScope.externalToken =null;
+                    //});
+                } else {
+                    // the user isn't logged in to Facebook.
+                     //$rootScope.$apply(function() { 
+                        $log.info('got login status! unknown');
+                        $rootScope.fbStatus = freedivingLogbookConstant.FB_STATUS_UNKNOWN;
+                        $rootScope.externalToken = $rootScope.externalToken =null;
+                    //});
+                }
+
+              },
+              function(err) {
+                    $log.info('got login error! unknown');
+                    $rootScope.fbStatus = freedivingLogbookConstant.FB_STATUS_UNKNOWN;
+                    $rootScope.externalToken = $rootScope.externalToken =null;
+
+              });
+        };
+
+        
+        
+        		
 		
 });

@@ -9,15 +9,8 @@
 
             </md-button>
             <p>{{applicationName}}</p>
-
-            <!--Inlclude fb button taht will show/hide respect user status --> 
-            <!--md-button ng-show="fbStatus != 0"--><div ng-show="fbStatus != 0" class="fb-login-button" scope="public_profile, publish_actions" data-max-rows="1" data-size="small" data-show-faces="false" data-auto-logout-link="true"></div><!--/md-button->
-            <!--md-button class="md-icon-button" aria-label="login" ng-show="fbStatus != 0" ng-click="login()">
-                
-                <md-icon flex md-svg-src="assets/img/facebook3.svg"></md-icon>
-            </md-button-->
             <!--fill right space with a blank div -->
-            <div ng-show="fbStatus == 0" style="height:48px; width:48px"></div>
+            <div style="height:48px; width:48px"></div>
             
             
         </div>                    
@@ -38,7 +31,7 @@
     <md-content flex>                    
         <!-- show the list if user has been logged on facebook -->
         <md-list ng-show="(fbStatus == 0) && (freediver.diveSessions.length >0)">
-            <md-list-item class="md-3-line" ng-repeat="diveSession in freediver.diveSessions | orderBy : '-diveDate'" ng-click="showDivesessionDetail(diveSession)">
+            <md-list-item class="md-3-line" ng-repeat="diveSession in freediver.diveSessions track by diveSession.id | orderBy : '-diveDate'" ng-click="showDivesessionDetail(diveSession)">
                 <img ng-src="assets/img/twitter_diver.png" class="md-avatar" alt="diver">
                 <!--md-icon flex md-font-set="material-icons">pool</md-icon-->
                 <div layout="column" class="md-list-item-text">
@@ -65,13 +58,23 @@
         </md-card>
         <!-- show a welcome card for anonymous user -->
         <md-card ng-show="fbStatus != 0" layout-align="center center">
+            
             <!--md-card-content>
                 <h3>Welcome to APP-NEA,</h2>
                 <h3>the first social freediver's logbook.</h3>
                 <p>Please, use your facebook account to login into the platform.</p>
             </md-card-content-->
+            <md-card-action>
+                <md-button ng-click="login()">
+                    <img src='assets/img/fb_login_button.png'>
+                </md-button>
+            </md-card-action>
             <img src="assets/img/before_login_en.jpg" class="md-card-image" alt="before login">
-            
+            <md-card-action>
+                <md-button ng-click="login()">
+                    <img src='assets/img/fb_login_button.png'>
+                </md-button>
+            </md-card-action>
         </md-card>
             
         

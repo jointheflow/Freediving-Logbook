@@ -1,6 +1,6 @@
     
 /*controller definition */
-appNeaClient.controller('sidenavController',  function ($scope, modelService, $log, $mdSidenav, fbAuth) {
+appNeaClient.controller('sidenavController',  function ($scope,$rootScope, modelService, $log, $mdSidenav, fbAuth) {
     
     $scope.freediver = modelService.freediverMdl;
     
@@ -11,8 +11,8 @@ appNeaClient.controller('sidenavController',  function ($scope, modelService, $l
     
     //manage logout on fb but we let fb manage logout directly +/
     $scope.logout = function() {
-        fbAuth.logout();
-        window.location.reload();
+        $rootScope.logout();
+        $mdSidenav('left').close();
     };
     
 });
