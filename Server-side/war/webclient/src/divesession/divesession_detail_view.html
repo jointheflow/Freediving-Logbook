@@ -17,8 +17,8 @@
                     <md-icon icon="share" md-font-set="material-icons">share</md-icon>
                 </md-button>
                 
-                <md-button aria-label="delete"  ng-disabled="viewStatus == 0" class="md-icon-button">
-                   <md-icon icon="delete" md-font-set="material-icons" ng-click="showRemoveConfirmation()">delete</md-icon>
+                <md-button aria-label="delete"  ng-disabled="viewStatus == 0" class="md-icon-button" ng-click="showRemoveConfirmation()">
+                   <md-icon icon="delete" md-font-set="material-icons">delete</md-icon>
                 </md-button>
             </div>
             <div ng-show="(fbStatus == 0) && (selectedIndex != 0)" style="height:48px; width:167.344px"></div>
@@ -139,7 +139,7 @@
         <!-- show dive list or a card depending of the number of dives in dive session -->
         <md-list ng-show="divesession.dives.length > 0">
             <md-list-item class="md-3-line" ng-repeat="dive in divesession.dives track by dive.id | orderBy : '-diveTime'" ng-click="showDiveDetail(dive)">
-                <img ng-src="assets/img/twitter_diver.png" class="md-avatar" alt="diver">
+                <img ng-src="assets/img/dive.png" class="md-avatar" alt="dive">
                 <div layout="column" class="md-list-item-text">
                     <div layout="row" layout-align="space-between end">
                         <h4><b>{{dive.getTimeHHMM()}}, {{dive.diveType}}</b></h4>

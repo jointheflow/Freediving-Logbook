@@ -32,7 +32,7 @@
         <!-- show the list if user has been logged on facebook -->
         <md-list ng-show="(fbStatus == 0) && (freediver.diveSessions.length >0)">
             <md-list-item class="md-3-line" ng-repeat="diveSession in freediver.diveSessions track by diveSession.id | orderBy : '-diveDate'" ng-click="showDivesessionDetail(diveSession)">
-                <img ng-src="assets/img/twitter_diver.png" class="md-avatar" alt="diver">
+                <img ng-src="assets/img/divesession.png" class="md-avatar" alt="diveSessionImg">
                 <!--md-icon flex md-font-set="material-icons">pool</md-icon-->
                 <div layout="column" class="md-list-item-text">
                     <div layout="row" layout-align="space-between end">

@@ -1,6 +1,6 @@
     
 /*controller definition */
-appNeaClient.controller('sidenavController',  function ($scope,$rootScope, modelService, $log, $mdSidenav, fbAuth) {
+appNeaClient.controller('sidenavController',  function ($scope,$rootScope, modelService, $log, $mdSidenav) {
     
     $scope.freediver = modelService.freediverMdl;
     
