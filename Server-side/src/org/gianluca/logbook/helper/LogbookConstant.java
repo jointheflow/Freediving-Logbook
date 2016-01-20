@@ -2,8 +2,8 @@ package org.gianluca.logbook.helper;
 
 public class LogbookConstant {
 	/*start values for test*/
-	public final static String HOST_NAME="http://localhost:8888";
-	//public final static String HOST_NAME ="http://localhost:8888";
+	public final static String HOST_NAME="https://app-nea-it.appspot.com";
+	//public final static String HOST_NAME ="https://app-nea-it.appspot.com";
 	//get new toke from FB https://developers.facebook.com/tools/explorer
 	public final static String FACEBOOK_ACCESSS_TOKEN="CAACVrSR6h0ABAECqWtYar5SlfVzQ8NXuwLXA4qZCVgEXTfvWU5b2rBVZCSxQdnZBwoRVGYIs03vMyKdABcjjcYaFxsOBLX6NqJ0EBr7tcxmMI1mwLMc5uZB6r2xQyC2lEL1nkYVwmXEJ5ZBUmXT6t9ZBoJ8ZCLKHzUG12sZAru3EXjOodZA0JJTPjwukQIiWLJu04HashXEW0I1amNYww3zI19pLpnIJlzMYZD";
 	/*end values for test*/
@@ -19,7 +19,7 @@ public class LogbookConstant {
 	public static final String FREEDIVER_STATUS_OLD="OLD";
 	
 	//Facebook secret app identifier
-	public static final String FACEBOOK_SECRET_APP="a8b3d5041ff969e27df85b2f3027653b";
+	public static final String FACEBOOK_SECRET_APP="9112e450484d1f40ab554bec6ff96c30";
 	
 	//Settings constants
 	public static final int TEMPERATURE_CELSIUS=0;

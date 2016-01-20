@@ -10,12 +10,7 @@ appNeaClient.controller ('diveDetailController',
     //regarding the status of the view set the defaut attribute to show
     switch(modelService.freediverMdl.viewstatus) {
         case freedivingLogbookConstant.VIEW_NEW:
-            //set the default date for time picker. The default date is the date caming from dive session. The default
-            //date must be inn the following format AAAA-MM-DD. The default date will show in the title of the picker
-            $scope.diveDate = modelService.freediverMdl.currentDiveSession.diveDate.getFullYear()+'-'+
-                             (modelService.freediverMdl.currentDiveSession.diveDate.getMonth()+1)+'-'+
-                              modelService.freediverMdl.currentDiveSession.diveDate.getDate();
-            
+            //null
             
         break;
         case freedivingLogbookConstant.VIEW_UPDATE:
@@ -27,10 +22,13 @@ appNeaClient.controller ('diveDetailController',
                               modelService.freediverMdl.currentDiveSession.diveDate.getDate()+ ' '+
                               modelService.freediverMdl.currentDiveSession.currentDive.getTimeHHMM();
             
-            //show the dive time of the selected dive
-            $scope.diveTime = modelService.freediverMdl.currentDiveSession.currentDive.getTimeHHMM();
             //bind the scope dive to the current dive in the model
             $scope.dive = modelService.freediverMdl.currentDiveSession.currentDive;
+            //show the dive time of the selected dive            
+            $scope.diveTime = modelService.freediverMdl.currentDiveSession.currentDive.getTimeHHMM();
+            $scope.dive.timeHour = (Math.floor(modelService.freediverMdl.currentDiveSession.currentDive.diveTime / 60)).toString().paddingLeft('00');
+            
+            $scope.dive.timeMinute = (modelService.freediverMdl.currentDiveSession.currentDive.diveTime % 60).toString().paddingLeft('00');
             //bind the scope to the minute and second from duration expressed in seconds
             $scope.dive.minute = Math.floor(modelService.freediverMdl.currentDiveSession.currentDive.duration / 60);
             $scope.dive.second = (modelService.freediverMdl.currentDiveSession.currentDive.duration % 60);
@@ -53,7 +51,7 @@ appNeaClient.controller ('diveDetailController',
     $scope.diveTypes = [ 'Constant Weight (CWT)', 'Constant Weight Without Fins (CNF)', 'Free Immersion (FIM)', 'Dynamic With Fins (DYN)', 'Dynamic Without Fins (DNF)', 'No Limit (NLT)', 'Variable Weight (VWT)', 'other'];
     
     //hour array
-    $scope.h24 = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'];
+    $scope.h24 = ['00','01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
     //minute (or second) array
     $scope.m60 = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59'];
     
@@ -81,7 +79,7 @@ appNeaClient.controller ('diveDetailController',
         if ($scope.dive==null)  {
             $scope.dive =  new Object();
         }
-            var selectedMoment = moment($scope.diveTime, 'HH:mm');
+            var selectedMoment = moment($scope.dive.timeHour+':'+$scope.dive.timeMinute, 'HH:mm');
             //check if $scope.dive if defined. If not create. This overwrite all field of $scope.dive
             if (!angular.isDefined($scope.dive))   new Object();
 

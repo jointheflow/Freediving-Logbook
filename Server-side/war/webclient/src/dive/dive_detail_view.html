@@ -45,17 +45,31 @@
                 <div layout="column"> 
                     <!-- default diveDate is the date of the parent diveSession. It is not a field of this view but it is required because will be
                     shown in the title of the time picker -->
-                    <md-input-container > 
-                        <div class="input-group" moment-picker="diveTime" format="HH:mm" min-view="hour" start-view="day" default-date={{diveDate}}>
-                            <label>Time (HH:mm) </label> 
-                            <input name="time" ng-model="diveTime" required> 
-                        </div>
-                    </md-input-container>
+                    <div layout="row"> 
+                        <!--div class="input-group" moment-picker="diveTime" format="HH:mm" min-view="hour" start-view="day" default-date={{diveDate}}-->
+                            <md-input-container>
+                                <label>HH</label> 
+                                <md-select ng-model="dive.timeHour" required>
+                                    <md-option ng-repeat="hour in h24 track by $index" value="{{hour}}">
+                                    {{hour}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container>
+                                <label>MM</label>
+                                <md-select ng-model="dive.timeMinute" required>
+                                    <md-option ng-repeat="minute in m60 track by $index" value="{{minute}}">
+                                    {{minute}}
+                                    </md-option>
+                                </md-select>
+                            <!--input name="time" ng-model="diveTime" required--> 
+                            </md-input-container>
+                    </div>
                    
                     <md-input-container>
                         <label>Dive Type</label>
                         <md-select ng-model="dive.diveType" required>
-                          <md-option ng-repeat="type in diveTypes" value="{{type}}">
+                          <md-option ng-repeat="type in diveTypes track by $index" value="{{type}}">
                             {{type}}
                           </md-option>
                         </md-select>
