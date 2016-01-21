@@ -2,7 +2,7 @@
 //appNeaClient is the main module that represents the app. It needs all other modules dependencies
 
 
-var appNeaClient = angular.module('appNeaClient', ['appNeaClient.service',  'ngMaterial', 'ngRoute', 'ngFacebook']);
+var appNeaClient = angular.module('appNeaClient', ['appNeaClient.service',  'ngMaterial', 'ngRoute', 'ngFacebook', 'chart.js']);
 
 //defines appNeaClient.service module
 var appNeaClientService = angular.module('appNeaClient.service', []);
