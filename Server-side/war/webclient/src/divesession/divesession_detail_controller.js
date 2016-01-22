@@ -257,5 +257,29 @@ appNeaClient.controller('diveSessionDetailController',
            
             
     };
+    
+    /*CHART MANAGEMENT START*/
+    $scope.populateXChart = function () {
+        xChart = [];
+        for (var i = 0; i < modelService.freediverMdl.currentDiveSession.dives.length; i++){
+            xChart.push(modelService.freediverMdl.currentDiveSession.dives[i].getTimeHHMM());
+        }  
+        return xChart;
+    };
+    
+    $scope.populateYChart = function () {
+        yChart = [];
+        for (var i = 0; i < modelService.freediverMdl.currentDiveSession.dives.length; i++){
+           yChart.push(-modelService.freediverMdl.currentDiveSession.dives[i].maxDepth);
+        }  
+        return yChart;
+    };
+    $scope.labels = $scope.populateXChart();
+    
+    //$scope.series = ['Series A', 'Series B'];
+    $scope.data = [$scope.populateYChart()];
+        
+    
+    /*CHART MANAGEMENT END*/
 });
 	

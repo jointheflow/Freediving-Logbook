@@ -175,6 +175,11 @@
                 <p><label>avg duration = <i>{{divesession.getAvgDiveDuration()}}</i></label></p>
                 </md-list>
             </div>
+            
+            <div>
+                <canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels" chart-legend="true" chart-series="series" chart-click="onClick"> 
+                </canvas> 
+            </div>
         </md-content>
     </md-tab>
        

@@ -248,6 +248,8 @@ DiveSessionMdl.prototype.getAvgDiveDuration = function () {
         return '-';
 
 };
+
+
 /*end statistics method*/
 
 //******Dive model
