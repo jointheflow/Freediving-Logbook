@@ -20,13 +20,18 @@ appNeaClient.controller('rootController',
     
         //manage facebook login
         $rootScope.login = function() {
-            $timeout(function() {
+            //$timeout(function() {
                 $facebook.login().then(function() {
                     $rootScope.getLoginStatus();
-                })},
-                1000,
-                false);
+                 });
+                //},1000,
+               // false);
         };
+    
+        $rootScope.alert = function() {
+            alert('alert!!');
+            
+        }
     
         //manage facebook login
         $rootScope.logout = function() {

@@ -138,6 +138,12 @@ appNeaClient.controller('diveSessionListController',
         $rootScope.login();
     };
     
+    //TODO: REMOVE ONLY for TEST!!!
+    $scope.alert = function() {
+      $rootScope.alert();  
+        
+    };
+    
     //every time the controller starts get the login status and refresh the info accordly
     $rootScope.getLoginStatus();
 

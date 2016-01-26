@@ -260,20 +260,35 @@ appNeaClient.controller('diveSessionDetailController',
     
     /*CHART MANAGEMENT START*/
     $scope.populateXChart = function () {
-        xChart = [];
-        for (var i = 0; i < modelService.freediverMdl.currentDiveSession.dives.length; i++){
-            xChart.push(modelService.freediverMdl.currentDiveSession.dives[i].getTimeHHMM());
-        }  
+        xChart = []; 
+        switch(modelService.freediverMdl.viewstatus) {
+                case freedivingLogbookConstant.VIEW_NEW:    
+                    break;
+                    
+                case freedivingLogbookConstant.VIEW_UPDATE:
+                    for (var i = 0; i < modelService.freediverMdl.currentDiveSession.dives.length; i++){
+                        xChart.push(modelService.freediverMdl.currentDiveSession.dives[i].getTimeHHMM());
+                    }
+                break;
+        }
         return xChart;
     };
     
     $scope.populateYChart = function () {
         yChart = [];
-        for (var i = 0; i < modelService.freediverMdl.currentDiveSession.dives.length; i++){
-           yChart.push(-modelService.freediverMdl.currentDiveSession.dives[i].maxDepth);
-        }  
+        switch(modelService.freediverMdl.viewstatus) {
+                case freedivingLogbookConstant.VIEW_NEW:    
+                    break;
+                    
+                case freedivingLogbookConstant.VIEW_UPDATE:
+                    for (var i = 0; i < modelService.freediverMdl.currentDiveSession.dives.length; i++){
+                       yChart.push(modelService.freediverMdl.currentDiveSession.dives[i].maxDepth);
+                    } 
+                    break;
+        }
         return yChart;
     };
+    
     $scope.labels = $scope.populateXChart();
     
     //$scope.series = ['Series A', 'Series B'];
