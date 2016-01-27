@@ -3,7 +3,7 @@ var appNeaClient = angular.module('appNeaClient');
 
 /*controller definition */
 appNeaClient.controller('diveSessionListController',  
-	function ($scope, $rootScope, freediverService, modelService, $log, $timeout, $mdSidenav, $location, $mdDialog, $facebook) {
+	function ($scope, $rootScope, freediverService, modelService, $log, $timeout, $mdSidenav, $location, $mdDialog, $facebook, $filter) {
 	
     
     
@@ -34,6 +34,10 @@ appNeaClient.controller('diveSessionListController',
         modelService.updateFreediverFromData(data);
         //put the freediver on the scope
         $scope.freediver=modelService.freediverMdl;
+        //order basing diveTime
+        $scope.freediver.diveSessions = $filter('orderBy')(modelService.freediverMdl.diveSessions, 'diveDate', false);
+        
+       
         
                 
         

@@ -138,7 +138,7 @@
     <md-content flex>
         <!-- show dive list or a card depending of the number of dives in dive session -->
         <md-list ng-show="divesession.dives.length > 0">
-            <md-list-item class="md-3-line" ng-repeat="dive in divesession.dives track by dive.id | orderBy : '-diveTime'" ng-click="showDiveDetail(dive)">
+            <md-list-item class="md-3-line" ng-repeat="dive in divesession.dives track by dive.id | orderBy:'diveType'" ng-click="showDiveDetail(dive)">
                 <img ng-src="assets/img/dive.png" class="md-avatar" alt="dive">
                 <div layout="column" class="md-list-item-text">
                     <div layout="row" layout-align="space-between end">

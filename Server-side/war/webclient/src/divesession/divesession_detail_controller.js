@@ -14,7 +14,11 @@ appNeaClient.controller('diveSessionDetailController',
         $scope.actionIcon= freedivingLogbookConstant.ICON_SAVE_DIVESESSION;
     
         //set the current divesession with that selected in the model
-        $scope.divesession = modelService.freediverMdl.currentDiveSession;       
+        $scope.divesession = modelService.freediverMdl.currentDiveSession;
+        //order basing diveTime
+        if (modelService.freediverMdl.viewstatus==freedivingLogbookConstant.VIEW_UPDATE) {
+            $scope.divesession.dives = $filter('orderBy')(modelService.freediverMdl.currentDiveSession.dives, 'diveTime', false);
+        };
         
         $scope.back = function() {
             $location.path('/divesessionlist');
@@ -282,7 +286,7 @@ appNeaClient.controller('diveSessionDetailController',
                     
                 case freedivingLogbookConstant.VIEW_UPDATE:
                     for (var i = 0; i < modelService.freediverMdl.currentDiveSession.dives.length; i++){
-                       yChart.push(modelService.freediverMdl.currentDiveSession.dives[i].maxDepth);
+                       yChart.push(-modelService.freediverMdl.currentDiveSession.dives[i].maxDepth);
                     } 
                     break;
         }
