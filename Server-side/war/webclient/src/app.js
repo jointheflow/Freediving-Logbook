@@ -84,6 +84,7 @@ appNeaClient.config(function($provide) {
 /*Configuring ngFacebook*/
 appNeaClient.config( function( $facebookProvider ) {
   $facebookProvider.setAppId(freedivingLogbookConstant.facebook_app_id);
+  $facebookProvider.setPermissions("user_about_me, email, publish_actions");
 });
 
 

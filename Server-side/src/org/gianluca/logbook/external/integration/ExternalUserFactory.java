@@ -62,7 +62,7 @@ public class ExternalUserFactory {
 		//create Facebook client
 		FacebookClient facebookClient = new DefaultFacebookClient(token, LogbookConstant.FACEBOOK_SECRET_APP, Version.VERSION_2_4);
 		FacebookType publishMessageResponse =
-				/*  facebookClient.publish("me/feed", FacebookType.class,
+		/*		facebookClient.publish("me/feed", FacebookType.class,
 				    Parameter.with("message", "RestFB test"));*/
 		
 		/*facebookClient.publish("me/feed", FacebookType.class,
@@ -71,8 +71,8 @@ public class ExternalUserFactory {
 			    //Parameter.with("caption", msg)
 			    Parameter.with("description", msg)
 			    );*/
-				facebookClient.publish("me/freedivinglogbook:complete", FacebookType.class,
-					    Parameter.with("dive_session", "http://samples.ogp.me/200248120322899")  
+			facebookClient.publish("me/org_appnea:complete", FacebookType.class,
+					    Parameter.with("dive_session", "https://app-nea-it.appspot.com/webclient/published_dive_session/sample_dive_session.html")  
 					    );
 
 				System.out.println("Published message ID: " + publishMessageResponse.getId());
