@@ -1,6 +1,10 @@
 package org.gianluca.logbook.external.integration;
 
+import java.util.logging.Logger;
+
+import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
 import org.gianluca.logbook.helper.LogbookConstant;
+import org.mortbay.log.Log;
 
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
@@ -11,6 +15,7 @@ import com.restfb.types.User;
 
 /*Creates a user accessing specific external platform, using OAuth token*/
 public class ExternalUserFactory {
+	private static final Logger log = Logger.getLogger(ExternalUserFactory.class.getName());
 	public static ExternalUser createExternalUser(String token, int platform) throws PlatformNotManagedException {
 		ExternalUser extUser = null;
 		switch (platform) {
@@ -76,5 +81,21 @@ public class ExternalUserFactory {
 					    );
 
 				System.out.println("Published message ID: " + publishMessageResponse.getId());
+	}
+	
+	public static String facebookPublishDiveSession(String token, String link) throws PlatformNotManagedException {
+		//create Facebook client
+		log.info("Publishing facebook dive session with token:"+token+" and link:"+link);
+		FacebookClient facebookClient = new DefaultFacebookClient(token, LogbookConstant.FACEBOOK_SECRET_APP, Version.VERSION_2_4);
+		String fbConnection = "me/"+LogbookConstant.FACEBOOK_APP_NAMESPACE+":complete";
+		log.info("publishing to the fbconnection:"+fbConnection);
+		FacebookType publishMessageResponse =
+			facebookClient.publish(fbConnection, FacebookType.class,
+					    Parameter.with("dive_session", link)
+					    );
+
+		System.out.println("Published message ID: " + publishMessageResponse.getId());
+		log.info("Published facebook dive session with token:"+token+" and link:"+link+" messageID:"+publishMessageResponse.getId());
+		return publishMessageResponse.getId();
 	}
 }

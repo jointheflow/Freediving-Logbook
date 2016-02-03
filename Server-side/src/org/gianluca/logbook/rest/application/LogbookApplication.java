@@ -35,6 +35,7 @@ public class LogbookApplication extends Application {
         router.attach("/freediver/divesession/dive/add", org.gianluca.logbook.rest.resource.DiveAddResource.class);
         router.attach("/freediver/divesession/dive/update", org.gianluca.logbook.rest.resource.DiveUpdateResource.class);
         router.attach("/freediver/divesession/dive/remove", org.gianluca.logbook.rest.resource.DiveRemoveResource.class);
+        router.attach("/freediver/divesession/publish", org.gianluca.logbook.rest.resource.FacebookPublishResource.class);
        
         
      // Add a CORS filter to allow cross-domain requests

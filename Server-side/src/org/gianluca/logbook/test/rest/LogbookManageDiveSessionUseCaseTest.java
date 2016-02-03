@@ -66,6 +66,7 @@ public class LogbookManageDiveSessionUseCaseTest {
 	private String diveSessionAddRequest =LogbookConstant.HOST_NAME+"/app/freediver/divesession/add";
 	private String diveSessionUpdateRequest =LogbookConstant.HOST_NAME+"/app/freediver/divesession/update";
 	private String diveSessionRemoveRequest =LogbookConstant.HOST_NAME+"/app/freediver/divesession/remove";
+	private String diveSessionPublishRequest =LogbookConstant.HOST_NAME+"/app/freediver/divesession/publish";
 	
 	@Before
 	/*Executing login will create a user*/
@@ -1919,18 +1920,18 @@ public class LogbookManageDiveSessionUseCaseTest {
 	}
 	
 	@Test
-	public void removeDiveSession() {
+	public void publishDiveSession() {
 		try {
 			
-			System.out.println("-----Start removeDiveSession()---------");		
+			System.out.println("-----Start publishDiveSession()---------");		
 			
 			Client providerClient = new Client(Protocol.HTTP);
-			Request providerRequest = new Request(Method.POST, diveSessionRemoveRequest);
+			Request providerRequest = new Request(Method.POST, diveSessionPublishRequest);
 			//create a post entity for Representation
 			Form fParam_prov = new Form();
 	
 			providerClient = new Client(Protocol.HTTP);
-			providerRequest = new Request(Method.POST, diveSessionRemoveRequest);
+			providerRequest = new Request(Method.POST, diveSessionPublishRequest);
 			//create a post entity for Representation
 			fParam_prov = new Form();
 			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
@@ -1945,7 +1946,7 @@ public class LogbookManageDiveSessionUseCaseTest {
 			JSONObject jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
 			System.out.println(jsonobj_prov.toString());
 			
-			assertTrue(jsonobj_prov.get("message").equals("Dive session removed"));
+			assertTrue(jsonobj_prov.get("message").toString().startsWith("Dive session published"));
 			assertTrue(jsonobj_prov.get("result").equals("OK"));
 			
 			assertTrue(providerResponse.getStatus().getCode()==Status.SUCCESS_OK.getCode());
@@ -1962,7 +1963,7 @@ public class LogbookManageDiveSessionUseCaseTest {
 			fail();
 		}
 		
-		System.out.println("-----End RemoveDiveSession()---------");
+		System.out.println("-----End publishDiveSession()---------");
 	}	
 
 	@Test
@@ -2245,6 +2246,53 @@ public class LogbookManageDiveSessionUseCaseTest {
 		}
 		
 		System.out.println("-----End removeDiveSessionWrongSession()---------");
+	}
+
+	@Test
+	public void removeDiveSession() {
+		try {
+			
+			System.out.println("-----Start removeDiveSession()---------");		
+			
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, diveSessionRemoveRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+	
+			providerClient = new Client(Protocol.HTTP);
+			providerRequest = new Request(Method.POST, diveSessionRemoveRequest);
+			//create a post entity for Representation
+			fParam_prov = new Form();
+			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("divesession_id", sessionId);
+			
+			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			
+		
+			JSONObject jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			System.out.println(jsonobj_prov.toString());
+			
+			assertTrue(jsonobj_prov.get("message").equals("Dive session removed"));
+			assertTrue(jsonobj_prov.get("result").equals("OK"));
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.SUCCESS_OK.getCode());
+			
+	
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+		
+		System.out.println("-----End RemoveDiveSession()---------");
 	}	
 
 }

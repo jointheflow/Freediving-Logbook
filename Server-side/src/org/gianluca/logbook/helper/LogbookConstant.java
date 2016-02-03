@@ -3,9 +3,9 @@ package org.gianluca.logbook.helper;
 public class LogbookConstant {
 	/*start values for test*/
 	public final static String HOST_NAME="http://localhost:8888";
-	//public final static String HOST_NAME ="http://localhost:8888";
+	//public final static String HOST_NAME ="https://app-nea-it.appspot.com";
 	//get new toke from FB https://developers.facebook.com/tools/explorer
-	public final static String FACEBOOK_ACCESSS_TOKEN="CAAB4GhgAGN0BADSBIBcnlnjSmICPu3GkZBKlTNZBKC2fRkxD4T4KqsyrqhoIkqZAqG5IrWQtYPlzkdIDrhHlqccZAhYYh2Uv6TZCZBenR4h4adGni707JAQ4gCji3ya0wGZB34q0RSaiuERHVBtrQ5dpG1msDCYfvpPmBQzU7DhTKqjM0mChl437OUlXi2HzrBAcCgSUZBAYoAkSBbG75XQdHTw2MqVeXJMZD";
+	public final static String FACEBOOK_ACCESSS_TOKEN="CAACVrSR6h0ABANugZAV65B3RShPZAq9ksL8ZBndMZAkInZAReKqHfO0f3VIr1M3krwWWj4spyOdeHNNzZCosF6iyEr7b47Www0YZBjHBmo6QcXRIUlVre7EwKR4taUgwwrRJdSzv9qpdNVc5T4iIcqQXQnNwEUgYlfQT45X7dWUMQIfKp1dZAMomTFkLZA74aZBWO8W0SVF5WsplsOyCyKMkXOFacFfT7wAoYZD";
 	/*end values for test*/
 	
 	public static final String SW_VERSION="0.0.0 (grouperino)";
@@ -37,6 +37,13 @@ public class LogbookConstant {
 	public static final double KILOGRAM_AS_POUND = 2.2046;
 	public static final String DATE_FORMAT = "dd-MM-yyyy";
 	
+	//facebook sample publication URL
+	public static final String FACEBOOK_SAMPLE_PUB_URL="https://app-nea-it.appspot.com/webclient/published_dive_session/sample_dive_session_test.html";
+	
+	//facebook real publication URL
+	public static final String FACEBOOK_PUB_URL="";
+	//facebook app namespace
+	public static final String FACEBOOK_APP_NAMESPACE="org_test_appnea";
 	
 	
 }

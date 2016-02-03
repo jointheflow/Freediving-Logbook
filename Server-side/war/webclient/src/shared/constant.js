@@ -3,7 +3,7 @@ var freedivingLogbookConstant = freedivingLogbookConstant || {
 	applicationClientVersion: '0.0.0 (grouperino)',
 	applicationServerVersion: '0.0.0 (grouperino)',
 
-	apiHostName: 'http://localhost:8888',
+	apiHostName: 'https://app-nea-it.appspot.com',
 	apiFreediverLoginPath:'/app/freediver/login',
 	apiFreediverRemovePath:'/app/freediver/remove',
 	apiDiveSessionGet:'/app/freediver/divesession/get',

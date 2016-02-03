@@ -556,6 +556,37 @@ public class LogbookDAO {
 	     return ds;
 	}
 	
+	/*Get lazy dive session by the session key passed as parameter. No dives associated*/
+	public static DiveSession getDiveSessionLazy(String diveSessionId) throws DiveSessionIdException{
+		DiveSession ds = null;
+		
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Transaction tx = datastore.beginTransaction();
+		
+		try {
+			//get DiveSession
+			Entity e_divesession = datastore.get(KeyFactory.stringToKey(diveSessionId));
+			ds = LogbookEntityFactory.createDiveSessionFromEntity(e_divesession);
+				
+			tx.commit();
+			
+		} catch (EntityNotFoundException e) {
+			log.info(e.getMessage());
+			throw new DiveSessionIdException("Dive session id not found");
+			
+		} catch (IllegalArgumentException e){
+			log.info(e.getMessage());
+			throw new DiveSessionIdException("Wrong dive session id: "+diveSessionId);
+		}finally {
+		    if (tx.isActive()) {
+		        tx.rollback();
+		    }
+		}
+		
+	     return ds;
+	}
+	
+	
 	/*build a freediver key basing on external id and external platform id*/
 	public static String buildFreediverKey(String externalId, int externalPlatformId){
 		switch (externalPlatformId) {
