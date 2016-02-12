@@ -7,6 +7,8 @@
 	  <property name="client_src" location="war/webclient/src"/>
 	  <property name="appnea_server_TEST_url" value="HOST_NAME=&quot;http://localhost:8888&quot;"/>
 	  <property name="appnea_server_PRODUCTION_url" value="HOST_NAME=&quot;https://app-nea-it.appspot.com&quot;"/>
+	  <property name="appnea_client_TEST_url" value="http://localhost:8888"/>
+	  <property name="appnea_client_PRODUCTION_url" value="https://app-nea-it.appspot.com"/>
 	  <property name="facebook_app_TEST_id" value="164570873890624"/>
 	  <property name="facebook_app_PRODUCTION_id" value="132053467142365"/>
 	  <property name="facebook_app_secret_TEST" value="a8b3d5041ff969e27df85b2f3027653b"/>
@@ -23,7 +25,7 @@
 		<replace file="${server_src}/org/gianluca/logbook/helper/LogbookConstant.java" token="${facebook_app_namespace_PRODUCTION}" value="${facebook_app_namespace_TEST}"/>
 		<replace file="${server_src}/org/gianluca/logbook/helper/LogbookConstant.java" token="${facebook_sample_url_PRODUCTION}" value="${facebook_sample_url_TEST}"/>
 		<replace file="${server_src}/org/gianluca/logbook/helper/LogbookConstant.java" token="${facebook_app_secret_PRODUCTION}" value="${facebook_app_secret_TEST}"/>
-		<replace file="${client_src}/shared/constant.js" token="${appnea_server_PRODUCTION_url}" value="${appnea_server_TEST_url}"/>
+		<replace file="${client_src}/shared/constant.js" token="${appnea_client_PRODUCTION_url}" value="${appnea_client_TEST_url}"/>
 		<replace file="${client_src}/shared/constant.js" token="${facebook_app_PRODUCTION_id}" value="${facebook_app_TEST_id}"/>
 	</target>
 	
@@ -32,7 +34,7 @@
 		<replace file="${server_src}/org/gianluca/logbook/helper/LogbookConstant.java" token="${facebook_app_namespace_TEST}" value="${facebook_app_namespace_PRODUCTION}"/>
 		<replace file="${server_src}/org/gianluca/logbook/helper/LogbookConstant.java" token="${facebook_sample_url_TEST}" value="${facebook_sample_url_PRODUCTION}"/>
 		<replace file="${server_src}/org/gianluca/logbook/helper/LogbookConstant.java" token="${facebook_app_secret_TEST}" value="${facebook_app_secret_PRODUCTION}" />
-		<replace file="${client_src}/shared/constant.js" token="${appnea_server_TEST_url}" value="${appnea_server_PRODUCTION_url}"/>
+		<replace file="${client_src}/shared/constant.js" token="${appnea_client_TEST_url}" value="${appnea_client_PRODUCTION_url}"/>
 		<replace file="${client_src}/shared/constant.js" token="${facebook_app_TEST_id}" value="${facebook_app_PRODUCTION_id}" />
 	</target>
 	

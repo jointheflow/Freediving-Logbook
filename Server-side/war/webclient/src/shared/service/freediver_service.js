@@ -150,6 +150,36 @@ appNeaClientService.service('freediverService', function ($http, $log) {
          
 	};
     
+    /*facebook publish dive session service*/
+	this.publishDiveSession = function (externalPlatform, externalToken, divesessionId, okCallBack, errorCallBack) {
+		var publishDiveSessionUrl = freedivingLogbookConstant.apiHostName+freedivingLogbookConstant.apiDiveSessionPublish;
+       
+        var dataParam = 'external_platform_id='+externalPlatform+
+                        '&external_token='+externalToken+
+                        '&divesession_id='+divesessionId;
+        $log.info('freediverService.publishDiveSession executing:'+publishDiveSessionUrl);
+        $log.info('Params:'+ dataParam);
+        
+        var publishDiveSessionPromiseResponse = $http({method: 'POST',
+                                                    url: publishDiveSessionUrl,
+                                                    data: dataParam,
+                                                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                                                  });
+        
+        //managing success
+       publishDiveSessionPromiseResponse.success(function(data, status, headers, config) {
+            $log.info(data);
+            okCallBack(data, divesessionId);
+        }); 
+        
+        //managin error
+       publishDiveSessionPromiseResponse.error(function(data, status, headers, config) {
+            $log.info(data);
+            errorCallBack(data);
+        }); 
+         
+	};
+    
     /*get detailed dive session*/
     this.getDetailDiveSession = function (externalPlatform, externalToken, divesessionId, okCallBack, errorCallBack) {
         var getDiveSessionUrl = freedivingLogbookConstant.apiHostName+freedivingLogbookConstant.apiDiveSessionGet +

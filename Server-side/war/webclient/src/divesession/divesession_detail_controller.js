@@ -239,26 +239,40 @@ appNeaClient.controller('diveSessionDetailController',
     });
   }; 
     
-    //execute sharing
+    //execute sharing on facebook
     $scope.shareSession = function() {
-    //TODO
-        $scope.onShareSuccess();
+         //activate dialog spinner
+         $rootScope.showWaitingSpinner();
+         freediverService.publishDiveSession(modelService.freediverMdl.externalPlatformId,
+                                               modelService.freediverMdl.externalToken,
+                                               $scope.divesession.id, 
+                                               $scope.onShareSuccess,
+                                               $scope.onShareError);
+        
     };
     
     
     //managing share success callback
     $scope.onShareSuccess = function (data) {
-            
-            $log.info('dive session shared!');
-            //stop dialog spinner
-            $rootScope.closeWaitingSpinner();
-            //show an action executed message
-            $mdToast.show($mdToast.simple()
-                          .content('Dive session shared on Facebook!')
-                          .position('bottom right')
-                          .hideDelay(2000)
-                         );
+        $log.info('dive session shared!');
+        //stop dialog spinner
+        $rootScope.closeWaitingSpinner();
+        //show an action executed message
+        $mdToast.show($mdToast.simple()
+                      .content('Dive session shared on Facebook!')
+                      .position('bottom right')
+                      .hideDelay(2000)
+                     );
            
+    };
+    
+    //managing share error callback
+    $scope.onShareError = function (data) {
+        $log.info('error during sharing session!');
+        //stop dialog spinner
+        $rootScope.closeWaitingSpinner();
+        var error = new Error(data.errorMessage);
+        throw error;
             
     };
     
@@ -294,6 +308,7 @@ appNeaClient.controller('diveSessionDetailController',
     };
     
     $scope.labels = $scope.populateXChart();
+    $scope.series =['Depth'];
     
     //$scope.series = ['Series A', 'Series B'];
     $scope.data = [$scope.populateYChart()];
