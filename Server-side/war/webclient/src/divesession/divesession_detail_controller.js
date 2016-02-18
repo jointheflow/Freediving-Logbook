@@ -292,7 +292,7 @@ appNeaClient.controller('diveSessionDetailController',
         return xChart;
     };
     
-    $scope.populateYChart = function () {
+    $scope.populateYChartDepth = function () {
         yChart = [];
         switch(modelService.freediverMdl.viewstatus) {
                 case freedivingLogbookConstant.VIEW_NEW:    
@@ -300,19 +300,77 @@ appNeaClient.controller('diveSessionDetailController',
                     
                 case freedivingLogbookConstant.VIEW_UPDATE:
                     for (var i = 0; i < modelService.freediverMdl.currentDiveSession.dives.length; i++){
-                       yChart.push(-modelService.freediverMdl.currentDiveSession.dives[i].maxDepth);
+                       yChart.push(modelService.freediverMdl.currentDiveSession.dives[i].maxDepth);
                     } 
                     break;
         }
         return yChart;
     };
     
-    $scope.labels = $scope.populateXChart();
-    $scope.series =['Depth'];
+     $scope.populateYChartDuration = function () {
+         yChart = [];
+         
+        switch(modelService.freediverMdl.viewstatus) {
+                case freedivingLogbookConstant.VIEW_NEW:    
+                    break;
+                    
+                case freedivingLogbookConstant.VIEW_UPDATE:
+                    for (var i = 0; i < modelService.freediverMdl.currentDiveSession.dives.length; i++){
+                       yChart.push(modelService.freediverMdl.currentDiveSession.dives[i].duration);
+                    } 
+                    break;
+        }
+       
+        return yChart;
+    };
     
-    //$scope.series = ['Series A', 'Series B'];
-    $scope.data = [$scope.populateYChart()];
-        
+    $scope.labels = $scope.populateXChart();
+    
+    $scope.seriesDepth =['Depth'];
+    $scope.seriesDuration =['Duration'];
+   
+   
+    $scope.dataDepth = [$scope.populateYChartDepth()];
+    $scope.dataDepthOption = {datasetFill : false};
+    
+    $scope.dataDuration =[$scope.populateYChartDuration()];
+    $scope.dataDurationOption = {datasetFill : false}; 
+    
+    $scope.myJson = {
+        "type":"mixed",
+            "title":{
+                "text":"Depth vs Duration"
+            },
+            "scale-x":{
+                "labels": $scope.populateXChart()
+            },
+            "scale-y":{
+                "values":"0:100:5",
+                "label": "meters"
+            },
+            "scale-y-2":{
+                "values":"0:300:5",
+                "guide":{
+                    "visible":false
+                }
+            },
+            "series":[
+                {
+                    "values": $scope.populateYChartDepth(),
+                    "type":"line",
+                    "scales":"scale-x,scale-y",
+                    "aspect": "spline",
+                    "text": "Depth chart"
+                    
+                },
+                {
+                    "values":$scope.populateYChartDuration(),
+                    "type":"bar",
+                    "scales":"scale-x,scale-y-2",
+                    "text": "Duration chart"
+                }
+            ]
+    };
     
     /*CHART MANAGEMENT END*/
 });

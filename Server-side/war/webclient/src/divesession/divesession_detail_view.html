@@ -176,15 +176,16 @@
                 </md-list>
             </div>
             
-            <div layout="column" layout-align="center center">
-                <canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels" chart-legend="true" chart-series="series" chart-click="onClick"> 
+            <!--div layout="column" layout-align="center center">
+                <canvas id="depthGraph" class="chart chart-line" chart-data="dataDepth" chart-labels="labels" chart-legend="true" chart-series="seriesDepth" chart-options="dataDepthOption" chart-click="onClick"> 
                 </canvas> 
             </div>
             
              <div layout="column" layout-align="center center">
-                <canvas id="line" class="chart chart-bar" chart-data="data" chart-labels="labels" chart-legend="true" chart-series="series" chart-click="onClick"> 
+                <canvas id="durationGraph" class="chart chart-bar" chart-data="dataDuration" chart-labels="labels" chart-legend="true" chart-series="seriesDuration"  chart-click="onClick"> 
                 </canvas> 
-            </div>
+            </div-->
+            <div layout="column" layout-align="center center" zingchart id="myChart" zc-json="myJson" zc-height=500 zc-width=600></div>
         </md-content>
     </md-tab>
        
