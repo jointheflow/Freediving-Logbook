@@ -150,12 +150,12 @@ DiveSessionMdl.prototype.getMaxDiveDepth = function(unit){
     
     var maxDepth = diveDepth.max();
     if (maxDepth != null) {
-        if (unit == freedivingLogbookConstant.DEEP_METER) return maxDepth + ' meters';
-        if (unit == freedivingLogbookConstant.DEEP_FEET) return maxDepth + ' feet';
-        return 'error value';
+        if (unit == freedivingLogbookConstant.DEEP_METER) return maxDepth;// + ' meters';
+        if (unit == freedivingLogbookConstant.DEEP_FEET) return maxDepth;// + ' feet';
+        return -1;
     
     }else
-        return '-';
+        return 0;
 };
 
 //get dive with max duration
@@ -168,11 +168,12 @@ DiveSessionMdl.prototype.getMaxDiveDuration = function () {
     
     var maxDuration = diveDuration.max();
     if (maxDuration != null) {
-       return (Math.floor(maxDuration / 60)) + '\'' + (maxDuration % 60)+'\'\'';
+       return maxDuration;
+        //return (Math.floor(maxDuration / 60)) + '\'' + (maxDuration % 60)+'\'\'';
         
     
     }else
-        return '-';
+        return -1;
 
 };
 

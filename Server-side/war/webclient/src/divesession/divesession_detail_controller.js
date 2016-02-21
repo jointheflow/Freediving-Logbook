@@ -345,29 +345,36 @@ appNeaClient.controller('diveSessionDetailController',
                 "labels": $scope.populateXChart()
             },
             "scale-y":{
-                "values":"0:100:5",
-                "label": "meters"
+                "values":"0:"+Math.floor($scope.divesession.getMaxDiveDepth(0)+30)+":5",
+                "label": {
+                        "text":"meters"
+                        }
             },
             "scale-y-2":{
-                "values":"0:300:5",
-                "guide":{
-                    "visible":false
-                }
+                "values":"0:"+($scope.divesession.getMaxDiveDuration()+30)+":5",
+                "label": {
+                        "text":"duration"
+                        }
+                //"labels":["1","2","3"],
+                //"show-labels":["A","B", "C", "D"]
+                
+                
             },
             "series":[
                 {
                     "values": $scope.populateYChartDepth(),
                     "type":"line",
                     "scales":"scale-x,scale-y",
-                    "aspect": "spline",
+                    //"aspect": "spline",
                     "text": "Depth chart"
                     
                 },
                 {
                     "values":$scope.populateYChartDuration(),
-                    "type":"bar",
+                    "type":"line",
                     "scales":"scale-x,scale-y-2",
-                    "text": "Duration chart"
+                    //"aspect": "spline",
+                    label: {"text": "Duration chart"}
                 }
             ]
     };
