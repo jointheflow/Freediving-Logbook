@@ -324,6 +324,27 @@ appNeaClient.controller('diveSessionDetailController',
         return yChart;
     };
     
+    $scope.populateBubbleChartSerie = function() {
+      bubbleSeries = [];
+      switch(modelService.freediverMdl.viewstatus) {
+                case freedivingLogbookConstant.VIEW_NEW:    
+                    break;
+                    
+                case freedivingLogbookConstant.VIEW_UPDATE:
+                    for (var i = 0; i < modelService.freediverMdl.currentDiveSession.dives.length; i++){
+                        seriesElement = [];
+                        seriesElement.push(i);
+                        seriesElement.push(modelService.freediverMdl.currentDiveSession.dives[i].maxDepth);
+                        seriesElement.push(modelService.freediverMdl.currentDiveSession.dives[i].duration)
+                        $log.info("Series element "+i+" created:"+seriesElement);
+                        bubbleSeries.push(seriesElement);
+                    } 
+                    break;
+        }
+        
+        return bubbleSeries;
+    };
+    
     $scope.labels = $scope.populateXChart();
     
     $scope.seriesDepth =['Depth'];
@@ -336,7 +357,7 @@ appNeaClient.controller('diveSessionDetailController',
     $scope.dataDuration =[$scope.populateYChartDuration()];
     $scope.dataDurationOption = {datasetFill : false}; 
     
-    $scope.myJson = {
+   /* $scope.myJson = {
         "type":"mixed",
             "title":{
                 "text":"Depth vs Duration"
@@ -345,13 +366,15 @@ appNeaClient.controller('diveSessionDetailController',
                 "labels": $scope.populateXChart()
             },
             "scale-y":{
+                //define max limit adding 30 meters to the y axis
                 "values":"0:"+Math.floor($scope.divesession.getMaxDiveDepth(0)+30)+":5",
                 "label": {
                         "text":"meters"
                         }
             },
             "scale-y-2":{
-                "values":"0:"+($scope.divesession.getMaxDiveDuration()+30)+":5",
+                //define max limit adding 1 minute (60'') to the y axis
+                "values":"0:"+($scope.divesession.getMaxDiveDuration()+60)+":5",
                 "label": {
                         "text":"duration"
                         }
@@ -378,6 +401,42 @@ appNeaClient.controller('diveSessionDetailController',
                 }
             ]
     };
+    */
+    $scope.myJson = {
+            "type":"bubble",
+            "plot":{
+    "value-box":{
+      "text": "%node-size-value",  //Use the %node-size-value token to display bubble size.
+        "font-color":"blue",
+        "font-size":15
+    }
+            },
+            "title":{
+                "text":"Depth vs Duration"
+            },
+            "scale-x":{
+                "labels": $scope.populateXChart()
+            },
+            "scale-y":{
+                //define max limit adding 30 meters to the y axis
+                "values":"0:"+Math.floor($scope.divesession.getMaxDiveDepth(0)+30)+":5",
+                "label": {
+                        "text":"meters"
+                        }
+            },
+            "series":[
+                {
+                    "values": $scope.populateBubbleChartSerie(),
+                    "scaling": "area", 
+                    "scales":"scale-x,scale-y",
+                    //"aspect": "spline",
+                    "text": "Depth chart"
+                    
+                }
+               
+            ]
+    };
+    
     
     /*CHART MANAGEMENT END*/
 });
