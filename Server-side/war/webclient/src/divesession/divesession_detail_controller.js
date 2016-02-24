@@ -316,7 +316,7 @@ appNeaClient.controller('diveSessionDetailController',
                     
                 case freedivingLogbookConstant.VIEW_UPDATE:
                     for (var i = 0; i < modelService.freediverMdl.currentDiveSession.dives.length; i++){
-                       yChart.push(modelService.freediverMdl.currentDiveSession.dives[i].duration);
+                       yChart.push(modelService.freediverMdl.currentDiveSession.dives[i].getDuration());
                     } 
                     break;
         }
@@ -344,6 +344,18 @@ appNeaClient.controller('diveSessionDetailController',
         
         return bubbleSeries;
     };
+    
+    $scope.getTimeHHMM = function (diveTime) {
+        if (diveTime != null) {
+            var HH = String(Math.floor(diveTime / 60));
+            var MM = String(diveTime % 60);
+            if (HH.length<2) HH = '0'+HH;
+            if (MM.length<2) MM = '0'+MM;
+            return HH + ':' + MM;
+
+        }else return '00:00';
+        
+    };   
     
     $scope.labels = $scope.populateXChart();
     
@@ -406,9 +418,9 @@ appNeaClient.controller('diveSessionDetailController',
             "type":"bubble",
             "plot":{
     "value-box":{
-      "text": "%node-size-value",  //Use the %node-size-value token to display bubble size.
+      "text": "%data-timeHHMM",  //Use the %node-size-value token to display bubble size.
         "font-color":"blue",
-        "font-size":15
+        "font-size":10
     }
             },
             "title":{
@@ -427,8 +439,10 @@ appNeaClient.controller('diveSessionDetailController',
             "series":[
                 {
                     "values": $scope.populateBubbleChartSerie(),
+                    "data-timeHHMM": $scope.populateYChartDuration(),
                     "scaling": "area", 
                     "scales":"scale-x,scale-y",
+                    "size-factor": 0.25,
                     //"aspect": "spline",
                     "text": "Depth chart"
                     
@@ -436,6 +450,8 @@ appNeaClient.controller('diveSessionDetailController',
                
             ]
     };
+    
+    
     
     
     /*CHART MANAGEMENT END*/
