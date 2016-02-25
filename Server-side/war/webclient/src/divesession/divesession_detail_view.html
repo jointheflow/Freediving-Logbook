@@ -162,7 +162,8 @@
         
         <!-- ************************STATISTICS ********************************** -->
     <md-tab label="Statistics">
-        <md-content layout-margin>
+        <!--show only if there are dives-->
+        <md-content ng-show="divesession.dives.length > 0" layout-margin>
             
             <div layout="column" layout-align="center center"> 
                 <zingchart style="display:block" id="myChart" zc-json="myJson" zc-height="400" zc-width="100%"></zingchart>

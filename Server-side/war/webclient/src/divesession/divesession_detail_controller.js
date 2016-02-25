@@ -414,43 +414,76 @@ appNeaClient.controller('diveSessionDetailController',
             ]
     };
     */
-    $scope.myJson = {
-            "type":"bubble",
-            "plot":{
-    "value-box":{
-      "text": "%data-timeHHMM",  //Use the %node-size-value token to display bubble size.
-        "font-color":"blue",
-        "font-size":10
-    }
-            },
-            "title":{
-                "text":"Depth vs Duration"
-            },
-            "scale-x":{
-                "labels": $scope.populateXChart()
-            },
-            "scale-y":{
-                //define max limit adding 30 meters to the y axis
-                "values":"0:"+Math.floor($scope.divesession.getMaxDiveDepth(0)+30)+":5",
-                "label": {
-                        "text":"meters"
-                        }
-            },
-            "series":[
-                {
-                    "values": $scope.populateBubbleChartSerie(),
-                    "data-timeHHMM": $scope.populateYChartDuration(),
-                    "scaling": "area", 
-                    "scales":"scale-x,scale-y",
-                    "size-factor": 0.25,
-                    //"aspect": "spline",
-                    "text": "Depth chart"
-                    
-                }
-               
-            ]
-    };
     
+    if (modelService.freediverMdl.currentDiveSession.dives.length > 0) {
+        $scope.myJson = {
+                "type":"bubble",
+
+                "plot":{
+                    "value-box":{
+                        "text": "%data-timeHHMM",  //Use the %node-size-value token to display bubble size.
+                        "font-color":"white",
+                        "font-size":10
+                    },
+                    "tooltip":{
+                        "text":"%v meters "
+                    },
+                    "marker":{
+                        "rules":[
+                            {"rule":"%v < 10",
+                             "background-color":"#ccd8ff"
+                            },
+                             {"rule":"%v >= 10 && %v < 20",
+                             "background-color":"#668aff"
+                            },
+                            {"rule":"%v >= 20 && %v < 30",
+                             "background-color":"#003cff"
+                            },
+                             {"rule":"%v >= 30 && %v < 40",
+                             "background-color":"#002ab3"
+                            },
+                             {"rule":"%v >= 40 && %v < 60",
+                             "background-color":"#001866"
+                            },
+                            {"rule":"%v >= 60",
+                             "background-color":"#00061a"
+                            }
+                        ]
+                    }
+
+                },
+                "title":{
+                    "text":"Depth vs Duration"
+                },
+                "scale-x":{
+                    "labels": $scope.populateXChart()
+                },
+                "scale-y":{
+                    //define max limit adding 30 meters to the y axis
+                    "values":"0:"+Math.floor($scope.divesession.getMaxDiveDepth(0)+30)+":5",
+                    "label": {
+                            "text":"meters"
+                            }
+                },
+                "series":[
+                    {
+                        "values": $scope.populateBubbleChartSerie(),
+                        "data-timeHHMM": $scope.populateYChartDuration(),
+                        "scaling": "radius", 
+                        "scales":"scale-x,scale-y",
+                        "size-factor": 0.25,
+                        //"aspect": "spline",
+                        "text": "Depth chart"
+
+
+                    }
+
+                ]
+        };
+    }else
+        {$scope.myJson=null;
+            
+        };
     
     
     

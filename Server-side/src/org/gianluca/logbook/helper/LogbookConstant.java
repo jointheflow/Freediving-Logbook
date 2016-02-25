@@ -2,7 +2,7 @@ package org.gianluca.logbook.helper;
 
 public class LogbookConstant {
 	/*start values for test*/
-	public final static String HOST_NAME="http://localhost:8888";
+	public final static String HOST_NAME="https://app-nea-it.appspot.com";
 	//public final static String HOST_NAME ="https://app-nea-it.appspot.com";
 	//get new toke from FB https://developers.facebook.com/tools/explorer
 	public final static String FACEBOOK_ACCESSS_TOKEN="CAACVrSR6h0ABANugZAV65B3RShPZAq9ksL8ZBndMZAkInZAReKqHfO0f3VIr1M3krwWWj4spyOdeHNNzZCosF6iyEr7b47Www0YZBjHBmo6QcXRIUlVre7EwKR4taUgwwrRJdSzv9qpdNVc5T4iIcqQXQnNwEUgYlfQT45X7dWUMQIfKp1dZAMomTFkLZA74aZBWO8W0SVF5WsplsOyCyKMkXOFacFfT7wAoYZD";
@@ -19,7 +19,7 @@ public class LogbookConstant {
 	public static final String FREEDIVER_STATUS_OLD="OLD";
 	
 	//Facebook secret app identifier
-	public static final String FACEBOOK_SECRET_APP="a8b3d5041ff969e27df85b2f3027653b";
+	public static final String FACEBOOK_SECRET_APP="9112e450484d1f40ab554bec6ff96c30";
 	
 	//Settings constants
 	public static final int TEMPERATURE_CELSIUS=0;
@@ -38,12 +38,12 @@ public class LogbookConstant {
 	public static final String DATE_FORMAT = "dd-MM-yyyy";
 	
 	//facebook sample publication URL
-	public static final String FACEBOOK_SAMPLE_PUB_URL="https://app-nea-it.appspot.com/webclient/published_dive_session/sample_dive_session_test.html";
+	public static final String FACEBOOK_SAMPLE_PUB_URL="https://app-nea-it.appspot.com/webclient/published_dive_session/sample_dive_session.html";
 	
 	//facebook real publication URL
 	public static final String FACEBOOK_PUB_URL="";
 	//facebook app namespace
-	public static final String FACEBOOK_APP_NAMESPACE="org_test_appnea";
+	public static final String FACEBOOK_APP_NAMESPACE="org_appnea";
 	
 	
 }
