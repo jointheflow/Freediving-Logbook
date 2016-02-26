@@ -276,40 +276,11 @@ appNeaClient.controller('diveSessionDetailController',
             
     };
     
-    /*CHART MANAGEMENT START*/
-    $scope.populateXChart = function () {
-        xChart = []; 
-        switch(modelService.freediverMdl.viewstatus) {
-                case freedivingLogbookConstant.VIEW_NEW:    
-                    break;
-                    
-                case freedivingLogbookConstant.VIEW_UPDATE:
-                    for (var i = 0; i < modelService.freediverMdl.currentDiveSession.dives.length; i++){
-                        xChart.push(modelService.freediverMdl.currentDiveSession.dives[i].getTimeHHMM());
-                    }
-                break;
-        }
-        return xChart;
-    };
-    
-    $scope.populateYChartDepth = function () {
-        yChart = [];
-        switch(modelService.freediverMdl.viewstatus) {
-                case freedivingLogbookConstant.VIEW_NEW:    
-                    break;
-                    
-                case freedivingLogbookConstant.VIEW_UPDATE:
-                    for (var i = 0; i < modelService.freediverMdl.currentDiveSession.dives.length; i++){
-                       yChart.push(modelService.freediverMdl.currentDiveSession.dives[i].maxDepth);
-                    } 
-                    break;
-        }
-        return yChart;
-    };
-    
-     $scope.populateYChartDuration = function () {
-         yChart = [];
-         
+    /******ZING CHART MANAGEMENT START******/
+   
+    /*Populate an array of duration in the following form [d1, d2, d3....]*/
+    $scope.populateDurationArray = function () {
+        yChart = []; 
         switch(modelService.freediverMdl.viewstatus) {
                 case freedivingLogbookConstant.VIEW_NEW:    
                     break;
@@ -320,11 +291,11 @@ appNeaClient.controller('diveSessionDetailController',
                     } 
                     break;
         }
-       
         return yChart;
     };
     
-    $scope.populateBubbleChartSerie = function() {
+    /*populate a series of the following element [[i, depth_i, duration_i], [y, depth_y, duraion_y]...]*/
+    $scope.populateDepthAndDurationBubbleChartSerie = function() {
       bubbleSeries = [];
       switch(modelService.freediverMdl.viewstatus) {
                 case freedivingLogbookConstant.VIEW_NEW:    
@@ -344,90 +315,38 @@ appNeaClient.controller('diveSessionDetailController',
         
         return bubbleSeries;
     };
-    
-    $scope.getTimeHHMM = function (diveTime) {
-        if (diveTime != null) {
-            var HH = String(Math.floor(diveTime / 60));
-            var MM = String(diveTime % 60);
-            if (HH.length<2) HH = '0'+HH;
-            if (MM.length<2) MM = '0'+MM;
-            return HH + ':' + MM;
-
-        }else return '00:00';
-        
-    };   
-    
-    $scope.labels = $scope.populateXChart();
-    
-    $scope.seriesDepth =['Depth'];
-    $scope.seriesDuration =['Duration'];
-   
-   
-    $scope.dataDepth = [$scope.populateYChartDepth()];
-    $scope.dataDepthOption = {datasetFill : false};
-    
-    $scope.dataDuration =[$scope.populateYChartDuration()];
-    $scope.dataDurationOption = {datasetFill : false}; 
-    
-   /* $scope.myJson = {
-        "type":"mixed",
-            "title":{
-                "text":"Depth vs Duration"
-            },
-            "scale-x":{
-                "labels": $scope.populateXChart()
-            },
-            "scale-y":{
-                //define max limit adding 30 meters to the y axis
-                "values":"0:"+Math.floor($scope.divesession.getMaxDiveDepth(0)+30)+":5",
-                "label": {
-                        "text":"meters"
-                        }
-            },
-            "scale-y-2":{
-                //define max limit adding 1 minute (60'') to the y axis
-                "values":"0:"+($scope.divesession.getMaxDiveDuration()+60)+":5",
-                "label": {
-                        "text":"duration"
-                        }
-                //"labels":["1","2","3"],
-                //"show-labels":["A","B", "C", "D"]
-                
-                
-            },
-            "series":[
-                {
-                    "values": $scope.populateYChartDepth(),
-                    "type":"line",
-                    "scales":"scale-x,scale-y",
-                    //"aspect": "spline",
-                    "text": "Depth chart"
+    /*populate label chart (time of dive) for x axis*/
+    $scope.populateLabelXAxisBubbleChart = function() {
+        xAxis= []; 
+        switch(modelService.freediverMdl.viewstatus) {
+                case freedivingLogbookConstant.VIEW_NEW:    
+                    break;
                     
-                },
-                {
-                    "values":$scope.populateYChartDuration(),
-                    "type":"line",
-                    "scales":"scale-x,scale-y-2",
-                    //"aspect": "spline",
-                    label: {"text": "Duration chart"}
-                }
-            ]
+                case freedivingLogbookConstant.VIEW_UPDATE:
+                    for (var i = 0; i < modelService.freediverMdl.currentDiveSession.dives.length; i++){
+                       xAxis.push(modelService.freediverMdl.currentDiveSession.dives[i].getTimeHHMM());
+                    } 
+                    break;
+        }
+        return xAxis;
+        
     };
-    */
+        
     
+    /*loading statistic check if there is a valid JSON object to rendering */  
     if (modelService.freediverMdl.currentDiveSession.dives.length > 0) {
         $scope.myJson = {
                 "type":"bubble",
-
                 "plot":{
                     "value-box":{
-                        "text": "%data-timeHHMM",  //Use the %node-size-value token to display bubble size.
+                        "text": "%data-timeHHMM",  //Use the %data-timeHHMM token to display bubble size (formatted duration).
                         "font-color":"white",
                         "font-size":10
                     },
                     "tooltip":{
                         "text":"%v meters "
                     },
+                    //show different colors for depth
                     "marker":{
                         "rules":[
                             {"rule":"%v < 10",
@@ -450,13 +369,13 @@ appNeaClient.controller('diveSessionDetailController',
                             }
                         ]
                     }
-
                 },
                 "title":{
-                    "text":"Depth vs Duration"
+                    "text":"Depth vs Duration",
+                    "font-size":12
                 },
                 "scale-x":{
-                    "labels": $scope.populateXChart()
+                    "labels": $scope.populateLabelXAxisBubbleChart()
                 },
                 "scale-y":{
                     //define max limit adding 30 meters to the y axis
@@ -467,26 +386,20 @@ appNeaClient.controller('diveSessionDetailController',
                 },
                 "series":[
                     {
-                        "values": $scope.populateBubbleChartSerie(),
-                        "data-timeHHMM": $scope.populateYChartDuration(),
+                        "values": $scope.populateDepthAndDurationBubbleChartSerie(),
+                        "data-timeHHMM": $scope.populateDurationArray(),
                         "scaling": "radius", 
                         "scales":"scale-x,scale-y",
                         "size-factor": 0.25,
                         //"aspect": "spline",
                         "text": "Depth chart"
-
-
                     }
 
                 ]
         };
     }else
-        {$scope.myJson=null;
-            
+        {$scope.myJson=null;   
         };
-    
-    
-    
-    /*CHART MANAGEMENT END*/
+    /********ZING CHART MANAGEMENT END*********/
 });
 	

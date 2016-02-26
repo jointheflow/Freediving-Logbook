@@ -169,7 +169,7 @@
                 <zingchart style="display:block" id="myChart" zc-json="myJson" zc-height="400" zc-width="100%"></zingchart>
             </div>
             
-            <!--div layout="column" layout-align="center center">
+            <div layout="column" layout-align="center center">
                 <md-list>
                 <p><label>max depth = <i>{{divesession.getMaxDiveDepth(0)}}</i></label></p>
                 <p><label>max duration = <i>{{divesession.getMaxDiveDuration()}}</i></label></p>
@@ -180,17 +180,7 @@
                 <p><label>avg depth = <i>{{divesession.getAvgDiveDepth(0)}}</i></label></p>
                 <p><label>avg duration = <i>{{divesession.getAvgDiveDuration()}}</i></label></p>
                 </md-list>
-            </div-->
-            
-            <!--div layout="column" layout-align="center center">
-                <canvas id="depthGraph" class="chart chart-line" chart-data="dataDepth" chart-labels="labels" chart-legend="true" chart-series="seriesDepth" chart-options="dataDepthOption" chart-click="onClick"> 
-                </canvas> 
             </div>
-            
-             <div layout="column" layout-align="center center">
-                <canvas id="durationGraph" class="chart chart-bar" chart-data="dataDuration" chart-labels="labels" chart-legend="true" chart-series="seriesDuration"  chart-click="onClick"> 
-                </canvas> 
-            </div-->
             
         </md-content>
     </md-tab>
