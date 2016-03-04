@@ -1,9 +1,9 @@
 package org.gianluca.logbook.test.rest;
 
-import static org.junit.Assert.*;
+
 
 import org.gianluca.logbook.external.integration.ExternalUserFactory;
-import org.gianluca.logbook.external.integration.PlatformNotManagedException;
+
 import org.gianluca.logbook.helper.LogbookConstant;
 import org.junit.After;
 import org.junit.Before;

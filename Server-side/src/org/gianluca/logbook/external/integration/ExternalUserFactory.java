@@ -91,7 +91,8 @@ public class ExternalUserFactory {
 		log.info("publishing to the fbconnection:"+fbConnection);
 		FacebookType publishMessageResponse =
 			facebookClient.publish(fbConnection, FacebookType.class,
-					    Parameter.with("dive_session", link)
+					    Parameter.with("dive_session", link), 
+					    Parameter.with("fb:explicitly_shared", "true")
 					    );
 
 		System.out.println("Published message ID: " + publishMessageResponse.getId());
