@@ -48,8 +48,8 @@ appNeaClient.config(['$httpProvider', function ($httpProvider) {
 appNeaClient.config(function($mdThemingProvider) {
   //$mdThemingProvider.theme('appnea') 
   $mdThemingProvider.theme('default')
-    .primaryPalette('yellow')
-    .accentPalette('orange');
+    .primaryPalette('blue')
+    .accentPalette('pink');
   
   //$mdThemingProvider.setDefaultTheme('appnea');
 });

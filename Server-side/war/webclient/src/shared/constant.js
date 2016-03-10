@@ -1,5 +1,5 @@
 var freedivingLogbookConstant = freedivingLogbookConstant || {
-	applicationName: '><)))\xB0> appnea',
+	applicationName: 'appnea',
 	applicationClientVersion: '0.0.0 (grouperino)',
 	applicationServerVersion: '0.0.0 (grouperino)',
 
