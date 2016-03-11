@@ -333,8 +333,8 @@ appNeaClient.controller('diveSessionDetailController',
     };
         
     
-    /*loading statistic check if there is a valid JSON object to rendering */  
-    if (modelService.freediverMdl.currentDiveSession.dives.length > 0) {
+    /*loading statistic graph if there is a valid JSON object to rendering */  
+    if ((modelService.freediverMdl.currentDiveSession != null) && (modelService.freediverMdl.currentDiveSession.dives.length) > 0) {
         $scope.myJson = {
                 "type":"bubble",
                 "plot":{
