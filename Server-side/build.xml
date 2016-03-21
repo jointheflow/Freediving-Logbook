@@ -15,8 +15,8 @@
 	  <property name="facebook_app_secret_PRODUCTION" value="9112e450484d1f40ab554bec6ff96c30"/>
 	  <property name="facebook_app_namespace_TEST" value="org_test_appnea"/>
 	  <property name="facebook_app_namespace_PRODUCTION" value="org_appnea"/>
-	  <property name="facebook_sample_url_TEST" value="https://app-nea-it.appspot.com/webclient/published_dive_session/sample_dive_session_test.html"/>
-	  <property name="facebook_sample_url_PRODUCTION" value="https://app-nea-it.appspot.com/webclient/published_dive_session/sample_dive_session.html"/>
+	  <property name="facebook_sample_url_TEST" value="https://app-nea-it.appspot.com/webclient/published_dive_session_test.html"/>
+	  <property name="facebook_sample_url_PRODUCTION" value="https://app-nea-it.appspot.com/webclient/published_dive_session.html"/>
 	  
 	
  

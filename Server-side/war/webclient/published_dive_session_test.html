@@ -1,0 +1,95 @@
+<html ng-app="appNeaClient">
+    <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# org_test_appnea: http://ogp.me/ns/fb/org_test_appnea#">
+        <!-- search engine indexing -->
+        <title>appnea, a social logbook for freediver </title>
+        <meta property="fb:app_id" content="164570873890624" />
+        <meta property="og:title" content="Sample Dive Session" />
+        <meta property="og:type" content="org_test_appnea:dive_session" />
+        <meta property="og:description" content="Sample Dive Session with a dive of 100 meter"/>
+        
+        <meta name="description" content="appnea, the social logbook for freediver. Store your performance and share them with your friends" />
+        <meta name="keywords" content="apnea, freediving, freediver, aida, apnea academy, ssi, immersioni, depth, pescasub, subacquea, profondità, logbook, registro, freediver logbook, freediving logbook, performance, prestazioni, aida logbook, aida registro, logbook freediver, logbook apnea, apnea logbook, apnea logbook">
+        <meta name="author" content="Gianluca Ragnoni" />
+        <meta name="copyright" content="Gianluca Ragnoni" />
+        <meta http-equiv="Reply-to" content="gianluca.ragnoni@gmail.com" />
+        <meta http-equiv="content-language" content="EN,IT" />
+        <meta http-equiv="Content-Type" content="text/html; iso-8859-1" />
+        <meta charset="iso-8859-1" />
+        <meta name="robots" content="INDEX,FOLLOW" />
+        <meta name="creation_Date" content="01/05/2016" />
+        <meta name="revisit-after" content="7 days" />
+        <link rel="canonical" href="https://app-nea-it.appspot.com/" />
+        
+        <meta name="viewport" content="width=device-width" content="initial-scale=1" />
+     
+        <!-- app-nea custom css -->
+        <link rel="stylesheet" href="src/shared/custom.css">
+        
+       <!-- Angular Material CSS now available via Google CDN; version 0.11.2 used here -->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+        
+        <!-- material icon -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+       <!-- Angular Material Dependencies -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-route.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-animate.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-aria.min.js"></script>
+
+       
+        
+         <!-- Angular Material Javascript now available via Google CDN; version 0.11.2 used here -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+        
+        
+        <!-- Angular moment-->
+        <script src="assets/libs/moment/moment-with-locales.js"></script>
+        
+        <!--ngFacebook dependecy -->
+        <script src="assets/libs/ng-facebook/ngFacebook.js"></script>
+               
+        <!--Zing chart dependency-->
+        <script src="assets/libs/zing-chart/zingchart.min.js"></script>
+        <script src="assets/libs/zing-chart/zingchart-angularjs.js"></script>
+        
+        <!-- app-nea source code reference -->    
+        <script src="src/app.js"></script> 
+        <script src="src/shared/constant.js"></script>
+        <script src="src/shared/helper.js"></script>
+        <script src="src/shared/service/freediver_service.js"></script>
+        <script src="src/shared/service/model_service.js"></script>
+        <script src="src/shared/model/model.js"></script>
+        <script src="src/divesession/divesession_list_controller.js"></script>
+        <script src="src/divesession/divesession_detail_controller.js"></script>
+        <script src="src/dive/dive_detail_controller.js"></script>
+        <script src="src/sidenav/sidenav_controller.js"></script>
+        <script src="src/shared/controller/root_controller.js"></script>
+        <script src="src/dialogalert/dialogalert_service.js"></script>
+
+    </head>
+
+    <body>
+        <!-- root controller is used to set and define global attributes and functions -->
+        <div layout="row" flex  ng-cloak ng-controller="rootController">
+            <!-- Include a left sidebar --> 
+            <ng-include src="'src/sidenav/sidenav_view.html'" ng-controller="sidenavController"></ng-include>            
+            
+            <!-- view switch depending on path attributes, see app.js for routing.
+            Then ng-view defines a common column layout with top fixed toolbar and scrollable content for every view. Must use layout-fill-->
+            <ng-view layout="column" layout-fill></ng-view>            
+        </div>
+        <div id="fb-root"></div>
+    </body>
+    
+    <!--Google analytics settings-->
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-71882773-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+</html>

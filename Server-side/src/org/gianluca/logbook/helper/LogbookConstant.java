@@ -38,7 +38,7 @@ public class LogbookConstant {
 	public static final String DATE_FORMAT = "dd-MM-yyyy";
 	
 	//facebook sample publication URL
-	public static final String FACEBOOK_SAMPLE_PUB_URL="https://app-nea-it.appspot.com/webclient/published_dive_session/sample_dive_session.html";
+	public static final String FACEBOOK_SAMPLE_PUB_URL="https://app-nea-it.appspot.com/webclient/published_dive_session.html";
 	
 	//facebook real publication URL
 	public static final String FACEBOOK_PUB_URL="";
