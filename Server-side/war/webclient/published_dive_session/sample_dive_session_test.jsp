@@ -1,12 +1,12 @@
+<%@ page language="java" contentType="text/html; charset=US-ASCII"
+    pageEncoding="US-ASCII"%>
 <html>
     <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# org_test_appnea: http://ogp.me/ns/fb/org_test_appnea#">
-        <title>Appnea Sample Dive Session Test</title>
-
-        
+        <title>Appnea - Dive Session Test</title>
         <meta property="fb:app_id" content="164570873890624" />
         <meta property="og:title" content="Sample Dive Session" />
         <meta property="og:type" content="org_test_appnea:dive_session" />
-        <meta property="og:description" content="Sample Dive Session with a dive of 100 meter"/>
+        <meta property="og:description" content="<%=new String("test")%>"/>
 
 
        

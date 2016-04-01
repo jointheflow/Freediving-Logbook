@@ -1,23 +1,27 @@
-<html ng-app="appNeaClient">
+<!--This page uses mixed code ("accrocco") jsp and javascript to generate dynamic result.
+The jsp code is used to rendering meta property in the HEAD for facebook in order to show story preview in the users log.
+The javascript code is used to rendering in the BODY the user depth graph when a user click on the user story from facebook 
+The page can receive the following parameters in query string:
+divesessionID
+location
+maxDepth
+maxDuration-->
+
+<%@ page language="java" contentType="text/html; charset=US-ASCII"
+    pageEncoding="US-ASCII"%>
+
+<html ng-app="appPublishedClient">
     <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# org_test_appnea: http://ogp.me/ns/fb/org_test_appnea#">
-        <!-- search engine indexing -->
+        
         <title>appnea, a social logbook for freediver </title>
         <meta property="fb:app_id" content="164570873890624" />
         <meta property="og:title" content="Sample Dive Session" />
+        <meta property="og:url" content="https://app-nea-it.appspot.com/webclient/published_dive_session_test.jsp" />
         <meta property="og:type" content="org_test_appnea:dive_session" />
-        <meta property="og:description" content="Sample Dive Session with a dive of 100 meter"/>
+        <!--TODO: change value according the parameter-->
+        <meta property="og:description" content="Dive session @${param.location}, max dive depth: ${param.maxDepth}, max dive duration: ${param.maxDuration}" />
+       
         
-        <meta name="description" content="appnea, the social logbook for freediver. Store your performance and share them with your friends" />
-        <meta name="keywords" content="apnea, freediving, freediver, aida, apnea academy, ssi, immersioni, depth, pescasub, subacquea, profondità, logbook, registro, freediver logbook, freediving logbook, performance, prestazioni, aida logbook, aida registro, logbook freediver, logbook apnea, apnea logbook, apnea logbook">
-        <meta name="author" content="Gianluca Ragnoni" />
-        <meta name="copyright" content="Gianluca Ragnoni" />
-        <meta http-equiv="Reply-to" content="gianluca.ragnoni@gmail.com" />
-        <meta http-equiv="content-language" content="EN,IT" />
-        <meta http-equiv="Content-Type" content="text/html; iso-8859-1" />
-        <meta charset="iso-8859-1" />
-        <meta name="robots" content="INDEX,FOLLOW" />
-        <meta name="creation_Date" content="01/05/2016" />
-        <meta name="revisit-after" content="7 days" />
         <link rel="canonical" href="https://app-nea-it.appspot.com/" />
         
         <meta name="viewport" content="width=device-width" content="initial-scale=1" />
@@ -26,12 +30,12 @@
         <link rel="stylesheet" href="src/shared/custom.css">
         
        <!-- Angular Material CSS now available via Google CDN; version 0.11.2 used here -->
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
         
         <!-- material icon -->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-       <!-- Angular Material Dependencies -->
+        <!-- Angular Material Dependencies -->
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-route.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-animate.min.js"></script>
@@ -46,40 +50,35 @@
         <!-- Angular moment-->
         <script src="assets/libs/moment/moment-with-locales.js"></script>
         
-        <!--ngFacebook dependecy -->
+         <!--ngFacebook dependecy -->
         <script src="assets/libs/ng-facebook/ngFacebook.js"></script>
-               
+        
         <!--Zing chart dependency-->
         <script src="assets/libs/zing-chart/zingchart.min.js"></script>
         <script src="assets/libs/zing-chart/zingchart-angularjs.js"></script>
         
         <!-- app-nea source code reference -->    
-        <script src="src/app.js"></script> 
+        <script src="src/appPublishedDiveSession.js"></script> 
         <script src="src/shared/constant.js"></script>
         <script src="src/shared/helper.js"></script>
         <script src="src/shared/service/freediver_service.js"></script>
         <script src="src/shared/service/model_service.js"></script>
         <script src="src/shared/model/model.js"></script>
-        <script src="src/divesession/divesession_list_controller.js"></script>
-        <script src="src/divesession/divesession_detail_controller.js"></script>
-        <script src="src/dive/dive_detail_controller.js"></script>
-        <script src="src/sidenav/sidenav_controller.js"></script>
-        <script src="src/shared/controller/root_controller.js"></script>
-        <script src="src/dialogalert/dialogalert_service.js"></script>
+        <script src="src/fbpublication/fb_publication.js"></script>
 
     </head>
-
-    <body>
-        <!-- root controller is used to set and define global attributes and functions -->
-        <div layout="row" flex  ng-cloak ng-controller="rootController">
-            <!-- Include a left sidebar --> 
-            <ng-include src="'src/sidenav/sidenav_view.html'" ng-controller="sidenavController"></ng-include>            
-            
-            <!-- view switch depending on path attributes, see app.js for routing.
-            Then ng-view defines a common column layout with top fixed toolbar and scrollable content for every view. Must use layout-fill-->
-            <ng-view layout="column" layout-fill></ng-view>            
+    <!--TODO init the divesessionid by parameter during jsp compilation-->  
+    <body ng-controller="publicationFbController" ng-init="divesession_id=${param.divesessionID}" >
+                
+        <div layout="column" flex>
+            <p> test</p>
+            <md-content>
+                <p>Lorem ipsum dolor sit amet, ne quod novum mei. Sea omnium invenire mediocrem at, in lobortis conclusionemque nam. Ne deleniti appetere reprimique pro, inani labitur disputationi te sed. At vix sale omnesque, id pro labitur reformidans accommodare, cum labores honestatis eu. Nec quem lucilius in, eam praesent reformidans no. Sed laudem aliquam ne.</p>
+                <p>Facete delenit argumentum cum at. Pro rebum nostrum contentiones ad. Mel exerci tritani maiorum at, mea te audire phaedrum, mel et nibh aliquam. Malis causae equidem vel eu. Noster melius vis ea, duis alterum oporteat ea sea. Per cu vide munere fierent.
+                </p>
+            </md-content>
         </div>
-        <div id="fb-root"></div>
+                 
     </body>
     
     <!--Google analytics settings-->
