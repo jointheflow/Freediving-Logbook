@@ -4,7 +4,6 @@ package org.gianluca.logbook.rest.application;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Set;
 
 import org.restlet.Application;
 import org.restlet.Restlet;
@@ -32,6 +31,7 @@ public class LogbookApplication extends Application {
         router.attach("/freediver/divesession/update", org.gianluca.logbook.rest.resource.DiveSessionUpdateResource.class);
         router.attach("/freediver/divesession/remove", org.gianluca.logbook.rest.resource.DiveSessionRemoveResource.class);
         router.attach("/freediver/divesession/get", org.gianluca.logbook.rest.resource.DiveSessionGetResource.class);
+        router.attach("/freediver/divesession/published/get", org.gianluca.logbook.rest.resource.PublishedDiveSessionGetResource.class);
         router.attach("/freediver/divesession/dive/add", org.gianluca.logbook.rest.resource.DiveAddResource.class);
         router.attach("/freediver/divesession/dive/update", org.gianluca.logbook.rest.resource.DiveUpdateResource.class);
         router.attach("/freediver/divesession/dive/remove", org.gianluca.logbook.rest.resource.DiveRemoveResource.class);

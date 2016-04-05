@@ -2,10 +2,11 @@
 The jsp code is used to rendering meta property in the HEAD for facebook in order to show story preview in the users log.
 The javascript code is used to rendering in the BODY the user depth graph when a user click on the user story from facebook 
 The page can receive the following parameters in query string:
-divesessionID
-location
-maxDepth
-maxDuration-->
+*****divesessionID
+*****location
+*****maxDepth
+*****maxDuration
+*****userName-->
 
 <%@ page language="java" contentType="text/html; charset=US-ASCII"
     pageEncoding="US-ASCII"%>
@@ -41,17 +42,9 @@ maxDuration-->
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-animate.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-aria.min.js"></script>
 
-       
-        
          <!-- Angular Material Javascript now available via Google CDN; version 0.11.2 used here -->
         <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
         
-        
-        <!-- Angular moment-->
-        <script src="assets/libs/moment/moment-with-locales.js"></script>
-        
-         <!--ngFacebook dependecy -->
-        <script src="assets/libs/ng-facebook/ngFacebook.js"></script>
         
         <!--Zing chart dependency-->
         <script src="assets/libs/zing-chart/zingchart.min.js"></script>
@@ -68,14 +61,47 @@ maxDuration-->
 
     </head>
     <!--TODO init the divesessionid by parameter during jsp compilation-->  
-    <body ng-controller="publicationFbController" ng-init="divesession_id=${param.divesessionID}" >
+    <body ng-controller="publicationFbController" ng-init="divesession_id='${param.divesessionID}'" >
                 
-        <div layout="column" flex>
-            <p> test</p>
-            <md-content>
-                <p>Lorem ipsum dolor sit amet, ne quod novum mei. Sea omnium invenire mediocrem at, in lobortis conclusionemque nam. Ne deleniti appetere reprimique pro, inani labitur disputationi te sed. At vix sale omnesque, id pro labitur reformidans accommodare, cum labores honestatis eu. Nec quem lucilius in, eam praesent reformidans no. Sed laudem aliquam ne.</p>
-                <p>Facete delenit argumentum cum at. Pro rebum nostrum contentiones ad. Mel exerci tritani maiorum at, mea te audire phaedrum, mel et nibh aliquam. Malis causae equidem vel eu. Noster melius vis ea, duis alterum oporteat ea sea. Per cu vide munere fierent.
-                </p>
+        <div layout="column" layout-fill>
+        <!-- toobar -->
+            <md-toolbar>
+                <div class="md-toolbar-tools" layout-align="center end">
+                    <p>{{applicationName}}</p>
+                    <!--fill right space with a blank div -->
+                    <div style="height:48px; width:48px"></div>
+                </div>                    
+            </md-toolbar>
+            <!-- show only if there are dive sessions -->
+            <md-content  layout-margin>
+                <div layout="column" layout-align="center">
+                    <table>
+                        <tr>
+                            <label><b>Freediver</b>: ${param.userName}</label>
+                        </tr>
+                        <tr>
+                            <label><b>Location</b>: ${param.location}</label>
+                        </tr>
+                    </table>
+                            <div layout="column" layout-align="center center"> 
+                                <zingchart style="display:block" id="myChart" zc-json="myJson" zc-height="400" zc-width="100%"></zingchart>
+                            </div>
+                            
+                        <table >
+                            <tr>
+                                <th>Max</th>
+                                <th>Average</th>
+                            </tr>
+                            <tr>    
+                                <td><label>Depth = <i>{{divesession.getMaxDiveDepth(0)}}</i></label></td>
+                                <td><label>Depth = <i>{{divesession.getAvgDiveDepth(0)}}</i></label></td>
+                            </tr> 
+                            <tr>
+                                <td><label>Duration = <i>{{divesession.getMaxDiveDuration()}}</label></td>
+                                <td><label>Duration = <i>{{divesession.getAvgDiveDuration()}}</label></td>
+                            </tr>
+                        </table>
+                </div>
             </md-content>
         </div>
                  

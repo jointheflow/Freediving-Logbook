@@ -28,6 +28,7 @@ public class LogbookDtoFactory {
 	public static int REQUEST_UPDATE =1;
 	public static int REQUEST_REMOVE = 2;
 	public static int REQUEST_GET = 3;
+	public static int REQUEST_GET_PUBLISHED = 4;
 	
 	public static void checkMandatory(String value, String name) throws WrongParameterException {
 		if (value==null) throw new WrongParameterException("Parameter "+name+" missing");
@@ -120,20 +121,22 @@ public class LogbookDtoFactory {
 		DiveInputDto diveInput = new DiveInputDto();
 		//check and set all parameters
 		//basing on the request set ancestor key or id key
-		String externalToken = form.getFirstValue("external_token");
-		checkMandatory(externalToken, "external_token");
-		diveInput.setExternalToken(externalToken);
 		
-		String s_externalPlatformId = form.getFirstValue("external_platform_id");
-		checkMandatory(s_externalPlatformId, "external_platform_id");
-		checkExternalPlatformId(s_externalPlatformId);
-		diveInput.setExternalPlatformId(new Integer(s_externalPlatformId));
+		if (requestType != REQUEST_GET_PUBLISHED) {
+			String externalToken = form.getFirstValue("external_token");
+			checkMandatory(externalToken, "external_token");
+			diveInput.setExternalToken(externalToken);
+			
+			String s_externalPlatformId = form.getFirstValue("external_platform_id");
+			checkMandatory(s_externalPlatformId, "external_platform_id");
+			checkExternalPlatformId(s_externalPlatformId);
+			diveInput.setExternalPlatformId(new Integer(s_externalPlatformId));
+			
+			//check token against external platform
+			ExternalUserFactory.checkExternalToken(externalToken, new Integer(s_externalPlatformId));
+		}	    
 		
-		//check token against external platform
-		ExternalUserFactory.checkExternalToken(externalToken, new Integer(s_externalPlatformId));
-			    
-		
-		if (requestType == REQUEST_ADD || requestType == REQUEST_GET) {
+		if (requestType == REQUEST_ADD || requestType == REQUEST_GET  || requestType == REQUEST_GET_PUBLISHED) {
 			String sessionId = form.getFirstValue("divesession_id");
 		    checkMandatory(sessionId, "divesession_id");
 		    diveInput.setDiveSessionId(sessionId);

@@ -22,6 +22,9 @@ public class DiveSession {
 	private double weightAsPound;
 	private Text note;
 	private DivesOfDiveSession dives;
+	//set if dive session has been published to facebook and is visible to everyone!!
+	//TODO: change default to false
+	private boolean published = true;
 	
 	public DivesOfDiveSession getDives() {
 		return dives;
@@ -106,6 +109,12 @@ public class DiveSession {
 	}
 	public void setNote(Text note) {
 		this.note = note;
+	}
+	public boolean isPublished() {
+		return published;
+	}
+	public void setPublished(boolean published) {
+		this.published = published;
 	}
 	
 	

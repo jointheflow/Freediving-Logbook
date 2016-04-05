@@ -556,6 +556,70 @@ public class LogbookDAO {
 	     return ds;
 	}
 	
+	/*Get complete published dive session by the session key passed as parameter. Returns data 
+	 * ONLY if the dive session exists and has attribute published=true*/
+	public static DiveSession getPublishedDiveSession(String diveSessionId) throws DiveSessionIdException{
+		DiveSession ds = null;
+		List<Dive> dives = null;
+		DivesOfDiveSession dOfSession = null;
+		
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Transaction tx = datastore.beginTransaction();
+		
+		try {
+			//get DiveSession
+			Entity e_divesession = datastore.get(KeyFactory.stringToKey(diveSessionId));
+			ds = LogbookEntityFactory.createDiveSessionFromEntity(e_divesession);
+			//check if dive session has published attribute set to true
+			if (!ds.isPublished()) {
+				log.info("Error: Dive session "+diveSessionId+" is not published");
+				throw new DiveSessionIdException("Dive session "+diveSessionId+" is not published");
+				
+			}
+			//get all dives descend from diveSessionId key ancestor
+			Query q = new Query("Dive").setAncestor(KeyFactory.stringToKey(diveSessionId));//addSort("diveTime",SortDirection.DESCENDING);		
+			PreparedQuery pq = datastore.prepare(q);		
+			
+			if (pq.countEntities(withLimit(100))>0) dives = new ArrayList<Dive>();		
+			
+			for (Entity entity : pq.asIterable()) {
+				Dive d = LogbookEntityFactory.createDiveFromEntity(entity);
+				
+				dives.add(d);
+			     
+			}
+			
+			
+			if (pq.countEntities(withLimit(100))>0)  {
+			
+				dOfSession = new DivesOfDiveSession();
+				dOfSession.setDives(dives);
+				
+			}
+			
+			//if exist set dives
+			ds.setDives(dOfSession);
+				
+			tx.commit();
+			
+		} catch (EntityNotFoundException e) {
+			log.info(e.getMessage());
+			throw new DiveSessionIdException("Dive session id not found");
+			
+		} catch (IllegalArgumentException e){
+			log.info(e.getMessage());
+			throw new DiveSessionIdException("Wrong dive session id: "+diveSessionId);
+		}finally {
+		    if (tx.isActive()) {
+		        tx.rollback();
+		    }
+		}
+		
+	     return ds;
+	}
+	
+	
+	
 	/*Get lazy dive session by the session key passed as parameter. No dives associated*/
 	public static DiveSession getDiveSessionLazy(String diveSessionId) throws DiveSessionIdException{
 		DiveSession ds = null;

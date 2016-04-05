@@ -33,7 +33,7 @@ appNeaClientService.service('modelService', function ($log) {
     };
     
     //update or add divesessions
-    this.addOrUpdateDiveSessionFromData = function (data, _tempUnit, _weightUnit, _depthUnit) {
+    this.addOrUpdateDiveSessionFromData = function (data, _depthUnit, _weightUnit, _tempUnit) {
         //regarding the current model, if divesession exists update else add
         //create an istance of dive session
         ds = new DiveSessionMdl();
@@ -61,9 +61,9 @@ appNeaClientService.service('modelService', function ($log) {
             for (i = 0; i < dives.length; i++) {
                 //dive
                 dive = this.addOrUpdateDiveFromData(dives[i], 
-                                                    this.freediverMdl.tempUnit,
-                                                    this.freediverMdl.weightUnit,
-                                                    this.freediverMdl.depthUnit);
+                                                    _tempUnit,
+                                                    _weightUnit,
+                                                    _depthUnit);
                 ds.addOrUpdateDive(dive);
             } 
         }

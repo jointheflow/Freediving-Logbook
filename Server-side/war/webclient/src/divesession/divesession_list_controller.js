@@ -120,6 +120,9 @@ appNeaClient.controller('diveSessionListController',
                                                     $scope.freediver.tempUnit,
                                                     $scope.freediver.weightUnit,
                                                     $scope.freediver.depthUnit);
+        
+        //modelService.addOrUpdateDiveSessionFromData(data);
+                                                     
         //change location to detail dive session view
         modelService.freediverMdl.diveSessionActiveTabIndex = freedivingLogbookConstant.TAB_DETAIL;
         $location.path('/divesessiondetail');

@@ -210,6 +210,34 @@ appNeaClientService.service('freediverService', function ($http, $log) {
     };
     
     
+     /*get detailed published dive session*/
+    this.getDetailPublishedDiveSession = function (divesessionId, okCallBack, errorCallBack) {
+        var getPublishedDiveSessionUrl = freedivingLogbookConstant.apiHostName+freedivingLogbookConstant.apiPublishedDiveSessionGet +
+						'?'+freedivingLogbookConstant.pNameDiveSessionId+'='+divesessionId;
+        
+		$log.info('freediverService.getDetailPublishedDiveSession executing:'+getPublishedDiveSessionUrl);
+		
+		
+		
+		var getPublishedDiveSessionPromiseResponse = $http({method: 'GET', url: getPublishedDiveSessionUrl}); 
+		
+		
+	    //managing success response
+		getPublishedDiveSessionPromiseResponse.success(function(data, status, headers, config) {
+	    	console.log(data);
+	    	//invoking callback function
+	    	okCallBack(data);
+	    });
+	    
+	    //managing error response
+		getPublishedDiveSessionPromiseResponse.error(function(data, status, headers, config) {
+	    	console.log(data);
+	    	//invoking callback function
+	    	errorCallBack(data);
+	    });
+    };
+    
+    
     /*add a dive*/
     this.addDive = function (divesessionId, externalPlatform, externalToken, deepUnit, tempUnit, weightUnit, diveTime, duration, equipment, weight, temp, deep, neutralBuoyance, note, diveType, okCallBack, errorCallBack) {
         var addDiveUrl = freedivingLogbookConstant.apiHostName+freedivingLogbookConstant.apiDiveAdd;
