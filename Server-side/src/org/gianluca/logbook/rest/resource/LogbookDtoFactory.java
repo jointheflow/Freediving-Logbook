@@ -29,6 +29,7 @@ public class LogbookDtoFactory {
 	public static int REQUEST_REMOVE = 2;
 	public static int REQUEST_GET = 3;
 	public static int REQUEST_GET_PUBLISHED = 4;
+	public static int REQUEST_FB_PUBLISH = 5;
 	
 	public static void checkMandatory(String value, String name) throws WrongParameterException {
 		if (value==null) throw new WrongParameterException("Parameter "+name+" missing");
@@ -280,7 +281,7 @@ public class LogbookDtoFactory {
             diveSessionInputDto.setFreediverId(freediverId);	
         }
         
-        if (requestType == REQUEST_UPDATE || requestType == REQUEST_REMOVE) {
+        if (requestType == REQUEST_UPDATE || requestType == REQUEST_REMOVE || requestType == REQUEST_FB_PUBLISH) {
         	String divesessionId = form.getFirstValue("divesession_id");
             checkMandatory(divesessionId, "divesession_id");
             diveSessionInputDto.setId(divesessionId);       	
@@ -339,15 +340,40 @@ public class LogbookDtoFactory {
 		    String equipment = form.getFirstValue("equipment"); 
 		    diveSessionInputDto.setEquipment(equipment);
 		    
-		    String location = form.getFirstValue("location");
-		    diveSessionInputDto.setLocationDesc(location);
 		    
 		    String meteo = form.getFirstValue("meteo");
 		    diveSessionInputDto.setMeteoDesc(meteo);
 		    
 			String note = form.getFirstValue("note");
 			diveSessionInputDto.setNote(note);
-        }	
+			
+        }		
+        
+        if (requestType == REQUEST_UPDATE || requestType == REQUEST_ADD || requestType == REQUEST_FB_PUBLISH) {
+			String location = form.getFirstValue("location");
+		    diveSessionInputDto.setLocationDesc(location);
+        }
+        
+        //manage parameters necessaries for facebook publication
+        if (requestType == REQUEST_FB_PUBLISH){
+		    
+        	String s_userName = form.getFirstValue("userName");
+			diveSessionInputDto.setUserName(s_userName);
+			
+			String s_maxDepth = form.getFirstValue("maxDepth");
+	        if (s_maxDepth !=null) {
+	        	checkDouble(s_maxDepth, "maxDepth");
+				Double maxDepth = new Double(s_maxDepth);
+				diveSessionInputDto.setMaxDiveDepth(maxDepth);
+	        }
+	        
+	        String s_maxDuration = form.getFirstValue("maxDuration");
+	        diveSessionInputDto.setMaxDiveDuration(s_maxDuration);
+	        		
+			
+			
+			
+		}	
         
 		return diveSessionInputDto;
 	    

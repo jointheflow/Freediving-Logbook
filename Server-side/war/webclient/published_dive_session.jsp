@@ -10,16 +10,16 @@ The page can receive the following parameters in query string:
 
 <%@ page language="java" contentType="text/html; charset=US-ASCII"
     pageEncoding="US-ASCII"%>
-
+<!--init the divesessionid by parameter during jsp compilation-->
 <html ng-app="appPublishedClient" ng-controller="publicationFbController" ng-init="divesession_id='${param.divesessionID}'">
-    <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# org_test_appnea: http://ogp.me/ns/fb/org_test_appnea#">
+    <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# org_appnea: http://ogp.me/ns/fb/org_appnea#">
         
         <title>appnea, a social apnea logbook for freediver </title>
-        <meta property="fb:app_id" content="164570873890624" />
-        <meta property="og:title" content="Sample Dive Session @${param.location}" />
-        <meta property="og:url" content="https://app-nea-it.appspot.com/webclient/published_dive_session_test.jsp?divesessionID=${param.divesessionID}&userName=${param.userName}&location=${param.location}&maxDepth=${param.maxDepth}&maxDuration=${param.maxDuration}" />
-        <meta property="og:type" content="org_test_appnea:dive_session" />
-        <!--change value according the parameter-->
+        <meta property="fb:app_id" content="132053467142365" />
+        <meta property="og:title" content="Dive Session @${param.location}" />
+        <meta property="og:url" content="https://app-nea-it.appspot.com/webclient/published_dive_session.jsp?divesessionID=${param.divesessionID}&userName=${param.userName}&location=${param.location}&maxDepth=${param.maxDepth}&maxDuration=${param.maxDuration}" />
+        <meta property="og:type" content="org_appnea:dive_session" />
+        <!--change value according the query parameter-->
         <meta property="og:description" content="max dive depth: ${param.maxDepth}, max dive duration: ${param.maxDuration}" />
        
         
@@ -60,7 +60,7 @@ The page can receive the following parameters in query string:
         <script src="src/fbpublication/fb_publication.js"></script>
 
     </head>
-    <!--TODO init the divesessionid by parameter during jsp compilation-->  
+      
     <body>
                 
         <div layout="column" layout-fill>

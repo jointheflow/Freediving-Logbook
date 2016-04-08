@@ -15,6 +15,9 @@ public class DiveSessionInputDto extends LogbookDto {
 	public String equipment;
 	public Double weight;
 	public String note;
+	public String userName;
+	public Double maxDiveDepth;
+	public String maxDiveDuration;
 	
 	
 	public String getFreediverId() {
@@ -91,6 +94,24 @@ public class DiveSessionInputDto extends LogbookDto {
 	}
 	public void setNote(String note) {
 		this.note = note;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public Double getMaxDiveDepth() {
+		return maxDiveDepth;
+	}
+	public void setMaxDiveDepth(Double maxDiveDepth) {
+		this.maxDiveDepth = maxDiveDepth;
+	}
+	public String getMaxDiveDuration() {
+		return maxDiveDuration;
+	}
+	public void setMaxDiveDuration(String maxDiveDuration) {
+		this.maxDiveDuration = maxDiveDuration;
 	}
 	
 	

@@ -32,7 +32,7 @@ appPublishedClient.controller('publicationFbController',  function ($scope, mode
         $scope.divesession.dives = $filter('orderBy')(modelService.freediverMdl.currentDiveSession.dives, 'diveTime', false);
         $log.info("model instantiated....creating zing chart");
         $timeout(
-                $scope.createZingChart, 1000);
+                $scope.createZingChart, 3000);
         
 		
 	}; 

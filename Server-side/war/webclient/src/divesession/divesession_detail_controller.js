@@ -243,9 +243,14 @@ appNeaClient.controller('diveSessionDetailController',
     $scope.shareSession = function() {
          //activate dialog spinner
          $rootScope.showWaitingSpinner();
+         //sends all parameters necessaies for facebook preview in the user timeline
          freediverService.publishDiveSession(modelService.freediverMdl.externalPlatformId,
                                                modelService.freediverMdl.externalToken,
                                                $scope.divesession.id, 
+                                               modelService.freediverMdl.username,
+                                               $scope.divesession.location,
+                                               $scope.divesession.getMaxDiveDepth(0),
+                                               $scope.divesession.getMaxDiveDuration(),
                                                $scope.onShareSuccess,
                                                $scope.onShareError);
         

@@ -151,12 +151,17 @@ appNeaClientService.service('freediverService', function ($http, $log) {
 	};
     
     /*facebook publish dive session service*/
-	this.publishDiveSession = function (externalPlatform, externalToken, divesessionId, okCallBack, errorCallBack) {
+	this.publishDiveSession = function (externalPlatform, externalToken, divesessionId, userName, location, maxDepth, maxDuration, okCallBack, errorCallBack) {
 		var publishDiveSessionUrl = freedivingLogbookConstant.apiHostName+freedivingLogbookConstant.apiDiveSessionPublish;
        
         var dataParam = 'external_platform_id='+externalPlatform+
                         '&external_token='+externalToken+
-                        '&divesession_id='+divesessionId;
+                        '&divesession_id='+divesessionId+
+                        '&userName='+userName+
+                        '&location='+location+
+                        '&maxDepth='+maxDepth+
+                        '&maxDuration='+maxDuration;
+        
         $log.info('freediverService.publishDiveSession executing:'+publishDiveSessionUrl);
         $log.info('Params:'+ dataParam);
         

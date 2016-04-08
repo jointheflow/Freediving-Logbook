@@ -168,14 +168,16 @@ DiveSessionMdl.prototype.getMaxDiveDuration = function () {
     
     var maxDuration = diveDuration.max();
     if (maxDuration != null) {
-       return maxDuration;
-        //return (Math.floor(maxDuration / 60)) + '\'' + (maxDuration % 60)+'\'\'';
+       //return maxDuration;
+        return (Math.floor(maxDuration / 60)) + '\'' + (maxDuration % 60)+'\'\'';
         
     
     }else
-        return -1;
+        return '-1';
 
 };
+
+
 
 
 //get dive with min depth

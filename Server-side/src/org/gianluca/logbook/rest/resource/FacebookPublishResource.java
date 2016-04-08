@@ -1,14 +1,15 @@
 package org.gianluca.logbook.rest.resource;
 
 
+import java.net.URLEncoder;
 import java.util.logging.Logger;
 
 import org.gianluca.logbook.dao.exception.DiveSessionIdException;
 import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
-
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
 import org.gianluca.logbook.dto.DiveInputDto;
 import org.gianluca.logbook.dto.DiveSessionDto;
+import org.gianluca.logbook.dto.DiveSessionInputDto;
 import org.gianluca.logbook.dto.LogbookDto;
 import org.gianluca.logbook.external.integration.ExternalUserFactory;
 import org.gianluca.logbook.external.integration.PlatformNotManagedException;
@@ -46,30 +47,36 @@ public class FacebookPublishResource<K> extends ServerResource {
 	        }	
 	        
 	        
-	        //create dive input dto from request
-	        DiveInputDto diveInputDto = LogbookDtoFactory.createDiveInputDtoFromPOSTRequest(form, LogbookDtoFactory.REQUEST_GET);
-	        
+	        //create divesession input dto from request
+	        //DiveInputDto diveInputDto = LogbookDtoFactory.createDiveInputDtoFromPOSTRequest(form, LogbookDtoFactory.REQUEST_GET);
+	        DiveSessionInputDto diveSessionInputDto = LogbookDtoFactory.createDiveSessionInputDtoFromPOSTRequest(form, LogbookDtoFactory.REQUEST_FB_PUBLISH);
 	        
 		    //get dive session in a lazy manner (only dive session info)
-		    DiveSession ds = LogbookDAO.getDiveSessionLazy(diveInputDto.diveSessionId);
+		    DiveSession ds = LogbookDAO.getDiveSessionLazy(diveSessionInputDto.id);
 		    //Complete population
 		    DiveSessionDto diveSessionDto = LogbookDtoFactory.createDiveSessionDtoFromEntity(ds);
-		    //TODO may check if the dive session is associated with the user????
+		    //TODO: may i check if the dive session is associated with the user????
 		    
-		    //TODO:build publication url
+		    //build publication url
+		    String publicationUrlAndParams = LogbookConstant.FACEBOOK_SAMPLE_PUB_URL+"?divesessionID="+diveSessionInputDto.id+
+		    																		"&userName="+URLEncoder.encode(diveSessionInputDto.userName, "UTF-8")+
+		    																		"&location="+URLEncoder.encode(diveSessionInputDto.locationDesc,"UTF-8")+
+		    																		"&maxDepth="+URLEncoder.encode(diveSessionInputDto.maxDiveDepth.toString(), "UTF-8")+
+		    																		"&maxDuration="+URLEncoder.encode(diveSessionInputDto.maxDiveDuration.toString(), "UTF-8");
+		    
 		    //TODO: must decide if pass here all dive session information for publication
 		    //as parameters to a target JSP or a target JSP retrieve all info needed (may be best the second because..)
 		    
 		    
 		    //invoking publishing method
-		    String messageId= ExternalUserFactory.facebookPublishDiveSession(diveInputDto.externalToken, LogbookConstant.FACEBOOK_SAMPLE_PUB_URL);
+		    String messageId= ExternalUserFactory.facebookPublishDiveSession(diveSessionInputDto.externalToken, publicationUrlAndParams);
 		    
 		    //Set dto status and message
 		    LogbookDto lDto = new LogbookDto();
 		    
 		    
 		    //TODO: set message for publication
-		    lDto.setExternalToken(diveInputDto.externalToken);
+		    lDto.setExternalToken(diveSessionInputDto.externalToken);
 		    lDto.setResult(LogbookDto.RESULT_OK);
 		    lDto.setMessage("Dive session published on facebook - messageID:"+messageId);
 		    lDto.setDetail(diveSessionDto);
