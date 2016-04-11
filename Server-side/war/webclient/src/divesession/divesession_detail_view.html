@@ -3,22 +3,30 @@
         <div class="md-toolbar-tools" layout-align="space-between end">
             <md-button class="md-icon-button" ng-show="fbStatus == 0" aria-label="back" ng-click="back()" >
                     <!--md-icon flex md-svg-src="assets/img/menu.svg"></md-icon-->
-                    <md-icon flex md-font-set="material-icons">arrow_back</md-icon>
+                    <!--md-icon flex md-font-set="material-icons">arrow_back</md-icon-->
+                    
+                    <md-icon md-svg-src="assets/img/icon/ic_arrow_back_white_18px.svg" aria-label="back"></md-icon>
 
             </md-button>
             <p>Dive Session</p>
             <!--different button depending on tab, tab 0 - DETAILS - has save and delete action. Other tabs has not action -->
             <div ng-show="(fbStatus == 0) && ( selectedIndex == 0) ">
                 <md-button aria-label="save" ng-disabled="divesessionForm.$invalid" class="md-icon-button" ng-click="saveDivesession()" >
-                    <md-icon icon="done" md-font-set="material-icons">done</md-icon>
+                    <!--md-icon icon="done" md-font-set="material-icons">done</md-icon-->
+                    <!--md-icon class="material-icons md-18">done</md-icon-->
+                    <md-icon md-svg-src="assets/img/icon/ic_done_white_18px.svg" aria-label="done"></md-icon>
                 </md-button>
                 
                 <md-button aria-label="share" ng-disabled="viewStatus == 0" class="md-icon-button" ng-click="showShareConfirmation()">
-                    <md-icon icon="share" md-font-set="material-icons">share</md-icon>
+                    <!--md-icon icon="share" md-font-set="material-icons">share</md-icon-->
+                    <md-icon md-svg-src="assets/img/icon/ic_share_white_18px.svg" aria-label="share"></md-icon>
+                    
                 </md-button>
                 
                 <md-button aria-label="delete"  ng-disabled="viewStatus == 0" class="md-icon-button" ng-click="showRemoveConfirmation()">
-                   <md-icon icon="delete" md-font-set="material-icons">delete</md-icon>
+                   <!--md-icon icon="delete" md-font-set="material-icons">delete</md-icon-->
+                    <md-icon md-svg-src="assets/img/icon/ic_delete_white_18px.svg" aria-label="delete"></md-icon>
+                    
                 </md-button>
             </div>
             <div ng-show="(fbStatus == 0) && (selectedIndex != 0)" style="height:48px; width:167.344px"></div>

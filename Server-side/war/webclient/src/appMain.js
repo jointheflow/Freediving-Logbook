@@ -45,11 +45,13 @@ appNeaClient.config(['$httpProvider', function ($httpProvider) {
 
 
 /*Angular Material theme configuration*/
-appNeaClient.config(function($mdThemingProvider) {
+appNeaClient.config(function($mdThemingProvider, $mdIconProvider) {
   //$mdThemingProvider.theme('appnea') 
   $mdThemingProvider.theme('default')
     .primaryPalette('blue')
     .accentPalette('pink');
+    
+  $mdIconProvider.defaultViewBoxSize(18);
   
   //$mdThemingProvider.setDefaultTheme('appnea');
 });

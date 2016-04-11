@@ -18,3 +18,16 @@ fieldset {
     display: inline-block;
     border: 1px groove;
 }
+md-icon {
+    height: 18px !important;
+    width: 18px !important;
+    
+}
+.md-button.md-icon-button {
+    height: 30px !important;
+    width: 30px !important;
+    
+}
+md-button {
+    min-height: 30px !important;
+}
