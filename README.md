@@ -1,5 +1,5 @@
 # Freediving logbook
-The aim of the project is create a digital logbook thinked for Freediving in order to be able to save a freedive session and all dives executed during the session.
+The aim of the project is to create a (digital logbook) [https://app-nea-it.appspot.com/] thinked for Freediving in order to be able to save a freedive session and all dives executed during the session.
 Project will deliver a web application for desktop users and app for device like Android and iOS for mobile users.
 The features of web application and app will be the following:
 
