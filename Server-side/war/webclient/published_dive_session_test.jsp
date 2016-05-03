@@ -75,19 +75,23 @@ The page can receive the following parameters in query string:
             <!-- show only if there are dive sessions -->
             <md-content  layout-margin>
                 <div layout="column" layout-align="center">
-                    <table>
-                        <tr>
-                            <label><b>Freediver</b>: ${param.userName}</label>
-                        </tr>
-                        <tr>
-                            <label><b>Location</b>: ${param.location}</label>
-                        </tr>
-                    </table>
+                    <div layout="column">
+                        <table>
+                            <tr>
+                                <label><b>Freediver</b>: ${param.userName}</label>
+                            </tr>
+                            <tr>
+                                <label><b>Location</b>: ${param.location}</label>
+                            </tr>
+                        </table>
+                    </div>
                             <div layout="column" layout-align="center center"> 
                                 <zingchart style="display:block" id="myChart" zc-json="myJson" zc-height="400" zc-width="100%"></zingchart>
                             </div>
                             
-                        <table >
+                        
+                    <div layout="column" layout-align="center center">
+                        <table>    
                             <tr>
                                 <th>Max</th>
                                 <th>Average</th>
@@ -97,10 +101,18 @@ The page can receive the following parameters in query string:
                                 <td><label>Depth = <i>{{divesession.getAvgDiveDepth(0)}}</i></label></td>
                             </tr> 
                             <tr>
-                                <td><label>Duration = <i>{{divesession.getMaxDiveDuration()}}</label></td>
-                                <td><label>Duration = <i>{{divesession.getAvgDiveDuration()}}</label></td>
+                                <td><label>Duration = <i>{{divesession.getMaxDiveDuration()}}</i></label></td>
+                                <td><label>Duration = <i>{{divesession.getAvgDiveDuration()}}</i></label></td>
                             </tr>
+                            
                         </table>
+                    </div>
+                    <div layout="column" layout-align="center center">
+                        <table>
+                            <tr><p></p></tr>
+                            <tr><a ng-href="https://app-nea-it.appspot.com">GO to APPNEA!</a></tr>    
+                        </table>
+                    </div>
                 </div>
             </md-content>
         </div>
