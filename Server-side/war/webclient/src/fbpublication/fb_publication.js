@@ -1,5 +1,22 @@
 /*controller definition */
-appPublishedClient.controller('publicationFbController',  function ($scope, modelService, freediverService, $log, $filter, $timeout) {
+appPublishedClient.controller('publicationFbController',  function ($scope, modelService, freediverService, $log, $filter, $timeout, $mdDialog) {
+    
+    //begin SPINNER DIALOG MANAGEMENT
+    //show the spinner
+    $scope.showWaitingSpinner = function() {
+        $mdDialog.show({
+                //controller: 'diveSessionDialogController',
+                templateUrl: 'src/spinnerdialog/spinner_dlg.html'
+        });
+    };
+    //hide the spinner                
+    $scope.closeWaitingSpinner = function() {
+        $mdDialog.cancel();
+    };
+    
+    //start spinner
+    $scope.showWaitingSpinner();
+    //End SPINNER DIALOG MANAGEMENT
     
     $scope.applicationName = freedivingLogbookConstant.applicationName;
     $scope.myJson = null;
@@ -11,8 +28,11 @@ appPublishedClient.controller('publicationFbController',  function ($scope, mode
                                                       $scope.divesession_id,
                                                       $scope.onGetDiveSessionSuccess,
                                                       $scope.onGetDiveSessionError);
-        }else
+        }else {
             $log.info("divesession_id received from jsp is NULL");
+            $scope.closeWaitingSpinner();
+        }
+        
 
     });
     
@@ -41,6 +61,7 @@ appPublishedClient.controller('publicationFbController',  function ($scope, mode
    /*manages get detail dive session error*/
 	$scope.onGetDiveSessionError = function(data) {
         //TODO manage the error
+        $scope.closeWaitingSpinner();
 		
 	}; 
     
@@ -147,6 +168,8 @@ appPublishedClient.controller('publicationFbController',  function ($scope, mode
         }else
             {$scope.myJson=null;   
             };
+        
+        $scope.closeWaitingSpinner();
     }
     /********ZING CHART MANAGEMENT END*********/
             
