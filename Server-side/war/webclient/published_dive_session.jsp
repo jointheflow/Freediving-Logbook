@@ -111,7 +111,7 @@ The page can receive the following parameters in query string:
                     <div layout="column" layout-align="center center">
                         <table>
                             <tr><p></p></tr>
-                            <tr><a ng-href="https://app-nea-it.appspot.com">GO to APPNEA!</a></tr>    
+                            <tr><a ng-href="https://app-nea-it.appspot.com">GO to APP-NEA!</a></tr>    
                         </table>
                     </div>
                 </div>
