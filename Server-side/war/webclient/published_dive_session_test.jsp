@@ -21,7 +21,7 @@ The page can receive the following parameters in query string:
         <meta property="og:type" content="org_test_appnea:dive_session" />
         <!--change value according the parameter-->
         <meta property="og:description" content="max dive depth: ${param.maxDepth}, max dive duration: ${param.maxDuration}" />
-       
+        <meta property="og:image" content="https://app-nea-it.appspot.com/webclient/assets/img/landing_page.png" />
         
         <!--link rel="canonical" href="https://app-nea-it.appspot.com/" /-->
         

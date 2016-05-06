@@ -17,10 +17,11 @@ The page can receive the following parameters in query string:
         <title>appnea, a social apnea logbook for freediver </title>
         <meta property="fb:app_id" content="132053467142365" />
         <meta property="og:title" content="Dive Session @${param.location}" />
+        <meta property="og:image" content="https://app-nea-it.appspot.com/webclient/assets/img/landing_page.png" />
         <meta property="og:url" content="https://app-nea-it.appspot.com/webclient/published_dive_session.jsp?divesessionID=${param.divesessionID}&userName=${param.userName}&location=${param.location}&maxDepth=${param.maxDepth}&maxDuration=${param.maxDuration}" />
         <meta property="og:type" content="org_appnea:dive_session" />
         <!--change value according the query parameter-->
-        <meta property="og:description" content="max dive depth: ${param.maxDepth}, max dive duration: ${param.maxDuration}" />
+        <meta property="og:description" content="Max Dive Depth: ${param.maxDepth} mt., Max Dive Duration: ${param.maxDuration}" />
        
         
         <!--link rel="canonical" href="https://app-nea-it.appspot.com/" /-->
