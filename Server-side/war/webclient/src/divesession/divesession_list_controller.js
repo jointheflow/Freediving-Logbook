@@ -35,7 +35,7 @@ appNeaClient.controller('diveSessionListController',
         //put the freediver on the scope
         $scope.freediver=modelService.freediverMdl;
         //order basing diveTime
-        $scope.freediver.diveSessions = $filter('orderBy')(modelService.freediverMdl.diveSessions, 'diveDate', false);
+        $scope.freediver.diveSessions = $filter('orderBy')(modelService.freediverMdl.diveSessions, 'diveDate', true);
         
        
         

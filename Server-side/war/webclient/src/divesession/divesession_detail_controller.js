@@ -17,7 +17,7 @@ appNeaClient.controller('diveSessionDetailController',
         $scope.divesession = modelService.freediverMdl.currentDiveSession;
         //order basing diveTime
         if (modelService.freediverMdl.viewstatus==freedivingLogbookConstant.VIEW_UPDATE) {
-            $scope.divesession.dives = $filter('orderBy')(modelService.freediverMdl.currentDiveSession.dives, 'diveTime', false);
+            $scope.divesession.dives = $filter('orderBy')(modelService.freediverMdl.currentDiveSession.dives, 'diveTime', true);
         };
         
         $scope.back = function() {
