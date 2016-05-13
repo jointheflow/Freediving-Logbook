@@ -1,8 +1,8 @@
 var freedivingLogbookConstant = freedivingLogbookConstant || {
 	applicationName: 'app-nea',
-	applicationClientVersion: '0.0.0 (grouperino)',
-	applicationServerVersion: '0.0.0 (grouperino)',
-
+	applicationClientVersion: '1.0.1 (grouperino)',
+	applicationServerVersion: '1.0.0 (grouperino)',
+    
 	apiHostName: 'https://app-nea-it.appspot.com',
 	apiFreediverLoginPath:'/app/freediver/login',
 	apiFreediverRemovePath:'/app/freediver/remove',
@@ -16,6 +16,7 @@ var freedivingLogbookConstant = freedivingLogbookConstant || {
 	apiDiveUpdate: '/app/freediver/divesession/dive/update',
 	apiDiveRemove: '/app/freediver/divesession/dive/remove',
 	
+    applicationHomePageUrl: 'https://app-nea-it.appspot.com/webclient/index.html',
 	pNameExternalPlatform : 'external_platform_id',
 	pNamePageSize :'dive_page_size',
 	pNameExternalToken : 'external_token',

@@ -3,7 +3,7 @@ var appNeaClient = angular.module('appNeaClient');
 
 /*controller definition */
 appNeaClient.controller('diveSessionListController',  
-	function ($scope, $rootScope, freediverService, modelService, $log, $timeout, $mdSidenav, $location, $mdDialog, $facebook, $filter) {
+	function ($scope, $rootScope, freediverService, modelService, $log, $timeout, $mdSidenav, $location, $mdDialog, $filter) {
 	
     
     
@@ -36,11 +36,7 @@ appNeaClient.controller('diveSessionListController',
         $scope.freediver=modelService.freediverMdl;
         //order basing diveTime
         $scope.freediver.diveSessions = $filter('orderBy')(modelService.freediverMdl.diveSessions, 'diveDate', true);
-        
-       
-        
-                
-        
+         
         
 	};
 	
@@ -151,8 +147,7 @@ appNeaClient.controller('diveSessionListController',
         
     };
     
-    //every time the controller starts get the login status and refresh the info accordly
-    $rootScope.getLoginStatus();
+   
 
 });   
 

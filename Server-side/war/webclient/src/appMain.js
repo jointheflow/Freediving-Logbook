@@ -2,7 +2,7 @@
 //appNeaClient is the main module that represents the app. It needs all other modules dependencies
 
 
-var appNeaClient = angular.module('appNeaClient', ['appNeaClient.service',  'ngMaterial', 'ngRoute', 'ngFacebook', 'zingchart-angularjs']);
+var appNeaClient = angular.module('appNeaClient', ['appNeaClient.service',  'ngMaterial', 'ngRoute', 'ezfb', 'zingchart-angularjs', 'ng.deviceDetector']);
 
 //defines appNeaClient.service module
 var appNeaClientService = angular.module('appNeaClient.service', []);
@@ -83,15 +83,17 @@ appNeaClient.config(function($provide) {
         
 
 
-/*Configuring ngFacebook*/
-appNeaClient.config( function( $facebookProvider ) {
-  $facebookProvider.setAppId(freedivingLogbookConstant.facebook_app_id);
-  $facebookProvider.setPermissions("user_about_me, email, publish_actions");
+/*Configuring Facebook ezfbProvider*/
+/*appNeaClient.config( function( ezfbProvider ) {
+   ezfbProvider.setInitParams({
+       appId: freedivingLogbookConstant.facebook_app_id
+  });  
+  //$facebookProvider.setPermissions("user_about_me, email, publish_actions");
 });
-
+*/
 
 /*Init facebook SDK*/
-appNeaClient.run(['$rootScope', 
+/*appNeaClient.run(['$rootScope', 
     (function($rootScope){
   // Load the facebook SDK asynchronously
       (function(){
@@ -111,9 +113,16 @@ appNeaClient.run(['$rootScope',
          // Insert the Facebook JS SDK into the DOM
          firstScriptElement.parentNode.insertBefore(facebookJS, firstScriptElement);
       }());
-   })    
+   })   
 ]);
 
+*/
+appNeaClient.run(function (ezfb) {
+  ezfb.init({
+    // This is my FB app id for plunker demo app
+    appId: freedivingLogbookConstant.facebook_app_id
+  });  
+});
 
 
   

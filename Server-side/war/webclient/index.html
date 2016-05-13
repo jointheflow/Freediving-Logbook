@@ -41,12 +41,17 @@
         <!-- Angular moment-->
         <script src="assets/libs/moment/moment-with-locales.js"></script>
         
-        <!--ngFacebook dependecy -->
-        <script src="assets/libs/ng-facebook/ngFacebook.js"></script>
-               
+        <!-- Facebook dependency via angular-easyfb -->  
+        <script src="assets/libs/easy-fb/angular-easyfb.min.js"></script>
+
         <!--Zing chart dependency-->
         <script src="assets/libs/zing-chart/zingchart.min.js"></script>
         <script src="assets/libs/zing-chart/zingchart-angularjs.js"></script>
+        
+        
+        <!-- browser, os, detector -->
+        <script src="assets/libs/ng-detector/re-tree.js"></script>
+        <script src="assets/libs/ng-detector/ng-device-detector.min.js"></script>
         
         <!-- app-nea source code reference -->    
         <script src="src/appMain.js"></script> 
@@ -74,7 +79,7 @@
             Then ng-view defines a common column layout with top fixed toolbar and scrollable content for every view. Must use layout-fill-->
             <ng-view layout="column" layout-fill></ng-view>            
         </div>
-        <div id="fb-root"></div>
+        
     </body>
     
     <!--Google analytics settings-->

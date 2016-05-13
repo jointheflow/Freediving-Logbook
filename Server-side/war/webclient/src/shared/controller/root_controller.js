@@ -5,7 +5,7 @@ var appNeaClient = angular.module('appNeaClient');
 
 appNeaClient.controller('rootController',  
                          
-    function ($rootScope, $scope, $log, $timeout, $location, $mdDialog, $facebook) {
+    function ($rootScope, $scope, $log, $timeout, $location, $mdDialog, ezfb, deviceDetector) {
         //show the spinner
         $rootScope.showWaitingSpinner = function() {
             $mdDialog.show({
@@ -21,9 +21,17 @@ appNeaClient.controller('rootController',
         //manage facebook login
         $rootScope.login = function() {
             //$timeout(function() {
-                $facebook.login().then(function() {
-                    $rootScope.getLoginStatus();
-                 });
+                //start fix issue for Chrome in iOS
+                $log.log('browser detected:'+deviceDetector.browser);
+                $log.log('os detected:'+deviceDetector.os);
+                if( deviceDetector.browser=='chrome' && deviceDetector.os=='ios') {
+                    window.open('https://www.facebook.com/dialog/oauth?client_id='+freedivingLogbookConstant.facebook_app_id+'&redirect_uri='+ freedivingLogbookConstant.applicationHomePageUrl +'&scope=email,public_profile', '_self', 'null');
+                }else { 
+                //end fix issue
+                    ezfb.login().then(function() {
+                        $rootScope.getLoginStatus();
+                    });
+                }
                 //},1000,
                // false);
         };
@@ -35,15 +43,16 @@ appNeaClient.controller('rootController',
     
         //manage facebook login
         $rootScope.logout = function() {
-            $facebook.logout().then(function() {
+            ezfb.logout().then(function() {
                 $rootScope.getLoginStatus();
             });
         };
     
-        //check the login status using ngFacebook api
+        //check the login status using easy-fb api
         $rootScope.getLoginStatus = function() {
             $log.info('getting login status.......');
-            $facebook.getLoginStatus().then( 
+            
+            ezfb.getLoginStatus().then( 
               function(response) {
 
                  if (response.status === 'connected') {
@@ -63,14 +72,14 @@ appNeaClient.controller('rootController',
                     //$rootScope.$apply(function() { 
                         $log.info('got login status! not_authorized');
                         $rootScope.fbStatus = freedivingLogbookConstant.FB_STATUS_NOT_AUTH;
-                        $rootScope.externalToken = $rootScope.externalToken =null;
+                        $rootScope.externalToken = null;
                     //});
                 } else {
                     // the user isn't logged in to Facebook.
                      //$rootScope.$apply(function() { 
                         $log.info('got login status! unknown');
                         $rootScope.fbStatus = freedivingLogbookConstant.FB_STATUS_UNKNOWN;
-                        $rootScope.externalToken = $rootScope.externalToken =null;
+                        $rootScope.externalToken = null;
                     //});
                 }
 
@@ -78,13 +87,15 @@ appNeaClient.controller('rootController',
               function(err) {
                     $log.info('got login error! unknown');
                     $rootScope.fbStatus = freedivingLogbookConstant.FB_STATUS_UNKNOWN;
-                    $rootScope.externalToken = $rootScope.externalToken =null;
+                    $rootScope.externalToken = null;
 
               });
         };
-
         
         
-        		
+   
+    //every time the controller starts get the login status and refresh the info accordly
+    $rootScope.getLoginStatus();
+    
 		
 });

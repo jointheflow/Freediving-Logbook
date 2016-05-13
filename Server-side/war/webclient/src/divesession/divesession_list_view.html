@@ -49,7 +49,8 @@
                         <p><i>{{diveSession.note | limitTo:45}}...</i></p>
                     </div> 
                     <md-divider></md-divider>
-                </md-list-item>            
+                </md-list-item>   
+                <!--md-button ng-click="getLoginStatus()">getLoginStatus</md-button-->
             </md-list>
        
         <!-- show a welcome card saying add the first dive session -->
@@ -74,6 +75,8 @@
                     <a href="">
                         <img src='assets/img/fb_login_button.png' ng-click="login()">
                     </a>
+                    <!--md-button ng-click="getLoginStatus()">getLoginStatus</md-button-->
+                        
                 <!--/md-button-->
             </md-card-action>
             

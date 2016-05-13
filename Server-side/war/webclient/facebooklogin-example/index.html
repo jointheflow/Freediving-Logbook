@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html ng-app="plunker">
+
+  <head>
+    <meta charset="utf-8" />
+    <title>angular-easyfb API demo (promise version)</title>
+    <link data-require="bootstrap-css@3.0.0" data-semver="3.0.0" rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
+    <script>document.write('<base href="' + document.location + '" />');</script>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/zenburn.min.css" />
+    <script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+    <script data-require="angular.js@1.4.x" src="http://code.angularjs.org/1.4.3/angular.min.js" data-semver="1.4.3"></script>
+    <script src="http://pc035860.github.io/angular-highlightjs/angular-highlightjs.min.js"></script>
+    <script src="http://pc035860.github.io/angular-easyfb/angular-easyfb.min.js"></script>
+    <script src="app.js"></script>
+  </head>
+
+  <body ng-controller="MainCtrl">
+    <a href="https://github.com/pc035860/angular-easyfb"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+    <div class="container">
+      <h2>angular-easyfb API demo (promise version)</h2>
+
+      <div>
+        <button class="btn btn-primary" ng-click="login()" ng-disabled="loginStatus.status == 'connected'">Connect with Facebook</button>
+         &nbsp; 
+        <button class="btn btn-danger" ng-click="logout()" ng-disabled="!loginStatus || loginStatus.status != 'connected'">Logout</button>
+         &nbsp;
+        <button class="btn btn-success" ng-click="share()">FB.ui</button>
+      </div>
+      
+      <br>
+
+      <h4>
+        Hello, <span ng-show="me.name">{{ me.name }}</span><span ng-show="me.error">unkown</span>!
+      </h4>
+
+      <div class="row">
+        <div class="col-md-6">
+          <h4 class="text-info">$FB.loginStatus()</h4>
+          <div class="code-block" hljs source="loginStatusJSON"></div>
+        </div>
+        <div class="col-md-6">
+          <h4 class="text-info">$FB.api('/me') & $FB.api('/me/likes')</h4>
+          <div class="code-block" hljs source="apiResJSON"></div>
+        </div>
+      </div>
+
+    </div>
+
+  </body>
+
+</html>
