@@ -1,5 +1,6 @@
 package org.gianluca.logbook.dao.googledatastore;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.gianluca.logbook.dao.googledatastore.entity.Dive;
@@ -107,6 +108,9 @@ public class LogbookEntityFactory {
 				freediver.setTemperatureUnit(castToInteger(entity.getProperty("temperatureUnit")));
 			if (entity.getProperty("weightUnit")!=null)
 				freediver.setWeightUnit(castToInteger(entity.getProperty("weightUnit")));
+			if (entity.getProperty("customFieldListOfDive")!=null) {
+				freediver.setCustomFieldListOfDive((ArrayList<String>)entity.getProperty("customFieldListOfDive"));
+			}
 			
 			freediver.setId(KeyFactory.keyToString(entity.getKey()));
 			
@@ -125,6 +129,7 @@ public class LogbookEntityFactory {
 	/*populates a datastore entity Freediver basing on passed parameters*/
 	public static void populateEntityFreediver(Entity e_freediver, String externalId, String externalName, String externalEmail, int externalPlatformId) {
 		if (e_freediver !=null) {		
+			
 			e_freediver.setProperty("externalId", externalId);
 			e_freediver.setProperty("externalName", externalName);
 			e_freediver.setProperty("externalEmail", externalEmail);
@@ -133,6 +138,14 @@ public class LogbookEntityFactory {
 			e_freediver.setProperty("deepUnit", LogbookConstant.DEEP_METER);
 			e_freediver.setProperty("temperatureUnit", LogbookConstant.TEMPERATURE_CELSIUS);
 			e_freediver.setProperty("weightUnit", LogbookConstant.WEIGHT_KILOGRAM);
+			
+		}
+		
+	}
+	
+	public static void updateEntityFreediver(Entity e_freediver, ArrayList<String> customFieldListOfDive) {
+		if (e_freediver !=null) {		
+			e_freediver.setProperty("customFieldListOfDive", customFieldListOfDive);
 		}
 		
 	}

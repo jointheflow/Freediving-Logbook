@@ -1,5 +1,7 @@
 package org.gianluca.logbook.dao.googledatastore.entity;
 
+import java.util.ArrayList;
+
 import org.gianluca.logbook.helper.LogbookConstant;
 
 
@@ -26,6 +28,8 @@ public class Freediver {
 	private int deepUnit= LogbookConstant.DEEP_METER;
 	
 	private int weightUnit = LogbookConstant.WEIGHT_KILOGRAM;
+
+	private ArrayList<String> customFieldListOfDive=null;
 	
 	
 	public String getId() {
@@ -91,6 +95,15 @@ public class Freediver {
 
 	public void setWeightUnit(int weightUnit) {
 		this.weightUnit = weightUnit;
+	}
+
+
+	public ArrayList<String> getCustomFieldListOfDive() {
+		return customFieldListOfDive;
+	}
+
+	public void setCustomFieldListOfDive(ArrayList<String> customFieldListOfDive) {
+		this.customFieldListOfDive = customFieldListOfDive;
 	}
 
 	
