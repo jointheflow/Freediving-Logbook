@@ -471,6 +471,44 @@ public class LogbookDAO {
 	        return dive;
 	}
 	
+	//update the Freediver preferences by freediver's id
+	public static Freediver updateFreediverPreferences(String id, ArrayList<String> customFieldListOfDive ) throws FreediverIdException {
+		
+		Freediver freediver = null;
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Transaction tx = datastore.beginTransaction();
+			try {
+				
+				//find entity
+				Entity e_freediver= datastore.get(KeyFactory.stringToKey(id));
+				freediver = LogbookEntityFactory.createFreediverFromEntity(e_freediver);				
+				
+				LogbookEntityFactory.updateEntityFreediver(e_freediver, customFieldListOfDive);
+				
+				datastore.put(e_freediver);
+				
+				
+				tx.commit();
+			
+				//instantiate a new entity object
+				freediver = LogbookEntityFactory.createFreediverFromEntity(e_freediver);
+				
+			}catch (IllegalArgumentException | EntityNotFoundException e) {
+				log.info(e.getMessage());
+				throw new FreediverIdException("Freediver id wrong or not found for "+id);
+				
+			
+			} finally {
+			    if (tx.isActive()) {
+			        tx.rollback();
+			    }
+			}
+			
+	        	
+	        return freediver;
+	}
+	
+	
 	//remove the Dive referenced by id
 	public static void removeDive(String diveId) throws DiveIdException {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
