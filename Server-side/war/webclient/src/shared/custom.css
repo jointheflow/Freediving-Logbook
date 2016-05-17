@@ -18,6 +18,7 @@ fieldset {
     display: inline-block;
     border: 1px groove;
 }
+
 md-icon {
     height: 18px !important;
     width: 18px !important;

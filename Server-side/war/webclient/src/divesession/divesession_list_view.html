@@ -31,7 +31,8 @@
 
 
     <!-- content contains divesession list or welcome card-->
-    <md-content flex>                    
+    <md-content flex> 
+            <md-subheader ng-show="fbStatus == 0" class="md-primary">My Dive Sessions</md-subheader>
             <!-- show the list if user has been logged on facebook -->
             <md-list ng-show="(fbStatus == 0) && (freediver.diveSessions.length >0)">
                 <md-list-item class="md-3-line" ng-repeat="diveSession in freediver.diveSessions track by diveSession.id | orderBy : '-diveDate'" ng-click="showDivesessionDetail(diveSession)">

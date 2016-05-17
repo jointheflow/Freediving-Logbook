@@ -84,6 +84,7 @@
     <!--div ng-show="spinner" layout="row" layout-align="center center"><md-progress-circular md-mode="indeterminate"></md-progress-circular></div-->
 
 <md-content>
+    
     <md-tabs md-dynamic-height md-dynamic-width md-border-bottom md-selected="selectedIndex" md-center-tabs="true">
         
         
@@ -144,6 +145,7 @@
         <!-- content contains divesession list -->
     <md-tab label="Dives">
     <md-content flex>
+        <md-subheader ng-show="fbStatus == 0" class="md-primary">My Dives</md-subheader>
         <!-- show dive list or a card depending of the number of dives in dive session -->
         <md-list ng-show="divesession.dives.length > 0">
             <md-list-item class="md-3-line" ng-repeat="dive in divesession.dives track by dive.id | orderBy:'diveType'" ng-click="showDiveDetail(dive)">

@@ -7,9 +7,34 @@
                     <md-icon md-svg-src="assets/img/icon/ic_arrow_back_white_18px.svg" aria-label="back"></md-icon>
 
             </md-button>
-            <p>Setting</p>
-           
-            
-            
-        </div>
+            <p>Settings</p>
+            <div ng-show="fbStatus == 0">
+                <md-button aria-label="save" ng-disabled="false" class="md-icon-button" ng-click="" >
+                    <!--md-icon icon="done" md-font-set="material-icons">done</md-icon-->
+                    <md-icon md-svg-src="assets/img/icon/ic_done_white_18px.svg" aria-label="done"></md-icon>
+                </md-button>
+               
+            </div>
+       </div>
     </md-toolbar>
+    
+<!-- custom field section -->
+    <p></p>
+    <section layout="row" layout-align="center center">
+      <fieldset class="standard">
+            <legend>Custom fields for dive session {{custom.index}}</legend>
+            <md-radio-group ng-model="custom.index" class="md-primary">
+                <md-radio-button ng-repeat="d in customFieldListOfDiveSession"
+                         ng-value="$index"
+                         
+                         ng-class="{'md-align-top-left': $index==1}" >
+            {{ d.name }}<br/>
+
+                </md-radio-button>
+            </md-radio-group>
+            <p>
+              <md-button class="md-raised" ng-click="addCustom()" type="button">Add</md-button>
+              <md-button class="md-raised" ng-click="removeCustom()" type="button">Remove</md-button>
+            </p>
+      </fieldset>
+    </section>

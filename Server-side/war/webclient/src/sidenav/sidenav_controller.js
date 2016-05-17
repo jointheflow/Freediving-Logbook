@@ -16,6 +16,7 @@ appNeaClient.controller('sidenavController',  function ($scope,$rootScope, model
     };
     
     $scope.setting = function() {
-        $rootScope.setting();  
+        $rootScope.setting();
+        $mdSidenav('left').close();
     };
 });
