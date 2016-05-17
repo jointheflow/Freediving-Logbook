@@ -92,7 +92,10 @@ appNeaClient.controller('rootController',
               });
         };
         
-        
+    //go to setting view
+    $rootScope.setting = function() {
+        $location.path('/setting');
+    };
    
     //every time the controller starts get the login status and refresh the info accordly
     $rootScope.getLoginStatus();

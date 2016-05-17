@@ -3,7 +3,7 @@ var freedivingLogbookConstant = freedivingLogbookConstant || {
 	applicationClientVersion: '1.0.1 (grouperino)',
 	applicationServerVersion: '1.0.0 (grouperino)',
     
-	apiHostName: 'https://app-nea-it.appspot.com',
+	apiHostName: 'http://localhost:8888',
 	apiFreediverLoginPath:'/app/freediver/login',
 	apiFreediverRemovePath:'/app/freediver/remove',
 	apiDiveSessionGet:'/app/freediver/divesession/get',
@@ -16,7 +16,7 @@ var freedivingLogbookConstant = freedivingLogbookConstant || {
 	apiDiveUpdate: '/app/freediver/divesession/dive/update',
 	apiDiveRemove: '/app/freediver/divesession/dive/remove',
 	
-    applicationHomePageUrl: 'https://app-nea-it.appspot.com/webclient/index.html',
+    applicationHomePageUrl: 'http://localhost:8888/webclient/index.html',
 	pNameExternalPlatform : 'external_platform_id',
 	pNamePageSize :'dive_page_size',
 	pNameExternalToken : 'external_token',
@@ -28,7 +28,7 @@ var freedivingLogbookConstant = freedivingLogbookConstant || {
     APPNEA_STATUS_LOGGED :0,
     APPNEA_STATUS_UNKNOWN : -2,
     
-    facebook_app_id: '132053467142365',
+    facebook_app_id: '164570873890624',
     
     //plaform managed
     PLATFORM_FACEBOOK : 0,
