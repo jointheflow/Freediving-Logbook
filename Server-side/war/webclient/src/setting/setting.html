@@ -22,7 +22,7 @@
     <p></p>
     <section layout="row" layout-align="center center">
       <fieldset class="standard">
-            <legend>Custom fields for dive session {{custom.index}}</legend>
+            <legend>Custom fields for dive session</legend>
             <md-radio-group ng-model="custom.index" class="md-primary">
                 <md-radio-button ng-repeat="d in customFieldListOfDiveSession"
                          ng-value="$index"
@@ -33,8 +33,8 @@
                 </md-radio-button>
             </md-radio-group>
             <p>
-              <md-button class="md-raised" ng-click="addCustom()" type="button">Add</md-button>
               <md-button class="md-raised" ng-click="removeCustom()" type="button">Remove</md-button>
+              <md-button class="md-raised" ng-click="addCustom()" type="button">Add</md-button>
             </p>
       </fieldset>
     </section>

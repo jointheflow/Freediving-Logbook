@@ -1,0 +1,42 @@
+<md-dialog aria-label={{name}} ng-cloak>
+    <form name="customForm">
+        <md-toolbar>
+          <div class="md-toolbar-tools">
+            <h2>Custom field for a dive</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+              <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
+          </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content">
+            <h3>{{title}}</h3>
+            <p>
+              <label>{{detail}}</label>
+            </p>
+
+                <md-input-container class="md-block" flex-gt-xs>
+                    <label>Custom field name valid (no spaces, only numbers and letter plus - and _)</label>
+                    <input id="fieldName" ng-model="newCustom" ng-pattern="/^[a-zA-Z0-9_-]*$/" md-maxlength=30>
+                    <div ng-messages="customForm.fieldName.$error">
+                        <div ng-message="md-maxlength">The name has to be less than 30 characters long</div>
+                        <div ng-message="pattern">You should use only letters, numbers, -,_ characters</div>
+
+                    </div>
+                </md-input-container>  
+
+           </div>
+        </md-dialog-content>
+        
+        <md-dialog-actions layout="row">
+          <md-button ng-click="dialogCancel()">
+           Cancel
+          </md-button>
+            <md-button ng-disabled="customForm.$invalid || customForm.$pending || customFieldExists()" ng-click="dialogAdd()">
+           Add
+          </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
