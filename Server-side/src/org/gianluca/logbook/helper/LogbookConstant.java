@@ -5,10 +5,10 @@ public class LogbookConstant {
 	public final static String HOST_NAME="http://localhost:8888";
 	//public final static String HOST_NAME ="https://app-nea-it.appspot.com";
 	//get new toke from FB https://developers.facebook.com/tools/explorer
-	public final static String FACEBOOK_ACCESSS_TOKEN="CAACVrSR6h0ABANugZAV65B3RShPZAq9ksL8ZBndMZAkInZAReKqHfO0f3VIr1M3krwWWj4spyOdeHNNzZCosF6iyEr7b47Www0YZBjHBmo6QcXRIUlVre7EwKR4taUgwwrRJdSzv9qpdNVc5T4iIcqQXQnNwEUgYlfQT45X7dWUMQIfKp1dZAMomTFkLZA74aZBWO8W0SVF5WsplsOyCyKMkXOFacFfT7wAoYZD";
+	public final static String FACEBOOK_ACCESSS_TOKEN="EAACVrSR6h0ABAKL2sZAGjgd51e2nPBXeHvMEFweZBZCgzfVLflCul0mYwOY3D0Cy17fh7DYfCJTJ6dMUwZCJTr6hVXUMpq8uOuDd9Hnfyt4LygxIgyg4UC5U4yP7v4rOHPaD6zQLTOaxEZCZAMMoGxPxZC40HRr6FzrhOCXQczJSwZDZD";
 	/*end values for test*/
 	
-	public static final String SW_VERSION="0.0.0 (grouperino)";
+	public static final String SW_VERSION="1.1.0 (grouperino)";
 	
 	public static final int FACEBOOK_PLATFORM=0;
 	public static final int GOOGLE_PLATFORM=1;

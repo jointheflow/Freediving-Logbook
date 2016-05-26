@@ -32,6 +32,10 @@ public class LogbookManageFreediverUseCaseTest {
 	private String freediverId = null;
 	
 	private int externalPlatform=LogbookConstant.FACEBOOK_PLATFORM;
+	//settings parameter
+	private String dive_custom_field_1 = "dive_custom_field_1";
+	private String dive_custom_field_2 = "dive_custom_field_2";
+	
 	//Dive sessions data global
 	private int deepUnit = LogbookConstant.DEEP_METER;
 	private int tempUnit = LogbookConstant.TEMPERATURE_CELSIUS;
@@ -73,6 +77,7 @@ public class LogbookManageFreediverUseCaseTest {
 	private String freediverLoginRequest=LogbookConstant.HOST_NAME+"/app/freediver/login?external_platform_id="+externalPlatform+"&external_token="+externalToken;
 	private String freediverRemoveRequest=LogbookConstant.HOST_NAME+"/app/freediver/remove";//?external_platform_id="+externalPlatform+"&external_token="+externalToken;
 	private String diveSessionAddRequest =LogbookConstant.HOST_NAME+"/app/freediver/divesession/add";
+	private String freediverUpdateSettingRequest = LogbookConstant.HOST_NAME+"/app/freediver/updatesetting";
 	
 	/*Add a freediver and 3 dive sessions*/
 	@Before
@@ -172,6 +177,28 @@ public class LogbookManageFreediverUseCaseTest {
 			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
 			System.out.println(jsonobj_prov.toString());
 			/* END adding some dives--*/
+			
+			/*START adding 2 custom field*/
+			Client updateClient = new Client(Protocol.HTTP);
+			Request updateRequest = new Request(Method.POST, freediverUpdateSettingRequest);
+			//create a post entity for Representation
+			fParam_prov = new Form();
+			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("freediver_id", freediverId);
+			
+			//add custom field
+			fParam_prov.add("custom_field_of_dive", dive_custom_field_1);
+			fParam_prov.add("custom_field_of_dive", dive_custom_field_2);
+			
+			
+			updateRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response updateResponse = updateClient.handle(updateRequest);
+			jsonobj_prov = new JsonRepresentation(updateResponse.getEntityAsText()).getJsonObject();
+			
+			System.out.println(jsonobj_prov.toString());
+			
+			/*END adding 2 custom field*/
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -657,6 +684,193 @@ public class LogbookManageFreediverUseCaseTest {
 				
 			
 			System.out.println("-------END tearDown()--------");
+		}
+	}
+
+	@Test
+	public void testUpdateSettingFreediver() {
+		try {
+			System.out.println("------start update setting freediver----------");
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, freediverUpdateSettingRequest);
+			//create a post entity for Representation
+			Form fParam_prov = new Form();
+			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("freediver_id", freediverId);
+			
+			//add custom field
+			fParam_prov.add("custom_field_of_dive", "parametro_uno");
+			fParam_prov.add("custom_field_of_dive", "parametro_due");
+			fParam_prov.add("custom_field_of_dive", "parametro_tre");
+			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			JSONObject jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			
+			System.out.println(jsonobj_prov.toString());
+			assertTrue(jsonobj_prov.get("result").equals("OK"));
+			assertTrue(jsonobj_prov.get("message").equals("Freediver setting updated"));
+			assertTrue(providerResponse.getStatus().getCode()==Status.SUCCESS_OK.getCode());
+			
+			System.out.println("------end update setting freediver----------");
+			
+			
+			System.out.println("------start error updating freediver setting external platform missing----------");
+			providerClient = new Client(Protocol.HTTP);
+			providerRequest = new Request(Method.POST, freediverUpdateSettingRequest);
+			//create a post entity for Representation
+			fParam_prov = new Form();
+			//fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("freediver_id", freediverId);
+			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			providerResponse = providerClient.handle(providerRequest);
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			
+			System.out.println(jsonobj_prov.toString());
+			//assertTrue(jsonobj_prov.getString("errorMessage").startsWith("Parameter temp_unit For input string:"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==ErrorResource.WRONG_PARAMETER_ERROR);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			System.out.println("------end error updating freediver setting external platform missing---------");
+			
+									
+			System.out.println("------start error updating freediver setting external token missing----------");
+			providerClient = new Client(Protocol.HTTP);
+			providerRequest = new Request(Method.POST, freediverUpdateSettingRequest);
+			//create a post entity for Representation
+			fParam_prov = new Form();
+			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
+			//fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("freediver_id", freediverId);
+			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			providerResponse = providerClient.handle(providerRequest);
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			
+			System.out.println(jsonobj_prov.toString());
+			//assertTrue(jsonobj_prov.getString("errorMessage").startsWith("Parameter temp_unit For input string:"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==ErrorResource.WRONG_PARAMETER_ERROR);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			System.out.println("------end error updating freediver setting external token missing----------");
+			
+			
+			
+			System.out.println("------start error updating freediver setting freediverid missing----------");
+			providerClient = new Client(Protocol.HTTP);
+			providerRequest = new Request(Method.POST, freediverUpdateSettingRequest);
+			//create a post entity for Representation
+			fParam_prov = new Form();
+			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
+			fParam_prov.add("external_token", externalToken);
+			//fParam_prov.add("freediver_id", freediverId);
+			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			providerResponse = providerClient.handle(providerRequest);
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			
+			System.out.println(jsonobj_prov.toString());
+			//assertTrue(jsonobj_prov.getString("errorMessage").startsWith("Parameter temp_unit For input string:"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==ErrorResource.WRONG_PARAMETER_ERROR);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			System.out.println("------end error updating freediver setting freediverid missing----------");
+			
+			
+			System.out.println("------start error updating freediver setting freediverid error----------");
+			providerClient = new Client(Protocol.HTTP);
+			providerRequest = new Request(Method.POST, freediverUpdateSettingRequest);
+			//create a post entity for Representation
+			fParam_prov = new Form();
+			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("freediver_id", "unknown");
+			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			providerResponse = providerClient.handle(providerRequest);
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			
+			System.out.println(jsonobj_prov.toString());
+			//assertTrue(jsonobj_prov.getString("errorMessage").startsWith("Parameter temp_unit For input string:"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==ErrorResource.FREEDIVER_ID_ERROR);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			System.out.println("------end error updating freediver setting freediverid error----------");
+			
+			System.out.println("------start error updating freediver setting external token error----------");
+			providerClient = new Client(Protocol.HTTP);
+			providerRequest = new Request(Method.POST, freediverUpdateSettingRequest);
+			//create a post entity for Representation
+			fParam_prov = new Form();
+			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
+			fParam_prov.add("external_token", "ERRORTOKEN");
+			fParam_prov.add("freediver_id", freediverId);
+			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			providerResponse = providerClient.handle(providerRequest);
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			
+			System.out.println(jsonobj_prov.toString());
+			//assertTrue(jsonobj_prov.getString("errorMessage").startsWith("Parameter temp_unit For input string:"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==ErrorResource.WRONG_OAUTH_TOKEN);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			System.out.println("------end error updating freediver settingexternal token error----------");
+			
+			
+			System.out.println("------start error updating freediver setting platform not managed----------");
+			providerClient = new Client(Protocol.HTTP);
+			providerRequest = new Request(Method.POST, freediverUpdateSettingRequest);
+			//create a post entity for Representation
+			fParam_prov = new Form();
+			fParam_prov.add("external_platform_id","8");
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("freediver_id", freediverId);
+			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			providerResponse = providerClient.handle(providerRequest);
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			
+			System.out.println(jsonobj_prov.toString());
+			//assertTrue(jsonobj_prov.getString("errorMessage").startsWith("Parameter temp_unit For input string:"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==ErrorResource.PLATFORM_NOT_MANAGED_ERROR);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			System.out.println("------end error updating freediver setting platform not managed----------");
+			System.out.println("------start error updating freediver setting platform not number----------");
+			providerClient = new Client(Protocol.HTTP);
+			providerRequest = new Request(Method.POST, freediverUpdateSettingRequest);
+			//create a post entity for Representation
+			fParam_prov = new Form();
+			fParam_prov.add("external_platform_id","A");
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("freediver_id", freediverId);
+			
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			providerResponse = providerClient.handle(providerRequest);
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			
+			System.out.println(jsonobj_prov.toString());
+			//assertTrue(jsonobj_prov.getString("errorMessage").startsWith("Parameter temp_unit For input string:"));
+			assertTrue(jsonobj_prov.getInt("errorCode")==ErrorResource.WRONG_PARAMETER_ERROR);
+			
+			assertTrue(providerResponse.getStatus().getCode()==Status.CLIENT_ERROR_BAD_REQUEST.getCode());
+			
+			System.out.println("------end  error updating freediver setting platform not number----------");
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			fail();
+			
 		}
 	}
 

@@ -3,6 +3,7 @@
 	    Build file for managing value between test and production environment 
 	  </description>
 	  <!-- set global properties for this build -->
+	  <property name="sw_version" value="1.1.0 (grouperino)"/>
 	  <property name="server_src" location="src"/>
 	  <property name="client_src" location="war/webclient/src"/>
 	  <property name="appnea_server_TEST_url" value="HOST_NAME=&quot;http://localhost:8888&quot;"/>

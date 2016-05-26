@@ -7,6 +7,8 @@ public class FreediverInputDto extends LogbookDto {
 	public String externalId;
 	public String externalUsername;
 	public int pageSize;
+	public String[] customFieldListOfDive;
+	
 	public String getId() {
 		return id;
 	}
@@ -30,6 +32,12 @@ public class FreediverInputDto extends LogbookDto {
 	}
 	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
+	}
+	public String[] getCustomFieldListOfDive() {
+		return customFieldListOfDive;
+	}
+	public void setCustomFieldListOfDive(String[] customFieldListOfDive) {
+		this.customFieldListOfDive = customFieldListOfDive;
 	}
 	
 	

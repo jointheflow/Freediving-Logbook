@@ -443,7 +443,12 @@ public class LogbookDtoFactory {
 			checkMandatory(p_divePageSize, "dive_page_size");
 			checkInt(p_divePageSize, "dive_page_size");
 			freeInputDto.setPageSize(new Integer(p_divePageSize));
-		}	
+		}
+		
+		if (requestType == REQUEST_UPDATE) {
+			String[] p_customFieldOfDive = form.getValuesArray("custom_field_of_dive");
+			freeInputDto.setCustomFieldListOfDive(p_customFieldOfDive);
+		}
 		return freeInputDto;
 		
 	} 
@@ -457,6 +462,7 @@ public class LogbookDtoFactory {
 		//fdDto.externalPlatformId = fd.getExternalPlatformId();
 		fdDto.externalUsername = fd.getExternalName();
 		fdDto.id = fd.getId();
+		fdDto.customFieldListOfDive = fd.getCustomFieldListOfDive();
 		//fdDto.deepUnit = fd.getDeepUnit();
 		//fdDto.tempUnit = fd.getTemperatureUnit();
 		//fdDto.externalToken= externalToken;				

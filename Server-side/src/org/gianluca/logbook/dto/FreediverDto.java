@@ -1,5 +1,6 @@
 package org.gianluca.logbook.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FreediverDto /*extends LogbookDto*/ {
@@ -14,7 +15,8 @@ public class FreediverDto /*extends LogbookDto*/ {
 	//the cursor pointing to the first next dive session, if pagination is used
 	public String diveSessionCursor;
 	
-	
+	//contains the custom field defined for
+	public ArrayList<String> customFieldListOfDive;
 	
 	public String getDiveSessionCursor() {
 		return diveSessionCursor;
@@ -56,6 +58,12 @@ public class FreediverDto /*extends LogbookDto*/ {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public ArrayList<String> getCustomFieldListOfDive() {
+		return customFieldListOfDive;
+	}
+	public void setCustomFieldListOfDive(ArrayList<String> customFieldListOfDive) {
+		this.customFieldListOfDive = customFieldListOfDive;
 	}
 	
 	

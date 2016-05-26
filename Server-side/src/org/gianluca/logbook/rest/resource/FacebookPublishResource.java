@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 import org.gianluca.logbook.dao.exception.DiveSessionIdException;
 import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
-import org.gianluca.logbook.dto.DiveInputDto;
 import org.gianluca.logbook.dto.DiveSessionDto;
 import org.gianluca.logbook.dto.DiveSessionInputDto;
 import org.gianluca.logbook.dto.LogbookDto;

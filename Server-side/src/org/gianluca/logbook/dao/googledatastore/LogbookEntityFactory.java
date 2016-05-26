@@ -89,6 +89,7 @@ public class LogbookEntityFactory {
 	}
 	
 	/*Creates a Freediver basing on the corresponding datastore entity */
+	@SuppressWarnings("unchecked")
 	public static Freediver createFreediverFromEntity(Entity entity) {
 		Freediver freediver = null;
 		if (entity != null) {
