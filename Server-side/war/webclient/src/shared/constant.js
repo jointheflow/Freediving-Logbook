@@ -6,6 +6,7 @@ var freedivingLogbookConstant = freedivingLogbookConstant || {
 	apiHostName: 'http://localhost:8888',
 	apiFreediverLoginPath:'/app/freediver/login',
 	apiFreediverRemovePath:'/app/freediver/remove',
+    apiUpdateFreediverSetting:'/app/freediver/updatesetting',
 	apiDiveSessionGet:'/app/freediver/divesession/get',
     apiPublishedDiveSessionGet:'/app/freediver/divesession/published/get',
 	apiDiveSessionUpdate:'/app/freediver/divesession/update',

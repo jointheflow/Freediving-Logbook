@@ -9,7 +9,7 @@
             </md-button>
             <p>Settings</p>
             <div ng-show="fbStatus == 0">
-                <md-button aria-label="save" ng-disabled="false" class="md-icon-button" ng-click="" >
+                <md-button aria-label="save" ng-disabled="false" class="md-icon-button" ng-click="saveSetting()" >
                     <!--md-icon icon="done" md-font-set="material-icons">done</md-icon-->
                     <md-icon md-svg-src="assets/img/icon/ic_done_white_18px.svg" aria-label="done"></md-icon>
                 </md-button>
@@ -24,11 +24,11 @@
       <fieldset class="standard">
             <legend>Custom fields for dive session</legend>
             <md-radio-group ng-model="custom.index" class="md-primary">
-                <md-radio-button ng-repeat="d in customFieldListOfDiveSession"
+                <md-radio-button ng-repeat="d in customFieldListOfDive track by $index" 
                          ng-value="$index"
                          
                          ng-class="{'md-align-top-left': $index==1}" >
-            {{ d.name }}<br/>
+            {{ d }}<br/>
 
                 </md-radio-button>
             </md-radio-group>

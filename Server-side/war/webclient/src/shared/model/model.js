@@ -10,6 +10,8 @@ function FreediverMdl() {
     this.weightUnit = null;
     this.tempUnit = null;
     this.depthUnit = null;
+    //custom field name array defined by the user for a single dive
+    this.customFieldListOfDive = [];
     //array of DiveSessionMdl
     this.diveSessions = [];    
     //the "current" dive session, null if is new - a dive session of divesessions[] ortherwise

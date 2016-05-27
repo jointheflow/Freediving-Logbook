@@ -362,4 +362,40 @@ appNeaClientService.service('freediverService', function ($http, $log) {
     
     };
     
+    
+     /*update freediver settings*/
+    this.updateFreediverSetting = function(freediverId, externalPlatform, externalToken, customFieldListOfDiveSession, okCallBack, errorCallBack) {
+        var updateFreediverSettingUrl = freedivingLogbookConstant.apiHostName+freedivingLogbookConstant.apiUpdateFreediverSetting;
+        
+        var dataParam = 'external_platform_id='+externalPlatform+
+                        '&external_token='+externalToken+
+                        '&freediver_id='+freediverId;
+        
+        /*add custom field list of dive*/
+        for (var i = 0; i < customFieldListOfDiveSession.length; i++){
+            dataParam = dataParam +'&custom_field_of_dive='+customFieldListOfDiveSession[i];
+        }
+        $log.info('freediverService.updateFreediverSetting executing:'+updateFreediverSettingUrl);
+        $log.info('Params:'+ dataParam);
+        
+        var updateFreediverSettingPromiseResponse = $http({method: 'POST',
+                                               url: updateFreediverSettingUrl,
+                                               data: dataParam,
+                                               headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                                            });
+        
+        //managing success
+        updateFreediverSettingPromiseResponse.success(function(data, status, headers, config) {
+            $log.info(data);
+            okCallBack(data);
+        }); 
+        
+        //managin error
+        updateFreediverSettingPromiseResponse.error(function(data, status, headers, config) {
+            $log.info(data);
+            errorCallBack(data);
+        }); 
+    
+    };
+    
 });

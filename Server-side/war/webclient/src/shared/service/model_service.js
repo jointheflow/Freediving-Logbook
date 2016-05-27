@@ -18,6 +18,7 @@ appNeaClientService.service('modelService', function ($log) {
         this.freediverMdl.tempUnit = data.tempUnit;
         this.freediverMdl.weightUnit = data.weightUnit;
         this.freediverMdl.username = data.detail.externalUsername;
+        this.freediverMdl.customFieldListOfDive = data.detail.customFieldListOfDive;
         //if there are some dive session update the model with each one
         if (data.detail.diveSessions != null) {
             divesessions = data.detail.diveSessions;
