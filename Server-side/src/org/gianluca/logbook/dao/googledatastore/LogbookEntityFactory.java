@@ -2,12 +2,15 @@ package org.gianluca.logbook.dao.googledatastore;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.gianluca.logbook.dao.googledatastore.entity.Dive;
 import org.gianluca.logbook.dao.googledatastore.entity.DiveSession;
 import org.gianluca.logbook.dao.googledatastore.entity.Freediver;
 import org.gianluca.logbook.helper.LogbookConstant;
 
+import com.google.appengine.api.datastore.EmbeddedEntity;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.GeoPt;
 import com.google.appengine.api.datastore.KeyFactory;
@@ -50,6 +53,13 @@ public class LogbookEntityFactory {
 				dive.setWeightAsPound((Double)entity.getProperty("weightAsPound"));
 			if (entity.getProperty("diveType")!=null)
 				dive.setDiveType((String)entity.getProperty("diveType"));
+			
+			if (entity.getProperty("customFieldList")!=null) {
+				EmbeddedEntity eCustomFieldList = (EmbeddedEntity) entity.getProperty("customFieldList");
+				Map<String, Object> customFieldList = eCustomFieldList.getProperties();
+				dive.setCustomFieldList(customFieldList);
+			}
+				
 		}	
 		return dive;
 	}
@@ -216,7 +226,7 @@ public class LogbookEntityFactory {
 		
 	}
 	/*populates Dive entity basing on passed parameters*/
-	public static void populateEntityDive(Entity e_dive, Integer diveTime_minute,String diveType, Integer duration_second, String equipment, Double deep, Double neutralBuoyancy, String note, Double weight, Double depthWaterTemp, int deepUnit, int tempUnit, int weightUnit) {
+	public static void populateEntityDive(Entity e_dive, Integer diveTime_minute,String diveType, Integer duration_second, String equipment, Double deep, Double neutralBuoyancy, String note, Double weight, Double depthWaterTemp, int deepUnit, int tempUnit, int weightUnit, Map<String, String> customFieldList) {
 		if (e_dive !=null) {
 			/*Executes deep conversion*/
 			if (deep !=null)
@@ -291,6 +301,21 @@ public class LogbookEntityFactory {
 			e_dive.setProperty("equipment", equipment);
 			if (note !=null)
 				e_dive.setProperty("note", new Text(note));
+			
+			//if custom field exists save in the embedded entity
+			if (customFieldList != null) {
+				//populate EmbeddedEntity with custom field
+				EmbeddedEntity e_customFieldList = new EmbeddedEntity();
+				Iterator<String> keyIterator = customFieldList.keySet().iterator();
+				while (keyIterator.hasNext()) {
+					String keyName = keyIterator.next();
+					e_customFieldList.setProperty(keyName, customFieldList.get(keyName));
+					
+				}
+				//set the embedded property
+				e_dive.setProperty("customFieldList", e_customFieldList);
+			}
+			
 		}
 	}
 	

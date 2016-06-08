@@ -59,7 +59,8 @@ public class DiveAddResource<K> extends ServerResource {
 		    							diveInputDto.depthWaterTemp,
 		    							diveInputDto.deepUnit,
 		    							diveInputDto.tempUnit,
-		    							diveInputDto.weightUnit);
+		    							diveInputDto.weightUnit,
+		    							diveInputDto.customFieldList);
 		    		 
 		    //create result dto
 		    DiveDto dDto = LogbookDtoFactory.createDiveDtoFromEntity(d);

@@ -1,6 +1,8 @@
 package org.gianluca.logbook.dao.googledatastore.entity;
 
 
+import java.util.Map;
+
 import com.google.appengine.api.datastore.Text;
 
 public class Dive {
@@ -37,6 +39,9 @@ public class Dive {
 	//depth water temp
 	private double depthWaterTempAsCelsisus;
 	private double depthWaterTempAsfarheneit;
+	
+	//custom field for the dive
+	private Map<String, Object> customFieldList;
 	
 	
 	public String getId() {
@@ -102,6 +107,10 @@ public class Dive {
 	public double getWeightAsKilogram() {
 		return weightAsKilogram;
 	}
+	public Map<String, Object> getCustomFieldList () {
+		return customFieldList;
+		
+	}
 	public void setWeightAsKilogram(double weightAsKilogram) {
 		this.weightAsKilogram = weightAsKilogram;
 	}
@@ -122,6 +131,10 @@ public class Dive {
 	}
 	public void setDepthWaterTempAsfarheneit(double depthWaterTempAsfarheneit) {
 		this.depthWaterTempAsfarheneit = depthWaterTempAsfarheneit;
+	}
+	public void setCustomFieldList(Map<String, Object> customFieldList2) {
+		this.customFieldList = customFieldList2;
+		
 	}
 	
 	

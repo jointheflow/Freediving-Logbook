@@ -2,8 +2,11 @@ package org.gianluca.logbook.test.dao;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.gianluca.logbook.dao.exception.DiveIdException;
 import org.gianluca.logbook.dao.exception.DiveSessionIdException;
@@ -37,7 +40,12 @@ public class DiveTest {
         	
         	fd = LogbookDAO.addFreediver("existsId", "name external", "email external", LogbookConstant.FACEBOOK_PLATFORM);
         	ds = LogbookDAO.addDiveSession(fd.getId(), new Date(100000), 35.6, "mask, lanyard, dive suti 5.5 mm", "Elba Island - margidore", null, "sunny", "katabasis course ssi level 3", 20.0, 5.0, LogbookConstant.DEEP_METER, LogbookConstant.TEMPERATURE_CELSIUS, LogbookConstant.WEIGHT_KILOGRAM);
+        	//add 2 custom field
         	
+			ArrayList<String> customFieldListOfDive = new ArrayList<String>();
+        	customFieldListOfDive.add("custom_1");
+        	customFieldListOfDive.add("custom_2");
+        	LogbookDAO.updateFreediverPreferences(fd.getId(), customFieldListOfDive);
         	System.out.println(fd);
         }catch (Exception e) {
         	
@@ -73,7 +81,13 @@ public class DiveTest {
 		Dive d1 = null;
 		
 		try {
-			d1 = LogbookDAO.addDive(ds.getId(), 605 /*10:05*/, "free",180 /*3 minutes*/, "mask, lanyard, dive suti 5.5 mm",20.0, 10.0, "Tuffo di riscaldamento", 5.0, 20.0, LogbookConstant.DEEP_METER, LogbookConstant.TEMPERATURE_CELSIUS, LogbookConstant.WEIGHT_KILOGRAM);
+			Map<String,String> customFieldListOfDiveMap = new HashMap<String, String>();
+			customFieldListOfDiveMap.put("custom_1", "value_custom_1");
+			customFieldListOfDiveMap.put("custom_2", "value_custom_2");
+			customFieldListOfDiveMap.put("custom_3", "value_custom_3");
+			
+			
+			d1 = LogbookDAO.addDive(ds.getId(), 605 /*10:05*/, "free",180 /*3 minutes*/, "mask, lanyard, dive suti 5.5 mm",20.0, 10.0, "Tuffo di riscaldamento", 5.0, 20.0, LogbookConstant.DEEP_METER, LogbookConstant.TEMPERATURE_CELSIUS, LogbookConstant.WEIGHT_KILOGRAM, customFieldListOfDiveMap);
 		} catch (DiveSessionIdException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -83,7 +97,7 @@ public class DiveTest {
 		assertTrue(d1.getMaxDeepAsMeter()==20.0);
 		//assertTrue(d1.getDeepAsFeet()==65.61679790000001);
 		
-		assertTrue(d1.getNeutralBuoyancyAsMeter()==20.0);
+		assertTrue(d1.getNeutralBuoyancyAsMeter()==10.0);
 		assertTrue(d1.getWeightAsKilogram()==5.0);
 		assertTrue(d1.getWeightAsPound()==11.023);
 		
@@ -99,7 +113,7 @@ public class DiveTest {
 		Dive d2 = null;
 		
 		try {
-			d2 = LogbookDAO.addDive(ds.getId(), 606 /*10:06*/, "constant", 120 /*2 minute*/, "mask", 116.79, 10.0, "katabasis course ssi level 3",  11.023, 68.0, LogbookConstant.DEEP_FEET, LogbookConstant.TEMPERATURE_FAHRHENEIT, LogbookConstant.WEIGHT_POUND);
+			d2 = LogbookDAO.addDive(ds.getId(), 606 /*10:06*/, "constant", 120 /*2 minute*/, "mask", 116.79, 10.0, "katabasis course ssi level 3",  11.023, 68.0, LogbookConstant.DEEP_FEET, LogbookConstant.TEMPERATURE_FAHRHENEIT, LogbookConstant.WEIGHT_POUND, null);
 		} catch (DiveSessionIdException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -120,7 +134,7 @@ public class DiveTest {
 		@SuppressWarnings("unused")
 		Dive d3;
 		try {
-			d3 = LogbookDAO.addDive(ds.getId(), 607 /*10:07*/, "constant",120 /*2 minute*/, "mask", 116.79, 10.0, "katabasis course ssi level 3",  11.023, 20.0, LogbookConstant.DEEP_FEET, LogbookConstant.TEMPERATURE_CELSIUS, LogbookConstant.WEIGHT_POUND);
+			d3 = LogbookDAO.addDive(ds.getId(), 607 /*10:07*/, "constant",120 /*2 minute*/, "mask", 116.79, 10.0, "katabasis course ssi level 3",  11.023, 20.0, LogbookConstant.DEEP_FEET, LogbookConstant.TEMPERATURE_CELSIUS, LogbookConstant.WEIGHT_POUND, null);
 			//System.out.println(d3);
 		} catch (DiveSessionIdException e) {
 			// TODO Auto-generated catch block
@@ -181,7 +195,7 @@ public class DiveTest {
 		
 		//update d2
 		try {
-			Dive d4= LogbookDAO.updateDive(d2.getId(), 608, "constant", 120, null, 30.0, 10.0, "nessuna", 5.0, 15.0, 0, 0, 0);
+			Dive d4= LogbookDAO.updateDive(d2.getId(), 608, "constant", 120, null, 30.0, 10.0, "nessuna", 5.0, 15.0, 0, 0, 0, null);
 			assertTrue(d4.getId().equals(d2.getId()));
 			assertTrue(d4.getDuration()==120);
 			assertTrue(d4.getDiveTime()==608);

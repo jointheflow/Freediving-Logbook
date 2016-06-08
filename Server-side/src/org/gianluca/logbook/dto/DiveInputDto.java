@@ -1,5 +1,8 @@
 package org.gianluca.logbook.dto;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class DiveInputDto extends LogbookDto {
 	public String id ;
@@ -14,6 +17,7 @@ public class DiveInputDto extends LogbookDto {
 	public String note;
 	public String diveType;
 	public double waterTemp;
+	public Map<String, String> customFieldList = new HashMap<String, String>();;
 	
 	public double getWaterTemp() {
 		return waterTemp;

@@ -6,6 +6,7 @@ package org.gianluca.logbook.dao.googledatastore;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.gianluca.logbook.dao.exception.DiveIdException;
@@ -28,7 +29,6 @@ import com.google.appengine.api.datastore.GeoPt;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.QueryResultList;
-
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.PreparedQuery;
 
@@ -157,6 +157,53 @@ public class LogbookDAO {
 		
 	}
 	
+	/*Get a freediver instance by one of his child session id*/
+	public static Freediver getFreediverBylSessionId(String sessionId) throws FreediverIdException { 
+		Freediver freediver = null;
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Transaction tx = datastore.beginTransaction();
+		try {
+			//here we build the sessionid key and then the parent freediver
+			Entity e_freediver= datastore.get(KeyFactory.stringToKey(sessionId).getParent());
+			freediver = LogbookEntityFactory.createFreediverFromEntity(e_freediver);				
+					
+			tx.commit();
+		} catch (EntityNotFoundException e) {
+			log.info(e.getMessage());
+			throw new FreediverIdException(e.getMessage());
+		} finally {
+		    if (tx.isActive()) {
+		        tx.rollback();
+		    }
+		}
+		
+	     return freediver;
+		
+	}
+	
+	/*Get a freediver instance by one of his child dive id of his session id*/
+	public static Freediver getFreediverBylDiveId(String diveId) throws FreediverIdException { 
+		Freediver freediver = null;
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Transaction tx = datastore.beginTransaction();
+		try {
+			//here we build the diveid key then sessionid key parent and then the freediver key parent
+			Entity e_freediver= datastore.get(KeyFactory.stringToKey(diveId).getParent().getParent());
+			freediver = LogbookEntityFactory.createFreediverFromEntity(e_freediver);				
+					
+			tx.commit();
+		} catch (EntityNotFoundException e) {
+			log.info(e.getMessage());
+			throw new FreediverIdException(e.getMessage());
+		} finally {
+		    if (tx.isActive()) {
+		        tx.rollback();
+		    }
+		}
+		
+	     return freediver;
+		
+	}
 	
 	//add freediver user and default settings
 	public static Freediver addFreediver(String externalId, String externalName, String externalEmail, int externalPlatformId) {
@@ -393,7 +440,7 @@ public class LogbookDAO {
 	}
 	
 	//add a new Dive to the DiveSession which id is passed as parameter
-	public static Dive addDive(String divesessionId, Integer diveTime_minute,String diveType, Integer duration_second, String equipment, Double deep, Double neutralBuoyancy, String note, Double weight, Double depthWaterTemp, int deepUnit, int tempUnit, int weightUnit) throws DiveSessionIdException {
+	public static Dive addDive(String divesessionId, Integer diveTime_minute,String diveType, Integer duration_second, String equipment, Double deep, Double neutralBuoyancy, String note, Double weight, Double depthWaterTemp, int deepUnit, int tempUnit, int weightUnit, Map<String, String> customFieldList) throws DiveSessionIdException {
 		Dive dive = null;
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Transaction tx = datastore.beginTransaction();
@@ -404,7 +451,7 @@ public class LogbookDAO {
 				
 				Entity e_dive = new Entity("Dive", KeyFactory.stringToKey(divesessionId));
 				
-				LogbookEntityFactory.populateEntityDive(e_dive, diveTime_minute, diveType, duration_second, equipment, deep, neutralBuoyancy, note, weight, depthWaterTemp, deepUnit, tempUnit, weightUnit);
+				LogbookEntityFactory.populateEntityDive(e_dive, diveTime_minute, diveType, duration_second, equipment, deep, neutralBuoyancy, note, weight, depthWaterTemp, deepUnit, tempUnit, weightUnit, customFieldList);
 				
 				datastore.put(e_dive);
 				
@@ -433,7 +480,7 @@ public class LogbookDAO {
 	}
 	
 	//update the Dive referenced by id
-	public static Dive updateDive(String diveId, Integer diveTime_minute,String diveType, Integer duration_second, String equipment, Double deep, Double neutralBuoyancy, String note, Double weight, Double depthWaterTemp, int deepUnit, int tempUnit, int weightUnit) throws DiveIdException {
+	public static Dive updateDive(String diveId, Integer diveTime_minute,String diveType, Integer duration_second, String equipment, Double deep, Double neutralBuoyancy, String note, Double weight, Double depthWaterTemp, int deepUnit, int tempUnit, int weightUnit, Map<String, String> customFieldList) throws DiveIdException {
 		
 		Dive dive = null;
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -446,7 +493,7 @@ public class LogbookDAO {
 				if (!e_dive.getKind().equals("Dive")) 
 					throw new DiveIdException("Dive id wrong or not found for "+diveId);
 				
-				LogbookEntityFactory.populateEntityDive(e_dive, diveTime_minute, diveType, duration_second, equipment, deep, neutralBuoyancy, note, weight, depthWaterTemp, deepUnit, tempUnit, weightUnit);
+				LogbookEntityFactory.populateEntityDive(e_dive, diveTime_minute, diveType, duration_second, equipment, deep, neutralBuoyancy, note, weight, depthWaterTemp, deepUnit, tempUnit, weightUnit, customFieldList);
 				
 				datastore.put(e_dive);
 				
