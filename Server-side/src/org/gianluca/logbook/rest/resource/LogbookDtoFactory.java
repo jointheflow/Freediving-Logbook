@@ -273,6 +273,9 @@ public class LogbookDtoFactory {
 		dDto.setNeutralBuoyanceAsMeter(d.getNeutralBuoyancyAsMeter());
 		dDto.setDiveType(d.getDiveType());
 		
+		if (d.getCustomFieldList() != null)
+			dDto.setCustomFieldList(d.getCustomFieldList());
+		
 		return dDto;
 	}
 	

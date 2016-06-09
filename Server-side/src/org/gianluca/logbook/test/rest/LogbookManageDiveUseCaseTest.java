@@ -82,6 +82,7 @@ public class LogbookManageDiveUseCaseTest {
 	private String diveAddRequest =LogbookConstant.HOST_NAME+"/app/freediver/divesession/dive/add";
 	private String diveUpdateRequest =LogbookConstant.HOST_NAME+"/app/freediver/divesession/dive/update";
 	private String diveRemoveRequest =LogbookConstant.HOST_NAME+"/app/freediver/divesession/dive/remove";
+	private String freediverUpdateSettingRequest = LogbookConstant.HOST_NAME+"/app/freediver/updatesetting";
 	
 	@Test
 	public void addDive() {
@@ -109,7 +110,13 @@ public class LogbookManageDiveUseCaseTest {
 			fParam_prov.add("depth_water_temp", Double.toString(d1_depthWaterTemp));
 		    fParam_prov.add("weight", Double.toString(d1_weight));
 		    fParam_prov.add("neutral_buoyance", Double.toString(d1_neutralBuoyance));
-		    			
+		    
+		    //add custom params admitted
+		    fParam_prov.add("parametro_uno","uno");
+		    fParam_prov.add("parametro_due","due");
+		    //add custom params not admitted (will be ignored)
+		    fParam_prov.add("parametro_tre", "tre");
+		    
 			providerRequest.setEntity(fParam_prov.getWebRepresentation());
 			Response providerResponse = providerClient.handle(providerRequest);
 					
@@ -123,12 +130,12 @@ public class LogbookManageDiveUseCaseTest {
 			assertTrue(((Integer)detailobj.get("duration")).intValue()==d1_duration);
 			assertTrue(((String)detailobj.get("note")).equals(d1_note));
 			assertTrue(((String)detailobj.get("equipment")).equals(d1_equipment));
-			assertTrue(detailobj.getDouble("depthWaterTempAsCelsius")==new Double(d1_depthWaterTemp));
+			assertTrue(detailobj.getDouble("depthWaterTempAsCelsius")== d1_depthWaterTemp);
 			assertTrue(detailobj.getDouble("depthWaterTempAsFahrehneit")==61.7);
-			assertTrue(((Double)detailobj.get("neutralBuoyanceAsFeet")).doubleValue()==65.61679790000001);										   
-			assertTrue(((Integer)detailobj.get("neutralBuoyanceAsMeter")).doubleValue()==20.0);
-			assertTrue(detailobj.getDouble("maxDeepAsMeter")==new Double(d1_maxDeep));
-			assertTrue(detailobj.getDouble("maxDeepAsFeet")==65.61679790000001);
+			assertTrue(detailobj.getDouble("neutralBuoyanceAsFeet")==32.808398950000004);										   
+			assertTrue(detailobj.getDouble("neutralBuoyanceAsMeter")==10);
+			assertTrue(detailobj.getDouble("maxDeepAsMeter")==new Double(0));
+			assertTrue(detailobj.getDouble("maxDeepAsFeet")==0);
 			assertTrue(detailobj.getDouble("weightAsKilogram")== d1_weight);
 			assertTrue(detailobj.getDouble("weightAsPound")== 12.125300000000001);
 			
@@ -206,10 +213,32 @@ public class LogbookManageDiveUseCaseTest {
 			JSONObject detailobj = jsonobj.getJSONObject("detail");
 			freediverId = (String)detailobj.get("id");
 			
-			System.out.println("Add dive session");
-			Request providerRequest = new Request(Method.POST, diveSessionAddRequest);
+			
+			/*add some custom param for a dive to the freediver settings*/
+			System.out.println("------start update setting freediver----------");
+			Client providerClient = new Client(Protocol.HTTP);
+			Request providerRequest = new Request(Method.POST, freediverUpdateSettingRequest);
 			//create a post entity for Representation
 			Form fParam_prov = new Form();
+			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
+			fParam_prov.add("external_token", externalToken);
+			fParam_prov.add("freediver_id", freediverId);
+			
+			//add custom field
+			fParam_prov.add("custom_field_of_dive", "parametro_uno");
+			fParam_prov.add("custom_field_of_dive", "parametro_due");
+						
+			providerRequest.setEntity(fParam_prov.getWebRepresentation());
+			Response providerResponse = providerClient.handle(providerRequest);
+			JSONObject jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			
+			System.out.println(jsonobj_prov.toString());
+			
+			
+			System.out.println("Add dive session");
+			providerRequest = new Request(Method.POST, diveSessionAddRequest);
+			//create a post entity for Representation
+			fParam_prov = new Form();
 			fParam_prov.add("external_platform_id",Integer.toString(LogbookConstant.FACEBOOK_PLATFORM));
 			fParam_prov.add("external_token", externalToken);
 			fParam_prov.add("freediver_id", freediverId);
@@ -228,7 +257,7 @@ public class LogbookManageDiveUseCaseTest {
 		    System.out.println("Executing POST "+ diveSessionAddRequest);
 		    Client addClient = 	new Client(Protocol.HTTP);		
 			providerRequest.setEntity(fParam_prov.getWebRepresentation());
-			Response providerResponse = addClient.handle(providerRequest);
+			providerResponse = addClient.handle(providerRequest);
 			JSONObject jsonobj2 = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
 			System.out.println(jsonobj2.toString());
 			
@@ -237,7 +266,7 @@ public class LogbookManageDiveUseCaseTest {
 			System.out.println("sessionId:"+detail2.getString("id"));
 			
 			System.out.println("Add dive");
-			Client providerClient = new Client(Protocol.HTTP);
+			providerClient = new Client(Protocol.HTTP);
 			providerRequest = new Request(Method.POST, diveAddRequest);
 			//create a post entity for Representation
 			
@@ -263,7 +292,7 @@ public class LogbookManageDiveUseCaseTest {
 			providerRequest.setEntity(fParam_prov.getWebRepresentation());
 			providerResponse = providerClient.handle(providerRequest);
 					
-			JSONObject jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
+			jsonobj_prov = new JsonRepresentation(providerResponse.getEntityAsText()).getJsonObject();
 			System.out.println(jsonobj_prov);
 			detailobj = jsonobj_prov.getJSONObject("detail");
 			diveId2 = detailobj.getString("id");

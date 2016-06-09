@@ -5,7 +5,7 @@ public class LogbookConstant {
 	public final static String HOST_NAME="http://localhost:8888";
 	//public final static String HOST_NAME ="https://app-nea-it.appspot.com";
 	//get new toke from FB https://developers.facebook.com/tools/explorer
-	public final static String FACEBOOK_ACCESSS_TOKEN="EAACVrSR6h0ABAKL2sZAGjgd51e2nPBXeHvMEFweZBZCgzfVLflCul0mYwOY3D0Cy17fh7DYfCJTJ6dMUwZCJTr6hVXUMpq8uOuDd9Hnfyt4LygxIgyg4UC5U4yP7v4rOHPaD6zQLTOaxEZCZAMMoGxPxZC40HRr6FzrhOCXQczJSwZDZD";
+	public final static String FACEBOOK_ACCESSS_TOKEN="EAACVrSR6h0ABAA9PJ8ZAPFCI5rGcc2Bw4Beip4lRvJe8VZCKrCQplsINdyZATikmJSd4hmsZChiO7izZCLMOBzlhbYbqJCLsJ6PZAjsDr5n7NbaUjjylj8sXh8AvaxNloYWtcQUWt2KCyNwuJHpxUbz7rI4tXuGDCtrtw8MoAHogZDZD";
 	/*end values for test*/
 	
 	public static final String SW_VERSION="1.1.0 (grouperino)";

@@ -1,5 +1,7 @@
 package org.gianluca.logbook.dto;
 
+import java.util.Map;
+
 
 public class DiveDto /*extends LogbookDto*/ {
 	public String id ;
@@ -16,6 +18,9 @@ public class DiveDto /*extends LogbookDto*/ {
 	public Double weightAsPound;
 	public String note;
 	public String diveType;
+	
+	//custom field for the dive
+	public Map<String, Object> customFieldList;
 	
 	public String getDiveType() {
 		return diveType;
@@ -100,6 +105,12 @@ public class DiveDto /*extends LogbookDto*/ {
 	}
 	public void setNote(String note) {
 		this.note = note;
+	}
+	public Map<String, Object> getCustomFieldList() {
+		return customFieldList;
+	}
+	public void setCustomFieldList(Map<String, Object> customFieldList) {
+		this.customFieldList = customFieldList;
 	}	
 	
 }

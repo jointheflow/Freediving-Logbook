@@ -109,6 +109,10 @@ public class DiveTest {
 		
 		assertTrue(d1.getNote().getValue().equals("Tuffo di riscaldamento"));
 		
+		assertTrue(d1.getCustomFieldList().get("custom_1").equals("value_custom_1"));
+		assertTrue(d1.getCustomFieldList().get("custom_2").equals("value_custom_2"));
+		assertTrue(d1.getCustomFieldList().size()==3);
+		
 		//2) test add dive  expressed as feet, farehnehit, pound unit 
 		Dive d2 = null;
 		
@@ -129,6 +133,7 @@ public class DiveTest {
 		assertTrue(d2.getEquipment().equals("mask"));
 		
 		assertTrue(d2.getNote().getValue().equals("katabasis course ssi level 3"));
+		assertTrue(d2.getCustomFieldList()==null);
 		
 		//3 test add another dive 
 		@SuppressWarnings("unused")
@@ -195,11 +200,17 @@ public class DiveTest {
 		
 		//update d2
 		try {
-			Dive d4= LogbookDAO.updateDive(d2.getId(), 608, "constant", 120, null, 30.0, 10.0, "nessuna", 5.0, 15.0, 0, 0, 0, null);
+			Map<String,String> customFieldListOfDiveMap = new HashMap<String, String>();
+			customFieldListOfDiveMap.put("custom_1", "value_custom_1");
+			customFieldListOfDiveMap.put("custom_2", "value_custom_2");
+			
+			Dive d4= LogbookDAO.updateDive(d2.getId(), 608, "constant", 120, null, 30.0, 10.0, "nessuna", 5.0, 15.0, 0, 0, 0, customFieldListOfDiveMap);
 			assertTrue(d4.getId().equals(d2.getId()));
 			assertTrue(d4.getDuration()==120);
 			assertTrue(d4.getDiveTime()==608);
 			assertTrue(d4.getEquipment()==null);
+			
+			assertTrue(d4.getCustomFieldList().size()==2);
 		} catch (DiveIdException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
