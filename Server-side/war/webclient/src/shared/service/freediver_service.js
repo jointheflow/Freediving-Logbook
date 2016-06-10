@@ -244,9 +244,18 @@ appNeaClientService.service('freediverService', function ($http, $log) {
     
     
     /*add a dive*/
-    this.addDive = function (divesessionId, externalPlatform, externalToken, deepUnit, tempUnit, weightUnit, diveTime, duration, equipment, weight, temp, deep, neutralBuoyance, note, diveType, okCallBack, errorCallBack) {
+    this.addDive = function (divesessionId, externalPlatform, externalToken, deepUnit, tempUnit, weightUnit, diveTime, duration, equipment, weight, temp, deep, neutralBuoyance, note, diveType, customFieldDiveMap, okCallBack, errorCallBack) {
         var addDiveUrl = freedivingLogbookConstant.apiHostName+freedivingLogbookConstant.apiDiveAdd;
-        
+         //iterate on customFieldDiveMap
+        var customFieldParams='';
+        if (customFieldDiveMap != null) {
+           for (var [key, value] of customFieldDiveMap) {
+                customFieldParams = customFieldParams +'&'+key+'='+value;
+                $log.info(customFieldParams); 
+            }
+        }
+       
+            
         var dataParam = 'external_platform_id='+externalPlatform+
                         '&external_token='+externalToken+
                         '&divesession_id='+divesessionId+
