@@ -175,10 +175,21 @@
 
                     
                     <md-input-container > 
-                        <label>Note</label> 
+                        
                         <textarea ng-model="dive.note" columns="1" md-maxlength="250"></textarea> 
                     </md-input-container> 
-
+                    
+                    <!-- add dynamically all custom field defined for the dive -->
+                    
+                    <div ng-repeat="customField in freediver.customFieldListOfDive">
+                        <md-input-container > 
+                            <label>{{customField}}</label> 
+                            <input name="{{customField}}" ng-model="customFieldDiveMap[customField]"/>
+                        </md-input-container> 
+                    </div>
+                        
+                    
+                    
                 </div>
             </form> 
         </div>
