@@ -7,7 +7,7 @@ appNeaClient.controller ('diveDetailController',
     
     $scope.viewStatus = modelService.freediverMdl.viewstatus;
     $scope.freediver=modelService.freediverMdl;
-    $scope.customFieldDiveMap = new Map();
+    $scope.customFieldDiveMap = {};
     
     //regarding the status of the view set the defaut attribute to show
     switch(modelService.freediverMdl.viewstatus) {
@@ -97,11 +97,6 @@ appNeaClient.controller ('diveDetailController',
         //regarding the status of the view set the defaut attribute to show
         switch(modelService.freediverMdl.viewstatus) {
             case freedivingLogbookConstant.VIEW_NEW:
-                //TODO --remove the test stub
-                /*var custoFieldDiveMap = new Map();
-                custoFieldDiveMap.set('custom_1', 'zero');
-                custoFieldDiveMap.set('custom_2', 'due');*/
-                //test stub
                 //invoke Asynch add dive rest service passing callback function
                 freediverService.addDive(modelService.freediverMdl.currentDiveSession.id,
                                         modelService.freediverMdl.externalPlatformId,

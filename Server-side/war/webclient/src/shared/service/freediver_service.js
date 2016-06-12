@@ -249,10 +249,11 @@ appNeaClientService.service('freediverService', function ($http, $log) {
          //iterate on customFieldDiveMap
         var customFieldParams='';
         if (customFieldDiveMap != null) {
-           for (var [key, value] of customFieldDiveMap) {
-                customFieldParams = customFieldParams +'&'+key+'='+value;
-                $log.info(customFieldParams); 
-            }
+               
+               for (var key in customFieldDiveMap) {
+                    customFieldParams = customFieldParams +'&'+key+'='+customFieldDiveMap[key];
+                    $log.info(customFieldParams); 
+                }
         }
        
             
@@ -270,7 +271,8 @@ appNeaClientService.service('freediverService', function ($http, $log) {
                         ((temp == null) ? '' : '&depth_water_temp='+temp)+
                         ((weight == null) ? '' : '&weight='+weight)+
                         ((diveType == null) ? '' : '&dive_type='+diveType)+
-                        ((note == null) ? '' : '&note='+note);
+                        ((note == null) ? '' : '&note='+note)+
+                        customFieldParams;
         
         $log.info('freediverService.addDive executing:'+addDiveUrl);
         $log.info('Params:'+ dataParam);
