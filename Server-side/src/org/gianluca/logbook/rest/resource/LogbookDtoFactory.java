@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.gianluca.logbook.dao.exception.DiveIdException;
 import org.gianluca.logbook.dao.exception.FreediverIdException;
 import org.gianluca.logbook.dao.googledatastore.LogbookDAO;
 import org.gianluca.logbook.dao.googledatastore.entity.Dive;
@@ -121,9 +122,13 @@ public class LogbookDtoFactory {
 	}
 	
 	
-	public static DiveInputDto createDiveInputDtoFromPOSTRequest(Form form,  int requestType) throws WrongParameterException, NumberFormatException, PlatformNotManagedException, FreediverIdException {
+	public static DiveInputDto createDiveInputDtoFromPOSTRequest(Form form,  int requestType) throws WrongParameterException, NumberFormatException, PlatformNotManagedException, FreediverIdException, DiveIdException {
 		DiveInputDto diveInput = new DiveInputDto();
 		Freediver eFreediver = null;
+		Dive eDive = null;
+		//used to retrieve custom field of a the dive depending if is in INSERT or UPDATE mode
+		Iterator<String> customFieldIterator=null;
+		
 		//check and set all parameters
 		//basing on the request set ancestor key or id key
 		
@@ -147,6 +152,9 @@ public class LogbookDtoFactory {
 		    diveInput.setDiveSessionId(sessionId);
 		    //get parent freediver basing on session id 
 	        eFreediver = LogbookDAO.getFreediverBylSessionId(sessionId);
+	        //set the iterator for custom field
+	        if (eFreediver.getCustomFieldListOfDive()!=null)
+	        	customFieldIterator = eFreediver.getCustomFieldListOfDive().iterator();
 		}
 		
 		if (requestType == REQUEST_REMOVE || requestType == REQUEST_UPDATE) {
@@ -155,7 +163,11 @@ public class LogbookDtoFactory {
 		    checkMandatory(diveId, "dive_id");
 		    diveInput.setId(diveId);
 		    //get parent freediver basing on diveid  
-	        eFreediver = LogbookDAO.getFreediverBylDiveId(diveId);
+	        //eFreediver = LogbookDAO.getFreediverBylDiveId(diveId);
+	        eDive = LogbookDAO.getDiveById(diveId);
+	        //set the iterator for custom field
+	        if (eDive.getCustomFieldList()!= null)
+	        	customFieldIterator = eDive.getCustomFieldList().keySet().iterator();
 		}
 		
 		if (requestType == REQUEST_ADD || requestType == REQUEST_UPDATE) {
@@ -239,16 +251,15 @@ public class LogbookDtoFactory {
 		        diveInput.setDepthWaterTemp(depthWaterTemp);
 	        } 
 	        
-	        //here we have the freediver and also all custom field defined for the freediver
-	        Iterator<String> customIterator = eFreediver.getCustomFieldListOfDive().iterator(); 
-	        while (customIterator.hasNext()) {
-	        	//populate custom field of dive if exists with custom value
-	        	String customField = customIterator.next();
-	        	String customValue = form.getFirstValue(customField);
-	        	if (customValue != null)
-	        		diveInput.customFieldList.put(customField, customValue);
+	        if (customFieldIterator != null){
+		        while (customFieldIterator.hasNext()) {
+		        	//populate custom field of dive if exists with custom value
+		        	String customField = customFieldIterator.next();
+		        	String customValue = form.getFirstValue(customField);
+		        	if (customValue != null)
+		        		diveInput.customFieldList.put(customField, customValue);
+		        }
 	        }
-	        
 		}   		   
 	    
 		return diveInput;

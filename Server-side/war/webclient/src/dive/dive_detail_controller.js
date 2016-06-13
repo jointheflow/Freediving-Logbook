@@ -7,12 +7,15 @@ appNeaClient.controller ('diveDetailController',
     
     $scope.viewStatus = modelService.freediverMdl.viewstatus;
     $scope.freediver=modelService.freediverMdl;
+    $scope.existingCustomFieldDiveMap = [];
     $scope.customFieldDiveMap = {};
     
     //regarding the status of the view set the defaut attribute to show
     switch(modelService.freediverMdl.viewstatus) {
         case freedivingLogbookConstant.VIEW_NEW:
-            //null
+            //set the custom field available: in this case takes the field define din the freediver
+            //settings
+            $scope.existingCustomFieldDiveMap=modelService.freediverMdl.customFieldListOfDive;
             
         break;
         case freedivingLogbookConstant.VIEW_UPDATE:
@@ -35,7 +38,17 @@ appNeaClient.controller ('diveDetailController',
             $scope.dive.minute = Math.floor(modelService.freediverMdl.currentDiveSession.currentDive.duration / 60);
             $scope.dive.second = (modelService.freediverMdl.currentDiveSession.currentDive.duration % 60);
             
+            //set the custom field available: in this case takes the field already defined in dive
+            //definied an empty array
+            $scope.customFieldDiveMap = modelService.freediverMdl.currentDiveSession.currentDive.customFieldDiveMap; 
             
+            //put the key of the existing diveMap defined for the dive in the array
+            for (var key in $scope.customFieldDiveMap) {
+                $scope.existingCustomFieldDiveMap.push(key);
+            }
+           
+            
+           
                 
             
         break;
@@ -136,6 +149,7 @@ appNeaClient.controller ('diveDetailController',
                                             $scope.dive.neutralBuoyance,
                                             $scope.dive.note,
                                             $scope.dive.diveType,
+                                            $scope.customFieldDiveMap,
                                             $scope.onSaveSuccess,
                                             $scope.onSaveError);               
             break;

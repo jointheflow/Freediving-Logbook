@@ -300,8 +300,18 @@ appNeaClientService.service('freediverService', function ($http, $log) {
     
     
     /*update a dive*/
-    this.updateDive = function (diveId, externalPlatform, externalToken, deepUnit, tempUnit, weightUnit, diveTime, duration, equipment, weight, temp, deep, neutralBuoyance, note, diveType, okCallBack, errorCallBack) {
+    this.updateDive = function (diveId, externalPlatform, externalToken, deepUnit, tempUnit, weightUnit, diveTime, duration, equipment, weight, temp, deep, neutralBuoyance, note, diveType, customFieldDiveMap, okCallBack, errorCallBack) {
         var updateDiveUrl = freedivingLogbookConstant.apiHostName+freedivingLogbookConstant.apiDiveUpdate;
+        
+         //iterate on customFieldDiveMap
+        var customFieldParams='';
+        if (customFieldDiveMap != null) {
+               
+               for (var key in customFieldDiveMap) {
+                    customFieldParams = customFieldParams +'&'+key+'='+customFieldDiveMap[key];
+                    $log.info(customFieldParams); 
+                }
+        }
         
         var dataParam = 'external_platform_id='+externalPlatform+
                         '&external_token='+externalToken+
@@ -317,7 +327,8 @@ appNeaClientService.service('freediverService', function ($http, $log) {
                         ((temp == null) ? '' : '&depth_water_temp='+temp)+
                         ((weight == null) ? '' : '&weight='+weight)+
                         ((diveType == null) ? '' : '&dive_type='+diveType)+
-                        ((note == null) ? '' : '&note='+note);
+                        ((note == null) ? '' : '&note='+note)+
+                        customFieldParams;
         
         $log.info('freediverService.updateDive executing:'+updateDiveUrl);
         $log.info('Params:'+ dataParam);

@@ -181,7 +181,7 @@
                     
                     <!-- add dynamically all custom field defined for the dive -->
                     
-                    <div ng-repeat="customField in freediver.customFieldListOfDive">
+                    <div ng-repeat="customField in existingCustomFieldDiveMap">
                         <md-input-container > 
                             <label>{{customField}}</label> 
                             <input name="{{customField}}" ng-model="customFieldDiveMap[customField]"/>

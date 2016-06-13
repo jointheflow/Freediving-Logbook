@@ -26,11 +26,13 @@ appNeaClientService.service('serviceDialogAlert', function ($mdDialog) {
             
         };
     
-        serviceDialogController = function($scope, dTitle, dDetail, $mdDialog) {
+        serviceDialogController = function($scope, dTitle, dDetail, $mdDialog, $location) {
            $scope.title = dTitle;
            $scope.detail = dDetail;  
+           //on close bring the user to the hp
            $scope.close = function() {
                         $mdDialog.cancel();
+                        $location.path('/divesessionlist');
            };
         };
 

@@ -269,6 +269,7 @@ function DiveMdl() {
     this.depthTemp = null;
     this.weight = null;
     this.note = null;
+    this.customFieldDiveMap = null;
 };
 
 /*Getter method*/

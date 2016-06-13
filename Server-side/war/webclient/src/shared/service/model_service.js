@@ -103,6 +103,8 @@ appNeaClientService.service('modelService', function ($log) {
         if (_tempUnit == freedivingLogbookConstant.TEMPERATURE_CELSIUS) d.depthTemp = data.depthWaterTempAsCelsius;
         if (_tempUnit == freedivingLogbookConstant.TEMPERATURE_FAHRHENEIT) d.depthTemp = data.depthWaterTempAsFahrehneit;
         
+        //get custom dive data field if exists
+        d.customFieldDiveMap = data.customFieldList;
         return d;
        
     };
