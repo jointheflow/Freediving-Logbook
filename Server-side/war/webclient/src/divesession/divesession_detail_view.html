@@ -96,17 +96,18 @@
               <div ng-show="!spinner">
                 <form name="divesessionForm" layout-margin> 
                     <div layout="column"> 
+                        <label>Date&#42;</label>
                         <md-datepicker name="divedate" ng-model="divesession.diveDate" md-placeholder="Date" required>
                         </md-datepicker>
                         <div ng-messages="divesessionForm.divedate.$error" ng-show="divesessionForm.divedate.$dirty">
                         </div>
 
-                        <md-input-container> 
-                            <label>Location</label> 
-                            <input name="location" ng-model="divesession.location" required> 
-                            <div ng-messages="divesessionForm.location.$error" ng-show="divesessionForm.location.$dirty">
+                        <md-input-container class="md-block"> 
+                            <label>Location&#42;</label> 
+                            <input required name="location" ng-model="divesession.location" md-placeholder="Location" > 
+                            <!--div ng-messages="divesessionForm.location.$error" ng-show="divesessionForm.location.$dirty">
                                 <div ng-message="required">Required!</div>
-                            </div>
+                            </div-->
                         </md-input-container> 
 
                         <md-input-container> 
