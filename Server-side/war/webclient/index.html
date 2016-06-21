@@ -31,6 +31,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-route.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-animate.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-aria.min.js"></script>
+        
 
        
         
@@ -52,6 +53,7 @@
         <!-- browser, os, detector -->
         <script src="assets/libs/ng-detector/re-tree.js"></script>
         <script src="assets/libs/ng-detector/ng-device-detector.min.js"></script>
+            
         
         <!-- app-nea source code reference -->    
         <script src="src/appMain.js"></script> 
@@ -73,6 +75,8 @@
     <body>
         <!-- root controller is used to set and define global attributes and functions -->
         <div layout="row" flex  ng-cloak ng-controller="rootController">
+            
+                   
             <!-- Include a left sidebar --> 
             <ng-include src="'src/sidenav/sidenav_view.html'" ng-controller="sidenavController"></ng-include>            
             
@@ -84,13 +88,13 @@
     
     
         <!-- Begin Cookie Consent script http://cookie-consent.org/ -->
-<script type="text/javascript">
-    window.cookieconsent_options = {"message":"This website uses cookies to ensure you get the best experience on our website","dismiss":"Got it!","learnMore":"More info","link":null,"theme":"dark-bottom"}; var cookieconsent_id = '957dd63e-6c61-4742-9d09-5c3ade2f2f33';</script>
+        <script type="text/javascript">
+            window.cookieconsent_options = {"message":"This website uses cookies to ensure you get the best experience on our website","dismiss":"Got it!","learnMore":"More info","link":"cookie-policy.html","theme":"dark-bottom"}; var cookieconsent_id = '957dd63e-6c61-4742-9d09-5c3ade2f2f33';</script>
 
-<script type="text/javascript" src="//cdn.front.to/libs/cookieconsent.min.3.js"></script>
+        <script type="text/javascript" src="//cdn.front.to/libs/cookieconsent.min.3.js"></script>
 
-<noscript><a href="http://cookie-consent.org/">EU cookie consent script</a></noscript>
-<!-- End Cookie Consent script -->
+        <noscript><a href="http://cookie-consent.org/">EU cookie consent script</a></noscript>
+        <!-- End Cookie Consent script -->
         
     </body>
     
