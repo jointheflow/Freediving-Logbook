@@ -25,10 +25,10 @@ appNeaClient.controller('rootController',
                 $log.log('browser detected:'+deviceDetector.browser);
                 $log.log('os detected:'+deviceDetector.os);
                 if( deviceDetector.browser=='chrome' && deviceDetector.os=='ios') {
-                    window.open('https://www.facebook.com/dialog/oauth?client_id='+freedivingLogbookConstant.facebook_app_id+'&redirect_uri='+ freedivingLogbookConstant.applicationHomePageUrl +'&scope=email,public_profile', '_self', 'null');
+                    window.open('https://www.facebook.com/dialog/oauth?client_id='+freedivingLogbookConstant.facebook_app_id+'&redirect_uri='+ freedivingLogbookConstant.applicationHomePageUrl +'&scope=email,public_profile,publish_actions', '_self', 'null');
                 }else { 
                 //end fix issue
-                    ezfb.login().then(function() {
+                    ezfb.login(null, {scope: 'email,public_profile, publish_actions'}).then(function() {
                         $rootScope.getLoginStatus();
                     });
                 }
