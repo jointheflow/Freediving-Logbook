@@ -30,6 +30,7 @@ public class ExternalUserFactory {
 				fbUser.setName(user.getName());
 				//assign fbUser to extUser
 				extUser = fbUser;
+				log.info("Logged Facebook user: "+extUser.getId()+", "+extUser.getName());
 			}
 			break;
 			
